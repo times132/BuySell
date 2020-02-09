@@ -1,8 +1,7 @@
 package com.example.giveandtake;
 
-import com.example.giveandtake.model.User;
+import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

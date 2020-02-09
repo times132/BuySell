@@ -1,6 +1,6 @@
 package com.example.giveandtake.DTO;
 
-import com.example.giveandtake.model.User;
+import com.example.giveandtake.model.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

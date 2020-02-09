@@ -1,4 +1,4 @@
-package com.example.giveandtake.model;
+package com.example.giveandtake.model.entity;
 
 import lombok.*;
 
@@ -18,30 +18,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 15)
     private String username;
 
-    @NotBlank
-    @Size(max = 40)
     private String nickname;
 
-    @NotBlank
-    @Size(max = 100)
     private String password;
 
-    @NotBlank
-    @Size(max = 40)
     private String phone;
 
-    @NotBlank
-    @Email
     private String email;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Date created_date;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Date updated_date;
 
     @Builder
