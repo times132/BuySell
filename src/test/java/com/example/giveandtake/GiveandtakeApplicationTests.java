@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,6 +27,7 @@ class GiveandtakeApplicationTests {
 				.email("times132@naver.com")
 				.password("1234562")
 				.phone("010-1111-2222")
+				.created_date(LocalDateTime.now())
 				.build());
 
 		List<User> userList = userRepository.findAll();

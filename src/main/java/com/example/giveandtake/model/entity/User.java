@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,17 +29,18 @@ public class User {
 
     private String email;
 
-    private Date created_date;
+    private LocalDateTime created_date;
 
     private Date updated_date;
 
     @Builder
-    public User(String username, String nickname, String password, String email, String phone){
+    public User(String username, String nickname, String password, String email, String phone, LocalDateTime created_date){
         this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.phone = phone;
+        this.created_date=created_date;
     }
 
 }
