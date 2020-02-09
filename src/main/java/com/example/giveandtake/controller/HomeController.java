@@ -14,11 +14,8 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(){
-        return "Home";
+        return "HOME HELLO";
     }
 
-    @PostMapping("/users")
-    public void saveUsers(@RequestBody UsersSaveRequestDto dto){
-        userRepository.save(dto.toEntity());
-    }
+
 }

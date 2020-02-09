@@ -8,9 +8,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
-
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+//@Getter
 @Entity
 @Table(name = "users")
 public class User {
@@ -31,16 +32,8 @@ public class User {
 
     private LocalDateTime created_date;
 
-    private Date updated_date;
+    private LocalDateTime updated_date;
 
-    @Builder
-    public User(String username, String nickname, String password, String email, String phone, LocalDateTime created_date){
-        this.username = username;
-        this.nickname = nickname;
-        this.password = password;
-        this.email = email;
-        this.phone = phone;
-        this.created_date=created_date;
-    }
+
 
 }
