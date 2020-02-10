@@ -5,7 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 //@Setter 의도가 분명하지 않게 객체를 변경하는 것을 막기위해 setter를 쓰지않음
 @Entity
