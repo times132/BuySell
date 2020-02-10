@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @SpringBootTest
 class GiveandtakeApplicationTests {
@@ -21,18 +24,20 @@ class GiveandtakeApplicationTests {
 
 	@Test
 	public void createUser(){
-		User user = new User();
-		user.setNickname("sunny");
-		user.setUsername("YOO");
-		user.setEmail("y4380@naver.com");
-		user.setPassword("1234");
-		user.setPhone("010-2222-2222");
-		user.setCreated_date(LocalDateTime.now());
+		userRepository.save(User.builder()
+				.username("Park")
+				.nickname("times132")
+				.password("123456")
+				.phone("010-1234-5678")
+				.email("times132@naver.com")
+				.build());
 
-		User newUser = userRepository.save(user);
-		System.out.println("newUser" + newUser);
-		assertThat(user.getNickname(), is("sunny"));
-		assertThat(user.getEmail(), is("y4380@naver.com"));}
+		List<User> usersList = userRepository.findAll();
+
+		User users = usersList.get(0);
+		assertThat(users.getNickname(), is("times132"));
+		assertThat(users.getEmail(), is("times132@naver.com"));
+	}
 
 	@Test
 	public void deleteUser(){
@@ -59,20 +64,29 @@ class GiveandtakeApplicationTests {
 //데이터를 찾아 user객체에 담아주고 출력한다.
 
 
+//	@Test
+//	public void updateUser(){
+//
+//		Optional<User> user = userRepository.findById(2L);
+//
+//		user.ifPresent(selectUser ->{
+//			selectUser.setNickname("sunny말고승아");
+//			selectUser.setUpdated_date(LocalDateTime.now());
+//			selectUser.setPassword("1234");
+//			selectUser.setPhone("010-2222-2222");
+//			userRepository.save(selectUser);
+//		});
+//	}
+
 	@Test
-	public void updateUser(){
-
-		Optional<User> user = userRepository.findById(2L);
-
-		user.ifPresent(selectUser ->{
-			selectUser.setNickname("sunny말고승아");
-			selectUser.setUpdated_date(LocalDateTime.now());
-			selectUser.setPassword("1234");
-			selectUser.setPhone("010-2222-2222");
-			userRepository.save(selectUser);
-		});
+	public void AuditTest(){
+		LocalDateTime now = LocalDateTime.now();
+		userRepository.save(User.builder()
+				.username("Park")
+				.nickname("times132")
+				.password("123456")
+				.phone("010-1234-5678")
+				.email("times132@naver.com")
+				.build());
 	}
-
-
-
 }

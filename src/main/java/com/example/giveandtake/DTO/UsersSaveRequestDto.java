@@ -5,28 +5,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
 public class UsersSaveRequestDto {
+    // Entity클래스가 변경되는 것을 막기위해 Controller에서 쓸 DTO 구현
 
-//    private String nickname;
-//    private String username;
-//    private String password;
-//    private String email;
-//    private String phone;
-//    private LocalDateTime created_date;
-//    public User toEntity(){
-//        return User.builder()
-//                .nickname(nickname)
-//                .username(username)
-//                .email(email)
-//                .password(password)
-//                .phone(phone)
-//                .created_date(created_date)
-//                .build();
-//    }
+    private String username;
+    private String nickname;
+    private String password;
+    private String phone;
+    private String email;
+
+    public User toEntity(){
+        return User.builder()
+                .username(username)
+                .nickname(nickname)
+                .password(password)
+                .phone(phone)
+                .email(email)
+                .build();
+    }
 }

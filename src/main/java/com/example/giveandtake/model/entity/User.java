@@ -1,20 +1,16 @@
 package com.example.giveandtake.model.entity;
 
+import com.example.giveandtake.model.audit.DateAudit;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.util.Date;
-@Data
+
 @NoArgsConstructor
-@AllArgsConstructor
-//@Getter
+@Getter
+//@Setter 의도가 분명하지 않게 객체를 변경하는 것을 막기위해 setter를 쓰지않음
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends DateAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +26,13 @@ public class User {
 
     private String email;
 
-    private LocalDateTime created_date;
-
-    private LocalDateTime updated_date;
-
-
+    @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
+    public User(String username, String nickname, String password, String phone, String email){
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+    }
 
 }
