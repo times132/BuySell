@@ -22,20 +22,20 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
-    private UserRepository memberRepository;
+    private UserRepository userRepository;
 
     @Transactional
     public Long joinUser(UserDTO userDto) {
-        // 비밀번호 암호화
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
-        return memberRepository.save(userDto.toEntity()).getId();
+        //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
+        userDto.setNickname(userDto.getNickname());
+        return userRepository.save(userDto.toEntity()).getId();
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<com.example.giveandtake.model.entity.User> userWrapper = memberRepository.findByEmail(email);
+    public UserDetails  loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
         com.example.giveandtake.model.entity.User user = userWrapper.get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -46,8 +46,8 @@ public class UserService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
         }
 
-        return new User(user.getEmail(), user.getPassword(), authorities);
-    }
+        return new User(user.getEmail(), user.getPassword(), authorities);//SpringSecurity에서 제공하는 UserDetails를 구현한 User를 반환
+         }
 }
 
 

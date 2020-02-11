@@ -10,10 +10,13 @@
 <body>
 <h1>회원 가입</h1>
 <hr>
-
 <form th:action="@{/user/signup}" method="post">
     <input type="text" name="email" placeholder="이메일 입력해주세요">
     <input type="password" name="password" placeholder="비밀번호">
+    <input type="text" name="nickname" placeholder="사용할 닉네임을 입력하여 주세요">
+    <input type="text" name="username" placeholder="이름을 입력하여 주세요">
+    <input type="text" name="phone" placeholder="핸드폰번호를 입력하여 주세요">
+
     <button type="submit">가입하기</button>
 </form>
 </body>

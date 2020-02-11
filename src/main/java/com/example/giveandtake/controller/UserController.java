@@ -16,12 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
     private UserService userService;
 
-    // 메인 페이지
-    @GetMapping("/")
-    public String home() {
-        return "home";
-    }
-
     // 회원가입 페이지
     @GetMapping("/user/signup")
     public String dispSignup() {
@@ -30,8 +24,8 @@ public class UserController {
 
     // 회원가입 처리
     @PostMapping("/user/signup")
-    public String execSignup(UserDTO memberDto) {
-        userService.joinUser(memberDto);
+    public String execSignup(UserDTO userDto) {
+        userService.joinUser(userDto);
 
         return "redirect:/user/login";
     }
@@ -48,7 +42,10 @@ public class UserController {
         return "successlogin";
     }
 
-
+    @GetMapping("/user/login/error")
+    public String dispFailurLogin(){
+        return "failurelogin";
+    }
 
     // 로그아웃 결과 페이지
     @GetMapping("/user/logout/result")

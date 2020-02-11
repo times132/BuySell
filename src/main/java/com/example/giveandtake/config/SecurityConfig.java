@@ -43,6 +43,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
                     .loginPage("/user/login")
                     .defaultSuccessUrl("/user/login/result")
                     .permitAll()
+                    .failureUrl("/user/login/error")
                     .and() // 로그아웃 설정
                     .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))

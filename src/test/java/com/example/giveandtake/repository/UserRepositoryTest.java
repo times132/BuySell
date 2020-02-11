@@ -41,18 +41,18 @@ class UserRepositoryTest {
         assertThat(users.getEmail(), is("times132@naver.com"));
     }
 
-//    @Test
-//    public void deleteUser(){
-//        Optional<User> user = userRepository.findById(16L);
-//        assertTrue(user.isPresent()); // isPresent() 저장된 값이 null인지 아닌지 확인
-//        user.ifPresent(selectUser->{ // ifPresent() 값이 존재할 때만 실행 됨
-//            userRepository.delete(selectUser);
-//        });
-//
-//        Optional<User> deleteUser = userRepository.findById(16L);
-//
-//        assertFalse(deleteUser.isPresent()); // false
-//    }
+    @Test
+    public void deleteUser(){
+        Optional<User> user = userRepository.findById(21L);
+        assertTrue(user.isPresent()); // isPresent() 저장된 값이 null인지 아닌지 확인
+        user.ifPresent(selectUser->{ // ifPresent() 값이 존재할 때만 실행 됨
+            userRepository.delete(selectUser);
+        });
+
+        Optional<User> deleteUser = userRepository.findById(21L);
+
+        assertFalse(deleteUser.isPresent()); // false
+    }
 
     @Test
     public void readUser(){
