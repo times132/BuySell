@@ -81,4 +81,14 @@ public class BoardController {
 
         return "redirect:/board";
     }
+
+    @PostMapping("/remove/{no}")
+    public String removePOST(@PathVariable("no") Long bid){
+        logger.info("-----board removePOST-----");
+
+        boardService.delete(bid);
+
+        return "redirect:/board";
+    }
+
 }

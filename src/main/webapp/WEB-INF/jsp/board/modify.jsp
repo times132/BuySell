@@ -14,7 +14,7 @@
     작성자 : <input type="text" name="writer" value="${boardDto.writer}" readonly="readonly"> <br>
     가격 : <input type="text" name="price" value="${boardDto.price}"> <br>
 
-    <input type="submit" value="등록">
+    <input type="submit" value="수정">
 </form>
 </body>
 </html>

@@ -65,4 +65,8 @@ public class BoardService {
     public Long update(BoardDto dto){
         return boardRepository.save(dto.toEntity()).getBid();
     }
+
+    public void delete(Long bid){
+        boardRepository.deleteById(bid);
+    }
 }

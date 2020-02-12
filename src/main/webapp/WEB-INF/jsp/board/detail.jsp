@@ -20,6 +20,10 @@
     <a href='<c:url value="/board/edit/${boardDto.bid}"/>'>
         <button data-oper="modifyBtn">수정</button>
     </a>
+    <form action="/board/remove/${boardDto.bid}" method="post">
+        <button data-oper="modifyBtn">삭제</button>
+    </form>
+
 
 </div>
 </body>
