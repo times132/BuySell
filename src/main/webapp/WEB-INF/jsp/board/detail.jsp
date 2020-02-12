@@ -9,10 +9,12 @@
 </head>
 <body>
 <h2><c:out value="${boardDto.title}"></c:out></h2>
+<p>분류 : ${boardDto.btype}</p>
 <p>작성일 : <javatime:format pattern="yyyy-MM-dd" value="${boardDto.createdDate}"/></p>
 
-<p>${boardDto.content}</p>
-<p>${boardDto.price}</p>
+<p>판매자 : ${boardDto.writer}</p>
+<p>내용 : ${boardDto.content}</p>
+<p>가격 : ${boardDto.price}</p>
 
 <div>
     <a href='<c:url value="/board/edit/${boardDto.bid}"/>'>

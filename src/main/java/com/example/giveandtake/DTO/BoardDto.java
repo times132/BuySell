@@ -23,6 +23,7 @@ public class BoardDto {
 
     public Board toEntity(){
         return Board.builder()
+                .bid(bid)
                 .btype(btype)
                 .title(title)
                 .content(content)

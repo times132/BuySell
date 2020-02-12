@@ -17,10 +17,12 @@
     </style>
 </head>
 <body>
+<a href="/board/write">글쓰기</a>
 <table>
     <thead>
     <tr>
         <th class="one wide">번호</th>
+        <th class="one wide">분류</th>
         <th class="ten wide">글제목</th>
         <th class="two wide">작성자</th>
         <th class="three wide">작성일</th>
@@ -35,7 +37,10 @@
                 <c:out value="${board.bid}"></c:out>
             </td>
             <td>
-                <a href='<c:out value="${board.bid}"/>'>
+                <c:out value="${board.btype}"></c:out>
+            </td>
+            <td>
+                <a href='<c:out value="/board/${board.bid}"/>'>
                     <c:out value="${board.title}"></c:out>
                 </a>
             </td>

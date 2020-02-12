@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
     @Configuration
@@ -33,12 +34,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests()
+            http.cors()
+                    .and().csrf().disable()
+                    .authorizeRequests()
                     // 페이지 권한 설정
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/user/myinfo").hasRole("MEMBER")
                     .antMatchers("/**").permitAll()
-                    .and() // 로그인 설정
+                    .and()
                     .formLogin()
                     .loginPage("/user/login")
                     .defaultSuccessUrl("/user/login/result")

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -24,7 +25,8 @@ public class Board extends DateAudit {
     private Integer price;
 
     @Builder
-    public Board(String btype, String title, String content, String writer, Integer price){
+    public Board(Long bid, String btype, String title, String content, String writer, Integer price){
+        this.bid = bid;
         this.btype =btype;
         this.title = title;
         this.content = content;

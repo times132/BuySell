@@ -23,7 +23,7 @@ public class BoardController {
 
     private BoardService boardService;
 
-    @GetMapping("/")
+    @GetMapping
     public String list(Model model){
         logger.info("-----board list-----");
 
@@ -31,14 +31,14 @@ public class BoardController {
 
         model.addAttribute("boardList", boardList);
 
-        return "board/list";
+        return "/board/list";
     }
 
     @GetMapping("/write")
     public String writeGET(){
         logger.info("-----board registerGET-----");
 
-        return "board/write";
+        return "/board/write";
     }
 
     @PostMapping("/write")
@@ -47,7 +47,7 @@ public class BoardController {
 
         boardService.register(dto);
 
-        return "redirect:/";
+        return "redirect:/board";
     }
 
     @GetMapping("/{no}")
@@ -58,7 +58,27 @@ public class BoardController {
 
         model.addAttribute("boardDto", boardDto);
 
-        return "board/detail";
+        return "/board/detail";
     }
 
+
+    @GetMapping("/edit/{no}")
+    public String modifyGET(@PathVariable("no") Long bid, Model model){
+        logger.info("-----board modifyGET-----");
+
+        BoardDto boardDto = boardService.getBoard(bid);
+
+        model.addAttribute("boardDto", boardDto);
+
+        return "/board/modify";
+    }
+
+    @PostMapping("/edit/{no}")
+    public String modifyPOST(BoardDto dto){
+        logger.info("-----board modifyPOST-----");
+
+        boardService.update(dto);
+
+        return "redirect:/board";
+    }
 }

@@ -51,6 +51,7 @@ public class BoardService {
 
         BoardDto boardDto = BoardDto.builder()
                 .bid(board.getBid())
+                .btype(board.getBtype())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .writer(board.getWriter())
@@ -59,5 +60,9 @@ public class BoardService {
                 .build();
 
         return boardDto;
+    }
+
+    public Long update(BoardDto dto){
+        return boardRepository.save(dto.toEntity()).getBid();
     }
 }
