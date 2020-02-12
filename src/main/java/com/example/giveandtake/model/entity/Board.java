@@ -3,12 +3,14 @@ package com.example.giveandtake.model.entity;
 import com.example.giveandtake.model.audit.DateAudit;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Getter
 @Table(name = "boards")
 public class Board extends DateAudit {
 
@@ -18,15 +20,15 @@ public class Board extends DateAudit {
     private String btype;
     private String title;
     private String content;
-    private String nickname;
+    private String writer;
     private Integer price;
 
     @Builder
-    public Board(String btype, String title, String content, String nickname, Integer price){
+    public Board(String btype, String title, String content, String writer, Integer price){
         this.btype =btype;
         this.title = title;
         this.content = content;
-        this.nickname = nickname;
+        this.writer = writer;
         this.price = price;
     }
 }
