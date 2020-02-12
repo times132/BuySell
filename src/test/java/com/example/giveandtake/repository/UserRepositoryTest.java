@@ -27,11 +27,11 @@ class UserRepositoryTest {
     @Test
     public void createUser(){
         userRepository.save(User.builder()
-                .username("Park")
-                .nickname("times132")
-                .password("123456")
+                .username("yooseunga")
+                .nickname("sunny")
+                .password("1234")
                 .phone("010-1234-5678")
-                .email("times132@naver.com")
+                .email("y4380@naver.com")
                 .build());
 
         List<User> usersList = userRepository.findAll();
@@ -43,13 +43,13 @@ class UserRepositoryTest {
 
     @Test
     public void deleteUser(){
-        Optional<User> user = userRepository.findById(6L);
+        Optional<User> user = userRepository.findById(21L);
         assertTrue(user.isPresent()); // isPresent() 저장된 값이 null인지 아닌지 확인
         user.ifPresent(selectUser->{ // ifPresent() 값이 존재할 때만 실행 됨
             userRepository.delete(selectUser);
         });
 
-        Optional<User> deleteUser = userRepository.findById(7L);
+        Optional<User> deleteUser = userRepository.findById(21L);
 
         assertFalse(deleteUser.isPresent()); // false
     }
@@ -67,20 +67,6 @@ class UserRepositoryTest {
 //id는 모델에서 long으로 선언 되어 있으므로 L을 붙여 id가 1번인 데이터를 찾는다.
 //데이터를 찾아 user객체에 담아주고 출력한다.
 
-
-//    @Test
-//    public void updateUser(){
-//
-//        Optional<User> user = userRepository.findById(2L);
-//
-//        user.ifPresent(selectUser ->{
-//            selectUser.setNickname("sunny말고승아");
-//            selectUser.setUpdated_date(LocalDateTime.now());
-//            selectUser.setPassword("1234");
-//            selectUser.setPhone("010-2222-2222");
-//            userRepository.save(selectUser);
-//        });
-//    }
 
     @Test
     public void AuditTest(){

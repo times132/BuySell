@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UsersSaveRequestDto {
+public class UserDTO {
     // Entity클래스가 변경되는 것을 막기위해 Controller에서 쓸 DTO 구현
 
     private String username;
