@@ -19,7 +19,7 @@ public class UserController {
     // 회원가입 페이지
     @GetMapping("/user/signup")
     public String dispSignup() {
-        return "signup";
+        return "/user/signup";
     }
 
     // 회원가입 처리
@@ -33,31 +33,31 @@ public class UserController {
     // 로그인 페이지
     @GetMapping("/user/login")
     public String dispLogin() {
-        return "login";
+        return "/user/login";
     }
 
     // 로그인 결과 페이지
     @GetMapping("/user/login/result")
     public String dispLoginResult() {
-        return "successlogin";
+        return "/user/successlogin";
     }
 
     @GetMapping("/user/login/error")
     public String dispFailurLogin(){
-        return "failurelogin";
+        return "/user/failurelogin";
     }
 
     // 로그아웃 결과 페이지
     @GetMapping("/user/logout/result")
     public String dispLogout() {
-        return "logout";
+        return "/user/logout";
     }
 
 
     // 접근 거부 페이지
     @GetMapping("/user/denied")
     public String dispDenied() {
-        return "denied";
+        return "/user/denied";
     }
 
     // 내 정보 페이지
@@ -66,6 +66,11 @@ public class UserController {
         return "myinfo";
     }
 
+    // 내정보 상세정보
+    @GetMapping("/user/detail")
+    public String dispuserdetail() {
+        return "/user/detail";
+    }
     // 어드민 페이지
     @GetMapping("/admin")
     public String dispAdmin() {
