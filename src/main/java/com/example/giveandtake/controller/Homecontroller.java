@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class Homecontroller {
     @GetMapping("/")// 메인 페이지
     public String home() {
-        return "home";
+        return "/home";
     }
 }

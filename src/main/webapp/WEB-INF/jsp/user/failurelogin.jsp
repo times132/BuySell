@@ -9,6 +9,6 @@
 <hr>
 <p>
 </p>
-<a th:href="@{'/user/login'}">다시로그인하기</a>
+<input type="button" value="다시로그인하기" onClick="self.location='user/login';">
 </body>
 </html>

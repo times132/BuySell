@@ -1,6 +1,8 @@
 package com.example.giveandtake.DTO;
 
 import com.example.giveandtake.model.entity.User;
+import jdk.nashorn.internal.runtime.Debug;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +18,9 @@ public class UserDTO {
     private String password;
     private String phone;
     private String email;
+
+
+
 
     public User toEntity(){
         return User.builder()

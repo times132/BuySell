@@ -47,7 +47,27 @@ public class UserService implements UserDetailsService {
         }
 
         return new User(user.getEmail(), user.getPassword(), authorities);//SpringSecurity에서 제공하는 UserDetails를 구현한 User를 반환
-         }
+    }
+
+//    @Transactional
+//    public List<UserDTO> getUserlist() {
+//        List<com.example.giveandtake.model.entity.User> userEntities = userRepository.findAll();
+//        List<UserDTO> userDtoList = new ArrayList<>();
+//
+//        for ( com.example.giveandtake.model.entity.User userEntity : userEntities) {
+//            UserDTO userDTO = UserDTO.builder()
+//                    .id(userEntity.getId())
+//                    .email(userEntity.getEmail())
+//                    .phone(userEntity.getPhone())
+//                    .nickname(userEntity.getNickname())
+//                    .createdDate(userEntity.getCreatedDate())
+//                    .build();
+//
+//            userDtoList.add(userDTO);
+//        }
+//
+//        return userDtoList;
+//    }
 }
 
 
