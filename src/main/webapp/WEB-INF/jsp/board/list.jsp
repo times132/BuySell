@@ -54,5 +54,14 @@
     </c:forEach>
     </tbody>
 </table>
+
+<%--검색 폼--%>
+<form action="/board/search" method="get">
+    <div>
+        <input name="keyword" type="text" placeholder="검색"/>
+    </div>
+
+    <button>검색하기</button>
+</form>
 </body>
 </html>

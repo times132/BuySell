@@ -7,10 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,9 +24,9 @@ public class BoardController {
     public String list(Model model){
         logger.info("-----board list-----");
 
-        List<BoardDto> boardList = boardService.getList();
+        List<BoardDto> boardDtoList = boardService.getList();
 
-        model.addAttribute("boardList", boardList);
+        model.addAttribute("boardList", boardDtoList);
 
         return "/board/list";
     }
@@ -89,6 +86,19 @@ public class BoardController {
         boardService.delete(bid);
 
         return "redirect:/board";
+    }
+
+    @GetMapping("/search")
+    public String searchGET(@RequestParam(value = "keyword") String keyword, Model model){
+        logger.info("-----board searchGET");
+
+        if(keyword == "") return "redirect:/board";
+
+        List<BoardDto> boardDtoList = boardService.searchBoard(keyword);
+
+        model.addAttribute("boardList", boardDtoList);
+
+        return "/board/list";
     }
 
 }

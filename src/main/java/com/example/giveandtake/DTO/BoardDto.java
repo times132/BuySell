@@ -1,10 +1,7 @@
 package com.example.giveandtake.DTO;
 
 import com.example.giveandtake.model.entity.Board;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 

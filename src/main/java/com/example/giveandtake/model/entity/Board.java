@@ -27,7 +27,7 @@ public class Board extends DateAudit {
     @Builder
     public Board(Long bid, String btype, String title, String content, String writer, Integer price){
         this.bid = bid;
-        this.btype =btype;
+        this.btype = btype;
         this.title = title;
         this.content = content;
         this.writer = writer;

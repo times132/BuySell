@@ -29,17 +29,7 @@ public class BoardService {
         List<BoardDto> boardDtoList = new ArrayList<>();
 
         for (Board board : boardList){
-            BoardDto boardDto = BoardDto.builder()
-                    .bid(board.getBid())
-                    .btype(board.getBtype())
-                    .title(board.getTitle())
-                    .content(board.getContent())
-                    .writer(board.getWriter())
-                    .price(board.getPrice())
-                    .createdDate(board.getCreatedDate())
-                    .build();
-
-            boardDtoList.add(boardDto);
+            boardDtoList.add(this.convertModelToDto(board));
         }
 
         return boardDtoList;
@@ -68,5 +58,28 @@ public class BoardService {
 
     public void delete(Long bid){
         boardRepository.deleteById(bid);
+    }
+
+    public List<BoardDto> searchBoard(String keyword){
+        List<Board> boardList = boardRepository.findByTitleContaining(keyword);
+        List<BoardDto> boardDtoList = new ArrayList<>();
+
+        if (boardList.isEmpty()) return boardDtoList;
+
+        for (Board board : boardList){
+            boardDtoList.add(this.convertModelToDto(board));
+        }
+
+        return boardDtoList;
+    }
+
+    private BoardDto convertModelToDto(Board board){
+        return BoardDto.builder()
+                .bid(board.getBid())
+                .btype(board.getBtype())
+                .title(board.getTitle())
+                .writer(board.getWriter())
+                .createdDate(board.getCreatedDate())
+                .build();
     }
 }
