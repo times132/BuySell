@@ -24,14 +24,17 @@ public class BoardServiceTest {
     @Test
     public void registerTest(){
         BoardDto dto = new BoardDto();
-        dto.setBtype("커피");
-        dto.setTitle("스타벅스 아메리카노");
-        dto.setContent("아메리카노 기프티콘 팝니다");
-        dto.setWriter("times132");
-        dto.setPrice(3500);
+        dto.setBtype("외식");
+        dto.setTitle("빕스");
+        dto.setContent("빕스 50000원");
+        dto.setWriter("dlwlrma");
+        dto.setPrice(45000);
         dto.toEntity();
 
-        boardService.register(dto);
+        for (int i=0; i<20; i++){
+            boardService.register(dto);
+        }
+
     }
 
     @Test

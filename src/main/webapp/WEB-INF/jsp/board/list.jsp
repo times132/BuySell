@@ -14,6 +14,18 @@
         table, th, td {
             border: 1px solid black;
         }
+
+        .pagination {
+            list-style:none;
+            margin:0;
+            padding:0;
+        }
+        .pagination li {
+            margin: 0 5px 0 0;
+            padding: 0 0 0 0;
+            border : 0;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -63,5 +75,20 @@
 
     <button>검색하기</button>
 </form>
+    <ul class="pagination">
+        <c:if test="${pageMaker.prev}">
+            <li><a class="prev" href="?page=${pageMaker.startPage - 1}">이전</a></li>
+        </c:if>
+        <c:forEach var="page" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+            <li><a class="page" href="?page=${page}">${page}</a></li>
+        </c:forEach>
+        <c:if test="${pageMaker.next}">
+            <li><a class="next" href="?page=${pageMaker.endPage + 1}">다음</a></li>
+        </c:if>
+    </ul>
+
+<div>
+
+</div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardDto;
 import com.example.giveandtake.Service.BoardService;
+import com.example.giveandtake.common.Pagination;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +22,15 @@ public class BoardController {
     private BoardService boardService;
 
     @GetMapping
-    public String list(Model model){
+    public String list(@RequestParam(value = "page", defaultValue = "1") Integer pageNum, Model model){
         logger.info("-----board list-----");
 
-        List<BoardDto> boardDtoList = boardService.getList();
+        List<BoardDto> boardDtoList = boardService.getList(pageNum);
+        Pagination pageMaker = boardService.getPageMaker(pageNum);
 
         model.addAttribute("boardList", boardDtoList);
+        model.addAttribute("pageMaker", pageMaker);
+
 
         return "/board/list";
     }
@@ -92,7 +96,7 @@ public class BoardController {
     public String searchGET(@RequestParam(value = "keyword") String keyword, Model model){
         logger.info("-----board searchGET");
 
-        if(keyword == "") return "redirect:/board";
+        if(keyword.equals("")) return "redirect:/board";
 
         List<BoardDto> boardDtoList = boardService.searchBoard(keyword);
 
