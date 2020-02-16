@@ -14,10 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -49,25 +49,18 @@ public class UserService implements UserDetailsService {
         return new User(user.getEmail(), user.getPassword(), authorities);//SpringSecurity에서 제공하는 UserDetails를 구현한 User를 반환
     }
 
-//    @Transactional
-//    public List<UserDTO> getUserlist() {
-//        List<com.example.giveandtake.model.entity.User> userEntities = userRepository.findAll();
-//        List<UserDTO> userDtoList = new ArrayList<>();
-//
-//        for ( com.example.giveandtake.model.entity.User userEntity : userEntities) {
-//            UserDTO userDTO = UserDTO.builder()
-//                    .id(userEntity.getId())
-//                    .email(userEntity.getEmail())
-//                    .phone(userEntity.getPhone())
-//                    .nickname(userEntity.getNickname())
-//                    .createdDate(userEntity.getCreatedDate())
-//                    .build();
-//
-//            userDtoList.add(userDTO);
-//        }
-//
-//        return userDtoList;
-//    }
+    public Map<String, String> validateHandling(Errors errors) {
+        Map<String, String> validatorResult = new HashMap<>();
+
+        for (FieldError error : errors.getFieldErrors()) {
+            String validKeyName = String.format("valid_%s", error.getField());
+            validatorResult.put(validKeyName, error.getDefaultMessage());
+        }
+        //유효성 검사에 실패한 필드에 정의된 메시지를 가져옵니다
+        return validatorResult;
+    }
+
+
 }
 
 

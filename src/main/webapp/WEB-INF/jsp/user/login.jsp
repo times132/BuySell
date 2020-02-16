@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
@@ -16,9 +17,15 @@
 <h1>로그인</h1>
 <hr>
 <form action="/user/login" method="post">
+    <div>
+        이메일 <input type="text" name="username" value="email">
+    </div>
+    <div>
+        비밀번호 <input type="password" name="password" value="password">
+    </div>
+
+
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    이메일 <input type="text" name="username" placeholder="이메일을 적어주세요">
-    비밀번호 <input type="password" name="password" placeholder="비밀번호">
 
     <button type="submit">로그인</button>
 </form>

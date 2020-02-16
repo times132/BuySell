@@ -11,11 +11,15 @@
 <h1>회원 가입</h1>
 <hr>
 <form  action="/user/signup" method="post">
-    이메일     : <input type="text" name="email" value="${userDto.email}" > <br>
-    패스워드   : <input type="text" name="password" value="${userDto.password}"/>
-    닉네임     : <input type="text" name="nickname" value="${userDto.nickname}"> <br>
+    이메일     : <input type="text" name="email" value="${userDto.email}" >  <p>${valid_email}</p><br>
+
+    패스워드   : <input type="text" name="password" value="${userDto.password}"/><p>${valid_password}</p><br>
+
+    닉네임     : <input type="text" name="nickname" value="${userDto.nickname}"><p> ${valid_nickname}</p> <br>
+
     이름       : <input type="text" name="username" value="${userDto.username}"> <br>
-    핸드폰번호  : <input type="text" name="phone" value="${userDto.phone}" > <br>
+
+    핸드폰번호  : <input type="text" name="phone" value="${userDto.phone}" ><p> ${valid_phone}</p> <br>
 
 
     <div>
