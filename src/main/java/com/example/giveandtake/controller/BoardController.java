@@ -2,10 +2,14 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardDto;
 import com.example.giveandtake.Service.BoardService;
+import com.example.giveandtake.common.Criteria;
 import com.example.giveandtake.common.Pagination;
+import com.example.giveandtake.model.entity.Board;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +25,31 @@ public class BoardController {
 
     private BoardService boardService;
 
+//    @GetMapping
+//    public String list(Criteria cri, Model model){
+//        logger.info("-----board list-----");
+//
+//        // 게시물 페이징
+//        List<BoardDto> boardDtoList = boardService.getList(cri);
+//        // 밑에 번호 페이징
+//        Long total = boardService.getBoardCount();
+//
+//        model.addAttribute("boardList", boardDtoList);
+//        model.addAttribute("pageMaker", pageMaker);
+//
+//        return "/board/list";
+//    }
+
     @GetMapping
-    public String list(@RequestParam(value = "page", defaultValue = "1") Integer pageNum, Model model){
+    public String list(Pageable pageable, Criteria cri, Model model){
         logger.info("-----board list-----");
 
-        List<BoardDto> boardDtoList = boardService.getList(pageNum);
-        Pagination pageMaker = boardService.getPageMaker(pageNum);
-
-        model.addAttribute("boardList", boardDtoList);
-        model.addAttribute("pageMaker", pageMaker);
-
+        Page<Board> boardPage =  boardService.getList1(pageable, cri);
+        Long total = boardPage.getTotalElements();
+        logger.info("-----total ele----- : " + total);
+        logger.info("-----total page----- : " + boardPage.getTotalPages());
+        logger.info("-----total pageable----- : " + boardPage.getContent());
+        model.addAttribute("boardList", boardPage.getContent());
 
         return "/board/list";
     }
@@ -51,7 +70,7 @@ public class BoardController {
         return "redirect:/board";
     }
 
-    @GetMapping("/{no}")
+    @GetMapping("/read/{no}")
     public String readGET(@PathVariable("no") Long bid, Model model){
         logger.info("-----board readGET-----");
 
@@ -92,17 +111,19 @@ public class BoardController {
         return "redirect:/board";
     }
 
-    @GetMapping("/search")
-    public String searchGET(@RequestParam(value = "keyword") String keyword, Model model){
-        logger.info("-----board searchGET");
-
-        if(keyword.equals("")) return "redirect:/board";
-
-        List<BoardDto> boardDtoList = boardService.searchBoard(keyword);
-
-        model.addAttribute("boardList", boardDtoList);
-
-        return "/board/list";
-    }
+//    @GetMapping("/search")
+//    public String searchGET(@RequestParam(value = "keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer pageNum, Model model){
+//        logger.info("-----board searchGET");
+//
+//        if(keyword.equals("")) return "redirect:/board";
+//
+//        Pagination pageMaker = boardService.getPageMaker(pageNum);
+//        List<BoardDto> boardDtoList = boardService.searchBoard(pageNum, keyword);
+//
+//        model.addAttribute("boardList", boardDtoList);
+//        model.addAttribute("pageMaker", pageMaker);
+//
+//        return "/board/list";
+//    }
 
 }
