@@ -52,7 +52,7 @@
                 <c:out value="${board.btype}"></c:out>
             </td>
             <td>
-                <a href='<c:out value="/board/${board.bid}"/>'>
+                <a href='<c:out value="read/${board.bid}"/>'>
                     <c:out value="${board.title}"></c:out>
                 </a>
             </td>
@@ -69,26 +69,48 @@
 
 <%--검색 폼--%>
 <form action="/board/search" method="get">
-    <div>
-        <input name="keyword" type="text" placeholder="검색"/>
-    </div>
+    <select name="type">
+        <option value=""/>>--</option>
+        <option value="W">작성자</option>
+        <option value="TC">제목+내용</option>
+    </select>
+
+    <input name="keyword" type="text" placeholder="검색"/>
+
+    <input type="hidden" name="page" value="<c:out value="${pageMaker.curPage}"/>"/>
 
     <button>검색하기</button>
 </form>
     <ul class="pagination">
         <c:if test="${pageMaker.prev}">
-            <li><a class="prev" href="?page=${pageMaker.startPage - 1}">이전</a></li>
+            <li class="pagination_btn" <a class="prev" href="?page=${pageMaker.startPage - 1}">이전</a></li>
         </c:if>
         <c:forEach var="page" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-            <li><a class="page" href="?page=${page}">${page}</a></li>
+            <li class="pagination_btn"><a class="page" href="?page=${page}">${page}</a></li>
         </c:forEach>
         <c:if test="${pageMaker.next}">
-            <li><a class="next" href="?page=${pageMaker.endPage + 1}">다음</a></li>
+            <li class="pagination_btn"><a class="next" href="?page=${pageMaker.endPage + 1}">다음</a></li>
         </c:if>
     </ul>
 
-<div>
+<%--    <form id="actionForm" action="/board/list" method="get">--%>
+<%--        <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">--%>
+<%--        <input type="hidden" name="amount" value="${pageMaker.cri.amount}">--%>
+<%--        <input type="hidden" name="type" value="${pageMaker.cri.type}">--%>
+<%--        <input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">--%>
+<%--    </form>--%>
 
-</div>
+<script>
+    $(document).ready(function () {
+
+
+        $(".pagination_button a").on("click", function (e) {
+            e.preventDefault();
+            console.log("click");
+            actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+            actionForm.submit();
+        });
+    })
+</script>
 </body>
 </html>

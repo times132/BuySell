@@ -61,6 +61,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
         public PasswordEncoder passwordEncoder() {
             return new BCryptPasswordEncoder();
         }
+
         @Override
         public void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
