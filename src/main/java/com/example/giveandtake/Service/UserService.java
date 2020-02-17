@@ -22,6 +22,7 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
+
     private UserRepository userRepository;
 
     @Transactional
@@ -61,6 +62,11 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public Optional<com.example.giveandtake.model.entity.User> readUserByEmail(String email) {
+        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByEmail(email);
+
+        return userList;
+    }
 }
 
 

@@ -2,7 +2,11 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.Service.UserService;
+import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +18,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
 public class UserController {
     private UserService userService;
+    private UserRepository memberDao;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     // 회원가입 페이지
     @GetMapping("/user/signup")
@@ -81,7 +89,14 @@ public class UserController {
 
     // 내 정보 페이지
     @GetMapping("/user/info")
-    public String dispMyInfo() {
+    public String dispMyInfo(Principal principal, Model model) {
+        String email = principal.getName();
+        logger.info("user email : " + email);
+        Optional<com.example.giveandtake.model.entity.User> userWrapper = memberDao.findByEmail(email);
+        com.example.giveandtake.model.entity.User user = userWrapper.get();
+
+        model.addAttribute("userList",user);
+
         return "/user/myinfo";
     }
 
