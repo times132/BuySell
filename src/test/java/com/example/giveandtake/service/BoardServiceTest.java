@@ -1,8 +1,7 @@
 package com.example.giveandtake.service;
 
-import com.example.giveandtake.DTO.BoardDto;
+import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.Service.BoardService;
-import com.example.giveandtake.model.entity.Board;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,7 @@ public class BoardServiceTest {
 
     @Test
     public void registerTest(){
-        BoardDto dto = new BoardDto();
+        BoardDTO dto = new BoardDTO();
         dto.setBtype("외식");
         dto.setTitle("빕스");
         dto.setContent("빕스 50000원");
@@ -35,12 +34,5 @@ public class BoardServiceTest {
             boardService.register(dto);
         }
 
-    }
-
-    @Test
-    public void searchTest(){
-        List<BoardDto> boardDtoList = boardService.searchBoard("aa");
-
-        assertEquals(2, boardDtoList.size());
     }
 }

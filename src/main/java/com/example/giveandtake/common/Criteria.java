@@ -1,13 +1,14 @@
 package com.example.giveandtake.common;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.util.UriComponentsBuilder;
 
+@Setter
 @Getter
 public class Criteria {
 
-    private Integer curPage;
-    private Integer amount;
+    private Integer page;
 
     private String type;
     private String keyword;
@@ -16,8 +17,8 @@ public class Criteria {
         this(1);
     }
 
-    public Criteria(Integer curPage){
-        this.curPage = curPage;
+    public Criteria(Integer page){
+        this.page = page;
     }
 
     public String[] getTypeArr(){
@@ -34,8 +35,7 @@ public class Criteria {
 
     public String getUrlLink(){
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
-                .queryParam("page", getCurPage())
-                .queryParam("amount", getAmount())
+                .queryParam("page", getPage())
                 .queryParam("type", getType())
                 .queryParam("keyword", getKeyword());
 

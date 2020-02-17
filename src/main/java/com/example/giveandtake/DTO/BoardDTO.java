@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BoardDto {
+public class BoardDTO {
 
     private Long bid;
     private String btype;
@@ -30,7 +30,7 @@ public class BoardDto {
     }
 
     @Builder
-    public BoardDto(Long bid, String btype, String title, String content, String writer, Integer price, LocalDateTime createdDate){
+    public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, LocalDateTime createdDate){
         this.bid = bid;
         this.btype = btype;
         this.title = title;

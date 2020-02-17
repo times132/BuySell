@@ -1,6 +1,6 @@
 package com.example.giveandtake.controller;
 
-import com.example.giveandtake.DTO.BoardDto;
+import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.Service.BoardService;
 import com.example.giveandtake.common.Criteria;
 import com.example.giveandtake.common.Pagination;
@@ -9,12 +9,9 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/board")
@@ -41,15 +38,27 @@ public class BoardController {
 //    }
 
     @GetMapping
-    public String list(Pageable pageable, Criteria cri, Model model){
+    public String list(Criteria cri, Model model){
         logger.info("-----board list-----");
 
-        Page<Board> boardPage =  boardService.getList1(pageable, cri);
-        Long total = boardPage.getTotalElements();
-        logger.info("-----total ele----- : " + total);
-        logger.info("-----total page----- : " + boardPage.getTotalPages());
-        logger.info("-----total pageable----- : " + boardPage.getContent());
+        Page<Board> boardPage =  boardService.getList(cri);
+
+        logger.info("-----getTotalElements----- : " + boardPage.getTotalElements());
+        logger.info("-----getTotalPages----- : " + boardPage.getTotalPages());
+        logger.info("-----getNumber----- : " + boardPage.getNumber());
+        logger.info("-----getSize----- : " + boardPage.getSize());
+        logger.info("-----get----- : " + boardPage.get());
+        logger.info("-----toList----- : " + boardPage.toList());
+        logger.info("-----getContent----- : " + boardPage.getContent());
+
         model.addAttribute("boardList", boardPage.getContent());
+        model.addAttribute("pageMaker", Pagination.builder()
+                            .cri(cri)
+                            .total(boardPage.getTotalElements())
+                            .rangeSize(boardPage.getSize())
+                            .realEndPage(boardPage.getTotalPages())
+                            .listSize(5)
+                            .build());
 
         return "/board/list";
     }
@@ -62,7 +71,7 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writePOST(BoardDto dto){
+    public String writePOST(BoardDTO dto){
         logger.info("-----board registerPOST-----");
 
         boardService.register(dto);
@@ -74,7 +83,7 @@ public class BoardController {
     public String readGET(@PathVariable("no") Long bid, Model model){
         logger.info("-----board readGET-----");
 
-        BoardDto boardDto = boardService.getBoard(bid);
+        BoardDTO boardDto = boardService.getBoard(bid);
 
         model.addAttribute("boardDto", boardDto);
 
@@ -86,7 +95,7 @@ public class BoardController {
     public String modifyGET(@PathVariable("no") Long bid, Model model){
         logger.info("-----board modifyGET-----");
 
-        BoardDto boardDto = boardService.getBoard(bid);
+        BoardDTO boardDto = boardService.getBoard(bid);
 
         model.addAttribute("boardDto", boardDto);
 
@@ -94,7 +103,7 @@ public class BoardController {
     }
 
     @PostMapping("/edit/{no}")
-    public String modifyPOST(BoardDto dto){
+    public String modifyPOST(BoardDTO dto){
         logger.info("-----board modifyPOST-----");
 
         boardService.update(dto);

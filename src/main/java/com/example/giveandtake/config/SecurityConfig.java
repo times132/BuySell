@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
     @Configuration
@@ -29,7 +28,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
         public void configure(WebSecurity web) throws Exception
         {
             // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
-            web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/lib/**,");
+            web.ignoring().antMatchers("/css/**", "/static/js/**", "/img/**", "/lib/**,");
         }
 
         @Override
