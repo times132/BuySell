@@ -1,5 +1,6 @@
 package com.example.giveandtake.common;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,11 +26,11 @@ public class Criteria {
         return type == null ? new String[] {} : type.split("");
     }
 
-    public String getKeyword(){
-        if (keyword == null){
+    public String getType(){
+        if (this.type == null){
             return "";
         }else{
-            return this.keyword;
+            return this.type;
         }
     }
 

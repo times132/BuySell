@@ -38,7 +38,7 @@ public class BoardService {
         Page<Board> page;
         logger.info("======getType()====== : " + cri.getType());
 
-        if (cri.getType() == null){
+        if (cri.getType().equals("")){
             page = boardRepository.findAll(pageable);
         }else if (cri.getType().equals("TC")){
             page = boardRepository.findAllByTitleContainingOrContentContaining(cri.getKeyword(), cri.getKeyword(), pageable);
