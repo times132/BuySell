@@ -1,6 +1,5 @@
 package com.example.giveandtake.common;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -9,36 +8,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Getter
 public class Criteria {
 
-    private Integer page;
-
-    private String type;
-    private String keyword;
+    private Integer page; // 현재 페이지
+    private Integer pageSize; // 밑에 보이는 페이지 개수
 
     public Criteria(){
-        this(1);
+        this(1, 5);
     }
 
-    public Criteria(Integer page){
+    public Criteria(Integer page, Integer pageSize){
         this.page = page;
+        this.pageSize = pageSize;
     }
 
-    public String[] getTypeArr(){
-        return type == null ? new String[] {} : type.split("");
-    }
-
-    public String getType(){
-        if (this.type == null){
-            return "";
-        }else{
-            return this.type;
-        }
-    }
-
-    public String getUrlLink(){
+    public String makeUrl(Integer page){
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
-                .queryParam("page", getPage())
-                .queryParam("type", getType())
-                .queryParam("keyword", getKeyword());
+                .queryParam("page", page);
 
         return builder.toUriString();
     }
