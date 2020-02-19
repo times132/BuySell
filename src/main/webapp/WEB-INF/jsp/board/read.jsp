@@ -40,6 +40,11 @@
     <button data-oper="remove">삭제</button>
     <button data-oper="list">목록</button>
 
+    <div>
+        <a>댓글 제목</a>
+        <a>댓글 내용</a>
+    </div>
+
 
     <form id="operForm" action="/board/modify" method="get">
         <input type="hidden" id="bid" name="bid" value="<c:out value="${boardDto.bid}"/>">

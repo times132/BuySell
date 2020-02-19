@@ -24,10 +24,10 @@ public class BoardController {
     private BoardService boardService;
 
     @GetMapping
-    public String list(SearchCriteria cri, Model model){
+    public String list(SearchCriteria searchCri, Model model){
         logger.info("-----board list-----");
 
-        Page<Board> boardPage =  boardService.getList(cri);
+        Page<Board> boardPage =  boardService.getList(searchCri);
 
         logger.info("-----getTotalElements----- : " + boardPage.getTotalElements());
         logger.info("-----getTotalPages----- : " + boardPage.getTotalPages());
@@ -39,7 +39,7 @@ public class BoardController {
 
         model.addAttribute("boardList", boardPage.getContent());
         model.addAttribute("pageMaker", Pagination.builder()
-                            .cri(cri)
+                            .cri(searchCri)
                             .total(boardPage.getTotalElements())
                             .rangeSize(boardPage.getSize())
                             .realEndPage(boardPage.getTotalPages())
@@ -57,10 +57,10 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writePOST(BoardDTO dto){
+    public String writePOST(BoardDTO boardDTO){
         logger.info("-----board registerPOST-----");
 
-        boardService.register(dto);
+        boardService.register(boardDTO);
 
         return "redirect:/board";
     }
@@ -75,21 +75,21 @@ public class BoardController {
     }
 
     @PostMapping("/modify")
-    public String modifyPOST(@ModelAttribute SearchCriteria cri, BoardDTO dto){
+    public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto){
         logger.info("-----board modifyPOST-----");
 
         boardService.update(dto);
 
-        return "redirect:/board" + cri.makeSearchUrl(cri.getPage());
+        return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
     @PostMapping("/remove")
-    public String removePOST(@ModelAttribute SearchCriteria cri, @RequestParam("bid") Long bid){
+    public String removePOST(@ModelAttribute SearchCriteria searchCri, @RequestParam("bid") Long bid){
         logger.info("-----board removePOST-----");
 
         boardService.delete(bid);
 
-        return "redirect:/board" + cri.makeSearchUrl(cri.getPage());
+        return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
 }
