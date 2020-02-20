@@ -12,7 +12,7 @@
 <hr>
 
 <form  action="/user/signup" method="post">
-    이메일 : <input type="text" name="email" value="${userDto.email}"/><p>${valid_email}</p><br>
+    이메일 : <input type="text" name="email" value="${email}"/><p>${valid_email}</p><br>
 
     패스워드   : <input type="text" name="password" value="${userDto.password}"/><p>${valid_password}</p><br>
 
