@@ -10,11 +10,9 @@
         table {
             border-collapse: collapse;
         }
-
         table, th, td {
             border: 1px solid black;
         }
-
         .pagination {
             list-style:none;
             margin:0;
@@ -27,11 +25,14 @@
             float: left;
         }
     </style>
-<%--    <script src="/static/js/jquery-3.4.1.min.js"></script>--%>
+    
     <script src="/webjars/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
+    <%@include file="../include/header.jsp"%>
     <a href="/board/write">글쓰기</a>
+
+    <a href="/board">전체보기</a>
 
     <table>
         <thead>
@@ -55,7 +56,7 @@
                     <c:out value="${board.btype}"></c:out>
                 </td>
                 <td>
-                    <a class="move" href='<c:out value="board/read/${board.bid}"/>'>
+                    <a class="move" href='<c:out value="${board.bid}"/>'>
                         <c:out value="${board.title}"></c:out>
                     </a>
                 </td>
@@ -102,44 +103,38 @@
         <input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
     </form>
 
-<script>
-    $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
 
-        // $(".move").on("click", function (e) {
-        //     e.preventDefault();
-        //     actionForm.append("<input type='hidden' name='bid' value='"+$(this).attr("href")+"'>");
-        //     actionForm.attr("action", "/board/read");
-        //     actionForm.submit();
-        // });
+            $(".move").on("click", function (e) {
+                e.preventDefault();
+                actionForm.append("<input type='hidden' name='bid' value='"+$(this).attr("href")+"'>");
+                actionForm.attr("action", "/board/read");
+                actionForm.submit();
+            });
 
-        var actionForm = $("#actionForm");
-
-        $(".pagination_btn a").on("click", function (e) {
-            e.preventDefault();
-            console.log("click");
-            actionForm.find("input[name='page']").val($(this).attr("href"));
-            actionForm.submit();
-        });
-
-        var searchForm = $("#searchForm");
-
-        $("#searchForm button").on("click", function (e) {
-            if (!searchForm.find("option:selected").val()){
-                alert("검색종류를 선택하세요.");
-                return false;
-            }
-            if (!searchForm.find("input[name='keyword']").val()){
-                alert("키워드를 입력하세요.");
-                return false;
-            }
-
-
-            searchForm.find("input[name='page']").val("1");
-            e.preventDefault();
-
-            searchForm.submit();
+            var actionForm = $("#actionForm");
+            $(".pagination_btn a").on("click", function (e) {
+                e.preventDefault();
+                console.log("click");
+                actionForm.find("input[name='page']").val($(this).attr("href"));
+                actionForm.submit();
+            });
+            var searchForm = $("#searchForm");
+            $("#searchForm button").on("click", function (e) {
+                if (!searchForm.find("option:selected").val()){
+                    alert("검색종류를 선택하세요.");
+                    return false;
+                }
+                if (!searchForm.find("input[name='keyword']").val()){
+                    alert("키워드를 입력하세요.");
+                    return false;
+                }
+                searchForm.find("input[name='page']").val("1");
+                e.preventDefault();
+                searchForm.submit();
+            })
         })
-    })
-</script>
+    </script>
 </body>
 </html>

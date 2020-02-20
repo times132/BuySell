@@ -4,6 +4,7 @@ import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.Service.BoardService;
 import com.example.giveandtake.common.Criteria;
 import com.example.giveandtake.common.Pagination;
+import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -22,26 +23,11 @@ public class BoardController {
 
     private BoardService boardService;
 
-//    @GetMapping
-//    public String list(Criteria cri, Model model){
-//        logger.info("-----board list-----");
-//
-//        // 게시물 페이징
-//        List<BoardDto> boardDtoList = boardService.getList(cri);
-//        // 밑에 번호 페이징
-//        Long total = boardService.getBoardCount();
-//
-//        model.addAttribute("boardList", boardDtoList);
-//        model.addAttribute("pageMaker", pageMaker);
-//
-//        return "/board/list";
-//    }
-
     @GetMapping
-    public String list(Criteria cri, Model model){
+    public String list(SearchCriteria searchCri, Model model){
         logger.info("-----board list-----");
 
-        Page<Board> boardPage =  boardService.getList(cri);
+        Page<Board> boardPage =  boardService.getList(searchCri);
 
         logger.info("-----getTotalElements----- : " + boardPage.getTotalElements());
         logger.info("-----getTotalPages----- : " + boardPage.getTotalPages());
@@ -53,7 +39,7 @@ public class BoardController {
 
         model.addAttribute("boardList", boardPage.getContent());
         model.addAttribute("pageMaker", Pagination.builder()
-                            .cri(cri)
+                            .cri(searchCri)
                             .total(boardPage.getTotalElements())
                             .rangeSize(boardPage.getSize())
                             .realEndPage(boardPage.getTotalPages())
@@ -71,68 +57,39 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writePOST(BoardDTO dto){
+    public String writePOST(BoardDTO boardDTO){
         logger.info("-----board registerPOST-----");
 
-        boardService.register(dto);
+        boardService.register(boardDTO);
 
         return "redirect:/board";
     }
 
-    @GetMapping("/read/{no}")
-    public String readGET(@PathVariable("no") Long bid, Model model){
+    @GetMapping({"/read", "/modify"})
+    public void readGET(@RequestParam("bid") Long bid, @ModelAttribute("cri") SearchCriteria cri, Model model){
         logger.info("-----board readGET-----");
 
         BoardDTO boardDto = boardService.getBoard(bid);
 
         model.addAttribute("boardDto", boardDto);
-
-        return "/board/detail";
     }
 
-
-    @GetMapping("/edit/{no}")
-    public String modifyGET(@PathVariable("no") Long bid, Model model){
-        logger.info("-----board modifyGET-----");
-
-        BoardDTO boardDto = boardService.getBoard(bid);
-
-        model.addAttribute("boardDto", boardDto);
-
-        return "/board/modify";
-    }
-
-    @PostMapping("/edit/{no}")
-    public String modifyPOST(BoardDTO dto){
+    @PostMapping("/modify")
+    public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto){
         logger.info("-----board modifyPOST-----");
 
         boardService.update(dto);
 
-        return "redirect:/board";
+        return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
-    @PostMapping("/remove/{no}")
-    public String removePOST(@PathVariable("no") Long bid){
+    @PostMapping("/remove")
+    public String removePOST(@ModelAttribute SearchCriteria searchCri, @RequestParam("bid") Long bid){
         logger.info("-----board removePOST-----");
 
         boardService.delete(bid);
 
-        return "redirect:/board";
+        return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
-
-//    @GetMapping("/search")
-//    public String searchGET(@RequestParam(value = "keyword") String keyword, @RequestParam(value = "page", defaultValue = "1") Integer pageNum, Model model){
-//        logger.info("-----board searchGET");
-//
-//        if(keyword.equals("")) return "redirect:/board";
-//
-//        Pagination pageMaker = boardService.getPageMaker(pageNum);
-//        List<BoardDto> boardDtoList = boardService.searchBoard(pageNum, keyword);
-//
-//        model.addAttribute("boardList", boardDtoList);
-//        model.addAttribute("pageMaker", pageMaker);
-//
-//        return "/board/list";
-//    }
 
 }

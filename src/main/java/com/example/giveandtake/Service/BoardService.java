@@ -1,7 +1,7 @@
 package com.example.giveandtake.Service;
 
 import com.example.giveandtake.DTO.BoardDTO;
-import com.example.giveandtake.common.Criteria;
+import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.repository.BoardRepository;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,6 @@ public class BoardService {
 
     private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
 
-    private static final int listSize = 5; // 밑에 보이는 페이지 개수
     private static final int rangeSize = 4; // 한 페이지에 보이는 게시물 개수
 
     private BoardRepository boardRepository;
@@ -32,18 +31,18 @@ public class BoardService {
     }
 
     // 게시물 목록, 페이징, 검색
-    public Page<Board> getList(Criteria cri){
-        Pageable pageable = PageRequest.of(cri.getPage()-1, rangeSize, Sort.by(Sort.Direction.ASC, "createdDate"));
+    public Page<Board> getList(SearchCriteria SearchCri){
+        Pageable pageable = PageRequest.of(SearchCri.getPage()-1, rangeSize, Sort.by(Sort.Direction.DESC, "createdDate"));
 
         Page<Board> page;
-        logger.info("======getType()====== : " + cri.getType());
+        logger.info("======getType()====== : " + SearchCri.getType());
 
-        if (cri.getType().equals("")){
+        if (SearchCri.getType().equals("")){
             page = boardRepository.findAll(pageable);
-        }else if (cri.getType().equals("TC")){
-            page = boardRepository.findAllByTitleContainingOrContentContaining(cri.getKeyword(), cri.getKeyword(), pageable);
+        }else if (SearchCri.getType().equals("TC")){
+            page = boardRepository.findAllByTitleContainingOrContentContaining(SearchCri.getKeyword(), SearchCri.getKeyword(), pageable);
         }else{
-            page = boardRepository.findAllByWriter(cri.getKeyword(), pageable);
+            page = boardRepository.findAllByWriter(SearchCri.getKeyword(), pageable);
         }
 
         return page;
@@ -54,7 +53,7 @@ public class BoardService {
         Optional<Board> boardWrapper = boardRepository.findById(bid);
         Board board = boardWrapper.get();
 
-        BoardDTO boardDto = BoardDTO.builder()
+        return BoardDTO.builder()
                 .bid(board.getBid())
                 .btype(board.getBtype())
                 .title(board.getTitle())
@@ -63,8 +62,6 @@ public class BoardService {
                 .price(board.getPrice())
                 .createdDate(board.getCreatedDate())
                 .build();
-
-        return boardDto;
     }
 
     // 게시물 업데이트
@@ -75,15 +72,5 @@ public class BoardService {
     // 게시물 삭제
     public void delete(Long bid){
         boardRepository.deleteById(bid);
-    }
-
-    private BoardDTO convertModelToDto(Board board){
-        return BoardDTO.builder()
-                .bid(board.getBid())
-                .btype(board.getBtype())
-                .title(board.getTitle())
-                .writer(board.getWriter())
-                .createdDate(board.getCreatedDate())
-                .build();
     }
 }

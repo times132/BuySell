@@ -3,12 +3,12 @@ package com.example.giveandtake.common;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Setter
 @Getter
 public class Pagination {
 
-    private Integer listSize; // 밑에 보이는 페이지 개수
     private Integer rangeSize; // 한 페이지에 보이는 게시물 개수
 
     private double total; // 총 개수
@@ -33,4 +33,6 @@ public class Pagination {
         this.prev = startPage > 1;
         this.next = this.endPage < this.realEndPage;
     }
+
+
 }
