@@ -29,6 +29,7 @@ import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 @Controller
 @AllArgsConstructor
@@ -50,8 +51,8 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public String execSignup(@Valid UserDTO userDto, Errors errors, Model model, HttpServletRequest request) {
-
+    public ModelAndView execSignup(@Valid UserDTO userDto, Errors errors, Model model, HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView();
         if (errors.hasErrors()) {
             // 회원가입 실패시, 입력 데이터를 유지
             model.addAttribute("userDto", userDto);
@@ -64,18 +65,21 @@ public class UserController {
                 model.addAttribute(key, validatorResult.get(key));
             }
 
-            return "/user/signup";
+            mv.setViewName("/user/signup");
             
         }  //여기있는 코드를 보내고 싶어
         String code = mailService.sendMail(userDto.getEmail(), userDto.getUsername(), request);
+
         if(code  != "null")
         {
-
-            return "redirect:/user/email";
+            logger.info("이메일 코드 : " + code);
+            mv.addObject("code", code);
+            mv.setViewName("/user/email");
         }
 //        userService.joinUser(userDto);
-        return "/user/signup";
+//        mv.setViewName("/user/signup");
 
+        return mv;
     }
     //이메일페이지로 연결
     @GetMapping("user/email")
@@ -85,7 +89,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/join_injeung{code}", method = RequestMethod.POST)
-    public String  join_injeung(@PathVariable String code, String email_injeung, HttpServletResponse response_equals) throws IOException {
+    public String join_injeung(@PathVariable String code, String email_injeung, HttpServletResponse response_equals) throws IOException {
             //여기서 코드를 받아오고싶어어어어어ㅓ어엉
 
         System.out.println("이메일상의 코드 "+ code);

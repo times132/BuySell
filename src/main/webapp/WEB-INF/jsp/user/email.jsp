@@ -10,7 +10,7 @@
 <h1> 이메일이 발송되었으니 인증코드를 확인해주세요. </h1>
 <h1> 만약이메일이 오지 않았다면 회원가입을 다시 시도해 주세요.
 
-</h1><form action="join_injeung.do${code}" method="post">
+</h1><form action="join_injeung${code}" method="post">
 
 
     <div>
