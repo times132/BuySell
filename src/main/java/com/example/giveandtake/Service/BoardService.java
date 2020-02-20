@@ -32,7 +32,7 @@ public class BoardService {
 
     // 게시물 목록, 페이징, 검색
     public Page<Board> getList(SearchCriteria SearchCri){
-        Pageable pageable = PageRequest.of(SearchCri.getPage()-1, rangeSize, Sort.by(Sort.Direction.DESC, "createdDate"));
+        Pageable pageable = PageRequest.of(SearchCri.getPage()-1, rangeSize, Sort.by(Sort.Direction.ASC, "createdDate"));
 
         Page<Board> page;
         logger.info("======getType()====== : " + SearchCri.getType());

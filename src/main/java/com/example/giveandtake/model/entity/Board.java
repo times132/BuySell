@@ -22,14 +22,16 @@ public class Board extends DateAudit {
     private String content;
     private String writer;
     private Integer price;
+    private Integer replyCnt;
 
     @Builder
-    public Board(Long bid, String btype, String title, String content, String writer, Integer price){
+    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer replyCnt){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.price = price;
+        this.replyCnt = replyCnt;
     }
 }

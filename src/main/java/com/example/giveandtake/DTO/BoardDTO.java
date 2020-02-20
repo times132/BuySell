@@ -16,6 +16,7 @@ public class BoardDTO {
     private String content;
     private String writer;
     private Integer price;
+    private Integer replyCnt;
     private LocalDateTime createdDate;
 
     public Board toEntity(){
@@ -26,17 +27,19 @@ public class BoardDTO {
                 .content(content)
                 .writer(writer)
                 .price(price)
+                .replyCnt(replyCnt)
                 .build();
     }
 
     @Builder
-    public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, LocalDateTime createdDate){
+    public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, Integer replyCnt, LocalDateTime createdDate){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.price = price;
+        this.replyCnt = replyCnt;
         this.createdDate = createdDate;
     }
 }

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -23,7 +22,7 @@ public class ReplyRepositoryTest {
     public void saveReply(){
         for (int i = 0; i < 10; i++){
             ReplyDTO dto = ReplyDTO.builder()
-                    .bid(6L)
+                    .bid(70L)
                     .reply("댓글 테스트" + i)
                     .replyer("times")
                     .build();

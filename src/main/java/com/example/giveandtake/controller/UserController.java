@@ -76,7 +76,7 @@ public class UserController {
             mv.addObject("code", code);
             mv.setViewName("/user/email");
         }
-//        userService.joinUser(userDto);
+        userService.joinUser(userDto);
 //        mv.setViewName("/user/signup");
 
         return mv;
