@@ -10,8 +10,10 @@
 <body>
 <h1>회원 가입</h1>
 <hr>
+
 <form  action="/user/signup" method="post">
-    이메일     : <input type="text" name="email" value="${userDto.email}" >  <p>${valid_email}</p><br>
+    이메일 : <input type="text" name="email" value="${userDto.email}"/><p>${valid_email}</p><br>
+
 
     패스워드   : <input type="text" name="password" value="${userDto.password}"/><p>${valid_password}</p><br>
 
@@ -23,9 +25,7 @@
 
 
     <div>
-        <a href='<c:url value="/user/login"/>'>
             <button type="submit">가입하기</button>
-        </a>
 
     </div>
 

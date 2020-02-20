@@ -34,6 +34,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(userDto.toEntity()).getId();
     }
 
+    //로그인시 권한부여와 이메일과 패스워드를 User에 저장
     @Override
     public UserDetails  loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
@@ -61,7 +62,7 @@ public class UserService implements UserDetailsService {
         return validatorResult;
     }
 
-
+    //상세정보 가져오기
     public Optional<com.example.giveandtake.model.entity.User> readUserByEmail(String email) {
         Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByEmail(email);
 

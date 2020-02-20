@@ -34,7 +34,7 @@
 
 
 <sec:authorize access="isAuthenticated()">
-    <h5><%=name%>님</h5>
+    <h5><%=name%>님.</h5>
     <input type="button" value="로그아웃" onClick="self.location='/user/logout';">
     <input type="button" value="내정보" onClick="self.location='/user/info';">
 </sec:authorize>
