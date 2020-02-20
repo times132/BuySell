@@ -65,7 +65,8 @@ public class UserController {
             }
 
             return "/user/signup";
-        }
+            
+        }  //여기있는 코드를 보내고 싶어
         String code = mailService.sendMail(userDto.getEmail(), userDto.getUsername(), request);
         if(code  != "null")
         {
@@ -85,7 +86,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/join_injeung{code}", method = RequestMethod.POST)
     public String  join_injeung(@PathVariable String code, String email_injeung, HttpServletResponse response_equals) throws IOException {
-
+            //여기서 코드를 받아오고싶어어어어어ㅓ어엉
 
         System.out.println("이메일상의 코드 "+ code);
 

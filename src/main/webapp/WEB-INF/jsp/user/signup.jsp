@@ -14,7 +14,6 @@
 <form  action="/user/signup" method="post">
     이메일 : <input type="text" name="email" value="${userDto.email}"/><p>${valid_email}</p><br>
 
-
     패스워드   : <input type="text" name="password" value="${userDto.password}"/><p>${valid_password}</p><br>
 
     닉네임     : <input type="text" name="nickname" value="${userDto.nickname}"><p> ${valid_nickname}</p> <br>
