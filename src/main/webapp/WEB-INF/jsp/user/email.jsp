@@ -1,29 +1,26 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
 <head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
 </head>
 <body>
-<h1> 이메일이 발송되었으니 인증코드를 확인해주세요. </h1>
-<h1> 만약이메일이 오지 않았다면 회원가입을 다시 시도해 주세요.
+이메일 인증 (이메일을 인증 받아야 회원가입을 진행하실 수 있습니다. )
+        <br> <br>
+                        <form action="auth.do" method="post">
+                                <br>
+                                <div>
+                                    이메일 : <input type="email" name="email"  placeholder="  이메일주소를 입력하세요. ">
+                                </div>
 
-</h1><form action="join_injeung${code}" method="post">
+                                <br> <br>
+                                <button type="submit" name="submit">이메일 인증받기 (이메일 보내기)</button>
 
 
-    <div>
-        인증번호 입력 : <input type="text" name="email_injeung" placeholder="  인증번호를 입력하세요. ">
-    </div>
-    <br> <br>
-    <div>
-        <button type="submit">인증코드입력하기</button>
-
-    </div>
-
-<hr>
-<input type="button" value="홈으로 이동" onClick="self.location='/';">
 </form>
+</center>
+
 </body>
 </html>

@@ -26,7 +26,7 @@ public class MailService {
 
 
     //이메일 보내기
-    public String sendMail(String email, String username, HttpServletRequest request) {
+    public String sendMail(String email, HttpServletRequest request) {
         String key = getKey(false, 6);
         String from = "yoo4380@gmail.com";
         String to = email; // 받는 사람 이메일
@@ -34,7 +34,7 @@ public class MailService {
         String content =
                 System.getProperty("line.separator")+ //한줄씩 줄간격을 두기위해 작성
                         System.getProperty("line.separator")+
-                        "안녕하세요 " + username +" 회원님 GIVEANDTAKE를 찾아주셔서 감사합니다"
+                        "안녕하세요 회원님 GIVEANDTAKE를 찾아주셔서 감사합니다"
                         +System.getProperty("line.separator")+
                         System.getProperty("line.separator")+
                         " 인증번호는 " + key + " 입니다. "
