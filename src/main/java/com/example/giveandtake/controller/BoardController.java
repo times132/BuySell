@@ -1,8 +1,7 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardDTO;
-import com.example.giveandtake.Service.BoardService;
-import com.example.giveandtake.common.Criteria;
+import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
@@ -41,7 +40,6 @@ public class BoardController {
         model.addAttribute("pageMaker", Pagination.builder()
                             .cri(searchCri)
                             .total(boardPage.getTotalElements())
-                            .rangeSize(boardPage.getSize())
                             .realEndPage(boardPage.getTotalPages())
                             .listSize(5)
                             .build());

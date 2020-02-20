@@ -17,6 +17,7 @@ public class ReplyDTO {
 
     private String reply;
     private String replyer;
+
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 
@@ -38,4 +39,5 @@ public class ReplyDTO {
         this.createdDate = createdDate;
         this.updatedDate = updatedDate;
     }
+
 }

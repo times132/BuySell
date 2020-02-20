@@ -22,9 +22,9 @@ public class ReplyRepositoryTest {
     public void saveReply(){
         for (int i = 0; i < 10; i++){
             ReplyDTO dto = ReplyDTO.builder()
-                    .bid(70L)
-                    .reply("댓글 테스트" + i)
-                    .replyer("times")
+                    .bid(2L)
+                    .reply("더미 데이터" + i)
+                    .replyer("dlwlrma")
                     .build();
 
             replyRepository.save(dto.toEntity());
@@ -34,7 +34,7 @@ public class ReplyRepositoryTest {
 
     @Test
     public void readReply(){
-        Optional<Reply> optional = replyRepository.findById(3L);
+        Optional<Reply> optional = replyRepository.findById(6L);
         Reply reply = optional.get();
         ReplyDTO dto = ReplyDTO.builder()
                 .rid(reply.getRid())

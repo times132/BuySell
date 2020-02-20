@@ -1,7 +1,7 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.ReplyDTO;
-import com.example.giveandtake.Service.ReplyService;
+import com.example.giveandtake.service.ReplyService;
 import com.example.giveandtake.common.Criteria;
 import com.example.giveandtake.model.entity.Reply;
 import lombok.AllArgsConstructor;
@@ -11,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("replies")
@@ -34,7 +32,7 @@ public class ReplyController {
     }
 
     @GetMapping(value = "/pages/{bid}/{page}", produces = "application/json") // json 방식으로 리턴해줌
-    public ResponseEntity<List<ReplyDTO>> listGET(@PathVariable("bid") Long bid, @PathVariable("page") Integer page){
+    public ResponseEntity<Page<Reply>> listGET(@PathVariable("bid") Long bid, @PathVariable("page") Integer page){
         logger.info("-----Reply readListGET-----");
 
         Criteria cri = new Criteria(page, 5);

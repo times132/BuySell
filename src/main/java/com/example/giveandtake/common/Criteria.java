@@ -9,7 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class Criteria {
 
     private Integer page; // 현재 페이지
-    private Integer pageSize; // 밑에 보이는 페이지 개수
+    private Integer pageSize; // 한 화면에 보이는 개수
 
     public Criteria(){
         this(1, 5);

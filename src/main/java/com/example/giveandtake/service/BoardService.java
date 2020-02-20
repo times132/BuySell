@@ -1,4 +1,4 @@
-package com.example.giveandtake.Service;
+package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.common.SearchCriteria;
@@ -21,8 +21,6 @@ public class BoardService {
 
     private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
 
-    private static final int rangeSize = 4; // 한 페이지에 보이는 게시물 개수
-
     private BoardRepository boardRepository;
 
     // 게시물 등록
@@ -32,7 +30,7 @@ public class BoardService {
 
     // 게시물 목록, 페이징, 검색
     public Page<Board> getList(SearchCriteria SearchCri){
-        Pageable pageable = PageRequest.of(SearchCri.getPage()-1, rangeSize, Sort.by(Sort.Direction.ASC, "createdDate"));
+        Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.ASC, "createdDate"));
 
         Page<Board> page;
         logger.info("======getType()====== : " + SearchCri.getType());

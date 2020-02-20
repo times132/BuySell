@@ -9,8 +9,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Getter
 public class Pagination {
 
-    private Integer rangeSize; // 한 페이지에 보이는 게시물 개수
-
     private double total; // 총 개수
     private Integer startPage; // 현재 블럭 시작 페이지 번호
     private Integer endPage; // 현재 블럭 끝 페이지 번호
@@ -19,10 +17,9 @@ public class Pagination {
     private Criteria cri;
 
     @Builder
-    public Pagination(Criteria cri, Long total, Integer rangeSize, Integer realEndPage, Integer listSize){
+    public Pagination(Criteria cri, Long total, Integer realEndPage, Integer listSize){
         this.cri = cri;
         this.total = total;
-        this.rangeSize = rangeSize;
         this.realEndPage = realEndPage;
 
         this.endPage = (int) Math.ceil(cri.getPage() / (double)listSize) * listSize;

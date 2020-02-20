@@ -1,25 +1,19 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.UserDTO;
-import com.example.giveandtake.Service.MailService;
-import com.example.giveandtake.Service.UserService;
-import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.service.MailService;
+import com.example.giveandtake.service.UserService;
 import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -28,8 +22,6 @@ import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.Callable;
 
 @Controller
 @AllArgsConstructor
@@ -85,10 +77,6 @@ public class UserController {
             mv.addObject("email", email);
             mv.setViewName("/user/email_injeung");
         }
-<<<<<<< HEAD
-        userService.joinUser(userDto);
-//        mv.setViewName("/user/signup");
-=======
         System.out.println("mv : "+mv);
 
         response_email.setContentType("text/html; charset=UTF-8");
@@ -96,7 +84,6 @@ public class UserController {
         out_email.println("<script>alert('이메일이 발송되었습니다. 인증번호를 입력해주세요.');</script>");
         out_email.flush();
 
->>>>>>> 38c37389130815a6db2ff721e4788e35b5b9069e
 
         return mv;
 

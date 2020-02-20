@@ -1,6 +1,6 @@
 package com.example.giveandtake.config;
 
-import com.example.giveandtake.Service.UserService;
+import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

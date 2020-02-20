@@ -1,3 +1,5 @@
+console.log("reply module");
+
 var replyService = (function () {
     function add(reply, callback, error) {
         console.log("add reply");
@@ -24,9 +26,10 @@ var replyService = (function () {
         var bid = param.bid;
         var page = param.page || 1;
 
-        $.getJSON("/replies/pages" + bid + "/" + page + ".json", function (data) {
+        $.getJSON("/replies/pages/" + bid + "/" + page, function (data) {
             if (callback){
-                callback(data.replyCnt, data.list);
+
+                callback(data);
             }
         }).fail(function (xhr, status, err) {
             if (error){
@@ -76,4 +79,4 @@ var replyService = (function () {
         get: get,
         displayTime: displayTime
     };
-});
+})();
