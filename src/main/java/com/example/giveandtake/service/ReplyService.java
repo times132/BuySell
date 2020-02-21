@@ -1,5 +1,6 @@
 package com.example.giveandtake.service;
 
+import com.example.giveandtake.DTO.ReplyDTO;
 import com.example.giveandtake.common.Criteria;
 import com.example.giveandtake.model.entity.Reply;
 import com.example.giveandtake.repository.ReplyRepository;

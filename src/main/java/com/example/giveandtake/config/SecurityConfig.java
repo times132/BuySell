@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and() // 로그아웃 설정
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutRequestMatcher(new AntPathRequestMatcher("/user/deleteuser"))
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/user/deleteuser"))
                 .logoutSuccessUrl("/user/logout/result")
                 .invalidateHttpSession(true)
                 .and()

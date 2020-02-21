@@ -1,5 +1,6 @@
 package com.example.giveandtake.repository;
 
+import com.example.giveandtake.DTO.ReplyDTO;
 import com.example.giveandtake.model.entity.Reply;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
