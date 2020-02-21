@@ -10,7 +10,7 @@
 
 <h1>나의 정보</h1>
 
-    <label>이메일</label> <input type="text" name="email" value="${userList.email }" readonly="readonly"><br>
+    <label>이메일</label> <input type="text" name="email" value="${userList.email}" readonly="readonly"><br>
 
     <label>비밀번호</label> <input type="text" name="password" value="${userList.password }" readonly="readonly"><br>
 
@@ -22,7 +22,7 @@
 
 <input type="button" value="회원정보수정" onClick="self.location='/user/modifyuser';">
 <input type="button" value="회원탈퇴" onClick="self.location='/user/password';">
-
+<input type="button" value="홈으로 이동" onClick="self.location='/';">
     <input type="hidden" name="id" value="${userList.id}">
 
 </form>

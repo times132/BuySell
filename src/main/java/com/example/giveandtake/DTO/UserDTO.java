@@ -36,6 +36,7 @@ public class UserDTO {
 
     public User toEntity() {
         return User.builder()
+                .id(id)
                 .username(username)
                 .nickname(nickname)
                 .password(password)
@@ -45,8 +46,8 @@ public class UserDTO {
     }
 
     @Builder
-    public UserDTO(String nickname, String email, String password, String phone, String username) {
-
+    public UserDTO(Long id, String nickname, String email, String password, String phone, String username) {
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;

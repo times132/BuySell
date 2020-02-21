@@ -26,9 +26,6 @@ public class BoardService {
     // 게시물 등록
     public Long register(BoardDTO dto){
 
-//        String writer =
-
-
         return boardRepository.save(dto.toEntity()).getBid();
     }
 

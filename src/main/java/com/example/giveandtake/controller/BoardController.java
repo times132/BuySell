@@ -1,12 +1,14 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardDTO;
+import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.UserRepository;
+import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,8 @@ public class BoardController {
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     private BoardService boardService;
+    private UserService userService;
 
-    private UserRepository userDto;
 
     @GetMapping
     public String list(SearchCriteria searchCri, Model model){
@@ -35,13 +37,13 @@ public class BoardController {
 
         Page<Board> boardPage =  boardService.getList(searchCri);
 
-        logger.info("-----getTotalElements----- : " + boardPage.getTotalElements());
-        logger.info("-----getTotalPages----- : " + boardPage.getTotalPages());
-        logger.info("-----getNumber----- : " + boardPage.getNumber());
-        logger.info("-----getSize----- : " + boardPage.getSize());
-        logger.info("-----get----- : " + boardPage.get());
-        logger.info("-----toList----- : " + boardPage.toList());
-        logger.info("-----getContent----- : " + boardPage.getContent());
+//        logger.info("-----getTotalElements----- : " + boardPage.getTotalElements());
+//        logger.info("-----getTotalPages----- : " + boardPage.getTotalPages());
+//        logger.info("-----getNumber----- : " + boardPage.getNumber());
+//        logger.info("-----getSize----- : " + boardPage.getSize());
+//        logger.info("-----get----- : " + boardPage.get());
+//        logger.info("-----toList----- : " + boardPage.toList());
+//        logger.info("-----getContent----- : " + boardPage.getContent());
 
         model.addAttribute("boardList", boardPage.getContent());
         model.addAttribute("pageMaker", Pagination.builder()
@@ -56,12 +58,8 @@ public class BoardController {
 
     @GetMapping("/write")
     public String writeGET(Principal principal, Model model){
-        String email = principal.getName();
-        logger.info("user email : " + email);
-        Optional<User> userWrapper = userDto.findByEmail(email);
-        com.example.giveandtake.model.entity.User user = userWrapper.get();
-
-        model.addAttribute("userList",user);
+        UserDTO userList= userService.readUserByEmail(principal.getName()); //현재사용자정보 불러오기
+        model.addAttribute("userList",userList);
         logger.info("-----board registerGET-----");
 
         return "/board/write";

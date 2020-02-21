@@ -1,6 +1,8 @@
 package com.example.giveandtake.controller;
 
+import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.UserDTO;
+import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.UserRepository;
 import com.example.giveandtake.service.MailService;
 import com.example.giveandtake.service.UserService;
@@ -9,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -17,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,7 +37,7 @@ public class UserController {
 
     private UserService userService;
 
-    private UserRepository userRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 
@@ -177,8 +181,6 @@ public class UserController {
     }
 
 
-
-
     // 접근 거부 페이지
     @GetMapping("/user/denied")
     public String dispDenied() {
@@ -188,55 +190,45 @@ public class UserController {
     // 내 정보 페이지
     @GetMapping("/user/info")
     public String dispMyInfo(Principal principal, Model model) {
-        String email = principal.getName();
-        logger.info("user email : " + email);
-        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
-        com.example.giveandtake.model.entity.User user = userWrapper.get();
-
-        model.addAttribute("userList", user);
-
+        UserDTO userList = userService.readUserByEmail(principal.getName());
+        model.addAttribute("userList",userList);
         return "/user/myinfo";
     }
 
+    // 회원 정보 수정
+    @GetMapping ("/user/modifyuser")
+    public String dismodifyuser(Principal principal, Model model) {
+        UserDTO userList= userService.readUserByEmail(principal.getName()); //현재사용자정보 불러오기
+        model.addAttribute("userList",userList);
+        return "/user/modifyuser";
+    }
 
+    @PostMapping ("/user/modifyuser")
+    public String modifyuser(UserDTO userList) {
+        userService.modify(userList);
+        return "redirect:/user/info";
+    }
+
+    // 회원 탈퇴
     @GetMapping ("/user/password")
     public String disdeleteuser() {
         return "/user/password";
     }
 
     @PostMapping ("/user/password")
-    public String disdeleteuser(String password) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails)principal;
-
-        String email = ((UserDetails) principal).getUsername();
-        String pw = ((UserDetails) principal).getPassword();
-
-
-        String inputpw = password;
-
-        System.out.println("현재이메일"+ email);
-
-
-
-
-        System.out.println("입력한 비번"+password);
-        System.out.println("현재 비번"+ pw);
-
-       if(userService.checkPassword(password,pw)==true)
-
-       {
-           userService.delete(email);
+    public String disdeleteuser(String password,Principal principal){
+        String email = principal.getName();
+        if(userService.checkPassword(password))
+        {
+            userService.delete(email);
             return "user/deleteuser";
-       }
+        }
 
         return "/user/password";
     }
 
-    // 회원 탈퇴
     @GetMapping("/user/deleteuser")
-    public String disdeleteuser(Principal principal) {
-
+    public String disdeleteuser( Principal principal) {
         return "/user/deleteuser";
     }
 
