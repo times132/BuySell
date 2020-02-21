@@ -1,4 +1,4 @@
-package com.example.giveandtake.Service;
+package com.example.giveandtake.service;
 
 
 import com.example.giveandtake.DTO.UserDTO;

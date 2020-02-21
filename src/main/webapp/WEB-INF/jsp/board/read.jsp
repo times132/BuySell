@@ -7,7 +7,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <link href="/resources/css/test.css" rel="stylesheet">
+
     <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/resources/js/reply.js"></script>
 </head>
 <body>
 
@@ -86,7 +89,6 @@
         });
     });
 </script>
-<script type="text/javascript" src="/resources/js/reply.js"></script>
 <script>
     var bidValue = "<c:out value="${boardDto.bid}"/>";
     var replyUL = $(".replyList");
@@ -94,53 +96,56 @@
     showList(1);
 
     function showList(page) {
-        replyService.getList({bid: bidValue, page: page || 1}, function (list) {
+
+        replyService.getList({bid: bidValue, page: page || 1}, function (data) {
+            // console.log(data);
             if (page == -1){
-                pageNum = Math.ceil(replyCnt/10.0);
+                pageNum = Math.ceil(data.totalElements/10.0);
                 showList(pageNum);
                 return;
             }
 
             var str = "";
 
-            if (list == null || list.length == 0){
+            if (data == null || data.length == 0){
                 return;
             }
-            for (var i = 0, len = list.length || 0; i < len; i++){
-                str += "<li data-rid='" + list[i].rid + "'>";
-                str += "<div><div class='header'><strong class='primary-font'>" + list[i].replyer + "</strong>";
-                str += "<small class='float-right text-muted'>" + replyService.displayTime(list[i].createdDate) + "</small></div>";
-                str += "<p>" + list[i].reply + "</p></div></li>";
+            for (var i = 0, len = data.content.length || 0; i < len; i++){
+                str += "<li data-rid='" + data.content[i].rid + "'>";
+                str += "<div><div class='header'><strong class='primary-font'>" + data.content[i].replyer + "</strong>";
+                str += "<small class='float-right text-muted'>" + replyService.displayTime(data.content[i].createdDate) + "</small></div>";
+                str += "<p>" + data.content[i].reply + "</p></div></li>";
             }
 
             replyUL.html(str);
 
-            showReplyPage(replyCnt);
+            showReplyPage(data.totalElements, data.size); //21, 4
         });
     }
 
     var pageNum = 1;
     var replyPageFooter = $(".reply-footer");
 
-    function showReplyPage(replyCnt) {
-        var endPage = Math.ceil(pageNum / 10.0) * 10; //현재 블럭 끝 번호
-        var startPage = endPage - 9; // 현재 블럭 시작 번호
+    function showReplyPage(replyCnt, size) { // size = 한 페이지에 보이는 댓글 수
+
+        var endPage = Math.ceil(pageNum / 3.0) * 3; //현재 블럭 끝 번호
+        var startPage = endPage - 2; // 현재 블럭 시작 번호
 
         var prev = startPage > 1;
         var next = false;
 
-        if (endPage * 5 >= replyCnt){ // 현재 블럭 끝 번호 * 한 페이지에 보이는 댓글 수가 전체 댓글 수 보다 많을시
-            endPage = Math.ceil(replyCnt / 10.0); // 블럭 끝 번호를 재설정
+        if (endPage * size >= replyCnt){ // 현재 블럭 끝 번호 * 한 페이지에 보이는 댓글 수가 전체 댓글 수 보다 많을시
+            endPage = Math.ceil(replyCnt / size); // 블럭 끝 번호를 재설정 21/5 = 5
         }
-
-        if (endPage * 5 < replyCnt){
+        
+        if (endPage * size < replyCnt){
             next = true;
         }
 
         var str = "<ul class='pagination float-right'>";
 
         if (prev){
-            str += "<li class='page-item'><a class='page-link' href'" + (startPage - 1) + "'이전</a></li>";
+            str += "<li class='page-item'><a class='page-link' href='" + (startPage - 1) + "'>이전</a></li>";
         }
 
         for (var i = startPage; i <= endPage; i++){
@@ -149,21 +154,22 @@
         }
 
         if (next){
-            str += "<li class='page-item'><a class='page-link' href'" + (endPage + 1) + "'다음</a></li>";
+            str += "<li class='page-item'><a class='page-link' href='" + (endPage + 1) + "'>다음</a></li>";
         }
 
         str += "</ul></div>";
 
-        console.log(str);
+
 
         replyPageFooter.html(str);
     }
 
-    replyPageFooter.on("clock", function (e) {
+    replyPageFooter.on("click", "li a", function (e) {
         e.preventDefault();
         console.log("page click");
 
         var targetPageNum = $(this).attr("href");
+        // console.log("targetpagenum" + targetPageNum);
         pageNum = targetPageNum;
         showList(pageNum);
     })

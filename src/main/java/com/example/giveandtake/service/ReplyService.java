@@ -1,6 +1,5 @@
-package com.example.giveandtake.Service;
+package com.example.giveandtake.service;
 
-import com.example.giveandtake.DTO.ReplyDTO;
 import com.example.giveandtake.common.Criteria;
 import com.example.giveandtake.model.entity.Reply;
 import com.example.giveandtake.repository.ReplyRepository;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,7 +19,6 @@ import java.util.Optional;
 public class ReplyService {
 
     private static final Logger logger = LoggerFactory.getLogger(ReplyService.class);
-    private static final int rangeSize = 5; // 한 페이지에 보이는 게시물 개수
 
     private ReplyRepository replyRepository;
 
@@ -30,18 +26,18 @@ public class ReplyService {
         return replyRepository.save(dto.toEntity()).getRid();
     }
 
-    public List<ReplyDTO> readReplyList(Long bid, Criteria cri){
-        Pageable pageable = PageRequest.of(cri.getPage()-1, rangeSize, Sort.by(Sort.Direction.DESC, "createdDate"));
+    public Page<Reply> readReplyList(Long bid, Criteria cri){
+        Pageable pageable = PageRequest.of(cri.getPage()-1, cri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
 
         Page<Reply> page = replyRepository.findAllByBid(bid, pageable);
+//        logger.info("댓글 수: " + page.getTotalElements());
+//        List<ReplyDTO> replyDTOList = new ArrayList<>();
+//
+//        for (Reply reply : page.getContent()){
+//            replyDTOList.add(convertEntityToDto(reply));
+//        }
 
-        List<ReplyDTO> replyDTOList = new ArrayList<>();
-
-        for (Reply reply : page.getContent()){
-            replyDTOList.add(convertEntityToDto(reply));
-        }
-
-        return replyDTOList;
+        return page;
     }
 
     public ReplyDTO readReply(Long rid){

@@ -1,21 +1,14 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.UserDTO;
-import com.example.giveandtake.Service.MailService;
-import com.example.giveandtake.Service.UserService;
 import com.example.giveandtake.repository.UserRepository;
+import com.example.giveandtake.service.MailService;
+import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -87,7 +80,6 @@ public class UserController {
             mv.addObject("email", email);
             mv.setViewName("/user/email_injeung");
         }
-
 
         System.out.println("mv : "+mv);
 
