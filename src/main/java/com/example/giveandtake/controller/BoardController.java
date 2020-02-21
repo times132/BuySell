@@ -6,6 +6,8 @@ import com.example.giveandtake.common.Criteria;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
+import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/board")
@@ -22,6 +27,8 @@ public class BoardController {
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     private BoardService boardService;
+
+    private UserRepository userDto;
 
     @GetMapping
     public String list(SearchCriteria searchCri, Model model){
@@ -50,7 +57,13 @@ public class BoardController {
     }
 
     @GetMapping("/write")
-    public String writeGET(){
+    public String writeGET(Principal principal, Model model){
+        String email = principal.getName();
+        logger.info("user email : " + email);
+        Optional<User> userWrapper = userDto.findByEmail(email);
+        com.example.giveandtake.model.entity.User user = userWrapper.get();
+
+        model.addAttribute("userList",user);
         logger.info("-----board registerGET-----");
 
         return "/board/write";

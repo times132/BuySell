@@ -26,12 +26,13 @@ public class User extends DateAudit {
     private String email;
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String username, String nickname, String password, String phone, String email){
+    public User(String username, String nickname, String password, String phone, String email,Long id){
         this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.phone = phone;
         this.email = email;
+        this.id= id;
     }
 
 }

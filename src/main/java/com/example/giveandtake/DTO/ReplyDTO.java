@@ -16,7 +16,7 @@ public class ReplyDTO {
     private Long bid;
 
     private String reply;
-    private String replyer;
+    private String replyer;  //댓글 작성자 아이디
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 

@@ -2,8 +2,10 @@ package com.example.giveandtake.config;
 
 import com.example.giveandtake.Service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -14,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //Spring Security 설정할 클래스라고 정의
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
@@ -28,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+
         http.cors()
                 .and().csrf().disable()
                 .authorizeRequests()
@@ -44,22 +48,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and() // 로그아웃 설정
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/user/deleteuser"))
                 .logoutSuccessUrl("/user/logout/result")
                 .invalidateHttpSession(true)
                 .and()
+
+
                 // 403 예외처리 핸들링
                 .exceptionHandling().accessDeniedPage("/user/denied");
+
     }
 
-    @Bean
+    @Bean  //BCryptPasswordEncoder는 Spring Security에서 제공하는 비밀번호 암호화 객체입니다.
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+        auth.eraseCredentials(false).userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
+
+
+
+
+
+
+
+
 }
 
 

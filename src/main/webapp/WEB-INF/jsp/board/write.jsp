@@ -10,7 +10,7 @@
     분류 : <input type="text" name="btype"> <br>
     제목 : <input type="text" name="title"> <br>
     내용 : <input type="text" name="content"> <br>
-    작성자 : <input type="text" name="writer"> <br>
+    작성자 : <input type="text" name="writer" value="${userList.nickname}" readonly="readonly"> <br>
     가격 : <input type="text" name="price"> <br>
 
     <input type="submit" value="등록">

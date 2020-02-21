@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -30,7 +31,11 @@
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
+
+<sec:authorize access="isAuthenticated()">
     <a href="/board/write">글쓰기</a>
+</sec:authorize>
+
 
     <a href="/board">전체보기</a>
 

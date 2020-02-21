@@ -3,23 +3,25 @@ package com.example.giveandtake.controller;
 import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.Service.MailService;
 import com.example.giveandtake.Service.UserService;
-import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -28,8 +30,6 @@ import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.Callable;
 
 @Controller
 @AllArgsConstructor
@@ -40,8 +40,10 @@ public class UserController {
 
     private UserService userService;
 
-    private UserRepository memberDao;
+    private UserRepository userRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+
 
     // 회원가입 페이지
     @GetMapping("/user/signup")
@@ -70,7 +72,7 @@ public class UserController {
         return "redirect:/user/login";
     }
 
-
+//<-------------------------이메일---------------------------------------------------------------------------------------------------->
     // mailSending 코드
     @RequestMapping( value = "/user/auth.do" , method=RequestMethod.POST )
     public ModelAndView mailSending(HttpServletRequest request, String email, HttpServletResponse response_email) throws IOException {
@@ -85,10 +87,8 @@ public class UserController {
             mv.addObject("email", email);
             mv.setViewName("/user/email_injeung");
         }
-<<<<<<< HEAD
-        userService.joinUser(userDto);
-//        mv.setViewName("/user/signup");
-=======
+
+
         System.out.println("mv : "+mv);
 
         response_email.setContentType("text/html; charset=UTF-8");
@@ -96,12 +96,9 @@ public class UserController {
         out_email.println("<script>alert('이메일이 발송되었습니다. 인증번호를 입력해주세요.');</script>");
         out_email.flush();
 
->>>>>>> 38c37389130815a6db2ff721e4788e35b5b9069e
-
         return mv;
 
     }
-
 
     //이메일 인증 페이지 맵핑 메소드
     @RequestMapping("/user/email")
@@ -116,7 +113,7 @@ public class UserController {
 
         System.out.println("입력한 코드 : : "+ email_injeung);
 
-//페이지이동과 자료를 동시에 하기위해 ModelAndView를 사용해서 이동할 페이지와 자료를 담음
+        //페이지이동과 자료를 동시에 하기위해 ModelAndView를 사용해서 이동할 페이지와 자료를 담음
 
         ModelAndView mv = new ModelAndView();
 
@@ -157,32 +154,25 @@ public class UserController {
             PrintWriter out_equals = response_equals.getWriter();
             out_equals.println("<script>alert('인증번호가 일치하지않습니다. 이메일을 다시 입력해주세요'); history.go(-2);</script>");
             out_equals.flush();
-
-
             return mv2;
 
         }
-
-
-
         return mv;
-
     }
 
-
-
+//<-------------------------------로그인----------------------------------------------------------------------->
     // 로그인 페이지
     @GetMapping("/user/login")
     public String dispLogin() {
         return "/user/login";
     }
 
-    // 로그인 결과 페이지
+    // 로그인 성공 페이지
     @GetMapping("/user/login/result")
     public String dispLoginResult() {
         return "/user/successlogin";
     }
-
+    // 로그인 실패 페이지
     @GetMapping("/user/login/error")
     public String dispFailurLogin(){
         return "/user/failurelogin";
@@ -193,6 +183,8 @@ public class UserController {
     public String dispLogout() {
         return "/user/logout";
     }
+
+
 
 
     // 접근 거부 페이지
@@ -206,30 +198,61 @@ public class UserController {
     public String dispMyInfo(Principal principal, Model model) {
         String email = principal.getName();
         logger.info("user email : " + email);
-        Optional<com.example.giveandtake.model.entity.User> userWrapper = memberDao.findByEmail(email);
+        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
         com.example.giveandtake.model.entity.User user = userWrapper.get();
 
-        model.addAttribute("userList",user);
+        model.addAttribute("userList", user);
 
         return "/user/myinfo";
     }
 
-    // 내정보 상세정보
-    @GetMapping("/user/detail")
-    public String dispuserdetail() {
-        return "/user/detail";
+
+    @GetMapping ("/user/password")
+    public String disdeleteuser() {
+        return "/user/password";
     }
+
+    @PostMapping ("/user/password")
+    public String disdeleteuser(String password) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails)principal;
+
+        String email = ((UserDetails) principal).getUsername();
+        String pw = ((UserDetails) principal).getPassword();
+
+
+        String inputpw = password;
+
+        System.out.println("현재이메일"+ email);
+
+
+
+
+        System.out.println("입력한 비번"+password);
+        System.out.println("현재 비번"+ pw);
+
+       if(userService.checkPassword(password,pw)==true)
+
+       {
+           userService.delete(email);
+            return "user/deleteuser";
+       }
+
+        return "/user/password";
+    }
+
+    // 회원 탈퇴
+    @GetMapping("/user/deleteuser")
+    public String disdeleteuser(Principal principal) {
+
+        return "/user/deleteuser";
+    }
+
     // 어드민 페이지
     @GetMapping("/admin")
     public String dispAdmin() {
         return "/admin";
     }
-
-    @GetMapping("/login/email")
-    public String emailcode() {
-        return "/user/email";
-    }
-
 
 
 

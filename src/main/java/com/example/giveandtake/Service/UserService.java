@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
 
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
     @Override
-    public UserDetails  loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
         com.example.giveandtake.model.entity.User user = userWrapper.get();
 
@@ -68,7 +68,21 @@ public class UserService implements UserDetailsService {
 
         return userList;
     }
+
+    public void delete(String email) {
+        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByEmail(email);
+        Long id = userList.get().getId();
+        userRepository.deleteById(id);
+    }
+
+
+    public boolean checkPassword(String password, String pw) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (passwordEncoder.matches(password, pw)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }
-
-
-

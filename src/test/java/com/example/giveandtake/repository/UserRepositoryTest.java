@@ -57,8 +57,7 @@ class UserRepositoryTest {
     @Test
     public void readUser(){
         Optional<User> user = userRepository.findById(10L);
-//        logger.info("user: ", user.isEmpty());
-//        assertTrue(user.isPresent());
+
 
         user.ifPresent(selectUser ->{
             System.out.println("user: "+selectUser);
