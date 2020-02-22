@@ -68,6 +68,8 @@ public class UserService implements UserDetailsService {
         return validatorResult;
     }
 
+
+
     //회원정보 가져오기
     public UserDTO readUserByEmail(String email) {
         Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
@@ -91,8 +93,14 @@ public class UserService implements UserDetailsService {
 
      //회원정보 수정
     public void modify(UserDTO userList){
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        userList.setPassword(passwordEncoder.encode(userList.getPassword()));
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = (UserDetails)principal;
+        String password = ((UserDetails) principal).getPassword();
+        String pw = userList.getPassword();
+        if(!password.equals(pw)) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            userList.setPassword(passwordEncoder.encode(userList.getPassword()));
+        }
         userRepository.save(userList.toEntity()).getId();
     }
 
@@ -112,4 +120,13 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public int useridCheck(String email)
+    {
+        Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByEmail(email);
+        System.out.println("값은 "+user.isPresent());
+        if(user.isPresent()){
+        return 1;
+    }
+        return 0;
+    }
 }
