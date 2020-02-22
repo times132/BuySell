@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -62,9 +63,9 @@ public class ReplyController {
     }
 
     @DeleteMapping(value = "{rid}")
-    public ResponseEntity<String> remove(@PathVariable("rid") Long rid){
+    public ResponseEntity<String> remove(@RequestBody ReplyDTO dto, @PathVariable("rid") Long rid){
         logger.info("-----reply removeDELETE-----");
-
+        logger.info("dto : " + dto);
         replyService.deleteReply(rid);
 
         return new ResponseEntity<>("success", HttpStatus.OK);

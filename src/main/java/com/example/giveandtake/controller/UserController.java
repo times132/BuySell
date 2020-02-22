@@ -100,16 +100,16 @@ public class UserController {
     // 내 정보 페이지
     @GetMapping("/user/info")
     public String dispMyInfo(Principal principal, Model model) {
-        UserDTO userList = userService.readUserByEmail(principal.getName());
-        model.addAttribute("userList",userList);
+//        UserDTO userList = userService.readUserByEmail(principal.getName());
+//        model.addAttribute("userList",userList);
         return "/user/myinfo";
     }
 
     // 회원 정보 수정
     @GetMapping ("/user/modifyuser")
     public String dismodifyuser(Principal principal, Model model) {
-        UserDTO userList= userService.readUserByEmail(principal.getName()); //현재사용자정보 불러오기
-        model.addAttribute("userList",userList);
+//        UserDTO userList= userService.readUserByEmail(principal.getName()); //현재사용자정보 불러오기
+//        model.addAttribute("userList",userList);
         return "/user/modifyuser";
     }
 
