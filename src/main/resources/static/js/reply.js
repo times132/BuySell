@@ -77,13 +77,19 @@ var replyService = (function () {
     }
 
     function get(rid, callback, error) {
-        $.get("/replies/" + rid, function (result) {
-            if (callback){
-                callback(result);
-            }
-        }).fail(function (xhr, status, err) {
-            if (error){
-                error(err);
+        $.ajax({
+            type: "get",
+            url: "/replies/" + rid,
+            async: false,
+            success: function (result) {
+                if (callback){
+                    callback(result);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (error){
+                    error(err);
+                }
             }
         });
     }
@@ -117,6 +123,8 @@ var replyService = (function () {
         add: add,
         getList: getList,
         get: get,
+        update: update,
+        remove: remove,
         displayTime: displayTime
     };
 })();

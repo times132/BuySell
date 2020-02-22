@@ -1,12 +1,17 @@
 package com.example.giveandtake.service;
 
 
-import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.UserDTO;
-import com.example.giveandtake.domain.Role;
+import com.example.giveandtake.common.AppException;
+import com.example.giveandtake.common.CustomUserDetails;
+import com.example.giveandtake.domain.RoleName;
+import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.repository.RoleRepository;
 import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,15 +19,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -30,12 +31,18 @@ import java.util.*;
 public class UserService implements UserDetailsService {
 
     private UserRepository userRepository;
+    private RoleRepository roleRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Transactional
     public Long joinUser(UserDTO userDto) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
+//        logger.info("########rolefind : " + roleRepository.findByName(RoleName.ROLE_USER));
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new AppException("User Role not set"));
+        userDto.setRoles(Collections.singleton(userRole));
 
         return userRepository.save(userDto.toEntity()).getId();
     }
@@ -43,18 +50,22 @@ public class UserService implements UserDetailsService {
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
-        com.example.giveandtake.model.entity.User user = userWrapper.get();
+//        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
+//        com.example.giveandtake.model.entity.User user = userWrapper.get();
+//
+//        List<GrantedAuthority> authorities = new ArrayList<>();
+//
+//        if (("admin@example.com").equals(email)) {
+//            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//        } else {
+//            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+//        }
+//
+//        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);//SpringSecurity에서 제공하는 UserDetails를 구현한 User를 반환
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UsernameNotFoundException("email not found :" + email));
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-
-        if (("admin@example.com").equals(email)) {
-            authorities.add(new SimpleGrantedAuthority(Role.ADMIN.getValue()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
-        }
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);//SpringSecurity에서 제공하는 UserDetails를 구현한 User를 반환
+        return CustomUserDetails.create(user);
     }
     //유효성 검사
     public Map<String, String> validateHandling(Errors errors) {

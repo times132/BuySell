@@ -1,11 +1,13 @@
 package com.example.giveandtake.DTO;
 
+import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
 import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,6 +35,7 @@ public class UserDTO {
     @NotBlank(message = "핸드폰번호는 필수 입력 값입니다.")
     private String phone;
 
+    private Set<Role> roles;
 
     public User toEntity() {
         return User.builder()
@@ -42,16 +45,18 @@ public class UserDTO {
                 .password(password)
                 .phone(phone)
                 .email(email)
+                .roles(roles)
                 .build();
     }
 
     @Builder
-    public UserDTO(Long id, String nickname, String email, String password, String phone, String username) {
+    public UserDTO(Long id, String nickname, String email, String password, String phone, String username, Set<Role> roles) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.username = username;
+        this.roles = roles;
     }
 }
