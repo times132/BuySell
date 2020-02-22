@@ -48,9 +48,10 @@
         <label>댓글</label><br/>
         <sec:authentication property="principal" var="pinfo"/>
         <input type="text" name="reply" placeholder="내용"/>
-        <input type="text" name="replyer" placeholder="작성자"/>
+        <input type="text" name="replyer" value="<c:out value="${userList.nickname}"/>" readonly="readonly"/>
 
         <button id="addReplyBtn" class="btn float-right">등록</button>
+
     </div>
 
     <div class="reply-body">
