@@ -19,7 +19,6 @@ public class ReplyDTO {
     private String replyer;
 
     private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
 
     public Reply toEntity(){
         return Reply.builder()
@@ -31,13 +30,12 @@ public class ReplyDTO {
     }
 
     @Builder
-    public ReplyDTO(Long rid, Long bid, String reply, String replyer, LocalDateTime createdDate, LocalDateTime updatedDate) {
+    public ReplyDTO(Long rid, Long bid, String reply, String replyer, LocalDateTime createdDate) {
         this.rid = rid;
         this.bid = bid;
         this.reply = reply;
         this.replyer = replyer;
         this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
     }
 
 }

@@ -63,7 +63,6 @@ public class ReplyService {
                 .reply(reply.getReply())
                 .replyer(reply.getReplyer())
                 .createdDate(reply.getCreatedDate())
-                .updatedDate(reply.getUpdatedDate())
                 .build();
     }
 }

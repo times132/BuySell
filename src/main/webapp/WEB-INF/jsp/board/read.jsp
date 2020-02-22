@@ -217,16 +217,20 @@
         });
     });
 
+
+    // 댓글 수정 클릭
     $(document).on("click", "#modReplyBtn", function(){
         var rid = $(this).closest("li").data("rid");
 
         var str = "";
 
-        str += "<input type='text' name='reply' value='" + reply1 + "'/>";
+        str += "<input type='text' name='mod_reply' value='" + reply1 + "'/>";
+        str += "<button id='modifyconfirm' type='submit'>확인</button>";
 
         $("#reply_"+rid).html(str);
     });
 
+    // 댓글 삭제
     $(document).on("click", "#removeReplyBtn", function(){
         var rid = $(this).closest("li").data("rid");
         var originalReplyer = replyer1;
@@ -238,6 +242,25 @@
 
         replyService.remove(rid, originalReplyer, function (result) {
             alert(result);
+            showList(pageNum);
+        });
+    });
+
+    // 수정한 댓글 전송
+    $(document).on("click", "#modifyconfirm", function () {
+        var rid = $(this).closest("li").data("rid");
+        var modReply = $("#reply_"+rid).find("input[name='mod_reply']");
+
+        var reply = {
+            reply: modReply.val(),
+            rid: rid
+        };
+        console.log(reply);
+
+
+        replyService.update(reply, function (result) {
+            alert(result);
+
             showList(pageNum);
         });
     });

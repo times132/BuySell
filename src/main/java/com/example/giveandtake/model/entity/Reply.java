@@ -17,9 +17,11 @@ public class Reply extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rid;
+    @Column(updatable=false)
     private Long bid;
 
     private String reply;
+    @Column(updatable=false)
     private String replyer;
 
     @Builder
