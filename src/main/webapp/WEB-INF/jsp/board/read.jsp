@@ -255,8 +255,6 @@
             reply: modReply.val(),
             rid: rid
         };
-        console.log(reply);
-
 
         replyService.update(reply, function (result) {
             alert(result);
