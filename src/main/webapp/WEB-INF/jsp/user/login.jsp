@@ -18,10 +18,10 @@
 <hr>
 <form action="/user/login" method="post">
     <div>
-        이메일 <input type="text" name="username" value="email">
+        이메일 <input type="text" name="username" placeholder="email">
     </div>
     <div>
-        비밀번호 <input type="password" name="password" value="password">
+        비밀번호 <input type="password" name="password">
     </div>
 
 

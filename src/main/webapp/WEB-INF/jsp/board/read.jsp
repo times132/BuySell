@@ -44,11 +44,13 @@
     <button data-oper="remove">삭제</button>
     <button data-oper="list">목록</button>
 
-    <div>
+    <div class="reply-add">
         <label>댓글</label><br/>
         <sec:authentication property="principal" var="pinfo"/>
         <input type="text" name="reply" placeholder="내용"/>
         <input type="text" name="replyer" placeholder="작성자"/>
+
+        <button id="addReplyBtn" class="btn float-right">등록</button>
     </div>
 
     <div class="reply-body">
@@ -98,28 +100,33 @@
     function showList(page) {
 
         replyService.getList({bid: bidValue, page: page || 1}, function (data) {
-            // console.log(data);
+            console.log(data);
             if (page == -1){
-                pageNum = Math.ceil(data.totalElements/10.0);
-                showList(pageNum);
+                pageNum = 1;
+                showList(1);
                 return;
             }
-
+            console.log(replyer);
             var str = "";
-
+            <c:if test="${'times132@naver.com' eq replyer}">
+                console.log("test");
+            </c:if>
             if (data == null || data.length == 0){
                 return;
             }
             for (var i = 0, len = data.content.length || 0; i < len; i++){
-                str += "<li data-rid='" + data.content[i].rid + "'>";
-                str += "<div><div class='header'><strong class='primary-font'>" + data.content[i].replyer + "</strong>";
+                str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
+                str += "<div class='header'><strong class='replyer primary-font'>" + data.content[i].replyer + "</strong>";
                 str += "<small class='float-right text-muted'>" + replyService.displayTime(data.content[i].createdDate) + "</small></div>";
-                str += "<p>" + data.content[i].reply + "</p></div></li>";
+                str += "<p>" + data.content[i].reply + "</p>";
+                str += "<button id='modifyReplyBtn' class='btn float-right' >수정</button>";
+                str += "<button id='removeReplyBtn' class='btn float-right' onclick='removereply()'>삭제</button></li>";
+                str += "<c:if test='${" + replyer  + " eq " + data.content[i].replyer + "}'><a>true</a></c:if>";
             }
 
             replyUL.html(str);
 
-            showReplyPage(data.totalElements, data.size); //21, 4
+            showReplyPage(data.totalElements, data.size); //21, 5
         });
     }
 
@@ -159,8 +166,6 @@
 
         str += "</ul></div>";
 
-
-
         replyPageFooter.html(str);
     }
 
@@ -169,9 +174,67 @@
         console.log("page click");
 
         var targetPageNum = $(this).attr("href");
-        // console.log("targetpagenum" + targetPageNum);
+
         pageNum = targetPageNum;
         showList(pageNum);
-    })
+    });
+
+    var replyer = null;
+    <sec:authorize access="isAuthenticated()">
+        <sec:authentication property="principal" var="pinfo"/>;
+        replyer = '${pinfo.username}';
+    </sec:authorize>
+
+    var replyadd = $(".reply-add");
+    var inputReply = replyadd.find("input[name='reply']");
+    var inputReplyer = replyadd.find("input[name='replyer']").val(replyer);
+
+    $("#addReplyBtn").on("click", function (e) {
+
+        var reply = {
+            reply: inputReply.val(),
+            replyer: inputReplyer.val(),
+            bid: bidValue
+        };
+
+        replyService.add(reply, function (result) {
+            alert(result);
+            replyadd.find("input").val('');
+            showList(-1);
+        });
+    });
+
+    $("#modifyReplyBtn").on("click", function (e) {
+        console.log("click");
+
+    });
+
+    replyUL.on("click", "button", function () {
+        var rid = $(this).closest("li").data("rid");
+        // console.log(rid)
+    });
+
+    function removereply(){
+
+        // console.log($(this));
+        var rid = $(".replyli").data("rid");
+
+        var originalReplyer = $(".replyer").val();
+
+        // console.log(originalReplyer);
+
+        if (replyer != originalReplyer){
+            alert("자신의 댓글만 삭제가 가능합니다");
+            return;
+        }
+
+        replyService.remove(rid, originalReplyer, function (result) {
+            alert(result);
+            showList(pageNum);
+        });
+    }
+
+
+
 </script>
 </html>

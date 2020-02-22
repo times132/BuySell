@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class ReplyController {
 
     private ReplyService replyService;
 
-    @PostMapping(value = "/new", consumes = "application/json") //json 방식으로 데이터를 받음
+    @PostMapping(value = "/new", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE}) //json 방식으로 데이터를 받음
     public ResponseEntity<String> writePOST(@RequestBody ReplyDTO replyDTO){
         // POST 방식으로 json 데이터를 받아 @RequestBody를 이용하여 Reply 타입으로 변환
         logger.info("-----reply writePOST-----");
@@ -34,7 +35,7 @@ public class ReplyController {
     @GetMapping(value = "/pages/{bid}/{page}", produces = "application/json") // json 방식으로 리턴해줌
     public ResponseEntity<Page<Reply>> listGET(@PathVariable("bid") Long bid, @PathVariable("page") Integer page){
         logger.info("-----Reply readListGET-----");
-
+        if (page == -1) page = 1;
         Criteria cri = new Criteria(page, 5);
 
         return new ResponseEntity<>(replyService.readReplyList(bid, cri), HttpStatus.OK);

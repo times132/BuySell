@@ -8,7 +8,7 @@ var replyService = (function () {
             type: 'post',
             url: "/replies/new",
             data: JSON.stringify(reply),
-            contentType: "application/json charset=utf-8",
+            contentType: "application/json; charset=utf-8",
             success: function (result, status, xhr) {
                 if (callback){
                     callback(result);
@@ -20,6 +20,44 @@ var replyService = (function () {
                 }
             }
         })
+    }
+
+    function remove(rid, replyer, callback, error) {
+        $.ajax({
+            type: "delete",
+            url: "/replies/" + rid,
+            data: JSON.stringify({rid: rid, replyer: replyer}),
+            contentType: "application/json; charset=utf-8",
+            success: function (deleteResult, status, xhr) {
+                if (callback){
+                    callback(deleteResult);
+                }
+            },
+            error: function (xhr, status, er) {
+                if (error){
+                    error(er);
+                }
+            }
+        });
+    }
+
+    function update(reply, callback, error) {
+        $.ajax({
+            type: "put",
+            url: "/replies/" + reply.rid,
+            data: JSON.stringify(reply),
+            contentType: "application/json; charset=utf-8",
+            success: function (result, status, xhr) {
+                if (callback){
+                    callback(result);
+                }
+            },
+            error: function (xhr, status, er) {
+                if (error){
+                    error(er);
+                }
+            }
+        });
     }
 
     function getList(param, callback, error) {
@@ -39,7 +77,7 @@ var replyService = (function () {
     }
 
     function get(rid, callback, error) {
-        $.get("/replies/" + rid + ".json", function (result) {
+        $.get("/replies/" + rid, function (result) {
             if (callback){
                 callback(result);
             }
@@ -51,11 +89,13 @@ var replyService = (function () {
     }
 
     function displayTime(timeValue) {
+
         var today = new Date();
 
-        var gap = today.getTime() - timeValue;
-
         var dateObj = new Date(timeValue);
+
+        var gap = today.getTime() - dateObj.getTime();
+
         var str = "";
 
         if (gap < (1000 * 60 * 60 * 24)){
@@ -63,7 +103,7 @@ var replyService = (function () {
             var mi = dateObj.getMinutes();
             var ss = dateObj.getSeconds();
 
-            return [(hh > 9 ? '' : '0') + hh, ":", (mi > 9 ? '' : '0') + mi, ":", (ss > 9 ? '' : '0') + ss].join('');
+            return [(hh > 9 ? '' : '0') + hh, ':', (mi > 9 ? '' : '0') + mi, ':', (ss > 9 ? '' : '0') + ss].join('');
         }else{
             var yy = dateObj.getFullYear();
             var mm = dateObj.getMonth() + 1;

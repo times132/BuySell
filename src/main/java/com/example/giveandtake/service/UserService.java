@@ -3,11 +3,11 @@ package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.domain.Role;
+import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(Role.MEMBER.getValue()));
         }
 
-        return new User(user.getEmail(), user.getPassword(), authorities);//SpringSecurity에서 제공하는 UserDetails를 구현한 User를 반환
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);//SpringSecurity에서 제공하는 UserDetails를 구현한 User를 반환
     }
 
     public Map<String, String> validateHandling(Errors errors) {
