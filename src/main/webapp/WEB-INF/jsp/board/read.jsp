@@ -44,15 +44,16 @@
     <button data-oper="remove">삭제</button>
     <button data-oper="list">목록</button>
 
-    <div class="reply-add">
-        <label>댓글</label><br/>
-        <sec:authentication property="principal" var="pinfo"/>
-        <input type="text" name="reply" placeholder="내용"/>
-        <input type="text" name="replyer" value="<c:out value="${userList.nickname}"/>" readonly="readonly"/>
+    <sec:authorize access="isAuthenticated()">
+        <div class="reply-add">
+            <label>댓글</label><br/>
+            <input type="text" name="reply" placeholder="내용"/>
+            <input type="text" name="replyer" readonly="readonly"/>
 
-        <button id="addReplyBtn" class="btn float-right">등록</button>
+            <button id="addReplyBtn" class="btn float-right">등록</button>
+        </div>
+    </sec:authorize>
 
-    </div>
 
     <div class="reply-body">
         <ul class="replyList">
@@ -99,7 +100,7 @@
     var replyer = null;
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
-        replyer = '${userinfo.username}';
+        replyer = '${userinfo.nickname}';
     </sec:authorize>
 
     showList(1);
@@ -125,7 +126,7 @@
                 str += "<small class='float-right text-muted'>" + replyService.displayTime(data.content[i].createdDate) + "</small></div>";
                 str += "<p id='reply_" + data.content[i].rid + "'>" + data.content[i].reply + "</p>";
                 str += "<div>";
-                str += ('${userinfo.username}' == data.content[i].replyer ?
+                str += (replyer === data.content[i].replyer ?
                     "<button id='modReplyBtn' class='btn float-right' >수정</button>" +
                     "<button id='removeReplyBtn' class='btn float-right'>삭제</button>" :
                     '');

@@ -116,10 +116,10 @@ public class UserController {
     @PostMapping ("/user/modifyuser")
     public String modifyuser(UserDTO userList ,HttpServletResponse response) throws IOException {
         userService.modify(userList);
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out_equals = response.getWriter();
-        out_equals.println("<script>alert('수정이 완료되었습니다.');location.replace('/user/info');</script>");
-        out_equals.flush();
+//        response.setContentType("text/html; charset=UTF-8");
+//        PrintWriter out_equals = response.getWriter();
+//        out_equals.println("<script>alert('수정이 완료되었습니다.');location.replace('/user/info');</script>");
+//        out_equals.flush();
 
         return "redirect:/user/info";
 

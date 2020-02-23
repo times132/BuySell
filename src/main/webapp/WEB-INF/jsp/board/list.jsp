@@ -36,9 +36,8 @@
     <a href="/board/write">글쓰기</a>
 </sec:authorize>
 
-
     <a href="/board">전체보기</a>
-
+    <a href="/">홈</a>
     <table>
         <thead>
         <tr>

@@ -62,6 +62,7 @@ public class ReplyController {
         return replyService.updateReply(replyDTO).equals(rid) ? new ResponseEntity<>("success", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @PreAuthorize("principal.nickname == #dto.replyer")
     @DeleteMapping(value = "{rid}")
     public ResponseEntity<String> remove(@RequestBody ReplyDTO dto, @PathVariable("rid") Long rid){
         logger.info("-----reply removeDELETE-----");

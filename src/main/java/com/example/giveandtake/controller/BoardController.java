@@ -58,8 +58,8 @@ public class BoardController {
 
     @GetMapping("/write")
     public String writeGET(Principal principal, Model model){
-        UserDTO userList= userService.readUserByEmail(principal.getName()); //현재사용자정보 불러오기
-        model.addAttribute("userList",userList);
+//        UserDTO userList= userService.readUserByEmail(principal.getName()); //현재사용자정보 불러오기
+//        model.addAttribute("userList",userList);
         logger.info("-----board registerGET-----");
 
         return "/board/write";
