@@ -100,8 +100,8 @@ public class UserController {
 // 내 정보 페이지
     @GetMapping("/user/info")
     public String dispMyInfo(Principal principal, Model model) {
-        UserDTO userList = userService.readUserByNickname(principal.getName());
-        model.addAttribute("userList",userList);
+//        UserDTO userList = userService.readUserByNickname(principal.getName());
+//        model.addAttribute("userList",userList);
     return "/user/myinfo";
     }
 

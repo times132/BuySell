@@ -12,6 +12,8 @@ import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,6 +55,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("email not found :" + email));
+        logger.info("########userRole :" + user);
         return CustomUserDetails.create(user);
     }
     //유효성 검사
@@ -98,6 +101,14 @@ public class UserService implements UserDetailsService {
             userList.setPassword(passwordEncoder.encode(userList.getPassword()));
         }
         userRepository.save(userList.toEntity()).getId();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        logger.info("##########auth :" + authentication);
+        logger.info("##########Email :" + userList.getEmail());
+        CustomUserDetails modUser = (CustomUserDetails) loadUserByUsername(userList.getEmail());
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(modUser, authentication.getCredentials(), modUser.getAuthorities());
+        newAuth.setDetails(authentication.getDetails());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 

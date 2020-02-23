@@ -2,6 +2,8 @@ package com.example.giveandtake.common;
 import com.example.giveandtake.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +16,8 @@ import java.util.stream.Collectors;
 @Getter
 public class CustomUserDetails implements UserDetails {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomUserDetails.class);
+
     private Long id;
     private String username;
     private String nickname;
@@ -22,12 +26,10 @@ public class CustomUserDetails implements UserDetails {
     private String email;
     private Collection<? extends GrantedAuthority> authorities;
 
-
-
     public static CustomUserDetails create(User user){
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-
+        logger.info("############authlist :" + authorities);
         return new CustomUserDetails(user.getId(), user.getUsername(), user.getNickname(), user.getPassword(), user.getPhone(), user.getEmail(), authorities);
     }
 
@@ -44,7 +46,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getNickname();
+        return username;
     }
 
     @Override
