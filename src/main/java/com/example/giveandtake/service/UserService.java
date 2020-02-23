@@ -68,8 +68,8 @@ public class UserService implements UserDetailsService {
     }
 
     //회원정보 가져오기
-    public UserDTO readUserByEmail(String email) {
-        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
+    public UserDTO readUserByNickname(String nickname) {
+        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByNickname(nickname);
         com.example.giveandtake.model.entity.User user = userWrapper.get();
         return UserDTO.builder()
                 .id(user.getId())
@@ -82,8 +82,8 @@ public class UserService implements UserDetailsService {
 
     }
     //회원정보 삭제
-    public void delete(String email) {
-        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByEmail(email);
+    public void delete(String nickname) {
+        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByNickname(nickname);
         com.example.giveandtake.model.entity.User user = userList.get();
         userRepository.deleteById(user.getId());
     }
