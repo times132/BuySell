@@ -59,4 +59,6 @@ public class UserDTO {
         this.username = username;
         this.roles = roles;
     }
+
+
 }

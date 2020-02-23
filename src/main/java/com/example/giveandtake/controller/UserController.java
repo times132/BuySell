@@ -107,22 +107,18 @@ public class UserController {
 
     // 회원 정보 수정
     @GetMapping ("/user/modifyuser")
-    public String dismodifyuser(Principal principal, Model model) {
-//        UserDTO userList= userService.readUserByEmail(principal.getName()); //현재사용자정보 불러오기
-//        model.addAttribute("userList",userList);
+    public String dismodifyuser() {
         return "/user/modifyuser";
     }
 
     @PostMapping ("/user/modifyuser")
     public String modifyuser(UserDTO userList ,HttpServletResponse response) throws IOException {
         userService.modify(userList);
-//        response.setContentType("text/html; charset=UTF-8");
-//        PrintWriter out_equals = response.getWriter();
-//        out_equals.println("<script>alert('수정이 완료되었습니다.');location.replace('/user/info');</script>");
-//        out_equals.flush();
-
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out_equals = response.getWriter();
+        out_equals.println("<script>alert('수정이 완료되었습니다.');location.replace('/user/info');</script>");
+        out_equals.flush();
         return "redirect:/user/info";
-
     }
 
     // 회원 탈퇴
