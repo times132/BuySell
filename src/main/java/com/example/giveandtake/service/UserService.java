@@ -135,4 +135,14 @@ public class UserService implements UserDetailsService {
     }
         return 0;
     }
+
+//    public int usernameCheck(String username) {
+//        Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByUsername(username);
+//        System.out.println("값은 "+user.isPresent());
+//        if(user.isPresent()){
+//            return 1;
+//        }
+//        return 0;
+//    }
+
 }

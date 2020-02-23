@@ -13,7 +13,7 @@
         <br> <br>
 <%--        <form action="auth.do" method="post">--%>
 <div class="form-group">
-    <label for="email">아이디</label>
+    <label for="email">이메일</label>
     <input type="text" class="form-control" id="email" name="email" placeholder="ID" required>
     <div class="check_font" id="id_check"></div>
 </div>

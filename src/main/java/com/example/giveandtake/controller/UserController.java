@@ -43,6 +43,8 @@ public class UserController {
 
         return "/user/signup";
     }
+
+
     @PostMapping("/user/signup")
     public String execSignup(@Valid UserDTO userDto, Errors errors, Model model) {
         if (errors.hasErrors()) {
@@ -109,7 +111,6 @@ public class UserController {
     @PostMapping ("/user/modifyuser")
     public String modifyuser(UserDTO userList) throws IOException {
         userService.modify(userList);
-
         return "redirect:/user/info";
     }
     // 회원 탈퇴
@@ -120,10 +121,10 @@ public class UserController {
 
     @PostMapping ("/user/password")
     public String disdeleteuser(String password,Principal principal){
-        String nickname = principal.getName();
+
         if(userService.checkPassword(password))
         {
-            userService.delete(nickname);
+            userService.delete(principal.getName());
             return "user/deleteuser";
         }
 
