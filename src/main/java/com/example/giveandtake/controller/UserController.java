@@ -122,7 +122,7 @@ public class UserController {
     @PostMapping ("/user/password")
     public String disdeleteuser(String password,Principal principal){
 
-        if(userService.checkPassword(password))
+        if(userService.checkPassword(password,principal))
         {
             userService.delete(principal.getName());
             return "user/deleteuser";

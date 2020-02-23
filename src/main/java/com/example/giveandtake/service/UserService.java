@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,21 +103,14 @@ public class UserService implements UserDetailsService {
         }
         userRepository.save(userList.toEntity()).getId();
 
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        logger.info("##########auth :" + authentication);
-//        logger.info("##########Email :" + userList.getEmail());
-//        CustomUserDetails modUser = (CustomUserDetails) loadUserByUsername(userList.getEmail());
-//        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(modUser, authentication.getCredentials(), modUser.getAuthorities());
-//        newAuth.setDetails(authentication.getDetails());
-//        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 
     //로그인 후 비밀번호 확인
-    public boolean checkPassword(String pw) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        CustomUserDetails customUserDetails = (CustomUserDetails)principal;
-        String password = ((CustomUserDetails) principal).getPassword();
+    public boolean checkPassword(String pw , Principal principal) {
+        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByUsername(principal.getName());
+        com.example.giveandtake.model.entity.User user = userList.get();
+        String password = user.getPassword();
         System.out.println(password);
         System.out.println("입력한비번"+pw);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
