@@ -97,12 +97,12 @@ public class UserController {
 
 
 //<----------------회원정보 --------------------------------------------------------------------------------------------------->
-    // 내 정보 페이지
+// 내 정보 페이지
     @GetMapping("/user/info")
     public String dispMyInfo(Principal principal, Model model) {
-//        UserDTO userList = userService.readUserByEmail(principal.getName());
-//        model.addAttribute("userList",userList);
-        return "/user/myinfo";
+        UserDTO userList = userService.readUserByEmail(principal.getName());
+        model.addAttribute("userList",userList);
+    return "/user/myinfo";
     }
 
     // 회원 정보 수정
@@ -120,7 +120,6 @@ public class UserController {
         out_equals.flush();
         return "redirect:/user/info";
     }
-
     // 회원 탈퇴
     @GetMapping ("/user/password")
     public String disdeleteuser() {

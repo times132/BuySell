@@ -88,7 +88,7 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(user.getId());
     }
 
-     //회원정보 수정
+    //회원정보 수정
     public void modify(UserDTO userList){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         CustomUserDetails customUserDetails = (CustomUserDetails)principal;
@@ -114,7 +114,6 @@ public class UserService implements UserDetailsService {
         }
         return false;
     }
-
 
     public int useridCheck(String email)
     {
