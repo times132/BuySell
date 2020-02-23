@@ -71,11 +71,6 @@ public class UserController {
         return "/user/login";
     }
 
-    // 로그인 성공 페이지
-    @GetMapping("/user/login/result")
-    public String dispLoginResult() {
-        return "/user/successlogin";
-    }
     // 로그인 실패 페이지
     @GetMapping("/user/login/error")
     public String dispFailurLogin(){
@@ -100,8 +95,8 @@ public class UserController {
 // 내 정보 페이지
     @GetMapping("/user/info")
     public String dispMyInfo(Principal principal, Model model) {
-//        UserDTO userList = userService.readUserByNickname(principal.getName());
-//        model.addAttribute("userList",userList);
+        UserDTO userList = userService.readUserByUsername(principal.getName());
+        model.addAttribute("userList",userList);
     return "/user/myinfo";
     }
 
@@ -112,12 +107,9 @@ public class UserController {
     }
 
     @PostMapping ("/user/modifyuser")
-    public String modifyuser(UserDTO userList ,HttpServletResponse response) throws IOException {
+    public String modifyuser(UserDTO userList) throws IOException {
         userService.modify(userList);
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out_equals = response.getWriter();
-        out_equals.println("<script>alert('수정이 완료되었습니다.');location.replace('/user/info');</script>");
-        out_equals.flush();
+
         return "redirect:/user/info";
     }
     // 회원 탈퇴

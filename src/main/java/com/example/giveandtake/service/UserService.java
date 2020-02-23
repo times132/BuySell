@@ -71,8 +71,8 @@ public class UserService implements UserDetailsService {
     }
 
     //회원정보 가져오기
-    public UserDTO readUserByNickname(String nickname) {
-        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByNickname(nickname);
+    public UserDTO readUserByUsername(String username) {
+        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByUsername(username);
         com.example.giveandtake.model.entity.User user = userWrapper.get();
         return UserDTO.builder()
                 .id(user.getId())
@@ -85,8 +85,8 @@ public class UserService implements UserDetailsService {
 
     }
     //회원정보 삭제
-    public void delete(String nickname) {
-        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByNickname(nickname);
+    public void delete(String username) {
+        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByUsername(username);
         com.example.giveandtake.model.entity.User user = userList.get();
         userRepository.deleteById(user.getId());
     }
@@ -102,13 +102,13 @@ public class UserService implements UserDetailsService {
         }
         userRepository.save(userList.toEntity()).getId();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        logger.info("##########auth :" + authentication);
-        logger.info("##########Email :" + userList.getEmail());
-        CustomUserDetails modUser = (CustomUserDetails) loadUserByUsername(userList.getEmail());
-        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(modUser, authentication.getCredentials(), modUser.getAuthorities());
-        newAuth.setDetails(authentication.getDetails());
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        logger.info("##########auth :" + authentication);
+//        logger.info("##########Email :" + userList.getEmail());
+//        CustomUserDetails modUser = (CustomUserDetails) loadUserByUsername(userList.getEmail());
+//        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(modUser, authentication.getCredentials(), modUser.getAuthorities());
+//        newAuth.setDetails(authentication.getDetails());
+//        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 

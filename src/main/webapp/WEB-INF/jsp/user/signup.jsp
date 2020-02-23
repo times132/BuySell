@@ -18,7 +18,7 @@
 
     닉네임     : <input type="text" name="nickname" value="${userDto.nickname}"><p> ${valid_nickname}</p> <br>
 
-    이름       : <input type="text" name="username" value="${userDto.username}"> <br>
+    아이디       : <input type="text" name="username" value="${userDto.username}"> <br>
 
     핸드폰번호  : <input type="text" name="phone" value="${userDto.phone}" ><p> ${valid_phone}</p> <br>
 
@@ -29,5 +29,8 @@
     </div>
 
 </form>
+
+
 </body>
 </html>
+
