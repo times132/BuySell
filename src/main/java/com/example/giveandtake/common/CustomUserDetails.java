@@ -1,6 +1,4 @@
 package com.example.giveandtake.common;
-
-import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,12 +22,15 @@ public class CustomUserDetails implements UserDetails {
     private String email;
     private Collection<? extends GrantedAuthority> authorities;
 
+
+
     public static CustomUserDetails create(User user){
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 
         return new CustomUserDetails(user.getId(), user.getUsername(), user.getNickname(), user.getPassword(), user.getPhone(), user.getEmail(), authorities);
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -43,7 +44,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return getEmail();
     }
 
     @Override

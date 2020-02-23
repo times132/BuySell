@@ -12,8 +12,6 @@ import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -50,21 +51,8 @@ public class UserService implements UserDetailsService {
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByEmail(email);
-//        com.example.giveandtake.model.entity.User user = userWrapper.get();
-//
-//        List<GrantedAuthority> authorities = new ArrayList<>();
-//
-//        if (("admin@example.com").equals(email)) {
-//            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-//        } else {
-//            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-//        }
-//
-//        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);//SpringSecurity에서 제공하는 UserDetails를 구현한 User를 반환
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("email not found :" + email));
-
         return CustomUserDetails.create(user);
     }
     //유효성 검사
@@ -78,8 +66,6 @@ public class UserService implements UserDetailsService {
         //유효성 검사에 실패한 필드에 정의된 메시지를 가져옵니다
         return validatorResult;
     }
-
-
 
     //회원정보 가져오기
     public UserDTO readUserByEmail(String email) {
@@ -105,10 +91,9 @@ public class UserService implements UserDetailsService {
      //회원정보 수정
     public void modify(UserDTO userList){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails)principal;
-        String password = ((UserDetails) principal).getPassword();
-        String pw = userList.getPassword();
-        if(!password.equals(pw)) {
+        CustomUserDetails customUserDetails = (CustomUserDetails)principal;
+        String password = ((CustomUserDetails) principal).getPassword();
+        if(!password.equals(userList.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userList.setPassword(passwordEncoder.encode(userList.getPassword()));
         }
@@ -119,8 +104,8 @@ public class UserService implements UserDetailsService {
     //로그인 후 비밀번호 확인
     public boolean checkPassword(String pw) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = (UserDetails)principal;
-        String password = ((UserDetails) principal).getPassword();
+        CustomUserDetails customUserDetails = (CustomUserDetails)principal;
+        String password = ((CustomUserDetails) principal).getPassword();
         System.out.println(password);
         System.out.println("입력한비번"+pw);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
