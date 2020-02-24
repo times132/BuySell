@@ -1,5 +1,6 @@
 package com.example.giveandtake.config;
 
+import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and() // 로그아웃 설정
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/user/deleteuser"))
                 .logoutSuccessUrl("/user/logout/result")
                 .invalidateHttpSession(true)
                 .and()

@@ -29,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
     public static CustomUserDetails create(User user){
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-        logger.info("############authlist :" + authorities);
+        logger.info("##################authlist :" + authorities);
         return new CustomUserDetails(user.getId(), user.getUsername(), user.getNickname(), user.getPassword(), user.getPhone(), user.getEmail(), authorities);
     }
 

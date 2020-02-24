@@ -9,10 +9,10 @@
 <body>
 
 <h1>나의 정보</h1>
-<%--    <sec:authentication property="principal" var="userinfo"/>--%>
+
     <label>이메일</label> <input type="text" name="email" value="${userList.email}" readonly="readonly"><br>
 
-    <label>비밀번호</label> <input type="text" name="password" value="${userList.password}" readonly="readonly"><br>
+    <label>비밀번호</label> <input type="password" name="password" value="${userList.password}" readonly="readonly"><br>
 
     <label>닉네임</label> <input type="text" name="nickname" value="${userList.nickname}" readonly="readonly"><br>
 

@@ -120,23 +120,25 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
+    //이메일
     public int useridCheck(String email)
     {
         Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByEmail(email);
-        System.out.println("값은 "+user.isPresent());
+        System.out.println("값은 이메일 "+user.isPresent());
         if(user.isPresent()){
         return 1;
     }
         return 0;
     }
 
-//    public int usernameCheck(String username) {
-//        Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByUsername(username);
-//        System.out.println("값은 "+user.isPresent());
-//        if(user.isPresent()){
-//            return 1;
-//        }
-//        return 0;
-//    }
-
+    //아이디 중복확인
+    public int usernameCheck(String username)  {
+        Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByUsername(username);
+        System.out.println(username);
+        System.out.println("값은 아이디 "+user.isPresent());
+        if(user.isPresent()){
+            return 1;
+        }
+        return 0;
+    }
 }

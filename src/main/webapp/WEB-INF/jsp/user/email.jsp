@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <title>이메일 인증</title>
     <script src="/webjars/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/resources/js/reply.js"></script>
+
+
 </head>
 <body>
 이메일 인증 (이메일을 인증 받아야 회원가입을 진행하실 수 있습니다. )
@@ -29,6 +30,7 @@
     $("#email").blur(function() {
         // id = "id_reg" / name = "userId"
         var email = $('#email').val();
+        consol.log(email);
         $.ajax({
             url : '${pageContext.request.contextPath}/user/idCheck?email='+ email,
             type : 'get',
@@ -38,17 +40,19 @@
                     //아이디가 존제할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
                     $("#id_check").text("사용중인 아이디입니다 :p");
                     $("#id_check").css("color", "red");
-                    $("#reg_submit").attr("disabled", true);
+                    $("#frm").attr("disabled", true);
                 } else {
-                    $("#id_check").text("사용가능한 아이디입니다. 이메일인증을 진행해주세요.");
+                    $("#id_check").text("사용가능한 아이디입니다.");
                     $("#id_check").css("color", "blue");
-                    $("#reg_submit").attr("disabled", true);
+                    $("#frm").attr("disabled", true);
                     //아이디가 중복하지 않으면  idck = 1
                     idck = 1;
                 }
 
                     if(idck==1){
-                        $("#email").blur($('#frm').click(function() {
+                        $("#email").blur($('#frm')
+                            .alert("이메일이 전송되었습니다")
+                            .click(function() {
                             location.href="/user/auth.do"+email;
                         }));
 
@@ -60,7 +64,6 @@
             }
 
         });
-
 
     });
 

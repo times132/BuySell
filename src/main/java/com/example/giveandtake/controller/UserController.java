@@ -44,6 +44,13 @@ public class UserController {
         return "/user/signup";
     }
 
+    //중복아이디 검사
+    @RequestMapping(value = "/user/usernameCheck", method = RequestMethod.GET)
+    @ResponseBody
+    public int usernameCheck(@RequestParam("username") String username) {
+        System.out.println(username);
+        return userService.usernameCheck(username);
+    }
 
     @PostMapping("/user/signup")
     public String execSignup(@Valid UserDTO userDto, Errors errors, Model model) {
@@ -57,7 +64,6 @@ public class UserController {
             for (String key : validatorResult.keySet()) {
                 model.addAttribute(key, validatorResult.get(key));
             }
-
             return "/user/signup";
         }
 
@@ -120,21 +126,18 @@ public class UserController {
     }
 
     @PostMapping ("/user/password")
-    public String disdeleteuser(String password,Principal principal){
+    public int disdeleteuser(String password,Principal principal, HttpSession httpSession){
 
         if(userService.checkPassword(password,principal))
         {
             userService.delete(principal.getName());
-            return "user/deleteuser";
+            httpSession.invalidate();
+            return  1;
         }
 
-        return "/user/password";
+        return 0;
     }
 
-    @GetMapping("/user/deleteuser")
-    public String disdeleteuser( Principal principal) {
-        return "/user/deleteuser";
-    }
 
     // 어드민 페이지
     @GetMapping("/admin")
