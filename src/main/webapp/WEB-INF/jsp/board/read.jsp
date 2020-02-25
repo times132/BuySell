@@ -100,11 +100,12 @@
     var replyer = null;
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
-        replyer = '${userinfo.nickname}';
+        replyer = '${userinfo.username}';
     </sec:authorize>
 
     showList(1);
 
+    // 댓글 목록 출력
     function showList(page) {
 
         replyService.getList({bid: bidValue, page: page || 1}, function (data) {
@@ -142,6 +143,7 @@
     var pageNum = 1;
     var replyPageFooter = $(".reply-footer");
 
+    // 댓글 페이징 처리
     function showReplyPage(replyCnt, size) { // size = 한 페이지에 보이는 댓글 수
 
         var endPage = Math.ceil(pageNum / 3.0) * 3; //현재 블럭 끝 번호
@@ -178,9 +180,9 @@
         replyPageFooter.html(str);
     }
 
+    // 댓글 페이징 번호 클릭시
     replyPageFooter.on("click", "li a", function (e) {
         e.preventDefault();
-        console.log("page click");
 
         var targetPageNum = $(this).attr("href");
 
@@ -194,8 +196,8 @@
     var reply1 = "";
     var replyer1 = "";
 
+    // 댓글 등록
     $("#addReplyBtn").on("click", function (e) {
-
         var reply = {
             reply: inputReply.val(),
             replyer: inputReplyer.val(),
@@ -209,6 +211,7 @@
         });
     });
 
+    // 댓글창 버튼 클릭하면 정보를 읽어옴
     replyUL.on("click", "button", function () {
         var rid = $(this).closest("li").data("rid");
 
@@ -263,8 +266,6 @@
             showList(pageNum);
         });
     });
-
-
 
 </script>
 </html>

@@ -53,10 +53,11 @@ public class UserService implements UserDetailsService {
 
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("email not found :" + email));
-        logger.info("########userRole :" + user);
+
         return CustomUserDetails.create(user);
     }
     //유효성 검사
@@ -80,7 +81,7 @@ public class UserService implements UserDetailsService {
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .phone(user.getPhone())
-                .nickname(user.getNickname())
+                .name(user.getName())
                 .username(user.getUsername())
                 .build();
 

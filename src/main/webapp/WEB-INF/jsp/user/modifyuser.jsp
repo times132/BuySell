@@ -13,7 +13,7 @@
 
     패스워드   : <input type="text" name="password" value="${userinfo.password}"/><p>${valid_password}</p><br>
 
-    닉네임     : <input type="text" name="nickname" value="${userinfo.nickname}"><p> ${valid_nickname}</p> <br>
+    이름     : <input type="text" name="name" value="${userinfo.name}"><p> ${valid_name}</p> <br>
 
     아이디       : <input type="text" name="username" value="${userinfo.username}" readonly="readonly"> <br>
 

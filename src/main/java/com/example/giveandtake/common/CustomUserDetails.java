@@ -20,7 +20,7 @@ public class CustomUserDetails implements UserDetails {
 
     private Long id;
     private String username;
-    private String nickname;
+    private String name;
     private String password;
     private String phone;
     private String email;
@@ -30,7 +30,7 @@ public class CustomUserDetails implements UserDetails {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
         logger.info("##################authlist :" + authorities);
-        return new CustomUserDetails(user.getId(), user.getUsername(), user.getNickname(), user.getPassword(), user.getPhone(), user.getEmail(), authorities);
+        return new CustomUserDetails(user.getId(), user.getUsername(), user.getName(), user.getPassword(), user.getPhone(), user.getEmail(), authorities);
     }
 
 

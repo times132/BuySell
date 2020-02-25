@@ -28,7 +28,7 @@ class UserRepositoryTest {
     public void createUser(){
         userRepository.save(User.builder()
                 .username("yooseunga")
-                .nickname("sunny")
+                .name("sunny")
                 .password("1234")
                 .phone("010-1234-5678")
                 .email("y4380@naver.com")
@@ -37,7 +37,7 @@ class UserRepositoryTest {
         List<User> usersList = userRepository.findAll();
 
         User users = usersList.get(0);
-        assertThat(users.getNickname(), is("times132"));
+        assertThat(users.getName(), is("times132"));
         assertThat(users.getEmail(), is("times132@naver.com"));
     }
 
@@ -72,7 +72,7 @@ class UserRepositoryTest {
         LocalDateTime now = LocalDateTime.now();
         userRepository.save(User.builder()
                 .username("Park")
-                .nickname("times132")
+                .name("times132")
                 .password("123456")
                 .phone("010-1234-5678")
                 .email("times132@naver.com")

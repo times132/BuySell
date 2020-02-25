@@ -2,6 +2,7 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.UserDTO;
+import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.UserRepository;
 import com.example.giveandtake.service.MailService;
@@ -9,6 +10,7 @@ import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.LogoutHandler;

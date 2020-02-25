@@ -14,7 +14,7 @@
 
     <label>비밀번호</label> <input type="password" name="password" value="${userList.password}" readonly="readonly"><br>
 
-    <label>닉네임</label> <input type="text" name="nickname" value="${userList.nickname}" readonly="readonly"><br>
+    <label>이름</label> <input type="text" name="name" value="${userList.name}" readonly="readonly"><br>
 
     <label>ID</label> <input type="text" name="username" value="${userList.username}" readonly="readonly"><br>
 

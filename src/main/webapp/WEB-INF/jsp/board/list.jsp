@@ -79,8 +79,8 @@
     <form id="searchForm" action="/board" method="get">
         <select name="type">
             <option value=""<c:out value="${pageMaker.cri.type == null ? 'selected' : ''}"/>>--</option>
-            <option value="W">작성자</option>
             <option value="TC">제목+내용</option>
+            <option value="W">작성자</option>
         </select>
 
         <input name="keyword" type="text" placeholder="검색"/>
@@ -137,7 +137,7 @@
                 searchForm.find("input[name='page']").val("1");
                 e.preventDefault();
                 searchForm.submit();
-            })
+            });
         })
     </script>
 </body>

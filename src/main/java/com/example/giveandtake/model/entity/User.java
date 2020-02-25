@@ -17,9 +17,9 @@ public class User extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private String name;
 
-    private String nickname;
+    private String username;
 
     private String password;
 
@@ -27,14 +27,14 @@ public class User extends DateAudit {
 
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String username, String nickname, String password, String phone, String email,Long id, Set<Role> roles){
+    public User(String username, String name, String password, String phone, String email,Long id, Set<Role> roles){
         this.username = username;
-        this.nickname = nickname;
+        this.name = name;
         this.password = password;
         this.phone = phone;
         this.email = email;

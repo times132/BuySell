@@ -20,7 +20,7 @@
     <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
     <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div><br>
 
-    닉네임     : <input type="text" name="nickname" value="${userDto.nickname}"><p> ${valid_nickname}</p> <br>
+    이름     : <input type="text" name="name" value="${userDto.name}"><p> ${valid_name}</p> <br>
 
         <label for="username">아이디</label>
         <input type="text" class="form-control" id="username" name="username" placeholder="ID" required>
