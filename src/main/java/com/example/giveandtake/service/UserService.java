@@ -136,12 +136,9 @@ public class UserService implements UserDetailsService {
 
 
     //로그인 후 비밀번호 확인
-    public boolean checkPassword(String pw , Principal principal) {
-        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByUsername(principal.getName());
-        com.example.giveandtake.model.entity.User user = userList.get();
-        String password = user.getPassword();
-        System.out.println(password);
-        System.out.println("입력한비번"+pw);
+    public boolean checkPassword(String pw) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String password = ((CustomUserDetails) authentication.getPrincipal()).getPassword();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (passwordEncoder.matches(pw,password)) {
             return true;

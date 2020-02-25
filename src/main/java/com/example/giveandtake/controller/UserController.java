@@ -10,7 +10,6 @@ import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +27,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -132,25 +133,17 @@ public class UserController {
 // 내 정보 페이지
     @GetMapping("/user/info")
     public String dispMyInfo(Principal principal, Model model) {
-        UserDTO userList = userService.readUserByUsername(principal.getName());
-        model.addAttribute("userList",userList);
-
     return "/user/myinfo";
     }
 
     // 회원 정보 수정
     @GetMapping ("/user/modifyuser")
-    public String dismodifyuser(Principal principal, Model model) {
-        UserDTO userList = userService.readUserByUsername(principal.getName());
-        model.addAttribute("userList",userList);
-
+    public String dismodifyuser() {
         return "/user/modifyuser";
     }
 
     @PostMapping ("/user/modifyuser")
-    public String modifyuser(@AuthenticationPrincipal CustomUserDetails user, UserDTO userList) throws IOException {
-//        logger.info("##############User Auth : " + user.getAuthorities());
-
+    public String modifyuser(UserDTO userList) throws IOException {
         userService.modify(userList);
         return "redirect:/user/info";
     }
@@ -161,16 +154,15 @@ public class UserController {
     }
     //비밀번호 확인 후 탈퇴
     @PostMapping ("/user/password")
-    public int disdeleteuser(String password,Principal principal, HttpSession httpSession){
+    public String disdeleteuser(String password,Principal principal, HttpSession httpSession){
 
-        if(userService.checkPassword(password,principal))
+        if(userService.checkPassword(password))
         {
             userService.delete(principal.getName());
             httpSession.invalidate();
-            return  1;
+            return  "redirect:/user/logout";
         }
-
-        return 0;
+        return "/user/password";
     }
 
 
