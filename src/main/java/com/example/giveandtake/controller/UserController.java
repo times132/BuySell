@@ -37,6 +37,7 @@ public class UserController {
 
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private MailService mailService;
 
 
     // 회원가입 페이지
@@ -44,6 +45,14 @@ public class UserController {
     public String dispSignup() {
 
         return "/user/signup";
+    }
+
+    //중복이메일 검사
+    @RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
+    @ResponseBody
+    public int idCheck(@RequestParam("email") String email) {
+        System.out.println("##############################이메일은"+email);
+        return userService.useridCheck(email);
     }
 
     //중복아이디 검사
@@ -93,6 +102,25 @@ public class UserController {
         return "/user/logout";
     }
 
+    @GetMapping("/user/findpw")
+    public String findpw()
+    {
+        return "/user/findPW";
+    }
+    //비밀번호 찾기
+    @RequestMapping( value = "/user/findpw.do{email}" , method=RequestMethod.GET)
+    public String findPW(HttpServletRequest request, @PathVariable String email) throws IOException {
+        System.out.println("##########################################이메일"+ email);
+        String mailType = "findpw";
+        String code = mailService.sendMail(email, request, mailType);
+
+        userService.changePW(email, code);
+        System.out.println("비밀번호변경완료");
+
+
+        return "/user/login";
+    }
+
 
     // 접근 거부 페이지
     @GetMapping("/user/denied")
@@ -126,7 +154,7 @@ public class UserController {
     public String disdeleteuser() {
         return "/user/password";
     }
-
+    //비밀번호 확인 후 탈퇴
     @PostMapping ("/user/password")
     public int disdeleteuser(String password,Principal principal, HttpSession httpSession){
 

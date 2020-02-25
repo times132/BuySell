@@ -9,11 +9,10 @@ import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.RoleRepository;
 import com.example.giveandtake.repository.UserRepository;
+import com.sun.mail.imap.IMAPStore;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,6 +36,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
 
     @Transactional
     public Long joinUser(UserDTO userDto) {
@@ -74,7 +74,13 @@ public class UserService implements UserDetailsService {
 
     //회원정보 가져오기
     public UserDTO readUserByUsername(String username) {
-        Optional<com.example.giveandtake.model.entity.User> userWrapper = userRepository.findByUsername(username);
+        Optional<User> userWrapper;
+        if(username.contains("@")){
+            userWrapper = userRepository.findByEmail(username);
+        }
+        else {
+            userWrapper = userRepository.findByUsername(username);
+        }
         com.example.giveandtake.model.entity.User user = userWrapper.get();
         return UserDTO.builder()
                 .id(user.getId())
@@ -121,16 +127,7 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    //이메일
-    public int useridCheck(String email)
-    {
-        Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByEmail(email);
-        System.out.println("값은 이메일 "+user.isPresent());
-        if(user.isPresent()){
-        return 1;
-    }
-        return 0;
-    }
+
 
     //아이디 중복확인
     public int usernameCheck(String username)  {
@@ -141,5 +138,26 @@ public class UserService implements UserDetailsService {
             return 1;
         }
         return 0;
+    }
+
+    //이메일 중복검사
+    public int useridCheck(String email)
+    {
+        Optional<User> user = userRepository.findByEmail(email);
+        System.out.println("값은 이메일 "+user.isPresent());
+        if(user.isPresent()){
+            return 1;
+        }
+        return 0;
+    }
+    //비밀번호 찾기
+    public void changePW(String email, String newPW){
+        UserDTO userList = readUserByUsername(email);
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        userList.setPassword(passwordEncoder.encode(newPW));
+        userRepository.save(userList.toEntity()).getId();
+        System.out.println("비밀번호 찾기");
+
     }
 }

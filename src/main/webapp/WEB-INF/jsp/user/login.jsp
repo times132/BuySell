@@ -23,8 +23,11 @@
 
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
-    <button type="submit">로그인</button>
-    <input type="button" value="회원가입" onClick="self.location='/user/signup';">
+    <button type="submit">로그인</button> <br>
+    아직 계정이 없으십니까? <input type="button" value="회원가입" onClick="self.location='/user/signup';"><br>
+    비밀번호를 잊어버리셨습니까? <input type="button" value="비밀번호 찾기" onClick="self.location='/user/findpw';"><br>
+
+
 </form>
 
 </body>
