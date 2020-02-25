@@ -7,6 +7,7 @@ import lombok.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -34,7 +35,7 @@ public class UserDTO {
     @NotBlank(message = "핸드폰번호는 필수 입력 값입니다.")
     private String phone;
 
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User toEntity() {
         return User.builder()

@@ -2,11 +2,14 @@ package com.example.giveandtake.model.entity;
 
 import com.example.giveandtake.domain.RoleName;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -22,8 +25,9 @@ public class Role {
     @NaturalId
     private RoleName name;
 
-    public Role(RoleName name){
+    @Builder
+    public Role(Long id, RoleName name){
+        this.id = id;
         this.name = name;
     }
-
 }

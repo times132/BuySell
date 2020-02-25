@@ -10,6 +10,7 @@ import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,9 +28,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
@@ -135,17 +134,23 @@ public class UserController {
     public String dispMyInfo(Principal principal, Model model) {
         UserDTO userList = userService.readUserByUsername(principal.getName());
         model.addAttribute("userList",userList);
+
     return "/user/myinfo";
     }
 
     // 회원 정보 수정
     @GetMapping ("/user/modifyuser")
-    public String dismodifyuser() {
+    public String dismodifyuser(Principal principal, Model model) {
+        UserDTO userList = userService.readUserByUsername(principal.getName());
+        model.addAttribute("userList",userList);
+
         return "/user/modifyuser";
     }
 
     @PostMapping ("/user/modifyuser")
-    public String modifyuser(UserDTO userList) throws IOException {
+    public String modifyuser(@AuthenticationPrincipal CustomUserDetails user, UserDTO userList) throws IOException {
+//        logger.info("##############User Auth : " + user.getAuthorities());
+
         userService.modify(userList);
         return "redirect:/user/info";
     }

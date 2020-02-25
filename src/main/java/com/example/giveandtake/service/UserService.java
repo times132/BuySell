@@ -13,6 +13,9 @@ import com.sun.mail.imap.IMAPStore;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,10 +27,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -89,10 +89,12 @@ public class UserService implements UserDetailsService {
                 .phone(user.getPhone())
                 .name(user.getName())
                 .username(user.getUsername())
+                .roles(user.getRoles())
                 .build();
 
     }
     //회원정보 삭제
+    @Transactional
     public void delete(String username) {
         Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByUsername(username);
         com.example.giveandtake.model.entity.User user = userList.get();
@@ -100,16 +102,36 @@ public class UserService implements UserDetailsService {
     }
 
     //회원정보 수정
+    @Transactional
     public void modify(UserDTO userList){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        CustomUserDetails customUserDetails = (CustomUserDetails)principal;
-        String password = ((CustomUserDetails) principal).getPassword();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        logger.info("###########AUTH principal: " + authentication.getPrincipal()); //커스텀 유저 반환
+//        logger.info("###########AUTH name: " + authentication.getName()); // username
+//        logger.info("###########AUTH authorities: " + authentication.getAuthorities()); // 권한
+//        logger.info("###########AUTH credentital: " + authentication.getCredentials()); // 비밀번호
+//        logger.info("###########AUTH detail: " + authentication.getDetails()); // 세션 같은거
+
+        String password = ((CustomUserDetails) authentication.getPrincipal()).getPassword();
         if(!password.equals(userList.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userList.setPassword(passwordEncoder.encode(userList.getPassword()));
         }
+        Set<Role> roles = new HashSet<>();
+
+        for (GrantedAuthority a : authentication.getAuthorities()){
+            roles.add(Role.builder()
+                    .id(userList.getId())
+                    .name(RoleName.valueOf(a.getAuthority()))
+                    .build());
+        }
+        userList.setRoles(roles);
+
         userRepository.save(userList.toEntity()).getId();
 
+        UserDetails userDetails = loadUserByUsername(userList.getEmail()); // 수정된 유저 정보 가져옴
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
+        newAuth.setDetails(authentication.getDetails());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 
@@ -151,6 +173,7 @@ public class UserService implements UserDetailsService {
         return 0;
     }
     //비밀번호 찾기
+    @Transactional
     public void changePW(String email, String newPW){
         UserDTO userList = readUserByUsername(email);
 
@@ -160,4 +183,5 @@ public class UserService implements UserDetailsService {
         System.out.println("비밀번호 찾기");
 
     }
+
 }

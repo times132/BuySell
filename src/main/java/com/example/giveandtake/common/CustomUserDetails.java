@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,10 +30,8 @@ public class CustomUserDetails implements UserDetails {
     public static CustomUserDetails create(User user){
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-        logger.info("##################authlist :" + authorities);
         return new CustomUserDetails(user.getId(), user.getUsername(), user.getName(), user.getPassword(), user.getPhone(), user.getEmail(), authorities);
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
