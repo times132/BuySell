@@ -133,8 +133,6 @@ public class UserController {
 // 내 정보 페이지
     @GetMapping("/user/info")
     public String dispMyInfo(Principal principal, Model model) {
-        UserDTO userList = userService.readUserByUsername(principal.getName());
-        model.addAttribute("userList",userList);
     return "/user/myinfo";
     }
 
@@ -156,16 +154,15 @@ public class UserController {
     }
     //비밀번호 확인 후 탈퇴
     @PostMapping ("/user/password")
-    public int disdeleteuser(String password,Principal principal, HttpSession httpSession){
+    public String disdeleteuser(String password,Principal principal, HttpSession httpSession){
 
-        if(userService.checkPassword(password,principal))
+        if(userService.checkPassword(password))
         {
             userService.delete(principal.getName());
             httpSession.invalidate();
-            return  1;
+            return  "redirect:/user/logout";
         }
-
-        return 0;
+        return "/user/password";
     }
 
 

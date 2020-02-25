@@ -13,6 +13,10 @@ import com.sun.mail.imap.IMAPStore;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,10 +28,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -101,25 +103,29 @@ public class UserService implements UserDetailsService {
 
     //회원정보 수정
     public void modify(UserDTO userList){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        CustomUserDetails customUserDetails = (CustomUserDetails)principal;
-        String password = ((CustomUserDetails) principal).getPassword();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String password = ((CustomUserDetails) authentication.getPrincipal()).getPassword();
         if(!password.equals(userList.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userList.setPassword(passwordEncoder.encode(userList.getPassword()));
         }
+
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new AppException("User Role not set"));
+        userList.setRoles(Collections.singleton(userRole));
         userRepository.save(userList.toEntity()).getId();
 
+        UserDetails userDetails = loadUserByUsername(userList.getEmail());
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
+        newAuth.setDetails(authentication.getDetails());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 
     //로그인 후 비밀번호 확인
-    public boolean checkPassword(String pw , Principal principal) {
-        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByUsername(principal.getName());
-        com.example.giveandtake.model.entity.User user = userList.get();
-        String password = user.getPassword();
-        System.out.println(password);
-        System.out.println("입력한비번"+pw);
+    public boolean checkPassword(String pw) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String password = ((CustomUserDetails) authentication.getPrincipal()).getPassword();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (passwordEncoder.matches(pw,password)) {
             return true;
@@ -128,13 +134,22 @@ public class UserService implements UserDetailsService {
     }
 
 
-
     //아이디 중복확인
     public int usernameCheck(String username)  {
         Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByUsername(username);
         System.out.println(username);
-        System.out.println("값은 아이디 "+user.isPresent());
-        if(user.isPresent()){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String id = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
+        System.out.println(id);
+
+        System.out.println(id.equals(username));
+
+        if(id.equals(username)){
+            return 0;
+        }
+        else if(user.isPresent()) {
+
             return 1;
         }
         return 0;
@@ -145,7 +160,7 @@ public class UserService implements UserDetailsService {
     {
         Optional<User> user = userRepository.findByEmail(email);
         System.out.println("값은 이메일 "+user.isPresent());
-        if(user.isPresent()){
+        if(user.isPresent() ){
             return 1;
         }
         return 0;
@@ -153,7 +168,6 @@ public class UserService implements UserDetailsService {
     //비밀번호 찾기
     public void changePW(String email, String newPW){
         UserDTO userList = readUserByUsername(email);
-
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userList.setPassword(passwordEncoder.encode(newPW));
         userRepository.save(userList.toEntity()).getId();

@@ -36,6 +36,8 @@
 <script>
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
     idck = 0;
+    $("#submit")
+        .attr("disabled", true)
     $("#username").blur(function() {
         var username = $("#username").val();
         $.ajax({
@@ -51,14 +53,13 @@
                 } else {
                     $("#username_check").text("사용가능한 아이디입니다.");
                     $("#username_check").css("color", "blue");
-                    $("#submit").attr("disabled", true);
+                    $("#submit").attr("disabled", false);
                     idck=1;
                 }
 
                 if(idck==1){
                     $("#submit")
                         .attr("disabled", false)
-                        // .click(function() { alert("회원가입이 완료되었습니다."); })
                 }
 
             }, error : function() {

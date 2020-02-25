@@ -34,7 +34,7 @@ public class ReplyController {
         // POST 방식으로 json 데이터를 받아 @RequestBody를 이용하여 Reply 타입으로 변환
         logger.info("-----reply writePOST-----");
         replyService.writeReply(replyDTO);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>("댓글 등록이 완료되었습니다.", HttpStatus.OK);
     }
 
     @GetMapping(value = "/pages/{bid}/{page}", produces = "application/json") // json 방식으로 리턴해줌
@@ -59,7 +59,7 @@ public class ReplyController {
 
         replyDTO.setRid(rid);
 
-        return replyService.updateReply(replyDTO).equals(rid) ? new ResponseEntity<>("success", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return replyService.updateReply(replyDTO).equals(rid) ? new ResponseEntity<>("댓글 수정이 완료되었습니다.", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PreAuthorize("principal.nickname == #dto.replyer")
@@ -69,7 +69,7 @@ public class ReplyController {
         logger.info("dto : " + dto);
         replyService.deleteReply(rid);
 
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>("댓글 삭제가 완료되었습니다.", HttpStatus.OK);
     }
 
 }
