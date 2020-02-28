@@ -24,18 +24,24 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	compile 'org.springframework.boot:spring-boot-starter-security'
-	compile 'org.springframework.security:spring-security-taglibs'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-taglibs'
 	//메일
-	compile group: 'org.springframework', name: 'spring-context-support', version: '2.5.6.SEC01'
-	compile group: 'com.sun.mail', name: 'javax.mail', version: '1.4.7'
+	implementation group: 'org.springframework', name: 'spring-context-support', version: '2.5.6.SEC01'
+	implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.4.7'
 
-
+	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.11'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'net.sargue:java-time-jsptags:1.1.4'
 	implementation 'javax.servlet:jstl'
+
+	implementation 'org.mapstruct:mapstruct:1.3.1.Final'
+
+
 
 	//jquery
 	implementation 'org.webjars.bower:jquery:3.4.1'

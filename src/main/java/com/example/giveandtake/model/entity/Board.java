@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -24,8 +26,11 @@ public class Board extends DateAudit {
     private Integer price;
     private Integer replyCnt;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<BoardFile> boardFileList = new ArrayList<>();
+
     @Builder
-    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer replyCnt){
+    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer replyCnt, List<BoardFile> boardFileList){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
@@ -33,5 +38,6 @@ public class Board extends DateAudit {
         this.writer = writer;
         this.price = price;
         this.replyCnt = replyCnt;
+        this.boardFileList = boardFileList;
     }
 }

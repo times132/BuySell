@@ -119,8 +119,9 @@ public class UserService implements UserDetailsService {
         Set<Role> roles = new HashSet<>();
 
         for (GrantedAuthority a : authentication.getAuthorities()){
+            logger.info("############AUTH : " + a);
             roles.add(Role.builder()
-                    .id(userList.getId())
+                    .id((long) (RoleName.valueOf(a.getAuthority()).ordinal()+1))
                     .name(RoleName.valueOf(a.getAuthority()))
                     .build());
         }

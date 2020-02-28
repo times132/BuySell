@@ -1,7 +1,9 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardDTO;
+import com.example.giveandtake.DTO.BoardFileDTO;
 import com.example.giveandtake.DTO.UserDTO;
+import com.example.giveandtake.model.entity.BoardFile;
 import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;

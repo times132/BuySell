@@ -1,8 +1,11 @@
 package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.BoardDTO;
+import com.example.giveandtake.DTO.BoardFileDTO;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
+import com.example.giveandtake.model.entity.BoardFile;
+import com.example.giveandtake.repository.BoardFileRepository;
 import com.example.giveandtake.repository.BoardRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -12,7 +15,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,16 +28,20 @@ public class BoardService {
     private static final Logger logger = LoggerFactory.getLogger(BoardService.class);
 
     private BoardRepository boardRepository;
+    private BoardFileRepository boardFileRepository;
 
     // 게시물 등록
+    @Transactional
     public Long register(BoardDTO dto){
-
+//        for (BoardFileDTO fileDTO : dto.getBoardFileList()){
+//            fileDTO.setBoard(dto.toEntity());
+//        }
         return boardRepository.save(dto.toEntity()).getBid();
     }
 
     // 게시물 목록, 페이징, 검색
     public Page<Board> getList(SearchCriteria SearchCri){
-        Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.ASC, "createdDate"));
+        Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
 
         Page<Board> page;
         logger.info("======getType()====== : " + SearchCri.getType());
@@ -71,5 +81,14 @@ public class BoardService {
     // 게시물 삭제
     public void delete(Long bid){
         boardRepository.deleteById(bid);
+    }
+
+    private List<BoardFile> convertDtoToEntity(List<BoardFileDTO> boardFiledtos){
+        List<BoardFile> boardFileList = new ArrayList<>();
+        for (BoardFileDTO boardFileDTOs : boardFiledtos){
+            boardFileList.add(boardFileDTOs.toEntity());
+        }
+
+        return boardFileList;
     }
 }
