@@ -27,7 +27,8 @@
         }
     </style>
     
-    <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+
 </head>
 <body>
     <%@include file="../include/header.jsp"%>

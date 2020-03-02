@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="/resources/css/test.css" rel="stylesheet">
-    <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
 </head>
 <body>
     <form id="writeForm" action="/board/write" method="post">

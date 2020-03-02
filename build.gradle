@@ -38,9 +38,12 @@ dependencies {
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
 	implementation 'net.sargue:java-time-jsptags:1.1.4'
 	implementation 'javax.servlet:jstl'
-	
+
 	implementation 'org.mapstruct:mapstruct:1.3.1.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.1.Final'
+
+	//jquery
+	implementation 'org.webjars.bower:jquery:3.4.1'
 
 	//websocket
 	compile("org.springframework.boot:spring-boot-starter-websocket")
@@ -57,10 +60,6 @@ dependencies {
 	implementation 'org.webjars:sockjs-client:1.1.2'
 	implementation 'org.webjars:stomp-websocket:2.3.3-1'
 	implementation 'com.google.code.gson:gson:2.8.0'
-
-	//jquery
-	implementation 'org.webjars.bower:jquery:3.4.1'
-	implementation 'org.webjars:webjars-locator-core'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
