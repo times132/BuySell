@@ -37,6 +37,7 @@
     <h5><%=name%>님.</h5>
     <input type="button" value="로그아웃" onClick="self.location='/user/logout';">
     <input type="button" value="내정보" onClick="self.location='/user/info';">
+    <input type="button" value="채팅" onClick="self.location='/chat/room';">
 </sec:authorize>
 
 <input type="button" value="게시판" onClick="self.location='/board';">
