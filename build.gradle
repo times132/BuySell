@@ -40,8 +40,7 @@ dependencies {
 	implementation 'javax.servlet:jstl'
 
 	implementation 'org.mapstruct:mapstruct:1.3.1.Final'
-
-
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.1.Final'
 
 	//jquery
 	implementation 'org.webjars.bower:jquery:3.4.1'

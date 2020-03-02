@@ -21,8 +21,7 @@ public class BoardFile {
     private Boolean fileType;
 
     @ManyToOne
-    @JoinColumn(name = "board_id")
-    @JsonIgnore
+    @JoinColumn(name = "board_bid")
     private Board board;
 
     @Builder

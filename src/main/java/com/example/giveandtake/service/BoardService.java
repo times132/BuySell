@@ -3,6 +3,7 @@ package com.example.giveandtake.service;
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
 import com.example.giveandtake.common.SearchCriteria;
+import com.example.giveandtake.mapper.BoardMapper;
 import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.BoardFile;
 import com.example.giveandtake.repository.BoardFileRepository;
@@ -29,14 +30,13 @@ public class BoardService {
 
     private BoardRepository boardRepository;
     private BoardFileRepository boardFileRepository;
+    private BoardMapper boardMapper;
 
     // 게시물 등록
     @Transactional
     public Long register(BoardDTO dto){
-//        for (BoardFileDTO fileDTO : dto.getBoardFileList()){
-//            fileDTO.setBoard(dto.toEntity());
-//        }
-        return boardRepository.save(dto.toEntity()).getBid();
+
+        return boardRepository.save(boardMapper.toEntity(dto)).getBid();
     }
 
     // 게시물 목록, 페이징, 검색
@@ -75,20 +75,11 @@ public class BoardService {
 
     // 게시물 업데이트
     public Long update(BoardDTO dto){
-        return boardRepository.save(dto.toEntity()).getBid();
+        return boardRepository.save(boardMapper.toEntity(dto)).getBid();
     }
 
     // 게시물 삭제
     public void delete(Long bid){
         boardRepository.deleteById(bid);
-    }
-
-    private List<BoardFile> convertDtoToEntity(List<BoardFileDTO> boardFiledtos){
-        List<BoardFile> boardFileList = new ArrayList<>();
-        for (BoardFileDTO boardFileDTOs : boardFiledtos){
-            boardFileList.add(boardFileDTOs.toEntity());
-        }
-
-        return boardFileList;
     }
 }

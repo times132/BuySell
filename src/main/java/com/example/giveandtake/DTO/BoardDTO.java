@@ -22,21 +22,20 @@ public class BoardDTO {
     private String writer;
     private Integer price;
     private Integer replyCnt;
-    private List<BoardFileDTO> boardFileList = new ArrayList<>();
     private LocalDateTime createdDate;
+    private List<BoardFileDTO> boardFileList = new ArrayList<>();
 
-    public Board toEntity(){
-        return Board.builder()
-                .bid(bid)
-                .btype(btype)
-                .title(title)
-                .content(content)
-                .writer(writer)
-                .price(price)
-                .replyCnt(replyCnt)
-                .boardFileList(convertDtoToEntity(boardFileList))
-                .build();
-    }
+//    public Board toEntity(){
+//        return Board.builder()
+//                .btype(btype)
+//                .title(title)
+//                .content(content)
+//                .writer(writer)
+//                .price(price)
+//                .replyCnt(replyCnt)
+//                .boardFileList(boardFileList)
+//                .build();
+//    }
 
     @Builder
     public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, Integer replyCnt, LocalDateTime createdDate, List<BoardFileDTO> boardFileList){
@@ -47,26 +46,7 @@ public class BoardDTO {
         this.writer = writer;
         this.price = price;
         this.replyCnt = replyCnt;
-        this.boardFileList = boardFileList;
         this.createdDate = createdDate;
-    }
-
-    public void setBoardFileList(List<BoardFileDTO> boardFileList) {
         this.boardFileList = boardFileList;
-        if (this.boardFileList != null && this.boardFileList.size() > 0){
-            for (BoardFileDTO bFile : boardFileList){
-                bFile.setBoardDTO(this);
-            }
-        }
-    }
-
-    private List<BoardFile> convertDtoToEntity(List<BoardFileDTO> fileDTOList){
-        List<BoardFile> FileList = new ArrayList<>();
-        for (BoardFileDTO fileDTO : fileDTOList){
-            fileDTO.setBoardDTO(this);
-            FileList.add(fileDTO.toEntity());
-        }
-
-        return FileList;
     }
 }
