@@ -1,6 +1,7 @@
 package com.example.giveandtake.model.entity;
 
 import com.example.giveandtake.model.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Board extends DateAudit {
     private Integer replyCnt;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<BoardFile> boardFileList = new ArrayList<>();
 
     @Builder

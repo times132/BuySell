@@ -15,11 +15,15 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -39,14 +43,6 @@ public class BoardController {
 
         Page<Board> boardPage =  boardService.getList(searchCri);
 
-//        logger.info("-----getTotalElements----- : " + boardPage.getTotalElements());
-//        logger.info("-----getTotalPages----- : " + boardPage.getTotalPages());
-//        logger.info("-----getNumber----- : " + boardPage.getNumber());
-//        logger.info("-----getSize----- : " + boardPage.getSize());
-//        logger.info("-----get----- : " + boardPage.get());
-//        logger.info("-----toList----- : " + boardPage.toList());
-//        logger.info("-----getContent----- : " + boardPage.getContent());
-
         model.addAttribute("boardList", boardPage.getContent());
         model.addAttribute("pageMaker", Pagination.builder()
                             .cri(searchCri)
@@ -60,8 +56,6 @@ public class BoardController {
 
     @GetMapping("/write")
     public String writeGET(){
-//        UserDTO userList= userService.readUserByEmail(principal.getName()); //현재사용자정보 불러오기
-//        model.addAttribute("userList",userList);
         logger.info("-----board registerGET-----");
 
         return "/board/write";
@@ -103,4 +97,10 @@ public class BoardController {
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
+    @GetMapping(value = "/getFileList", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<BoardFileDTO>> fileListGET(Long bid){
+
+        return new ResponseEntity<>(boardService.readFile(bid), HttpStatus.OK);
+    }
 }

@@ -40,6 +40,22 @@
         <input name="price" value="<c:out value="${boardDto.price}"/>" readonly="readonly"/>
     </div>
 
+    <div class="imageWrapper">
+        <div class="originPicture">
+
+        </div>
+    </div>
+
+    <div class="panel">
+        <div>사진</div>
+        <div class="panel-body">
+            <div class="uploadResult">
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <button data-oper="modify">수정</button>
     <button data-oper="remove">삭제</button>
     <button data-oper="list">목록</button>
@@ -53,7 +69,6 @@
             <button id="addReplyBtn" class="btn float-right">등록</button>
         </div>
     </sec:authorize>
-
 
     <div class="reply-body">
         <ul class="replyList">
@@ -90,6 +105,45 @@
             operForm.find("#bid").remove();
             operForm.attr("action", "/board");
             operForm.submit();
+        });
+
+        $.getJSON("/board/getFileList", {bid: bidValue}, function (arr) {
+            var str = "";
+
+            $(arr).each(function (i, file) {
+                if (file.fileType){
+                    var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
+
+                    str += "<li data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.fileType + "'><div>";
+                    str += "<img src='/display?fileName=" + fileCallPath + "'>";
+                    str += "</div>";
+                    str += "</li>"
+                }
+            });
+            $(".uploadResult ul").html(str);
+        });
+
+        $(".uploadResult").on("click", "li", function (e) {
+            var liobj = $(this);
+            console.log(liobj);
+            var path = encodeURIComponent(liobj.data("path") + "/" + liobj.data("uuid") + "_" + liobj.data("filename"));
+
+            showImage(path.replace(new RegExp(/\\/g),"/"));
+        });
+
+        function showImage(fileCallPath) {
+            $(".imageWrapper").css("display", "flex").show();
+
+            $(".originPicture")
+                .html("<img src='/display?fileName=" + fileCallPath +"'>")
+                .animate({width: "10%", height: "10%"}, 100);
+        }
+
+        $(".originPicture").on("click", function (e) {
+            $(".originPicture").animate({width: "0%", height: "0%"});
+            setTimeout(function () {
+                $(".imageWrapper").hide();
+            }, 100);
         });
     });
 </script>
@@ -266,6 +320,5 @@
             showList(pageNum);
         });
     });
-
 </script>
 </html>

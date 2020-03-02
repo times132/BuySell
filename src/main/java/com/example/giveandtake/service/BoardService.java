@@ -34,9 +34,12 @@ public class BoardService {
 
     // 게시물 등록
     @Transactional
-    public Long register(BoardDTO dto){
-
-        return boardRepository.save(boardMapper.toEntity(dto)).getBid();
+    public void register(BoardDTO dto){
+        Board board = boardRepository.save(boardMapper.toEntity(dto));
+        for (BoardFileDTO fileDTO : dto.getBoardFileList()){
+            fileDTO.setBoard(board);
+            boardFileRepository.save(boardMapper.filetoEntity(fileDTO));
+        }
     }
 
     // 게시물 목록, 페이징, 검색
@@ -81,5 +84,9 @@ public class BoardService {
     // 게시물 삭제
     public void delete(Long bid){
         boardRepository.deleteById(bid);
+    }
+
+    public List<BoardFileDTO> readFile(Long bid){
+        return boardMapper.fileToDTOList(boardFileRepository.findAllByBoardBid(bid));
     }
 }

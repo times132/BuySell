@@ -15,6 +15,8 @@ import javax.persistence.*;
 public class BoardFile {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long fid;
     private String uuid;
     private String uploadPath;
     private String fileName;
@@ -25,7 +27,8 @@ public class BoardFile {
     private Board board;
 
     @Builder
-    public BoardFile(String uuid, String uploadPath, String fileName, Boolean fileType, Board board){
+    public BoardFile(Long fid, String uuid, String uploadPath, String fileName, Boolean fileType, Board board){
+        this.fid = fid;
         this.uuid = uuid;
         this.uploadPath = uploadPath;
         this.fileName = fileName;

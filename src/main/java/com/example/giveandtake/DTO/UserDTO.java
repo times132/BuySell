@@ -1,13 +1,16 @@
 package com.example.giveandtake.DTO;
 
+import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
 import lombok.*;
 
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter

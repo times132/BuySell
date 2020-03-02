@@ -16,19 +16,10 @@ public class BoardFileDTO {
     private String uploadPath;
     private String fileName;
     private Boolean fileType;
-    private BoardDTO board;
-
-//    public BoardFile toEntity(){
-//        return BoardFile.builder()
-//                .uuid(uuid)
-//                .uploadPath(uploadPath)
-//                .fileName(fileName)
-//                .fileType(fileType)
-//                .build();
-//    }
+    private Board board;
 
     @Builder
-    public BoardFileDTO(String uuid, String uploadPath, String fileName, Boolean fileType, BoardDTO board) {
+    public BoardFileDTO(String uuid, String uploadPath, String fileName, Boolean fileType, Board board) {
         this.uuid = uuid;
         this.uploadPath = uploadPath;
         this.fileName = fileName;

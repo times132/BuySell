@@ -25,18 +25,6 @@ public class BoardDTO {
     private LocalDateTime createdDate;
     private List<BoardFileDTO> boardFileList = new ArrayList<>();
 
-//    public Board toEntity(){
-//        return Board.builder()
-//                .btype(btype)
-//                .title(title)
-//                .content(content)
-//                .writer(writer)
-//                .price(price)
-//                .replyCnt(replyCnt)
-//                .boardFileList(boardFileList)
-//                .build();
-//    }
-
     @Builder
     public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, Integer replyCnt, LocalDateTime createdDate, List<BoardFileDTO> boardFileList){
         this.bid = bid;

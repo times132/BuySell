@@ -1,7 +1,6 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardFileDTO;
-import net.coobird.thumbnailator.Thumbnailator;
 import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,14 +93,14 @@ public class FileController {
             logger.info("Upload File Name: " + multipartFile.getOriginalFilename());
             logger.info("Upload File Size: " + multipartFile.getSize());
 
-            BoardFileDTO boardFileDTO = new BoardFileDTO();
+            BoardFileDTO fileDTO = new BoardFileDTO();
 
             String uploadFileName = multipartFile.getOriginalFilename();
 
             // IE file path
             uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
             logger.info("only file name: " + uploadFileName);
-            boardFileDTO.setFileName(uploadFileName);
+            fileDTO.setFileName(uploadFileName);
 
             UUID uuid = UUID.randomUUID();
 
@@ -111,12 +110,12 @@ public class FileController {
                 File saveFile = new File(uploadPath, uploadFileName);
                 multipartFile.transferTo(saveFile);
 
-                boardFileDTO.setUploadPath(uploadFolderPath);
-                boardFileDTO.setUuid(uuid.toString());
+                fileDTO.setUploadPath(uploadFolderPath);
+                fileDTO.setUuid(uuid.toString());
 
                 if (checkImageType(saveFile)){
 
-                    boardFileDTO.setFileType(true);
+                    fileDTO.setFileType(true);
 
                     FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
                     Thumbnails.of(saveFile)
@@ -127,7 +126,7 @@ public class FileController {
                     thumbnail.close();
                 }
 
-                list.add(boardFileDTO);
+                list.add(fileDTO);
             }catch (Exception e){
                 e.printStackTrace();
             }
