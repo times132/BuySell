@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <link href="/resources/css/test.css" rel="stylesheet">
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
 </head>
 <body>
     <form action="/board/modify" method="post">
@@ -19,11 +20,31 @@
         내용 : <input type="text" name="content" value="${boardDto.content}"> <br>
         작성자 : <input type="text" name="writer" value="${boardDto.writer}" readonly="readonly"> <br>
         가격 : <input type="text" name="price" value="${boardDto.price}"> <br>
-
-        <button data-oper="modify" type="submit">수정</button>
-        <button data-oper="list" type="submit">목록</button>
     </form>
 
+    <div class="imageWrapper">
+        <div class="originPicture">
+
+        </div>
+    </div>
+
+    <div class="panel">
+        <div>사진</div>
+        <div class="panel-body">
+            <div class="uploadDiv">
+                <input type="file" name="uploadFile" multiple>
+            </div>
+            <div class="uploadResult">
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <button data-oper="modify" type="submit">수정</button>
+    <button data-oper="list" type="submit">목록</button>
+
+    <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script>
         $(document).ready(function(){
             var formObj = $("form");
@@ -45,9 +66,47 @@
                     formObj.append(typeTag);
                     formObj.append(keywordTag);
                 }else if (operation === 'modify'){
-                    formObj.submit();
+                    var str = "";
+
+                    $(".uploadResult ul li").each(function (i, obj) {
+                        var jobj = $(obj);
+
+                        str += "<input type='hidden' name='boardFileList[" + i + "].fid' value='" + jobj.data("fid") + "'>";
+                        str += "<input type='hidden' name='boardFileList[" + i + "].fileName' value='" + jobj.data("filename") + "'>";
+                        str += "<input type='hidden' name='boardFileList[" + i + "].uuid' value='" + jobj.data("uuid") + "'>";
+                        str += "<input type='hidden' name='boardFileList[" + i + "].uploadPath' value='" + jobj.data("path") + "'>";
+                        str += "<input type='hidden' name='boardFileList[" + i + "].image' value='" + jobj.data("type") + "'>";
+                    });
+                    formObj.append(str).submit();
                 }
                 formObj.submit();
+            });
+
+            var bidValue = "<c:out value="${boardDto.bid}"/>";
+
+            $.getJSON("/board/getFileList", {bid: bidValue}, function (arr) {
+                var str = "";
+
+                $(arr).each(function (i, file) {
+                    if (file.image){
+                        var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
+
+                        str += "<li data-fid='" + file.fid + "' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'><div>";
+                        str += "<span> " + file.fileName + "</span>";
+                        str += "<button type='button' data-file=\'" + fileCallPath + "\' data-type='image'><i>X</i></button></br>";
+                        str += "<img src='/display?fileName=" + fileCallPath + "'>";
+                        str += "</div>";
+                        str += "</li>"
+                    }
+                });
+                $(".uploadResult ul").html(str);
+            });
+
+            $(".uploadResult").on("click", "button", function (e) {
+                if (confirm("사진을 삭제하시겠습니까?")){
+                    var targetLi = $(this).closest("li");
+                    targetLi.remove();
+                }
             });
         });
     </script>

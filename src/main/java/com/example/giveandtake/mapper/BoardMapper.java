@@ -12,13 +12,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
 
-    BoardDTO toDTO(Board entity);
-    List<BoardFileDTO> fileToDTOList(List<BoardFile> list);
-
     @Mapping(target = "boardFileList", ignore = true)
     Board toEntity(BoardDTO dto);
+    BoardDTO toDTO(Board entity);
 
-    BoardFile filetoEntity(BoardFileDTO dto);
-
+    BoardFile fileToEntity(BoardFileDTO dto);
+    BoardFileDTO fileToDTO(BoardFile entity);
+    List<BoardFileDTO> fileToDTOList(List<BoardFile> list);
 
 }

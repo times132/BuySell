@@ -20,19 +20,19 @@ public class BoardFile {
     private String uuid;
     private String uploadPath;
     private String fileName;
-    private Boolean fileType;
+    private Boolean image;
 
     @ManyToOne
     @JoinColumn(name = "board_bid")
     private Board board;
 
     @Builder
-    public BoardFile(Long fid, String uuid, String uploadPath, String fileName, Boolean fileType, Board board){
+    public BoardFile(Long fid, String uuid, String uploadPath, String fileName, Boolean image, Board board){
         this.fid = fid;
         this.uuid = uuid;
         this.uploadPath = uploadPath;
         this.fileName = fileName;
-        this.fileType = fileType;
+        this.image = image;
         this.board = board;
     }
 }

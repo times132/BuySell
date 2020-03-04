@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -38,7 +40,7 @@ public class BoardService {
         Board board = boardRepository.save(boardMapper.toEntity(dto));
         for (BoardFileDTO fileDTO : dto.getBoardFileList()){
             fileDTO.setBoard(board);
-            boardFileRepository.save(boardMapper.filetoEntity(fileDTO));
+            boardFileRepository.save(boardMapper.fileToEntity(fileDTO));
         }
     }
 
@@ -77,8 +79,32 @@ public class BoardService {
     }
 
     // 게시물 업데이트
-    public Long update(BoardDTO dto){
-        return boardRepository.save(boardMapper.toEntity(dto)).getBid();
+    @Transactional
+    public void update(BoardDTO dto){
+        Board board = boardRepository.save(boardMapper.toEntity(dto));
+
+        // 기존 게시물에 있던 사진 uuid 저장
+        Set<String> uuidList = boardFileRepository.findAllByBoardBid(dto.getBid())
+                .stream()
+                .map(BoardFile::getUuid)
+                .collect(Collectors.toSet());
+
+        for (BoardFileDTO fileDTO : dto.getBoardFileList()){
+//            uuidList.remove(fileDTO.getUuid()); // 기존 게시물에서 삭제된 uuid만 저장
+//            BoardFile boardFile = boardFileRepository.findByUuid(fileDTO.getUuid()); //uuid로 검색해서
+//            if (boardFile != null){ // 있으면 update
+//                fileDTO.setFid(boardFile.getFid());
+//            }
+//            fileDTO.setBoard(board);
+//            boardFileRepository.save(boardMapper.fileToEntity(fileDTO));
+            uuidList.remove(fileDTO.getUuid());
+            fileDTO.setBoard(board);
+            boardFileRepository.save(boardMapper.fileToEntity(fileDTO));
+        }
+
+        for (String uuid : uuidList){
+            boardFileRepository.deleteByUuid(uuid);
+        }
     }
 
     // 게시물 삭제

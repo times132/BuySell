@@ -55,9 +55,15 @@
             </div>
         </div>
     </div>
+    <sec:authentication property="principal" var="userinfo"/>
+        <sec:authorize access="isAuthenticated()">
+            <c:if test="${userinfo.username eq boardDto.writer}">
+                <button data-oper="modify">수정</button>
+                <button data-oper="remove">삭제</button>
+            </c:if>
+        </sec:authorize>
 
-    <button data-oper="modify">수정</button>
-    <button data-oper="remove">삭제</button>
+
     <button data-oper="list">목록</button>
 
     <sec:authorize access="isAuthenticated()">
@@ -82,6 +88,7 @@
 
     <form id="operForm" action="/board/modify" method="get">
         <input type="hidden" id="bid" name="bid" value="<c:out value="${boardDto.bid}"/>">
+        <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.writer}"/>">
         <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">
         <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">
         <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
@@ -111,10 +118,10 @@
             var str = "";
 
             $(arr).each(function (i, file) {
-                if (file.fileType){
+                if (file.image){
                     var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
 
-                    str += "<li data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.fileType + "'><div>";
+                    str += "<li data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'><div>";
                     str += "<img src='/display?fileName=" + fileCallPath + "'>";
                     str += "</div>";
                     str += "</li>"

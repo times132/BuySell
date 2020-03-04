@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +80,7 @@ public class BoardController {
         model.addAttribute("boardDto", boardDto);
     }
 
+    @PreAuthorize("principal.username == #dto.writer")
     @PostMapping("/modify")
     public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto){
         logger.info("-----board modifyPOST-----");
@@ -88,10 +90,11 @@ public class BoardController {
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
+    @PreAuthorize("principal.username == #writer")
     @PostMapping("/remove")
-    public String removePOST(@ModelAttribute SearchCriteria searchCri, @RequestParam("bid") Long bid){
+    public String removePOST(@ModelAttribute SearchCriteria searchCri, @RequestParam("bid") Long bid, String writer){
         logger.info("-----board removePOST-----");
-
+        logger.info("########WRITER : " + writer);
         boardService.delete(bid);
 
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());

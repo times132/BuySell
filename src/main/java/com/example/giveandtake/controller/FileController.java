@@ -1,6 +1,7 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardFileDTO;
+import com.example.giveandtake.common.CustomUserDetails;
 import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,10 +36,10 @@ public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    private String getFolder(){
+    private String getFolder(Long userid){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
-        String str = sdf.format(date);
+        String str = userid + "-" + sdf.format(date);
         return str.replace("-", File.separator);
     }
 
@@ -71,17 +75,18 @@ public class FileController {
         return result;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/uploadFile", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<BoardFileDTO>> uploadFilePOST(MultipartFile[] uploadFile){
+    public ResponseEntity<List<BoardFileDTO>> uploadFilePOST(MultipartFile[] uploadFile, @AuthenticationPrincipal CustomUserDetails user){
         logger.info("-----File uploadFilePOST-----");
-
+        Long userid = user.getId();
         List<BoardFileDTO> list = new ArrayList<>();
         String uploadFolder = "D:\\upload";
 
-        String uploadFolderPath = getFolder();
+        String uploadFolderPath = getFolder(userid);
         File uploadPath = new File(uploadFolder, uploadFolderPath);
-        logger.info("upload path: " + uploadPath);
+
 
         if (uploadPath.exists() == false){
             uploadPath.mkdirs();
@@ -115,7 +120,7 @@ public class FileController {
 
                 if (checkImageType(saveFile)){
 
-                    fileDTO.setFileType(true);
+                    fileDTO.setImage(true);
 
                     FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
                     Thumbnails.of(saveFile)
@@ -135,15 +140,16 @@ public class FileController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/deleteFile")
     @ResponseBody
-    public ResponseEntity<String> deleteFilePOST(String fileName, String type){
+    public ResponseEntity<String> deleteFilePOST(String fileName, String type, @AuthenticationPrincipal CustomUserDetails user){
         logger.info("-----File deleteFilePOST-----");
-
+        Long userid = user.getId();
         File file;
 
         try {
-            file = new File("D:\\upload\\" + URLDecoder.decode(fileName, "UTF-8"));
+            file = new File("D:\\upload\\" +userid +"\\" + URLDecoder.decode(fileName, "UTF-8"));
             file.delete();
 
             if (type.equals("image")){

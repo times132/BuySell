@@ -6,6 +6,7 @@
     <title>Title</title>
     <link href="/resources/css/test.css" rel="stylesheet">
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+
 </head>
 <body>
     <form id="writeForm" action="/board/write" method="post">
@@ -30,7 +31,7 @@
     </form>
 
     <div>
-        <div class="file-head">첨부파일</div>
+        <div class="file-head">사진</div>
         <div class="file-body">
             <div class="uploadDiv">
                 <input type="file" name="uploadFile" multiple>
@@ -42,6 +43,7 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script>
         $(document).ready(function () {
             var writeForm = $("#writeForm");
@@ -72,81 +74,10 @@
                     str += "<input type='hidden' name='boardFileList[" + i + "].fileName' value='" + jobj.data("filename") + "'>";
                     str += "<input type='hidden' name='boardFileList[" + i + "].uuid' value='" + jobj.data("uuid") + "'>";
                     str += "<input type='hidden' name='boardFileList[" + i + "].uploadPath' value='" + jobj.data("path") + "'>";
-                    str += "<input type='hidden' name='boardFileList[" + i + "].fileType' value='" + jobj.data("type") + "'>";
+                    str += "<input type='hidden' name='boardFileList[" + i + "].image' value='" + jobj.data("type") + "'>";
                 });
                 writeForm.append(str).submit();
             });
-
-            var regex = new RegExp("(.*?)\.(jpg|jpeg|png|bmp)$");
-            var maxSize = 5242880; // 5MB
-
-            function checkExtension(fileName, fileSize) {
-                if (!regex.test(fileName)){
-                    alert("이미지만 업로드 가능합니다.");
-                    return false;
-                }
-
-                if (fileSize > maxSize){
-                    alert("파일 사이즈가 너무 큽니다.");
-                    return false;
-                }
-
-                return true;
-            }
-
-            $("input[type='file']").change(function (e) {
-                var formData = new FormData();
-                var inputFile = $("input[name='uploadFile']");
-                var files = inputFile[0].files;
-
-                for (var i = 0; i < files.length; i++){
-                    if (!checkExtension(files[i].name, files[i].size)){
-                        return false;
-                    }
-                    formData.append("uploadFile", files[i]);
-                    console.log(formData.get("uploadFile"));
-                }
-
-                $.ajax({
-                    type: "POST",
-                    url: "/uploadFile",
-                    processData: false,
-                    contentType: false,
-                    data: formData,
-                    dataType: "json",
-                    success: function (result) {
-                        console.log(result);
-                        showUploadResult(result);
-                    }
-                });
-            });
-
-            function showUploadResult(uploadResultArr) {
-                if (!uploadResultArr || uploadResultArr.length == 0) {
-                    return;
-                }
-
-                var uploadUL = $(".uploadResult ul");
-
-                var str = "";
-
-                $(uploadResultArr).each(function (i, obj) {
-                    if (obj.fileType){
-                        var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
-
-                        str += "<li data-path='" + obj.uploadPath + "'" + " data-uuid='" + obj.uuid;
-                        str += "' data-fileName='" + obj.fileName + "' data-type='" + obj.fileType + "'><div>";
-                        str += "<span> " + obj.fileName + "</span>";
-                        str += "<button type='button' data-file=\'" + fileCallPath + "\' data-type='image'><i>x</i></button></br>";
-                        str += "<img src='/display?fileName=" + fileCallPath + "'>";
-                        str += "</div></li>";
-                    }else{
-                        return;
-                    }
-                });
-
-                uploadUL.append(str);
-            }
 
             $(".uploadResult").on("click", "button", function (e) {
                 console.log("delete file");
@@ -167,9 +98,6 @@
                 });
             });
         });
-    </script>
-    <script>
-
     </script>
 </body>
 </html>
