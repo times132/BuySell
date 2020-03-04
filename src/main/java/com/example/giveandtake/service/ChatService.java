@@ -9,6 +9,7 @@ import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.ChatMessageRepository;
 import com.example.giveandtake.repository.ChatRoomRepository;
 import com.example.giveandtake.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -23,27 +24,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ChatService {
     private final SimpMessageSendingOperations messagingTemplate;
 
 
-    @Autowired
     private ChatRoomRepository chatRoomRepository;
-
-    @Autowired
     private ChatMessageRepository chatMessageRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
 
     // 채팅방 생성순서 최근 순으로 반환
     public List<ChatRoom> findAllRoom() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String my_id= ((CustomUserDetails) authentication.getPrincipal()).getUsername();
-        System.out.println("채팅방리스트반환" +my_id);
-
         List<ChatRoom> chatList = new ArrayList<>();
         chatList.addAll(chatRoomRepository.findByRequest(my_id));
         chatList.addAll(chatRoomRepository.findByReceiver(my_id));
@@ -95,6 +88,7 @@ public class ChatService {
     public void deleteChatRoom(Long roomId) {
 
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%끝 delete"+roomId);
+
         chatRoomRepository.deleteById(roomId);
 
     }
@@ -102,7 +96,6 @@ public class ChatService {
     //채팅방 메시지 리스트 가져오기
     public List<ChatMessage> findMessages(Long roomId) {
         List<ChatMessage> messages = chatMessageRepository.findMessageByRoomId(roomId);
-        Collections.reverse(messages);
         return messages;
     }
 }

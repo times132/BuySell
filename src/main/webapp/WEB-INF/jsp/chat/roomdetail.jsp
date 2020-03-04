@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Websocket ChatRoom</title>
+    <title>Chatting room</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -20,22 +20,24 @@
             <button class="btn btn-primary" type="button" @click="stopChat">채팅그만두기</button>
         </div>
     </div>
+    <div id="scrollDiv" style="overflow:auto; width:800px; height:350px;">
+        <ul class="list-group">
+            <li class="list-group-item" v-for="(value,name) in messages">
+            [{{value.createdDate}}]  {{value.sender}}-{{value.message}}
+            </li>
+        </ul>
+    </div>
     <div class="input-group">
         <div class="input-group-prepend">
             <label class="input-group-text">메시지</label>
         </div>
-        <input type="text" class="form-control" v-model="message" v-on:keypress.enter="sendMessage">
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="button" @click="sendMessage">보내기</button>
-        </div>
+        <input style="height: 50px; width:800px;" type="text" class="form-control" v-model="message" v-on:keypress.enter="sendMessage">
+        <span class="input-group-append">
+            <button class="btn btn-primary" type="button" @click="sendMessage">전송</button>
+        </span>
     </div>
-    <ul class="list-group">
-        <li class="list-group-item" v-for="(value,name) in messages">
-            [{{value.createdDate}}]  {{value.sender}}-{{value.message}}
-        </li>
-    </ul>
-    <div></div>
 </div>
+
 <!-- JavaScript -->
 <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
 <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
@@ -44,6 +46,7 @@
 <script>
     //alert(document.title);
     // websocket &amp; stomp initialize
+    var objDiv = document.getElementById("scrollDiv");
     var sock = new SockJS("/ws-stomp");
     var ws = Stomp.over(sock);
     var reconnect = 0;
@@ -64,6 +67,7 @@
             this.roomName= localStorage.getItem('wschat.roomName');
             this.findRoom();
             this.findMessages();
+            objDiv.scrollTop = objDiv.scrollHeight;
         },
         methods: {
             findRoom: function() {
@@ -75,9 +79,12 @@
             sendMessage: function() {
                 ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message, createdDate:this.createdDate}));
                 this.message = '';
+                // 채팅창 스크롤 바닥 유지
+                objDiv.scrollTop = objDiv.scrollHeight;
+
             },
             recvMessage: function(recv) {
-                this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message,"createdDate":recv.createdDate})
+                this.messages.push({"type":recv.type,"sender":recv.sender,"message":recv.message,"createdDate":recv.createdDate})
             },
             stopChat:function () {
                 ws.send("/pub/chat/message", {}, JSON.stringify({type:'QUIT', roomId:this.roomId, sender:this.sender, message:this.message, createdDate:this.createdDate}));
@@ -104,7 +111,7 @@
                 var recv = JSON.parse(message.body);
                 vm.recvMessage(recv);
             });
-            ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId:vm.$data.roomId, sender:vm.$data.sender}));
+            // ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId:vm.$data.roomId, sender:vm.$data.sender}));
         }, function(error) {
             if(reconnect++ <= 5) {
                 setTimeout(function() {

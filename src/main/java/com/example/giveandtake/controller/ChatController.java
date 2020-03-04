@@ -1,33 +1,25 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.ChatMessageDTO;
-import com.example.giveandtake.DTO.ChatRoomDTO;
 import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
-import com.example.giveandtake.repository.ChatMessageRepository;
 import com.example.giveandtake.service.ChatService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.GenerationType;
 import java.security.Principal;
 import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Controller
 @RequestMapping("/chat")
 @MessageMapping("/chat")
 public class ChatController {
 
-    @Autowired
     private ChatService chatService;
-
-    @Autowired
-    private ChatMessageRepository chatMessageRepository;
 
     //메시지보내기
     @MessageMapping("/message")
@@ -43,6 +35,12 @@ public class ChatController {
         return "/chat/room";
     }
 
+    // 채팅 리스트 화면
+    @GetMapping("/finduser/{txt}")
+    public String finduser(Model model, @PathVariable String txt) {
+        model.addAttribute("txt", txt);
+        return "/chat/finduser";
+    }
 
     //채팅그만두기 화면
     @GetMapping("/room/stop/{roomId}")
