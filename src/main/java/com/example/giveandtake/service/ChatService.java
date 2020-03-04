@@ -62,8 +62,8 @@ public class ChatService {
         ChatRoomDTO chatRoomDTO =new ChatRoomDTO();
         chatRoomDTO.setRoomName(roomName);
         chatRoomDTO.setReceiver(receiver);
-        List<User> userList = Collections.singletonList(userRepository.findByUsername(principal.getName()).get());
-        chatRoomDTO.setChatMembers(userList);
+//        List<User> userList = Collections.singletonList(userRepository.findByUsername(principal.getName()).get());
+//        chatRoomDTO.setChatMembers(userList);
         chatRoomDTO.setRequest(principal.getName());
         chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
 
@@ -85,14 +85,13 @@ public class ChatService {
         Long msgNum = chatMessageRepository.save(chatMessageDTO.toEntity()).getMsgNum();
         Optional <ChatMessage> chatMessageList = chatMessageRepository.findByMsgNum(msgNum);
         ChatMessage chatMessage = chatMessageList.get();
-        System.out.println(chatMessage.getRoomId());
 
 
         messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
 
 
     }
-
+    //채팅방 삭제
     public void deleteChatRoom(Long roomId) {
 
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%끝 delete"+roomId);
@@ -100,13 +99,10 @@ public class ChatService {
 
     }
 
-//    public List<ChatMessage> findMessages(Long roomId) {
-//        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$findMessage"+roomId);
-//        List<ChatMessage> messageList =chatMessageRepository.findMessageByRoomId(roomId);
-//        Collections.reverse(messageList);
-//        System.out.println("messageList"+messageList);
-//        return messageList;
-//    }
-
-
+    //채팅방 메시지 리스트 가져오기
+    public List<ChatMessage> findMessages(Long roomId) {
+        List<ChatMessage> messages = chatMessageRepository.findMessageByRoomId(roomId);
+        Collections.reverse(messages);
+        return messages;
+    }
 }

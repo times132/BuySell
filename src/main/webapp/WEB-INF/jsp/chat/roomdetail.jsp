@@ -63,10 +63,14 @@
             this.sender = localStorage.getItem('wschat.sender');
             this.roomName= localStorage.getItem('wschat.roomName');
             this.findRoom();
+            this.findMessages();
         },
         methods: {
             findRoom: function() {
                 axios.get('/chat/room/'+this.roomId).then(response => { this.room = response.data; });
+            },
+            findMessages: function(){
+                axios.get('/chat/messages/'+this.roomId).then(response => { this.messages = response.data; });
             },
             sendMessage: function() {
                 ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message, createdDate:this.createdDate}));

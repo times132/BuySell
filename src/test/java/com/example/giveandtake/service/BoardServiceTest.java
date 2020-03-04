@@ -24,26 +24,26 @@ public class BoardServiceTest {
 
     @Test
     public void registerTest(){
-        BoardDTO dto = new BoardDTO();
-        BoardFileDTO fileDTO = new BoardFileDTO();
-        List<BoardFileDTO> fileDTOList = new ArrayList<>();
-        fileDTO.setFileName("사진1");
-        fileDTO.setFileType(true);
-        fileDTO.setUploadPath("2020/03/01");
-        fileDTO.setUuid("30178876-1482-4b23-9e11-a96dcacd4d");
-        fileDTO.setBoardDTO(dto);
-        fileDTOList.add(fileDTO);
+//        BoardDTO dto = new BoardDTO();
+//        BoardFileDTO fileDTO = new BoardFileDTO();
+//        List<BoardFileDTO> fileDTOList = new ArrayList<>();
+//        fileDTO.setFileName("사진1");
+//        fileDTO.setFileType(true);
+//        fileDTO.setUploadPath("2020/03/01");
+//        fileDTO.setUuid("30178876-1482-4b23-9e11-a96dcacd4d");
+//        fileDTO.setBoardDTO(dto);
+//        fileDTOList.add(fileDTO);
+//
+//        dto.setBtype("외식");
+//        dto.setTitle("빕스");
+//        dto.setContent("빕스 50000원");
+//        dto.setWriter("dlwlrma");
+//        dto.setPrice(45000);
+//        dto.setBoardFileList(fileDTOList);
+//        dto.toEntity();
 
-        dto.setBtype("외식");
-        dto.setTitle("빕스");
-        dto.setContent("빕스 50000원");
-        dto.setWriter("dlwlrma");
-        dto.setPrice(45000);
-        dto.setBoardFileList(fileDTOList);
-        dto.toEntity();
 
-
-        boardService.register(dto);
+//        boardService.register(dto);
 
 
     }

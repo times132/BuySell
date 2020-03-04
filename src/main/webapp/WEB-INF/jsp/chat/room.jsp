@@ -22,6 +22,7 @@
             <h3>채팅방 리스트</h3>
         </div>
     </div>
+    <a class="btn btn-info btn-sm" href="/">홈으로 이동</a><br>
     <div class="input-group">
         <span class="input-group-prepend">
             <label class="input-group-text">방제목</label>
