@@ -1,6 +1,7 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.ChatRoomDTO;
+import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
 import com.example.giveandtake.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.GenerationType;
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,6 +28,15 @@ public class ChatRoomController {
         return "/chat/room";
     }
 
+
+    //채팅그만두기 화면
+    @GetMapping("/room/stop/{roomId}")
+    public String stopChat(@PathVariable Long roomId)
+    {
+        chatService.deleteChatRoom(roomId);
+        return "redirect:/chat/room";
+    }
+
     // 모든 채팅방 목록
     @GetMapping("/rooms")
     @ResponseBody
@@ -36,9 +47,8 @@ public class ChatRoomController {
     // 채팅방 생성
     @PostMapping("/room")
     @ResponseBody
-    public List<ChatRoom> createRoom(@RequestParam String roomName) {
-        System.out.println("방이름은 " + roomName);
-        List<ChatRoom> chatRoom = chatService.createChatRoom(roomName);
+    public List<ChatRoom> createRoom(@RequestParam String roomName, @RequestParam String receiver, Principal principal) {
+        List<ChatRoom> chatRoom = chatService.createChatRoom(roomName,receiver,principal);
         return chatRoom;
     }
 
@@ -56,5 +66,14 @@ public class ChatRoomController {
         List<ChatRoom> chatRoom = chatService.findRoomById(roomId);
         return chatRoom;
     }
+
+    //메시지 조회
+//    @GetMapping("/messages/{roomId}")
+//    @ResponseBody
+//    public List<ChatMessage> MessageInfo(@PathVariable Long roomId) {
+//        System.out.println("1.통과***********************************" +roomId);
+//        List<ChatMessage> chatMessages = chatService.findMessages(roomId);
+//        return chatMessages;
+//    }
 
 }

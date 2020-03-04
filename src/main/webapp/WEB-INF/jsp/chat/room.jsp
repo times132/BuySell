@@ -8,12 +8,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <!-- CSS -->
-    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-    <style>
-        [v-cloak] {
-            display: none;
-        }
-    </style>
+    <%--    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">--%>
+    <%--    <style>--%>
+    <%--        [v-cloak] {--%>
+    <%--            display: none;--%>
+    <%--        }--%>
+    <%--    </style>--%>
 </head>
 <body>
 <div class="container" id="app" v-cloak>
@@ -23,16 +23,16 @@
         </div>
     </div>
     <div class="input-group">
-        <div class="input-group-prepend">
+        <span class="input-group-prepend">
             <label class="input-group-text">방제목</label>
-        </div>
+        </span>
         <input type="text" class="form-control" v-model="room_name" v-on:v-on:keyup.enter="createRoom">
-        <div class="input-group-append">
+        <span class="input-group-append">
             <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
-        </div>
+        </span>
     </div>
     <ul class="list-group">
-        <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId)">
+        <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId, item.roomName)">
             {{item.roomName}}
         </li>
     </ul>
@@ -46,7 +46,9 @@
         data: {
             room_name : '',
             chatrooms: [
-            ]
+            ],
+            receiver:''
+
         },
         created() {
             this.findAllRoom();
@@ -60,12 +62,15 @@
                     alert("방 제목을 입력해 주십시요.");
                     return;
                 } else {
+                    var receiver = prompt('대화상대를 입력해 주세요. 존재하지 않는 닉네임일경우 채팅요청에 실패할 수 있으니 유의해주세요.');
                     var params = new URLSearchParams();
                     params.append("roomName",this.room_name);
+                    params.append("receiver", receiver.toString())
+                    console.log(receiver);
                     axios.post('/chat/room', params)
                         .then(
                             response => {
-                                alert(response.data.room_name+"방 개설에 성공하였습니다.")
+                                alert("'"+this.room_name+" '방  개설에 성공하였습니다."+receiver+"님과 즐거운 대화나누세요")
                                 this.room_name = '';
                                 this.findAllRoom();
                             }
@@ -73,17 +78,20 @@
                         .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
                 }
             },
-            enterRoom: function(roomId) {
+            enterRoom: function(roomId,roomName) {
                 <sec:authorize access="isAuthenticated()">
-                     <sec:authentication property="principal" var="userinfo"/>;
-                         var sender = '${userinfo.username}';
+                <sec:authentication property="principal" var="userinfo"/>;
+                var sender = '${userinfo.username}';
                 </sec:authorize>
+
                 if(sender != "") {
                     localStorage.setItem('wschat.sender',sender);
                     localStorage.setItem('wschat.roomId',roomId);
+                    localStorage.setItem('wschat.roomName',roomName);
                     location.href="/chat/room/enter/"+roomId;
+
                 }
-                
+
             }
         }
     });

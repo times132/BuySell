@@ -20,14 +20,21 @@ public class ChatRoom {
     @Column
     private String roomName;
 
+    @Column
+    private String request;
+
+    @Column
+    private String receiver;
+
 
 
     @Builder
-    public ChatRoom(Long roomId , String roomName) {
+    public ChatRoom(Long roomId , String roomName, String request, String receiver) {
         this.roomId = roomId;
         this.roomName =roomName;
+        this.request = request;
+        this.receiver = receiver;
     }
-
 
 
 }

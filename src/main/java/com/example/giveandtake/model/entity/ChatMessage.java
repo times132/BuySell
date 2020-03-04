@@ -1,26 +1,24 @@
 package com.example.giveandtake.model.entity;
 
+import com.example.giveandtake.model.audit.DateAudit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 
 @NoArgsConstructor
 @Entity
 @Getter
-@Setter
 @Table(name = "chatmessages")
-public class ChatMessage {
+public class ChatMessage extends DateAudit {
 
     // 메시지 타입 : 입장, 채팅
     public enum MessageType {
-        ENTER, TALK
+        ENTER, TALK, QUIT
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long msgNum;
 
     @Column
@@ -36,17 +34,13 @@ public class ChatMessage {
     private String message; // 메시지
 
 
-    @Column
-    private  String receiver; //메시지 받는 사람
-
-
     @Builder
-    public ChatMessage(Long roomId , String sender, MessageType type, String message, String receiver) {
+    public ChatMessage(Long roomId , String sender, MessageType type, String message) {
         this.roomId = roomId;
         this.sender = sender;
         this.type = type;
         this.message = message;
-        this.receiver= receiver;
+
     }
 
 }
