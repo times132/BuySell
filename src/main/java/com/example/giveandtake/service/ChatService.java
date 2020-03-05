@@ -12,6 +12,7 @@ import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +32,7 @@ public class ChatService {
 
     private ChatRoomRepository chatRoomRepository;
     private ChatMessageRepository chatMessageRepository;
+    private UserRepository userRepository;
 
 
     // 채팅방 생성순서 최근 순으로 반환
@@ -80,6 +82,7 @@ public class ChatService {
         ChatMessage chatMessage = chatMessageList.get();
 
 
+
         messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
 
 
@@ -97,5 +100,12 @@ public class ChatService {
     public List<ChatMessage> findMessages(Long roomId) {
         List<ChatMessage> messages = chatMessageRepository.findMessageByRoomId(roomId);
         return messages;
+    }
+
+    //유저정보가지고오기
+    public List<User> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        System.out.println("**********실행"+ users);
+        return users;
     }
 }

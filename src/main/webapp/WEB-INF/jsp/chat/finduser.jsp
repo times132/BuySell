@@ -10,30 +10,55 @@
 
 </head>
 <body>
-<h1>Popup!!!!!!!!!!!!!!!!!!!</h1>
-
-닉네임 : <input type="text" id="childText" value="${txt}"/>
-<button id=submit type="button" name="button" onclick="sendToParent();">입력</button>
-
-</form>
+<h1>회원 찾기</h1>
 
 
-<script type="text/javascript">
-    function sendToParent(){
+<div class="container" id="sel">
 
-                var txt = document.getElementById("childText").value;
-                // opener 를 이용해 부모 window 객체에 접근할 수 있습니다.
-                // 부모에게서 전달받은 값에 추가로 문자열을 더해서 다시 부모의 receiveFromChild 라는 id를 갖는
-                // 태그요소에 value 값을 바꾸어 주는 작업입니다.
-                window.opener.postMessage(txt, "http://localhost:8050/chat/room");
-                opener.document.getElementById("parentText").value = txt;
+    <div class="input-group">
+        닉네임 : <input type="text" id="nickName" value="${txt}"/>
+        <span><button type="button" @click="findAllUser">조회 </button></span> <br><br>
 
-                // 창을 닫음
-                window.close();
-    }
 
+    </div>
+
+    <ul class="list-group" style="overflow:auto; width:300px; height:400px;">
+        <li class="list-group-item list-group-item-action" v-for="item in userLists" v-on:click="chooseUser(item.username)">
+            {{item.username}}
+        </li>
+    </ul>
+
+</div>
+<script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+<script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#sel',
+        data: {
+            user_name : '',
+            userLists: [
+            ]
+
+        },
+        created() {
+
+            this.findAllUser();
+
+        },
+        methods: {
+            findAllUser: function() {
+                axios.get('/chat/userList/').then(response => { this.userLists = response.data; });
+                console.log("findAllUser");
+            },
+            chooseUser: function(username) {
+                            opener.document.getElementById("parentText").value = username;
+                            // 창을 닫음
+                            window.close();
+            }
+
+        }
+
+    });
 </script>
-
-
 </body>
 </html>

@@ -28,13 +28,9 @@
             <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
         </span>
 
-
-
-
-
     </div>
 
-    <ul class="list-group">
+    <ul class="list-group" style="overflow:auto; width:300px; height:350px;">
         <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId, item.roomName)">
             {{item.roomName}}
         </li>
@@ -107,18 +103,16 @@
             findUser: function() {
                 var windowObj;
                 var txt=document.getElementById("parentText").value
-                windowObj = window.open("finduser/"+txt, "대화상대 아이디 찾기", "width=400, height=300, left=100, top=50");
-                // windowObj.document.getElementById("childText").value = document.getElementById('parentText').value;
+                if (txt == "")
+                {
+                    alert("대화상대를 입력하지 않았습니다.");
+                    return;
+                }
+                else {
+                    window.open("finduser/" + txt, "대화상대 아이디 찾기", "width=500, height=400, left=100, top=50");
 
+                }
 
-                console.log("***********************************"+document.getElementById("parentText").value)
-
-                // window.addEventListener('message', function(event) {
-                //     if(event.srcElement.location.href==window.location.href){
-                //         /* 전달받은 event.data 를 가지고 원하는 추가 액션 수행 */
-                //     }
-                // });
-                // console.log("###############################리씨버"+receiver);
             }
 
         }
