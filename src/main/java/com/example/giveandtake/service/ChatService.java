@@ -78,8 +78,6 @@ public class ChatService {
         Optional <ChatMessage> chatMessageList = chatMessageRepository.findByMsgNum(msgNum);
         ChatMessage chatMessage = chatMessageList.get();
 
-
-
         messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
 
 

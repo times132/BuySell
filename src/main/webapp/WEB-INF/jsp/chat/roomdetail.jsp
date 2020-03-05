@@ -23,7 +23,7 @@
     <div id="scrollDiv" style="overflow:auto; width:800px; height:350px;">
         <ul class="list-group">
             <li class="list-group-item" v-for="(value,name) in messages">
-            [{{value.createdDate}}]  {{value.sender}}-{{value.message}}
+            [{{displaytime(value.createdDate)}}]  {{value.sender}}-{{value.message}}
             </li>
         </ul>
     </div>
@@ -74,7 +74,9 @@
                 axios.get('/chat/room/'+this.roomId).then(response => { this.room = response.data; });
             },
             findMessages: function(){
-                axios.get('/chat/messages/'+this.roomId).then(response => { this.messages = response.data; });
+                axios.get('/chat/messages/'+this.roomId).then(response => {
+                    console.log(response.data);
+                    this.messages = response.data; });
             },
             sendMessage: function() {
                 ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message, createdDate:this.createdDate}));
@@ -84,7 +86,7 @@
 
             },
             recvMessage: function(recv) {
-                this.messages.push({"type":recv.type,"sender":recv.sender,"message":recv.message,"createdDate":recv.createdDate})
+                this.messages.push({"type":recv.type,"sender":recv.sender,"message":recv.message,"createdDate":displaytime(recv.createdDate)})
             },
             stopChat:function () {
                 ws.send("/pub/chat/message", {}, JSON.stringify({type:'QUIT', roomId:this.roomId, sender:this.sender, message:this.message, createdDate:this.createdDate}));
@@ -103,6 +105,18 @@
             }
         }
     });
+
+    function displaytime(timeValue) {
+        var dateObj = new Date(timeValue);
+
+        var mm = dateObj.getMonth() + 1;
+        var dd = dateObj.getDate();
+
+        var hh = dateObj.getHours();
+        var mi = dateObj.getMinutes();
+
+        return [(mm > 9 ? '' : '0') + mm, '월', (dd > 9 ? '' : '0') + dd + "일 " + (hh > 12 ? '오후' : '오전') + hh, ':', (mi > 9 ? '' : '0') + mi].join('');
+    }
 
     function connect() {
         // pub/sub event

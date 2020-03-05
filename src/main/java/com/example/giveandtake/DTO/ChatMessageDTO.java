@@ -19,7 +19,6 @@ public class ChatMessageDTO {
     private ChatMessage.MessageType type; // 메시지 타입
     private String message; // 메시지
 
-
     private LocalDateTime createdDate;
 
     public ChatMessage toEntity(){
