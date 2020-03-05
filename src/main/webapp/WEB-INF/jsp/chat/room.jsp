@@ -18,8 +18,9 @@
     </div>
     <a class="btn btn-info btn-sm" href="/">홈으로 이동</a><br><br>
     <div class="input-group">
-        <input style="height: 20px; width:500px;" type="text" id="parentText" placeholder="닉네임(대화상대)을 입력해주세요"/>
-        <span><button type="button" @click="findUser" > 회원정보찾기 </button></span> <br><br>
+        <input style="height: 20px; width:500px;" type="text" id="parentText" value="${nickName}" placeholder="닉네임(대화상대)을 입력해주세요"/>
+<%--        <span><button type="button" @click="findUser" > 회원정보찾기 </button></span> <br>--%>
+<%--        <div class="check_font" id="username_check"></div><br><br>--%>
 
 
 
@@ -46,7 +47,8 @@
             room_name : '',
             chatrooms: [
             ],
-            receiver:''
+            receiver:'',
+            data:''
 
         },
         created() {
@@ -74,7 +76,6 @@
                     var params = new URLSearchParams();
                     params.append("roomName",this.room_name);
                     params.append("receiver",receiver)
-                    console.log("###################33"+ receiver);
                     axios.post('/chat/room', params)
                         .then(
                             response => {
@@ -101,17 +102,13 @@
                 }
             },
             findUser: function() {
-                var windowObj;
                 var txt=document.getElementById("parentText").value
                 if (txt == "")
                 {
                     alert("대화상대를 입력하지 않았습니다.");
                     return;
                 }
-                else {
-                    window.open("finduser/" + txt, "대화상대 아이디 찾기", "width=500, height=400, left=100, top=50");
 
-                }
 
             }
 

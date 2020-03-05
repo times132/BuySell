@@ -7,7 +7,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="/resources/css/test.css" rel="stylesheet">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script type="text/javascript" src="/resources/js/reply.js"></script>
@@ -28,9 +34,23 @@
     </div>
 
     <div>
+
         <label>판매자</label>
-        <input name="writer" value="<c:out value="${boardDto.writer}"/>" readonly="readonly"/>
+        <span class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-expanded="true">
+                <c:out value="${boardDto.writer}"></c:out>
+                <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-lg-right" role="menu" aria-labelledby="dropdownMenu">
+                <button class="dropdown-item" type="button" data-oper="chatting"> 1:1채팅 </button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" type="button">Another action</button>
+            </div>
+        </span>
+<%--        <input name="writer" value="<c:out value="${boardDto.writer}"/>" readonly="readonly"/>--%>
     </div>
+
+
     <div>
         <label>내용</label>
         <input name="content" value="<c:out value="${boardDto.content}"/>" readonly="readonly"/>
@@ -59,7 +79,7 @@
         <sec:authorize access="isAuthenticated()">
             <c:if test="${userinfo.username eq boardDto.writer}">
                 <button data-oper="modify">수정</button>
-                <button data-oper="remove">삭제</button>
+                <span><button data-oper="remove">삭제</button></span>
             </c:if>
         </sec:authorize>
 
@@ -94,11 +114,18 @@
         <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
     </form>
 </body>
-
 <script>
     $(document).ready(function () {
 
         var operForm = $("#operForm");
+        var nickName = "<c:out value="${boardDto.writer}"/>";
+
+        $("button[data-oper='chatting']").on("click", function (e) {
+
+            alert("채팅창으로 이동합니다.");
+            location.href="/chat/rooom/"+nickName;
+
+        })
 
         $("button[data-oper='remove']").on("click", function (e) {
             operForm.attr("action", "/board/remove").attr("method", "post").submit();
@@ -184,7 +211,12 @@
             }
             for (var i = 0, len = data.content.length || 0; i < len; i++){
                 str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
+
+
                 str += "<div class='header'><strong id='replyer' class='primary-font'>" + data.content[i].replyer + "</strong>";
+
+
+
                 str += "<small class='float-right text-muted'>" + replyService.displayTime(data.content[i].createdDate) + "</small></div>";
                 str += "<p id='reply_" + data.content[i].rid + "'>" + data.content[i].reply + "</p>";
                 str += "<div>";

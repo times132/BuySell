@@ -22,7 +22,6 @@
             <input type="button" name="frm" id="frm" value="이메일 인증받기"/>
 
 
-        </form>
 
 <script>
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
