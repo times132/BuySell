@@ -7,114 +7,127 @@
     <title>채팅방</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/resources/js/chat.js"></script>
 </head>
 <body>
-<div class="container" id="app">
     <div class="row">
         <div class="col-md-12">
-            <h3>채팅방 리스트</h3>
+            <h3>대화 목록</h3>
         </div>
     </div>
     <a class="btn btn-info btn-sm" href="/">홈으로 이동</a><br><br>
-    <div class="input-group">
-        <input style="height: 20px; width:500px;" type="text" id="parentText" value="${nickName}" placeholder="닉네임(대화상대)을 입력해주세요"/>
-<%--        <span><button type="button" @click="findUser" > 회원정보찾기 </button></span> <br>--%>
-<%--        <div class="check_font" id="username_check"></div><br><br>--%>
+        <input style="height: 20px; width:200px;" type="text" id="receiver" value="${nickName}" placeholder="닉네임(대화상대)을 입력해주세요"/>
 
-
-
-        <input style="height: 20px; width:500px;"  type="text" class="form-control" v-model="room_name" v-on:v-on:keyup.enter="createRoom" placeholder="방이름">
-        <span class="input-group-append">
-            <button class="btn btn-primary" type="button" @click="createRoom">채팅방 개설</button>
+        <input style="height: 20px; width:500px;"  type="text" id="room_name" name="room_name"  placeholder="방이름">
+        <span>
+            <button class="btn btn-primary" id="creating" type="button">채팅방 개설</button>
         </span>
+<%--        채팅방목록--%>
+
+        <ul class="chatList">
+
+        </ul>
+
 
     </div>
 
-    <ul class="list-group" style="overflow:auto; width:300px; height:350px;">
-        <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId, item.roomName)">
-            {{item.roomName}}
-        </li>
-    </ul>
 </div>
-<!-- JavaScript -->
-<script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
-<script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
 <script>
-    var vm = new Vue({
-        el: '#app',
-        data: {
-            room_name : '',
-            chatrooms: [
-            ],
-            receiver:'',
-            data:''
+    init();
+    var room_name = document.getElementById("room_name").value;
+    var chatUL = $(".chatList");
+    function init() {
+    // 채팅룸 출력
+        chatService.findAllRoom(function (data) {
+            var str = "";
+            console.log("findfindfind");
+            if (data == null || data.length == 0) {
+                return;
+            }
+            for (var i = 0, len = data.length || 0; i < len; i++) {
+                str += "<li class='chatli' type='hidden' data-rid='" + data[i].roomId + "'>";
+                str +=
+                    "<button id='enterBtn' class='btn float-right' >입장</button>" +
+                    "<button id='deleteBtn' class='btn float-right'>삭제</button>";
 
-        },
-        created() {
-            this.findAllRoom();
-        },
-        methods: {
-            findAllRoom: function() {
-                axios.get('/chat/rooms').then(response => { this.chatrooms = response.data; });
-            },
-            createRoom: function() {
-                if("" === this.room_name){
-                    alert("방 제목을 입력해 주십시요.");
-                    return;
-                } else {
+                str += "<span class='header'><strong id='roomName' class='primary-font'>" +   data[i].roomName + "</strong>";
+                str += "<span>";
 
-                    var receiver =document.getElementById("parentText").value
-                    console.log("###############2"+receiver);
-                    // var receiver = prompt('대화상대를 입력해 주세요. 존재하지 않는 닉네임일경우 채팅요청에 실패할 수 있으니 유의해주세요.');
-                    if(receiver==""){
-                        alert("대화상대를 입력하지 않았습니다.");
-                        return;
-
-                    }
-
-                    var params = new URLSearchParams();
-                    params.append("roomName",this.room_name);
-                    params.append("receiver",receiver)
-                    axios.post('/chat/room', params)
-                        .then(
-                            response => {
-                                alert("'"+this.room_name+" '방  개설에 성공하였습니다."+this.receiver+"님과 즐거운 대화나누세요")
-                                this.room_name = '';
-                                this.findAllRoom();
-                            }
-                        )
-                        .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
-                }
-            },
-            enterRoom: function(roomId,roomName) {
-                <sec:authorize access="isAuthenticated()">
-                <sec:authentication property="principal" var="userinfo"/>;
-                var sender = '${userinfo.username}';
-                </sec:authorize>
-
-                if(sender != "") {
-                    localStorage.setItem('wschat.sender',sender);
-                    localStorage.setItem('wschat.roomId',roomId);
-                    localStorage.setItem('wschat.roomName',roomName);
-                    location.href="/chat/room/enter/"+roomId;
-
-                }
-            },
-            findUser: function() {
-                var txt=document.getElementById("parentText").value
-                if (txt == "")
-                {
-                    alert("대화상대를 입력하지 않았습니다.");
-                    return;
-                }
-
-
+                str += "</li>";
             }
 
+            chatUL.html(str);
+
+
+        });
+
+    }
+    var roomId='';
+    var roomName ='';
+    var sender ='';
+    // 버튼 클릭하면 정보를 읽어옴
+
+
+    $("#creating").click(function() {
+        var inputRN = document.getElementById("room_name").value
+        var inputreceiver = document.getElementById("receiver").value
+        if ("" === inputRN) {
+            alert("방 제목을 입력해 주십시요.");
+            return;
         }
+        else {
+            if (inputreceiver == "") {
+                alert("대화상대를 입력하지 않았습니다.");
+                return;
+            }
+            var room = {
+                roomName : inputRN,
+                receiver : inputreceiver,
+            };
+
+            chatService.createRoom(room, function (result) {
+                   alert(result);
+                   document.getElementById("room_name").value="";
+                   document.getElementById("receiver").value="";
+                   init();
+            });
+
+
+
+        }
+    });
+
+    $(document).on("click", "#enterBtn", function(){
+        var room_id = $(this).closest("li").data("rid");
+
+
+
+                    <sec:authorize access="isAuthenticated()">
+                    <sec:authentication property="principal" var="userinfo"/>;
+                    var sender = '${userinfo.username}';
+
+                    </sec:authorize>
+
+              alert("입장");
+             if(sender != "") {
+                            localStorage.setItem('wschat.sender',sender);
+                            localStorage.setItem('wschat.roomId',room_id);
+                            location.href="/chat/room/enter/"+room_id;
+
+             }
 
     });
+
+    $(document).on("click", "#deleteBtn", function(){
+        var room_id = $(this).closest("li").data("rid");
+
+        chatService.deleteRoom(room_id, function (result) {
+            init();
+        });
+
+    });
+
 </script>
 </body>
 </html>

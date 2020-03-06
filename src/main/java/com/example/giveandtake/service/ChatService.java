@@ -2,6 +2,7 @@ package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.ChatMessageDTO;
 import com.example.giveandtake.DTO.ChatRoomDTO;
+import com.example.giveandtake.DTO.ReplyDTO;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
@@ -26,27 +27,8 @@ import java.util.Optional;
 public class ChatService {
     private final SimpMessageSendingOperations messagingTemplate;
 
-
     private ChatRoomRepository chatRoomRepository;
     private ChatMessageRepository chatMessageRepository;
-    private UserRepository userRepository;
-
-
-    // 채팅방 생성순서 최근 순으로 반환
-    public List<ChatRoom> findAllRoom() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String my_id= ((CustomUserDetails) authentication.getPrincipal()).getUsername();
-        List<ChatRoom> chatList = new ArrayList<>();
-        chatList.addAll(chatRoomRepository.findByRequest(my_id));
-        chatList.addAll(chatRoomRepository.findByReceiver(my_id));
-        System.out.println("chatList"+chatList);
-        Collections.reverse(chatList);
-        return chatList;
-    }
-
-    public List<ChatRoom> findRoomById(Long roomId) {
-        return chatRoomRepository.findByRoomId(roomId);
-    }
 
     //채팅방만들기
     public List<ChatRoom> createChatRoom(String roomName, String receiver, Principal principal){
@@ -54,17 +36,27 @@ public class ChatService {
         ChatRoomDTO chatRoomDTO =new ChatRoomDTO();
         chatRoomDTO.setRoomName(roomName);
         chatRoomDTO.setReceiver(receiver);
-//        List<User> userList = Collections.singletonList(userRepository.findByUsername(principal.getName()).get());
-//        chatRoomDTO.setChatMembers(userList);
         chatRoomDTO.setRequest(principal.getName());
         chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
-
-
         List<ChatRoom> chatRoom = chatRoomRepository.findByRoomName(roomName);
         return chatRoom;
     }
 
-    //대화내용 저장
+    // 모든 채팅방
+    public List<ChatRoom> findAllRoom() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String my_id= ((CustomUserDetails) authentication.getPrincipal()).getUsername();
+        List<ChatRoom> chatList = new ArrayList<>();
+        chatList.addAll(chatRoomRepository.findByRequest(my_id));
+        chatList.addAll(chatRoomRepository.findByReceiver(my_id));
+        Collections.reverse(chatList);
+        return chatList;
+    }
+    //특정채팅방 조회
+    public List<ChatRoom> findRoomById(Long roomId) {
+        return chatRoomRepository.findByRoomId(roomId);
+    }
+//    대화내용 저장
     public void createMessage(ChatMessageDTO chatMessageDTO) {
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessageDTO.getType())) {
@@ -97,10 +89,5 @@ public class ChatService {
         return messages;
     }
 
-    //유저정보가지고오기
-    public List<User> findAllUsers() {
-        List<User> users = userRepository.findAll();
-        System.out.println("**********실행"+ users);
-        return users;
-    }
+
 }

@@ -86,7 +86,7 @@
 
             },
             recvMessage: function(recv) {
-                this.messages.push({"type":recv.type,"sender":recv.sender,"message":recv.message,"createdDate":displaytime(recv.createdDate)})
+                this.messages.push({"type":recv.type,"sender":recv.sender,"message":recv.message,"createdDate":recv.createdDate})
             },
             stopChat:function () {
                 ws.send("/pub/chat/message", {}, JSON.stringify({type:'QUIT', roomId:this.roomId, sender:this.sender, message:this.message, createdDate:this.createdDate}));
