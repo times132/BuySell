@@ -14,7 +14,7 @@ public class ChatMessage extends DateAudit {
 
     // 메시지 타입 : 입장, 채팅
     public enum MessageType {
-        ENTER, TALK, QUIT
+        TALK, QUIT
     }
 
     @Id

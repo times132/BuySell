@@ -2,14 +2,11 @@ package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.ChatMessageDTO;
 import com.example.giveandtake.DTO.ChatRoomDTO;
-import com.example.giveandtake.DTO.ReplyDTO;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
-import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.ChatMessageRepository;
 import com.example.giveandtake.repository.ChatRoomRepository;
-import com.example.giveandtake.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
@@ -56,13 +53,10 @@ public class ChatService {
     public List<ChatRoom> findRoomById(Long roomId) {
         return chatRoomRepository.findByRoomId(roomId);
     }
-//    대화내용 저장
+   //대화내용 저장
     public void createMessage(ChatMessageDTO chatMessageDTO) {
 
-        if (ChatMessage.MessageType.ENTER.equals(chatMessageDTO.getType())) {
-            chatMessageDTO.setMessage(chatMessageDTO.getSender() + "님이 입장하셨습니다.");
-            chatMessageDTO.setSender("[알림]");
-        } else if (ChatMessage.MessageType.QUIT.equals(chatMessageDTO.getType())) {
+        if (ChatMessage.MessageType.QUIT.equals(chatMessageDTO.getType())) {
             chatMessageDTO.setMessage(chatMessageDTO.getSender() + "님이 방에서 나갔습니다.");
             chatMessageDTO.setSender("[알림]");
         }
@@ -75,9 +69,10 @@ public class ChatService {
 
     }
     //채팅방 삭제
-    public void deleteChatRoom(Long roomId) {
+    public void deleteChatRoom(Long roomId, Principal principal) {
 
         System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%끝 delete"+roomId);
+        
 
         chatRoomRepository.deleteById(roomId);
 

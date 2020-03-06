@@ -79,9 +79,9 @@ public class ChatController {
 
     //채팅그만두기 화면
     @GetMapping("/room/stop/{roomId}")
-    public String stopChat(@PathVariable Long roomId)
+    public String stopChat(@PathVariable Long roomId, Principal principal)
     {
-        chatService.deleteChatRoom(roomId);
+        chatService.deleteChatRoom(roomId, principal);
         return "redirect:/chat/room";
     }
 

@@ -118,6 +118,7 @@
     $(document).ready(function () {
 
         var operForm = $("#operForm");
+
         var nickName = "<c:out value="${boardDto.writer}"/>";
 
         $("button[data-oper='chatting']").on("click", function (e) {
@@ -195,6 +196,7 @@
 
     // 댓글 목록 출력
     function showList(page) {
+
         replyService.getList({bid: bidValue, page: page || 1}, function (data) {
             // console.log(data);
             if (page == -1){
@@ -211,7 +213,11 @@
             for (var i = 0, len = data.content.length || 0; i < len; i++){
                 str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
 
+
                 str += "<div class='header'><strong id='replyer' class='primary-font'>" + data.content[i].replyer + "</strong>";
+
+
+
                 str += "<small class='float-right text-muted'>" + replyService.displayTime(data.content[i].createdDate) + "</small></div>";
                 str += "<p id='reply_" + data.content[i].rid + "'>" + data.content[i].reply + "</p>";
                 str += "<div>";

@@ -19,11 +19,13 @@
     <a class="btn btn-info btn-sm" href="/">홈으로 이동</a><br><br>
         <input style="height: 20px; width:200px;" type="text" id="receiver" value="${nickName}" placeholder="닉네임(대화상대)을 입력해주세요"/>
 
-        <input style="height: 20px; width:500px;"  type="text" id="room_name" name="room_name"  placeholder="방이름">
+        <input style="height: 20px; width:400px;"  type="text" id="room_name" name="room_name"  placeholder="방이름">
         <span>
             <button class="btn btn-primary" id="creating" type="button">채팅방 개설</button>
         </span>
 <%--        채팅방목록--%>
+
+
 
         <ul class="chatList">
 
@@ -38,18 +40,17 @@
     var room_name = document.getElementById("room_name").value;
     var chatUL = $(".chatList");
     function init() {
-    // 채팅룸 출력
-        chatService.findAllRoom(function (data) {
-            var str = "";
-            console.log("findfindfind");
-            if (data == null || data.length == 0) {
-                return;
-            }
+                // 채팅룸 출력
+                chatService.findAllRoom(function (data) {
+                    var str = "";
+                    console.log("findfindfind");
+                    if (data == null || data.length == 0) {
+                        return;
+                    }
             for (var i = 0, len = data.length || 0; i < len; i++) {
                 str += "<li class='chatli' type='hidden' data-rid='" + data[i].roomId + "'>";
                 str +=
-                    "<button id='enterBtn' class='btn float-right' >입장</button>" +
-                    "<button id='deleteBtn' class='btn float-right'>삭제</button>";
+                    "<button id='enterBtn' class='btn float-right' >입장</button>"
 
                 str += "<span class='header'><strong id='roomName' class='primary-font'>" +   data[i].roomName + "</strong>";
                 str += "<span>";
@@ -66,8 +67,6 @@
     var roomId='';
     var roomName ='';
     var sender ='';
-    // 버튼 클릭하면 정보를 읽어옴
-
 
     $("#creating").click(function() {
         var inputRN = document.getElementById("room_name").value
@@ -101,8 +100,6 @@
     $(document).on("click", "#enterBtn", function(){
         var room_id = $(this).closest("li").data("rid");
 
-
-
                     <sec:authorize access="isAuthenticated()">
                     <sec:authentication property="principal" var="userinfo"/>;
                     var sender = '${userinfo.username}';
@@ -119,14 +116,7 @@
 
     });
 
-    $(document).on("click", "#deleteBtn", function(){
-        var room_id = $(this).closest("li").data("rid");
 
-        chatService.deleteRoom(room_id, function (result) {
-            init();
-        });
-
-    });
 
 </script>
 </body>

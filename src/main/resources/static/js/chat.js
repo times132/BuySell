@@ -63,10 +63,43 @@ var chatService = (function () {
         });
     }
     function get(roomId, callback, error) {
-        console.log("룸아이디"+roomId)
+        console.log("GET"+roomId)
         $.ajax({
             type: "get",
             url: "/chat/room/" + roomId,
+            async: true,
+            success: function (result) {
+                if (callback){
+                    callback(result);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (error){
+                    error(err);
+                }
+            }
+        });
+    }
+
+    function displayTime(timeValue) {
+        var dateObj = new Date(timeValue);
+
+        var mm = dateObj.getMonth() + 1;
+        var dd = dateObj.getDate();
+
+        var hh = dateObj.getHours();
+        var mi = dateObj.getMinutes();
+
+        return [(mm > 9 ? '' : '0') + mm, '월', (dd > 9 ? '' : '0') + dd + "일 " + (hh > 12 ? '오후' : '오전') + hh, ':', (mi > 9 ? '' : '0') + mi].join('');
+    }
+
+
+    function findAllMessages(roomId, callback, error) {
+        console.log("GET ALL MESSEGES");
+
+        $.ajax({
+            type: "get",
+            url: "/chat/messages/"+roomId,
             async: true,
             success: function (result) {
                 if (callback){
@@ -85,7 +118,9 @@ var chatService = (function () {
         deleteRoom:deleteRoom,
         findAllRoom : findAllRoom,
         createRoom : createRoom,
-        get:get
+        get : get,
+        displayTime : displayTime,
+        findAllMessages : findAllMessages
     };
 
 
