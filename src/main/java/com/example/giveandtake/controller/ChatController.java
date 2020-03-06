@@ -38,7 +38,6 @@ public class ChatController {
     @GetMapping("/room/{roomId}")
     @ResponseBody
     public List<ChatRoom> roomInfo(@PathVariable Long roomId) {
-        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^SELECT ROOM");
         return chatService.findRoomById(roomId);
     }
 
@@ -61,8 +60,6 @@ public class ChatController {
     @PostMapping("/room")
     @ResponseBody
     public String createRoom(@RequestParam String roomName, @RequestParam String receiver, Principal principal) {
-       System.out.println("*****************************88"+ roomName + receiver);
-
         chatService.createChatRoom(roomName,receiver,principal);
         String result= "'"+roomName+"'" +"채팅방 개설이 완료되었습니다." ;
 
@@ -81,6 +78,7 @@ public class ChatController {
     @GetMapping("/room/stop/{roomId}")
     public String stopChat(@PathVariable Long roomId, Principal principal)
     {
+        System.out.println("DELETE ROOM");
         chatService.deleteChatRoom(roomId, principal);
         return "redirect:/chat/room";
     }
@@ -97,17 +95,14 @@ public class ChatController {
     //메시지보내기
     @MessageMapping("/message")
     public void message(ChatMessageDTO chatMessageDTO) {
-        System.out.println("###########################sendmessage");
-        System.out.println(chatMessageDTO);
         chatService.createMessage(chatMessageDTO);
+
     }
 
     //메시지 조회
     @GetMapping("/messages/{roomId}")
     @ResponseBody
     public List<ChatMessage> MessageInfo(@PathVariable Long roomId) {
-        System.out.println("**********************************MSG INFO***********************************" +roomId);
-
         return chatService.findMessages(roomId);
     }
 
