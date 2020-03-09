@@ -2,11 +2,9 @@ package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.ChatMessageDTO;
 import com.example.giveandtake.DTO.ChatRoomDTO;
-import com.example.giveandtake.DTO.ReplyDTO;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
-import com.example.giveandtake.model.entity.Reply;
 import com.example.giveandtake.repository.ChatMessageRepository;
 import com.example.giveandtake.repository.ChatRoomRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;

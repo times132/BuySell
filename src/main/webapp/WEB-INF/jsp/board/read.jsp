@@ -6,16 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
     <link href="/resources/css/test.css" rel="stylesheet">
 
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/reply.js"></script>
 </head>
 <body>
@@ -42,12 +38,11 @@
                 <span class="caret"></span>
             </button>
             <div class="dropdown-menu dropdown-menu-lg-right" role="menu" aria-labelledby="dropdownMenu">
-                <button class="dropdown-item" type="button" data-oper="chatting"> 1:1채팅 </button>
+                <button class="dropdown-item" type="button" id="chatting"> 1:1채팅 </button>
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" type="button">Another action</button>
             </div>
         </span>
-<%--        <input name="writer" value="<c:out value="${boardDto.writer}"/>" readonly="readonly"/>--%>
     </div>
 
 
@@ -119,9 +114,11 @@
 
         var operForm = $("#operForm");
 
+
         var nickName = "<c:out value="${boardDto.writer}"/>";
 
-        $("button[data-oper='chatting']").on("click", function (e) {
+
+        $("#chatting").on("click", function (e) {
 
             alert("채팅창으로 이동합니다.");
             location.href="/chat/rooom/"+nickName;
@@ -157,6 +154,8 @@
             });
             $(".uploadResult ul").html(str);
         });
+
+
 
         $(".uploadResult").on("click", "li", function (e) {
             var liobj = $(this);

@@ -66,13 +66,6 @@ public class ChatController {
         return result;
     }
 
-    //유저정보 조회 화면
-    @GetMapping("/finduser/{txt}")
-    public String finduser(Model model, @PathVariable String txt) {
-        model.addAttribute("txt", txt);
-        return "/chat/finduser";
-    }
-
 
     //채팅그만두기 화면
     @GetMapping("/room/stop/{roomId}")
@@ -80,7 +73,7 @@ public class ChatController {
     {
         System.out.println("DELETE ROOM");
         chatService.deleteChatRoom(roomId, principal);
-        return "redirect:/chat/room";
+        return "redirect:/chat/rooms";
     }
 
 
@@ -88,7 +81,7 @@ public class ChatController {
     @GetMapping("/room/enter/{roomId}")
     public String roomDetail(Model model, @PathVariable Long roomId) {
         model.addAttribute("roomId",roomId);
-        return "/chat/roomdetail";
+        return "/chat/room";
     }
 
 

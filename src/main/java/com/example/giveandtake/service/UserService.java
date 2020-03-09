@@ -105,12 +105,6 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void modify(UserDTO userList){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        logger.info("###########AUTH principal: " + authentication.getPrincipal()); //커스텀 유저 반환
-//        logger.info("###########AUTH name: " + authentication.getName()); // username
-//        logger.info("###########AUTH authorities: " + authentication.getAuthorities()); // 권한
-//        logger.info("###########AUTH credentital: " + authentication.getCredentials()); // 비밀번호
-//        logger.info("###########AUTH detail: " + authentication.getDetails()); // 세션 같은거
-
         String password = ((CustomUserDetails) authentication.getPrincipal()).getPassword();
         if(!password.equals(userList.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

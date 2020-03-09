@@ -9,14 +9,15 @@
 
 </head>
 <body>
+<div id="app">
         <div class="col-md-6">
             <label id="title" value></label>
         </div>
         <div class="col-md-6 text-right">
-            <a class="btn btn-info btn-sm" href="/chat/room">채팅방 리스트</a>
+            <button class="btn btn-info btn-sm" href="/chat/room">채팅방 리스트</button>
             <button id='deleteBtn' class='btn float-right'>채팅그만두기</button>
         </div>
-        <div id="scrollDiv" style="overflow:auto; width:800px; height:350px;">
+        <div class="scrollDiv" style="overflow:auto; width:800px; height:350px;">
             <ul class="messageList" >
 
             </ul>
@@ -32,7 +33,7 @@
 
             </span>
     </div>
-
+</div>
 
 <!-- JavaScript -->
 <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
@@ -40,8 +41,6 @@
 <script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
 <script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
 <script>
-
-
     var sock = new SockJS("/ws-stomp");
     var ws = Stomp.over(sock);
     var reconnect = 0;
@@ -63,9 +62,9 @@
                 return;
             }
             for (var i = 0, len = data.length || 0; i < len; i++) {
-                str += "<div class='header'><strong id='sender' class='primary-font'>" + data[i].sender + "</strong>";
+                str += "<div class='msg_cotainer'><strong id='sender' class='primary-font'>" + data[i].sender + "</strong>";
                 str += "<small class='float-right text-muted'>" + chatService.displayTime(data[i].createdDate) + "</small></div>";
-                str += "<span class='header'>" +   data[i].message ;
+                str += "<span>" +   data[i].message ;
                 str += "<span>";
                 str += "</div>"
             }
@@ -89,7 +88,8 @@
         ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId:roomId, sender:sender, message:this.message, createdDate:this.createdDate}));
         this.message = '';
         document.getElementById("message").value='';
-        messageUL.scrollTop = messageUL.scrollHeight;
+        $(".scrollDiv").scrollTop = $(".scrollDiv").scrollHeight
+
         init();
     });
 
@@ -133,5 +133,6 @@
     }
     connect();
 </script>
+
 </body>
 </html>
