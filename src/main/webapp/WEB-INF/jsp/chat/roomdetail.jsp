@@ -32,7 +32,7 @@
             <button class="btn btn-primary" type="button" id="sending">전송</button>
 
             </span>
-    </div>
+        </div>
 </div>
 
 <!-- JavaScript -->

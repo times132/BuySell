@@ -84,6 +84,7 @@
             if (data == null || data.length == 0) {
                 return;
             }
+            console.log("data" + data);
             for (var i = 0, len = data.length || 0; i < len; i++) {
                 str += "<div class='chat_list'>"
                 str += "<ul>"
@@ -91,12 +92,14 @@
                 str += "<div class='chat_people'>"
                 str += "<div class='chat_ib'>"
                 str += ( sender === data[i].receiver ?
-                    "<h5>"+ data[i].request +"<span class='chat_date'>Dec 25</span></h5>"
-                    :"<h5>"+ data[i].receiver +"<span class='chat_date'>Dec 25</span></h5>");
-
+                    "<h5>"+ data[i].request +"<div class='msgCnt'>"+ data[i].rqMsgCount +"</div>"
+                    +"<span class='chat_date'>Dec 25</span></h5>"
+                    :"<h5>"+ data[i].receiver +"<div class='msgCnt'>"+ data[i].rcMsgCount + "</div>"
+                    +"<span class='chat_date'>Dec 25</span></h5>");
                 str += "<p>" + data[i].roomName+ "</p>";   //메시지 내용이 들어가면 좋을 것 같음
                 str += "<button id='enterBtn' class='btn float-right' >입장</button>";
                 str += "</div></div></div></li></ul></div>";
+
             }
 
             chatUL.html(str);

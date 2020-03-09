@@ -87,16 +87,16 @@ public class ChatController {
 
     //메시지보내기
     @MessageMapping("/message")
-    public void message(ChatMessageDTO chatMessageDTO) {
-        chatService.createMessage(chatMessageDTO);
+    public void message(ChatMessageDTO chatMessageDTO, Principal principal) {
+        chatService.createMessage(chatMessageDTO ,principal);
 
     }
 
-    //메시지 조회
+    //메시지 조회-입장시
     @GetMapping("/messages/{roomId}")
     @ResponseBody
-    public List<ChatMessage> MessageInfo(@PathVariable Long roomId) {
-        return chatService.findMessages(roomId);
+    public List<ChatMessage> MessageInfo(@PathVariable Long roomId, Principal principal) {
+        return chatService.findMessages(roomId, principal);
     }
 
 }
