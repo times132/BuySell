@@ -1,17 +1,16 @@
 package com.example.giveandtake.controller;
 
+import com.ctc.wstx.util.StringUtil;
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
-import com.example.giveandtake.DTO.UserDTO;
-import com.example.giveandtake.model.entity.BoardFile;
+
 import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
-import com.example.giveandtake.model.entity.User;
-import com.example.giveandtake.repository.UserRepository;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,9 +22,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.security.acl.LastOwnerException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/board")
@@ -42,6 +46,7 @@ public class BoardController {
     public String list(SearchCriteria searchCri, Model model){
         logger.info("-----board list-----");
 
+        searchCri.setPageSize(10); // 한 화면에 게시물 10개씩 표시
         Page<Board> boardPage =  boardService.getList(searchCri);
 
         model.addAttribute("boardList", boardPage.getContent());
@@ -49,7 +54,7 @@ public class BoardController {
                             .cri(searchCri)
                             .total(boardPage.getTotalElements())
                             .realEndPage(boardPage.getTotalPages())
-                            .listSize(5)
+                            .listSize(5) // 페이징 5로 설정
                             .build());
 
         return "/board/list";
@@ -71,9 +76,45 @@ public class BoardController {
         return "redirect:/board";
     }
 
-    @GetMapping({"/read", "/modify"})
-    public void readGET(@RequestParam("bid") Long bid, @ModelAttribute("cri") SearchCriteria cri, Model model){
+    @GetMapping("/read")
+    public String readGET(HttpServletRequest request, HttpServletResponse response, @RequestParam("bid") Long bid, @ModelAttribute("cri") SearchCriteria cri, Model model){
         logger.info("-----board readGET-----");
+
+        // 쿠키로 조회수 조작 방지
+        // 쿠키 불러오기
+        Cookie[] cookies = request.getCookies();
+        Map mapCookie = new HashMap();
+
+        // 쿠키가 있으면 map에 저장
+        if (request.getCookies() != null){
+            for (int i = 0; i < cookies.length; i++){
+                Cookie obj = cookies[i];
+                mapCookie.put(obj.getName(), obj.getValue());
+            }
+        }
+
+        // 쿠키중 'view_count'만 조회, 새로운 쿠키 생성
+        String cookie_view_count = (String) mapCookie.get("view_count");
+        String new_cookie = "|" + bid;
+
+        // 'view_count'에 현재 게시물 쿠키가 없으면 추가 후 조회수 증가
+        if (StringUtils.indexOfIgnoreCase(cookie_view_count, new_cookie) == -1){
+            Cookie cookie = new Cookie("view_count", cookie_view_count + new_cookie);
+            cookie.setMaxAge(60*3);
+            response.addCookie(cookie);
+
+            boardService.addViewCount(bid);
+        }
+
+        BoardDTO boardDto = boardService.getBoard(bid);
+        model.addAttribute("boardDto", boardDto);
+
+        return "/board/read";
+    }
+
+    @GetMapping("/modify")
+    public void modifyGET(@RequestParam("bid") Long bid, @ModelAttribute("cri") SearchCriteria cri, Model model){
+        logger.info("-----board modifyGET-----");
 
         BoardDTO boardDto = boardService.getBoard(bid);
 

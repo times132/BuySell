@@ -6,113 +6,143 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .carousel{
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        }
+        .carousel-inner{
+            position: relative;
+            background-color: black;
+        }
+        .carousel-item{
+            position:absolute;
+
+        }
+
+    </style>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
     <link href="/resources/css/test.css" rel="stylesheet">
 
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/reply.js"></script>
+    <script type="text/javascript" src="/resources/js/common.js"></script>
 </head>
 <body>
+    <%@include file="../include/header.jsp"%>
 
-    <div>
-        <label>제목</label>
-        <input name="bid" value="<c:out value="${boardDto.title}"/>" readonly="readonly"/>
-    </div>
-    <div>
-        <label>분류</label>
-        <input name="bid" value="<c:out value="${boardDto.btype}"/>" readonly="readonly"/>
-    </div>
-    <div>
-        <label>작성일</label>
-        <input name="createddate" value="<javatime:format pattern="yyyy-MM-dd" value="${boardDto.createdDate}"/>" readonly="readonly"/>
-    </div>
+    <div class="container">
+        <div class="panel">
+            <div>사진</div>
 
-    <div>
+            <div id="carouselExampleIndicators" class="carousel slide my-4" data-interval="false">
+                <ol class="carousel-indicators">
 
-        <label>판매자</label>
-        <span class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-expanded="true">
-                <c:out value="${boardDto.writer}"></c:out>
-                <span class="caret"></span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-lg-right" role="menu" aria-labelledby="dropdownMenu">
-                <button class="dropdown-item" type="button" data-oper="chatting"> 1:1채팅 </button>
-                <div class="dropdown-divider"></div>
-                <button class="dropdown-item" type="button">Another action</button>
-            </div>
-        </span>
-<%--        <input name="writer" value="<c:out value="${boardDto.writer}"/>" readonly="readonly"/>--%>
-    </div>
+                </ol>
+                <div class="carousel-inner" role="listbox">
 
-
-    <div>
-        <label>내용</label>
-        <input name="content" value="<c:out value="${boardDto.content}"/>" readonly="readonly"/>
-    </div>
-    <div>
-        <label>가격</label>
-        <input name="price" value="<c:out value="${boardDto.price}"/>" readonly="readonly"/>
-    </div>
-
-    <div class="imageWrapper">
-        <div class="originPicture">
-
-        </div>
-    </div>
-
-    <div class="panel">
-        <div>사진</div>
-        <div class="panel-body">
-            <div class="uploadResult">
-                <ul>
-                </ul>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
         </div>
-    </div>
-    <sec:authentication property="principal" var="userinfo"/>
+
+        <div>
+            <label>제목</label>
+            <input name="bid" value="<c:out value="${boardDto.title}"/>" readonly="readonly"/>
+        </div>
+        <div>
+            <label>분류</label>
+            <input name="bid" value="<c:out value="${boardDto.btype}"/>" readonly="readonly"/>
+        </div>
+        <div>
+            <label>작성일</label>
+            <input name="createddate" value="<javatime:format pattern="yyyy-MM-dd" value="${boardDto.createdDate}"/>" readonly="readonly"/>
+        </div>
+
+        <div>
+            <label>판매자</label>
+            <div class="btn-group dropright">
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <c:out value="${boardDto.writer}"></c:out>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg-right" role="menu" aria-labelledby="dropdownMenu">
+                    <button class="dropdown-item" type="button" id="chatting"> 1:1채팅 </button>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item" type="button">Another action</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div>
+            <label>내용</label>
+            <input name="content" value="<c:out value="${boardDto.content}"/>" readonly="readonly"/>
+        </div>
+        <div>
+            <label>가격</label>
+            <input name="price" value="<c:out value="${boardDto.price}"/>" readonly="readonly"/>
+        </div>
+
+        <div class="imageWrapper">
+            <div class="originPicture">
+
+            </div>
+        </div>
+
+
+
+        <div>
+            <sec:authentication property="principal" var="userinfo"/>
+            <sec:authorize access="isAuthenticated()">
+                <c:if test="${userinfo.username eq boardDto.writer}">
+                    <button data-oper="modify">수정</button>
+                    <span><button data-oper="remove">삭제</button></span>
+                </c:if>
+            </sec:authorize>
+
+            <button data-oper="list">목록</button>
+            조회수 <c:out value="${boardDto.viewCnt}"/>
+        </div>
+
+        <label>
+            댓글 <c:out value="${boardDto.replyCnt}"/>
+        </label><br/>
         <sec:authorize access="isAuthenticated()">
-            <c:if test="${userinfo.username eq boardDto.writer}">
-                <button data-oper="modify">수정</button>
-                <span><button data-oper="remove">삭제</button></span>
-            </c:if>
+            <div class="reply-add">
+
+                <input type="text" name="reply" placeholder="내용"/>
+                <input type="text" name="replyer" readonly="readonly"/>
+
+                <button id="addReplyBtn" class="btn">등록</button>
+            </div>
         </sec:authorize>
 
+        <div class="reply-body">
+            <ul class="replyList">
 
-    <button data-oper="list">목록</button>
-
-    <sec:authorize access="isAuthenticated()">
-        <div class="reply-add">
-            <label>댓글</label><br/>
-            <input type="text" name="reply" placeholder="내용"/>
-            <input type="text" name="replyer" readonly="readonly"/>
-
-            <button id="addReplyBtn" class="btn float-right">등록</button>
+            </ul>
         </div>
-    </sec:authorize>
 
-    <div class="reply-body">
-        <ul class="replyList">
+        <div class="reply-footer">
 
-        </ul>
+        </div>
+
+        <form id="operForm" action="/board/modify" method="get">
+            <input type="hidden" id="bid" name="bid" value="<c:out value="${boardDto.bid}"/>">
+            <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.writer}"/>">
+            <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">
+            <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">
+            <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
+        </form>
     </div>
 
-    <div class="reply-footer">
-
-    </div>
-
-    <form id="operForm" action="/board/modify" method="get">
-        <input type="hidden" id="bid" name="bid" value="<c:out value="${boardDto.bid}"/>">
-        <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.writer}"/>">
-        <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">
-        <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">
-        <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
-    </form>
 </body>
 <script>
     $(document).ready(function () {
@@ -121,7 +151,7 @@
 
         var nickName = "<c:out value="${boardDto.writer}"/>";
 
-        $("button[data-oper='chatting']").on("click", function (e) {
+        $("#chatting").on("click", function (e) {
 
             alert("채팅창으로 이동합니다.");
             location.href="/chat/rooom/"+nickName;
@@ -144,21 +174,29 @@
 
         $.getJSON("/board/getFileList", {bid: bidValue}, function (arr) {
             var str = "";
+            var str2 = "";
 
             $(arr).each(function (i, file) {
                 if (file.image){
                     var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
+                    if (i === 0){
+                        str2 += "<li class='active'></li>";
+                        str += "<div class='carousel-item active' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
+                    }else{
+                        str2 += "<li></li>";
+                        str += "<div class='carousel-item' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
+                    }
 
-                    str += "<li data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'><div>";
-                    str += "<img src='/display?fileName=" + fileCallPath + "'>";
+                    str += "<img class='d-block img-fluid' src='/display?fileName=" + fileCallPath + "'>";
                     str += "</div>";
-                    str += "</li>"
                 }
             });
-            $(".uploadResult ul").html(str);
+
+            $(".carousel-indicators").html(str2);
+            $(".carousel-inner").html(str);
         });
 
-        $(".uploadResult").on("click", "li", function (e) {
+        $(".carousel-inner").on("click", "div", function (e) {
             var liobj = $(this);
             console.log(liobj);
             var path = encodeURIComponent(liobj.data("path") + "/" + liobj.data("uuid") + "_" + liobj.data("filename"));
@@ -198,7 +236,7 @@
     function showList(page) {
 
         replyService.getList({bid: bidValue, page: page || 1}, function (data) {
-            // console.log(data);
+            console.log(data);
             if (page == -1){
                 pageNum = 1;
                 showList(1);
@@ -218,12 +256,12 @@
 
 
 
-                str += "<small class='float-right text-muted'>" + replyService.displayTime(data.content[i].createdDate) + "</small></div>";
+                str += "<small class='text-muted'>" + commonService.displayTime(data.content[i].createdDate) + "</small></div>";
                 str += "<p id='reply_" + data.content[i].rid + "'>" + data.content[i].reply + "</p>";
                 str += "<div>";
                 str += (replyer === data.content[i].replyer ?
-                    "<button id='modReplyBtn' class='btn float-right' >수정</button>" +
-                    "<button id='removeReplyBtn' class='btn float-right'>삭제</button>" :
+                    "<button id='modReplyBtn' class='btn' >수정</button>" +
+                    "<button id='removeReplyBtn' class='btn'>삭제</button>" :
                     '');
                 str += "</li>";
             }
@@ -254,7 +292,7 @@
             next = true;
         }
 
-        var str = "<ul class='pagination float-right'>";
+        var str = "<ul class='pagination'>";
 
         if (prev){
             str += "<li class='page-item'><a class='page-link' href='" + (startPage - 1) + "'>이전</a></li>";

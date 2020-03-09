@@ -5,10 +5,14 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="/resources/css/test.css" rel="stylesheet">
-    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
 </head>
 <body>
+    <%@include file="../include/header.jsp"%>
+
     <form id="writeForm" action="/board/write" method="post">
         <sec:authentication property="principal" var="userinfo"/>
         <div>

@@ -38,6 +38,7 @@ public class BoardService {
     @Transactional
     public void register(BoardDTO dto){
         Board board = boardRepository.save(boardMapper.toEntity(dto));
+        // 첨부 파일 저장
         for (BoardFileDTO fileDTO : dto.getBoardFileList()){
             fileDTO.setBoard(board);
             boardFileRepository.save(boardMapper.fileToEntity(fileDTO));
@@ -49,7 +50,6 @@ public class BoardService {
         Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
 
         Page<Board> page;
-        logger.info("======getType()====== : " + SearchCri.getType());
 
         if (SearchCri.getType().equals("")){
             page = boardRepository.findAll(pageable);
@@ -63,19 +63,13 @@ public class BoardService {
     }
 
     // 게시물 상세 페이지 정보
+    @Transactional
     public BoardDTO getBoard(Long bid){
+        logger.info("######get board#######");
         Optional<Board> boardWrapper = boardRepository.findById(bid);
         Board board = boardWrapper.get();
 
-        return BoardDTO.builder()
-                .bid(board.getBid())
-                .btype(board.getBtype())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .writer(board.getWriter())
-                .price(board.getPrice())
-                .createdDate(board.getCreatedDate())
-                .build();
+        return boardMapper.toDTO(board);
     }
 
     // 게시물 업데이트
@@ -114,5 +108,16 @@ public class BoardService {
 
     public List<BoardFileDTO> readFile(Long bid){
         return boardMapper.fileToDTOList(boardFileRepository.findAllByBoardBid(bid));
+    }
+
+    @Transactional
+    public void addViewCount(Long bid){
+        logger.info("######addcount#######");
+        Optional<Board> boardWrapper = boardRepository.findById(bid);
+        Board board = boardWrapper.get();
+        BoardDTO boardDTO = boardMapper.toDTO(board);
+        boardDTO.setViewCnt(boardDTO.getViewCnt()+1);
+
+        boardRepository.save(boardMapper.toEntity(boardDTO));
     }
 }

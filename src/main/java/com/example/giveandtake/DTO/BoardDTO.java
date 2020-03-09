@@ -21,18 +21,20 @@ public class BoardDTO {
     private String content;
     private String writer;
     private Integer price;
+    private Integer viewCnt;
     private Integer replyCnt;
     private LocalDateTime createdDate;
     private List<BoardFileDTO> boardFileList = new ArrayList<>();
 
     @Builder
-    public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, Integer replyCnt, LocalDateTime createdDate, List<BoardFileDTO> boardFileList){
+    public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, LocalDateTime createdDate, List<BoardFileDTO> boardFileList){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
         this.content = content;
         this.writer = writer;
         this.price = price;
+        this.viewCnt = viewCnt;
         this.replyCnt = replyCnt;
         this.createdDate = createdDate;
         this.boardFileList = boardFileList;
