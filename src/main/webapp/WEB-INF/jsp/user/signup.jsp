@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>회원가입 페이지</title>
 </head>

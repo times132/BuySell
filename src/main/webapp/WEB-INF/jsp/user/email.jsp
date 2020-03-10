@@ -5,17 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <title>이메일 인증</title>
-    <script src="/webjars/jquery/dist/jquery.min.js"></script>
-
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/resources/js/mail.js"></script>
 
 </head>
 <body>
 이메일 인증 (이메일을 인증 받아야 회원가입을 진행하실 수 있습니다. )
-        <br> <br>
-<%--        <form action="auth.do" method="post">--%>
+<br> <br>
 <div class="form-group">
     <label for="email">이메일</label>
-    <input type="text" class="form-control" id="email" name="email" placeholder="ID" required>
+    <input type="text" id="email" name="email" placeholder="ID" required>
     <div class="check_font" id="id_check"></div>
 </div>
 
@@ -29,7 +28,7 @@
     $("#email").blur(function() {
         // id = "id_reg" / name = "userId"
         var email = $('#email').val();
-        consol.log(email);
+        console.log(email);
         $.ajax({
             url : '${pageContext.request.contextPath}/user/idCheck?email='+ email,
             type : 'get',
@@ -49,10 +48,31 @@
                 }
 
                     if(idck==1){
-                        $("#email").blur($('#frm')
-                            .alert("이메일이 전송되었습니다")
-                            .click(function() {
-                            location.href="/user/auth.do"+email;
+                        $("#email").blur(
+                            $('#frm')
+                                .attr("disabled", false)
+                                .click(function() {
+                                    var e_mail = {
+                                        email : email
+                                    };
+                                    alert("이메일이 전송되었습니다. 이메일 인증번호를 확인해주세요");
+                                    mailService.sendEmail(e_mail, function (result) {
+
+
+                                        for(var i=0; i<3; i++) {
+                                            var code = prompt("인증번호를 입력해주세요");
+                                            if (code == result) {
+                                                alert("회원가입을 진행해주세요");
+                                                location.href = "/user/email/"+email;
+                                                return;
+                                            } else {
+                                                alert("인증번호가 틀렸습니다. 인증번호를 다시 확인해주세요");
+                                            }
+                                        }
+                                        alert("인증번호가 3회이상 틀렸습니다. 이메일 전송을 다시시도해주세요");
+                                        location.href = "/user/email"
+
+                                    });
                         }));
 
                     }

@@ -36,6 +36,6 @@ public class ChatMessageDTO {
         this.sender = sender;
         this.type = type;
         this.message = message;
-
     }
+
 }

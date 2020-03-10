@@ -2,11 +2,9 @@ package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.ChatMessageDTO;
 import com.example.giveandtake.DTO.ChatRoomDTO;
-import com.example.giveandtake.DTO.ReplyDTO;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
-import com.example.giveandtake.model.entity.Reply;
 import com.example.giveandtake.repository.ChatMessageRepository;
 import com.example.giveandtake.repository.ChatRoomRepository;
 import lombok.AllArgsConstructor;
@@ -15,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,32 +54,46 @@ public class ChatService {
     public List<ChatRoom> findRoomById(Long roomId) {
         return chatRoomRepository.findByRoomId(roomId);
     }
-    //대화내용 저장
-    public void createMessage(ChatMessageDTO chatMessageDTO) {
 
+
+    //대화내용 저장
+    public void createMessage(ChatMessageDTO chatMessageDTO, Principal principal) {
         if (ChatMessage.MessageType.QUIT.equals(chatMessageDTO.getType())) {
             chatMessageDTO.setMessage(chatMessageDTO.getSender() + "님이 방에서 나갔습니다.");
             chatMessageDTO.setSender("[알림]");
-
         }
+
         Long msgNum = chatMessageRepository.save(chatMessageDTO.toEntity()).getMsgNum();
         Optional <ChatMessage> chatMessageList = chatMessageRepository.findByMsgNum(msgNum);
         ChatMessage chatMessage = chatMessageList.get();
+
+        System.out.println("*****************************************메시지");
+        List<ChatRoom> chatRooms = chatRoomRepository.findByRoomId(chatMessage.getRoomId());
+        ChatRoom chats = chatRooms.get(0);
+        ChatRoomDTO chatRoomDTO = convertEntityToDto(chats);
+        String name = principal.getName();
+        //메시지 개수 설정
+        if(name.equals(chats.getReceiver())){
+            int num = chats.getRcMsgCount();
+            chatRoomDTO.setRcMsgCount(num+1); //나의 메시지 개수 증가
+            System.out.println("************메시지 카운트 +1*****************************??"+ num);
+        }
+        else {
+            int num = chats.getRqMsgCount();
+            chatRoomDTO.setRqMsgCount(num+1);
+            System.out.println("************메시지 카운트 +1*****************************??"+ num);
+        }
+        chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
 
         messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
 
     }
     //채팅방 삭제
     public void deleteChatRoom(Long roomId, Principal principal) {
-        ChatRoomDTO chatRoomDTO =new ChatRoomDTO();
         List<ChatRoom> chatRoom = chatRoomRepository.findByRoomId(roomId);
         ChatRoom chats = chatRoom.get(0);
-
+        ChatRoomDTO chatRoomDTO = convertEntityToDto(chats);
         String name = principal.getName();
-        chatRoomDTO.setRoomId(roomId);
-        chatRoomDTO.setRoomName(chats.getRoomName());
-        chatRoomDTO.setReceiver(chats.getReceiver());
-        chatRoomDTO.setRequest(chats.getRequest());
 
         if( name.equals(chats.getReceiver()) ){
             chatRoomDTO.setReceiver("");
@@ -98,9 +109,33 @@ public class ChatService {
     }
 
     //채팅방 메시지 리스트 가져오기
-    public List<ChatMessage> findMessages(Long roomId) {
+    public List<ChatMessage> findMessages(Long roomId, Principal principal) {
         List<ChatMessage> messages = chatMessageRepository.findMessageByRoomId(roomId);
+        String name = principal.getName();
+        List<ChatRoom> chatRooms = chatRoomRepository.findByRoomId(roomId);
+        ChatRoom chats = chatRooms.get(0);
+        ChatRoomDTO chatRoomDTO = convertEntityToDto(chats);
+        //메시지 개수 설정
+        if(name.equals(chats.getReceiver())){
+            chatRoomDTO.setRqMsgCount(0); //상대방이 보낸 메세지 개수 리셋
+        }
+        else{
+            chatRoomDTO.setRcMsgCount(0);
+        }
+        chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
+
         return messages;
     }
 
+    private ChatRoomDTO convertEntityToDto(ChatRoom chatRoom){
+        return ChatRoomDTO.builder()
+                .roomId(chatRoom.getRoomId())
+                .roomName(chatRoom.getRoomName())
+                .receiver(chatRoom.getReceiver())
+                .request(chatRoom.getRequest())
+                .rcMsgCount(chatRoom.getRcMsgCount())
+                .rqMsgCount(chatRoom.getRqMsgCount())
+                .createdDate(chatRoom.getCreatedDate())
+                .build();
+    }
 }

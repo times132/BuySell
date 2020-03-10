@@ -1,12 +1,9 @@
 package com.example.giveandtake.DTO;
 
 import com.example.giveandtake.model.entity.ChatRoom;
-import com.example.giveandtake.model.entity.User;
 import lombok.*;
 
-import javax.persistence.Column;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,8 +16,11 @@ public class ChatRoomDTO {
     private String roomName;
     private String request;  //대화요청하는 사람
     private String receiver; //대화요청 받는 사람
-    private List<User> chatMembers = new ArrayList<>();
 
+    private Integer rqMsgCount;
+    private Integer rcMsgCount;
+
+    private LocalDateTime createdDate;
 
     public ChatRoom toEntity(){
         return ChatRoom.builder()
@@ -28,14 +28,20 @@ public class ChatRoomDTO {
                 .roomName(roomName)
                 .receiver(receiver)
                 .request(request)
+                .rcMsgCount(rcMsgCount)
+                .rqMsgCount(rqMsgCount)
                 .build();
     }
 
+
     @Builder
-    public ChatRoomDTO(Long roomId, String roomName, String request, String receiver) {
+    public ChatRoomDTO (Long roomId, String roomName, String request, String receiver, Integer rqMsgCount, Integer rcMsgCount, LocalDateTime createdDate) {
         this.roomId =roomId;
         this.roomName= roomName;
         this.request = request;
         this.receiver = receiver;
+        this.rcMsgCount = rcMsgCount;
+        this.rqMsgCount= rqMsgCount;
+        this.createdDate = createdDate;
     }
 }

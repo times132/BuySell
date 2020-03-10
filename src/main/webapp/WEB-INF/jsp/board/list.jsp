@@ -29,10 +29,15 @@
         }
 
         .pagination li.active {
+            font-weight: bold;
             text-decoration: underline;
         }
-
-        .pagination a:hover:not(.active) {background-color: #ddd;}
+        .pagination a{
+            text-decoration: inherit;
+        }
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
     </style>
     
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>

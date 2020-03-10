@@ -41,9 +41,9 @@ public class UserController {
 
 
     // 회원가입 페이지
-    @GetMapping("/user/signup")
-    public String dispSignup() {
-
+    @GetMapping("/user/signup/{email}")
+    public String dispSignup(@PathVariable String email, Model model) {
+        model.addAttribute("email", email);
         return "/user/signup";
     }
 
@@ -51,7 +51,6 @@ public class UserController {
     @RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
     @ResponseBody
     public int idCheck(@RequestParam("email") String email) {
-        System.out.println("##############################이메일은"+email);
         return userService.useridCheck(email);
     }
 
@@ -93,13 +92,13 @@ public class UserController {
     // 로그인 실패 페이지
     @GetMapping("/user/login/error")
     public String dispFailurLogin(){
-        return "/user/failurelogin";
+        return "redirect:/user/login";
     }
 
-    // 로그아웃 결과 페이지
+    // 로그아웃 후 홈으로 이동
     @GetMapping("/user/logout/result")
     public String dispLogout() {
-        return "/user/logout";
+        return "redirect:/";
     }
 
     @GetMapping("/user/findpw")
@@ -108,15 +107,12 @@ public class UserController {
         return "/user/findPW";
     }
     //비밀번호 찾기
-    @RequestMapping( value = "/user/findpw.do{email}" , method=RequestMethod.GET)
+    @RequestMapping( value = "/user/findpw/{email}" , method=RequestMethod.GET)
     public String findPW(HttpServletRequest request, @PathVariable String email) throws IOException {
         System.out.println("##########################################이메일"+ email);
         String mailType = "findpw";
         String code = mailService.sendMail(email, request, mailType);
-
         userService.changePW(email, code);
-        System.out.println("비밀번호변경완료");
-
 
         return "/user/login";
     }
@@ -132,7 +128,7 @@ public class UserController {
 //<----------------회원정보 --------------------------------------------------------------------------------------------------->
 // 내 정보 페이지
     @GetMapping("/user/info")
-    public String dispMyInfo(Principal principal, Model model) {
+    public String dispMyInfo() {
     return "/user/myinfo";
     }
 
@@ -143,7 +139,7 @@ public class UserController {
     }
 
     @PostMapping ("/user/modifyuser")
-    public String modifyuser(UserDTO userList) throws IOException {
+    public String modifyuser(UserDTO userList){
         userService.modify(userList);
         return "redirect:/user/info";
     }

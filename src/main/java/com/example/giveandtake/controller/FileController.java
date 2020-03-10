@@ -124,7 +124,7 @@ public class FileController {
 
                     FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
                     Thumbnails.of(saveFile)
-                            .size(360, 480)
+                            .size(480, 600)
                             .outputFormat("jpg")
                             .toOutputStream(thumbnail);
 
