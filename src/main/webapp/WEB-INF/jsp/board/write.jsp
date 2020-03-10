@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="/resources/css/test.css" rel="stylesheet">
+    <link href="/resources/css/board.css" rel="stylesheet">
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>

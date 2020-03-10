@@ -7,122 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        .reply_pagination li {
-            margin: 0 5px 0 0;
-            padding: 0 0 0 0;
-            border : 0;
-        }
-        .reply_pagination {
-            display: inline-block;
-        }
-        .reply_pagination li.active {
-            font-weight: bold;
-            text-decoration: underline;
-            text-decoration-color: red;
-        }
-        .reply_pagination li a {
-            color: black!important;
-            float: left;
-            padding: 8px 16px;
-            transition: background-color .3s;
-            text-decoration: inherit;
-        }
-        .reply_pagination li a:hover:not(.active) {
-            background-color: #ddd;
-        }
-        .carousel{
-            width:480px;
-            height :480px;
-            margin-right: 1rem;
-            display: flex;
-            background: black;
-        }
-        .carousel-inner{
-            display: flex;
-            align-items: center;
 
-        }
-        .d-block{
-            margin: 0 auto;
-            overflow: hidden;
-        }
-        .product_info{
-            margin-right: 1rem;
-        }
-        .product_info *{
-            padding-bottom: 10px;
-        }
-        .product_info .createddate{
-            float: right;
-        }
-        .product_info .price{
-            text-align: right;
-        }
-        .writer-dropdown{
-            -ms-flex: 1 1 auto;
-            right: 0;
-            bottom: 0;
-            position: absolute;
-        }
-        @media (max-width: 768px) {
-            .writer-dropdown{
-                text-align: right;
-                position: relative;
-            }
-        }
-        .writer{
-            color: black!important;
-        }
-        .dropdown-menu {
-            min-width: auto!important;
-        }
-        .dropdown-toggle::after{
-            display: none!important;
-        }
-        .carousel-item.active{
-            overflow: hidden;
-        }
-        .card-body{
-            border-top: 1px solid lightgray;
-        }
-        .btnlist{
-            text-align: right;
-        }
-        .muted-info{
-            margin-top: 0.5rem;
-        }
-        .reply-add, .reply-modify{
-            display: flex;
-        }
-        .reply-body{
-            padding: 1rem 0;
-            background-color: whitesmoke;
-        }
-        .replyList{
-            list-style: none;
-        }
-        .replyList li{
-            border-width: thick;
-            border-bottom: 1px dashed;
-        }
-        #addReplyBtn, #modifyconfirm{
-            margin-left: 0.5rem;
-            width: 7rem;
-        }
-        .reply-header{
-            display: inline-block;
-        }
-        .reply-header-btn{
-            display: inline-block;
-            float: right;
-        }
-        .reply-footer{
-            text-align: center;
-        }
-    </style>
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-    <link href="/resources/css/test.css" rel="stylesheet">
+    <link href="/resources/css/board.css" rel="stylesheet">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
@@ -394,7 +281,7 @@
             next = true;
         }
 
-        var str = "<ul class='pagination reply_pagination pagination-sm'>";
+        var str = "<ul class='pagination pagination-sm justify-content-center'>";
 
         if (prev){
             str += "<li class='page-item'><a class='page' href='" + (startPage - 1) + "'>이전</a></li>";

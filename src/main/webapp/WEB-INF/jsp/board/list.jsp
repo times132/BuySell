@@ -8,37 +8,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-    <style>
-
-        .pagination li {
-            margin: 0 5px 0 0;
-            padding: 0 0 0 0;
-            border : 0;
-            float: left;
-        }
-        .pagination {
-            display: inline-block;
-        }
-
-        .pagination a {
-            color: black;
-            float: left;
-            padding: 8px 16px;
-            text-decoration: none;
-            transition: background-color .3s;
-        }
-
-        .pagination li.active {
-            font-weight: bold;
-            text-decoration: underline;
-        }
-        .pagination a{
-            text-decoration: inherit;
-        }
-        .pagination a:hover:not(.active) {
-            background-color: #ddd;
-        }
-    </style>
+    <link href="/resources/css/board.css" rel="stylesheet">
     
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
@@ -117,17 +87,17 @@
                     </tbody>
                 </table>
 
-                <div class="row justify-content-md-center mb-3">
+                <div class="reply-footer">
                     <%-- 페이징 --%>
-                    <ul class="pagination">
+                    <ul class="pagination pagination-sm justify-content-center">
                         <c:if test="${pageMaker.prev}">
-                            <li class="pagination_btn"><a class="prev" href="${pageMaker.startPage - 1}">이전</a></li>
+                            <li class="page-item"><a class="prev" href="${pageMaker.startPage - 1}">이전</a></li>
                         </c:if>
                         <c:forEach var="page" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                            <li class="pagination_btn ${pageMaker.cri.page == page ? "active" : ""}"><a class="page" href="${page}">${page}</a></li>
+                            <li class="page-item ${pageMaker.cri.page == page ? "active" : ""}"><a class="page" href="${page}">${page}</a></li>
                         </c:forEach>
                         <c:if test="${pageMaker.next}">
-                            <li class="pagination_btn"><a class="next" href="${pageMaker.endPage + 1}">다음</a></li>
+                            <li class="page-item"><a class="next" href="${pageMaker.endPage + 1}">다음</a></li>
                         </c:if>
                     </ul>
                 </div>
@@ -175,7 +145,7 @@
             });
 
             var actionForm = $("#actionForm");
-            $(".pagination_btn a").on("click", function (e) {
+            $(".page-item a").on("click", function (e) {
                 e.preventDefault();
                 console.log("click");
                 actionForm.find("input[name='page']").val($(this).attr("href"));
