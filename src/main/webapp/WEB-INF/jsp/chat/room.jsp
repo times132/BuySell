@@ -91,10 +91,10 @@
                 str += "<div class='chat_people'>"
                 str += "<div class='chat_ib'>"
                 str += ( sender === data[i].receiver ?
-                    "<h5>"+ data[i].request +"<div class='msgCnt'>"+ data[i].rqMsgCount +"</div>"
-                    +"<span class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</span></h5>"
-                    :"<h5>"+ data[i].receiver +"<div class='msgCnt'>"+ data[i].rcMsgCount + "</div>"
-                    +"<span class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</span></h5>");
+                    "<h5>"+ data[i].request +"<span class='msgCnt'>"+ data[i].rqMsgCount +"</span>"
+                    +"<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></h5>"
+                    :"<h5>"+ data[i].receiver +"<span class='msgCnt'>"+ data[i].rcMsgCount + "</span>"
+                    +"<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></h5>");
                 str += "<p>" + data[i].roomName+ "</p>";   //메시지 내용이 들어가면 좋을 것 같음
                 str += "<button id='enterBtn' class='btn float-right' >입장</button>";
                 str += "</div></div></div></li></ul></div>";
@@ -110,7 +110,6 @@
     var roomId='';
 
     $("#creating").click(function() {
-        var inputRN = document.getElementById("room_name").value
         var inputreceiver = document.getElementById("receiver").value
         if (inputreceiver == "") {
             alert("대화상대를 입력하지 않았습니다.");
@@ -129,7 +128,6 @@
 
             chatService.createRoom(room, function (result) {
                 alert(result);
-                document.getElementById("room_name").value="";
                 document.getElementById("receiver").value="";
                 init();
             });
