@@ -166,7 +166,7 @@
         $.getJSON("/board/getFileList", {bid: bidValue}, function (arr) {
             var str = "";
             var first = "";
-
+            
             $(arr).each(function (i, file) {
                 if (file.image){
                     var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);

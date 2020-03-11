@@ -143,13 +143,13 @@ public class FileController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/deleteFile")
     @ResponseBody
-    public ResponseEntity<String> deleteFilePOST(String fileName, String type, @AuthenticationPrincipal CustomUserDetails user){
+    public ResponseEntity<String> deleteFilePOST(String fileName, String type){
         logger.info("-----File deleteFilePOST-----");
-        Long userid = user.getId();
+
         File file;
 
         try {
-            file = new File("D:\\upload\\" +userid +"\\" + URLDecoder.decode(fileName, "UTF-8"));
+            file = new File("D:\\upload\\"  + URLDecoder.decode(fileName, "UTF-8"));
             file.delete();
 
             if (type.equals("image")){
