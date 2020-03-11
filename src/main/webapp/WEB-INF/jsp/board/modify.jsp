@@ -5,12 +5,19 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <link href="/resources/css/test.css" rel="stylesheet">
+    <link href="/resources/css/board.css" rel="stylesheet">
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
 </head>
 <body>
+    <%@include file="../include/header.jsp"%>
+
     <form action="/board/modify" method="post">
         <input type="hidden" name="bid" value="${boardDto.bid}"/>
+        <input type="hidden" name="viewCnt" value="${boardDto.viewCnt}"/>
+        <input type="hidden" name="replyCnt" value="${boardDto.replyCnt}"/>
         <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">
         <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">
         <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">

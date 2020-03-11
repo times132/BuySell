@@ -34,8 +34,10 @@ public class ChatRoom{
     @Column
     private Integer rcMsgCount;
 
+
     @Column
     private LocalDateTime msgDate;
+
 
     @Builder
     public ChatRoom(Long roomId , String roomName, String request, String receiver,Integer rqMsgCount,Integer rcMsgCount, LocalDateTime msgDate)

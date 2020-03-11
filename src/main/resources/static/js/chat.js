@@ -43,24 +43,7 @@ var chatService = (function () {
         });
     }
 
-    function deleteRoom(roomId, callback, error) {
-        console.log("****DELETE ROOM*********")
-        $.ajax({
-            type: "get",
-            url: "/chat/room/stop/" + roomId,
-            async: true,
-            success: function (result) {
-                if (callback) {
-                    callback(result);
-                }
-            },
-            error: function (xhr, status, err) {
-                if (error) {
-                    error(err);
-                }
-            }
-        });
-    }
+
     function get(roomId, callback, error) {
         console.log("GET"+roomId)
         $.ajax({
@@ -114,7 +97,7 @@ var chatService = (function () {
     }
 
     return {
-        deleteRoom:deleteRoom,
+
         findAllRoom : findAllRoom,
         createRoom : createRoom,
         get : get,
