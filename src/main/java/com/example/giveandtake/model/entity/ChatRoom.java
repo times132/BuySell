@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "chatrooms")
-public class ChatRoom extends DateAudit {
+public class ChatRoom{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +35,10 @@ public class ChatRoom extends DateAudit {
     private Integer rcMsgCount;
 
     @Column
-    private LocalDateTime updatedDate;
+    private LocalDateTime msgDate;
 
     @Builder
-    public ChatRoom(Long roomId , String roomName, String request, String receiver,Integer rqMsgCount,Integer rcMsgCount)
+    public ChatRoom(Long roomId , String roomName, String request, String receiver,Integer rqMsgCount,Integer rcMsgCount, LocalDateTime msgDate)
     {
         this.roomId = roomId;
         this.roomName =roomName;
@@ -46,6 +46,7 @@ public class ChatRoom extends DateAudit {
         this.receiver = receiver;
         this.rqMsgCount =rqMsgCount;
         this.rcMsgCount=rcMsgCount;
+        this.msgDate = msgDate;
     }
 
 

@@ -2,7 +2,7 @@ console.log("reply module");
 
 var replyService = (function () {
     function add(reply, callback, error) {
-        console.log("add reply");
+        console.log(reply);
 
         $.ajax({
             type: 'post',

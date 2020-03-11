@@ -28,9 +28,8 @@ var chatService = (function () {
         $.ajax({
             type: "post",
             url: "/chat/room",
-            data: room,
-            dataType: 'text',//데이타 타입
-            async: true,
+            data: JSON.stringify(room),
+            contentType: "application/json; charset=utf-8",
             success: function (result) {
                 if (callback){
                     callback(result);
