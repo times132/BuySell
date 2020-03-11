@@ -80,6 +80,9 @@ public class BoardController {
     public String readGET(HttpServletRequest request, HttpServletResponse response, @RequestParam("bid") Long bid, @ModelAttribute("cri") SearchCriteria cri, Model model){
         logger.info("-----board readGET-----");
 
+        BoardDTO boardDto = boardService.getBoard(bid);
+        model.addAttribute("boardDto", boardDto);
+
         // 쿠키로 조회수 조작 방지
         // 쿠키 불러오기
         Cookie[] cookies = request.getCookies();
@@ -106,8 +109,7 @@ public class BoardController {
             boardService.addViewCount(bid);
         }
 
-        BoardDTO boardDto = boardService.getBoard(bid);
-        model.addAttribute("boardDto", boardDto);
+
 
         return "/board/read";
     }

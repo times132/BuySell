@@ -7,55 +7,6 @@
     <link href="/resources/css/board.css" rel="stylesheet">
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
-    <style>
-        .input-price-text{
-            display: flex;
-            -ms-flex-align: center;
-            align-items: center;
-            padding: .375rem .75rem;
-            margin-bottom: 0;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #495057;
-            text-align: center;
-            white-space: nowrap;
-            border: 1px solid #ced4da;
-            background-color: whitesmoke;
-            border-radius: .25rem;
-        }
-        .image-frame{
-            border: 1px solid black;
-            border-radius: .25rem;
-            padding: .5rem;
-        }
-        .input-image{
-            visibility: hidden;
-            width: 0;
-            height: 0;
-        }
-        .uploadimg{
-            cursor: pointer;
-        }
-        .uploadResult{
-            width: 100%;
-            background-color: gray;
-        }
-        .uploadResult ul{
-            display: flex;
-            flex-flow: row;
-            justify-content: center;
-            align-items: center;
-        }
-        .uploadResult ul li{
-            list-style: none;
-            padding: 10px;
-        }
-        .uploadResult ul li img{
-            width: 30%;
-        }
-    </style>
-
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
 </head>
@@ -97,22 +48,20 @@
         </div>
 
         <!-- 사진 업로드 -->
-        <div class="row">
+        <div class="row mb-3">
             <div class="col">
                 <div class="image-frame">
-                    <div class="file-head"><p class="h5">사진</p></div>
+                    <div class="file-head">
+                        <span class="h5 font-weight-bold">사진</span>
+                        <span class="h6 text-muted">(최대 10장 까지 가능하며 총 50MB까지 가능합니다.)</span>
+                        <label class="uploadDiv" for="input-img-icon">
+                            <img class="uploadimg" src="/resources/image/plus.png"/>
+                        </label>
+                        <input id="input-img-icon" class="input-image" type="file" name="uploadFile" onclick="this.value=null;" multiple>
+
+                    </div>
+
                     <div class="file-body">
-<%--                        <div class="uploadDiv">--%>
-<%--                            <input type="file" name="uploadFile" multiple>--%>
-<%--                        </div>--%>
-
-                        <div class="uploadDiv">
-                            <label for="input-img-icon">
-                                <img class="uploadimg" src="/resources/image/plus.png"/>
-                            </label>
-                            <input id="input-img-icon" class="input-image" type="file" name="uploadFile" onclick="this.value=null;" multiple>
-                        </div>
-
                         <div class="uploadResult">
                             <ul>
 
@@ -123,14 +72,18 @@
             </div>
         </div>
 
-        <button type="submit">등록</button>
+        <div>
+            <span><a href="#" class="btn btn-outline-dark btn-submit"><i></i>작성하기</a></span>
+            <a href="/board"><button class="btn btn-dark float-right" type="submit">목록</button></a>
+        </div>
+
     </div>
 
     <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script>
         $(document).ready(function () {
             var writeForm = $("#writeForm");
-            $("button[type='submit']").on("click", function (e) {
+            $(".btn-submit").on("click", function (e) {
                 e.preventDefault();
                 var str = "";
 
@@ -162,7 +115,8 @@
                 writeForm.append(str).submit();
             });
 
-            $(".uploadResult").on("click", "button", function (e) {
+
+            $(".uploadResult").on("click", ".del-image", function (e) {
                 console.log("onclick")
                 filecount -= 1;
                 var targetFile = $(this).data("file");
@@ -183,6 +137,15 @@
                 });
             });
         });
+
+        $("body").on({
+            mouseenter: function () {
+                $(this).closest("li").css("border", "1px solid red");
+            },
+            mouseleave: function () {
+                $(this).closest("li").css("border", "none");
+            }
+        }, ".del-image");
     </script>
 </body>
 </html>

@@ -17,16 +17,19 @@ function checkExtension(fileName, fileSize) {
 }
 
 $("input[type='file']").change(function (e) {
-    console.log("onchange")
+    console.log(filecount)
     var formData = new FormData();
     var inputFile = $("input[name='uploadFile']");
     var files = inputFile[0].files;
     filecount += files.length;
 
-    if (filecount > 7){
-        alert("파일은 최대 7개까지 업로드 가능합니다.");
+    if (filecount > 10){
+        alert("파일은 최대 10개까지 업로드 가능합니다.");
+        filecount -= files.length;
         return false;
     }
+
+
 
     for (var i = 0; i < files.length; i++){
         if (!checkExtension(files[i].name, files[i].size)){
@@ -65,12 +68,11 @@ function showUploadResult(uploadResultArr) {
                 obj.fid = -1;
             }
 
-            str += "<li data-fid='" + obj.fid + "' data-path='" + obj.uploadPath + "'" + " data-uuid='" + obj.uuid;
-            str += "' data-fileName='" + obj.fileName + "' data-type='" + obj.image + "'><div>";
-            str += "<span>" + obj.fileName + "</span>";
-            str += "<button type='button' data-file=\'" + fileCallPath + "\' data-type='image'><i>x</i></button></br>";
-            str += "<img src='/display?fileName=" + fileCallPath + "'>";
-            str += "</div></li>";
+            str += "<li class='thum-image' data-fid='" + obj.fid + "' data-path='" + obj.uploadPath + "'" + " data-uuid='" + obj.uuid;
+            str += "' data-fileName='" + obj.fileName + "' data-type='" + obj.image + "'>";
+            str += "<img class='img-thumbnail' src='/display?fileName=" + fileCallPath + "'>";
+            str += "<input class='del-image' type='button' data-file=\'" + fileCallPath + "\' data-type='image'/>";
+            str += "</li>";
         }else{
             return;
         }

@@ -42,13 +42,13 @@
                 <table class="table table-responsive table-sm table-hover">
                     <thead>
                         <tr>
-                            <th style="width: 5%" scope="col">#</th>
-                            <th style="width: 10%" scope="col">분류</th>
+                            <th style="width: 6%" scope="col">#</th>
+                            <th style="width: 12%" scope="col">분류</th>
                             <th style="width: 45%" scope="col">글제목</th>
                             <th style="width: 10%" scope="col">가격</th>
                             <th style="width: 10%" scope="col">작성자</th>
                             <th style="width: 10%" scope="col">작성일</th>
-                            <th style="width: 10%" scope="col">조회</th>
+                            <th style="width: 7%" scope="col">조회</th>
                         </tr>
                     </thead>
 

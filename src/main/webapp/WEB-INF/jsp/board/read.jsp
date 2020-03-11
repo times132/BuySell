@@ -139,7 +139,7 @@
 </body>
 <script>
     $(document).ready(function () {
-
+        console.log("<c:out value="${boardDto.createdDate}"/>")
         var operForm = $("#operForm");
         var username = "<c:out value="${boardDto.writer}"/>";
 
@@ -166,22 +166,30 @@
         $.getJSON("/board/getFileList", {bid: bidValue}, function (arr) {
             var str = "";
             var first = "";
-            
-            $(arr).each(function (i, file) {
-                if (file.image){
-                    var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
-                    if (i === 0){ // 첫번째 요소에 active 부여
-                        first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
-                        str += "<div class='carousel-item active' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
-                    }else{
-                        first += "<li data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
-                        str += "<div class='carousel-item' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
-                    }
 
-                    str += "<img class='d-block img-fluid' src='/display?fileName=" + fileCallPath + "'>";
-                    str += "</div>";
-                }
-            });
+            if (arr.length === 0){
+                str += "<img class='d-block img-fluid' src='/resources/image/no-image.jpg'>";
+                $(".carousel-control-prev").hide();
+                $(".carousel-control-next").hide();
+
+            }else{
+                $(arr).each(function (i, file) {
+                    if (file.image){
+                        var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
+                        if (i === 0){ // 첫번째 요소에 active 부여
+                            first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
+                            str += "<div class='carousel-item active' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
+                        }else{
+                            first += "<li data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
+                            str += "<div class='carousel-item' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
+                        }
+
+                        str += "<img class='d-block img-fluid' src='/display?fileName=" + fileCallPath + "'>";
+                        str += "</div>";
+                    }
+                });
+            }
+
             $(".carousel-indicators").html(first);
             $(".carousel-inner").html(str);
         });
