@@ -28,9 +28,8 @@ var chatService = (function () {
         $.ajax({
             type: "post",
             url: "/chat/room",
-            data: room,
-            dataType: 'text',//데이타 타입
-            async: true,
+            data: JSON.stringify(room),
+            contentType: "application/json; charset=utf-8",
             success: function (result) {
                 if (callback){
                     callback(result);
@@ -44,24 +43,7 @@ var chatService = (function () {
         });
     }
 
-    function deleteRoom(roomId, callback, error) {
-        console.log("****DELETE ROOM*********")
-        $.ajax({
-            type: "get",
-            url: "/chat/room/stop/" + roomId,
-            async: true,
-            success: function (result) {
-                if (callback) {
-                    callback(result);
-                }
-            },
-            error: function (xhr, status, err) {
-                if (error) {
-                    error(err);
-                }
-            }
-        });
-    }
+
     function get(roomId, callback, error) {
         console.log("GET"+roomId)
         $.ajax({
@@ -115,7 +97,7 @@ var chatService = (function () {
     }
 
     return {
-        deleteRoom:deleteRoom,
+
         findAllRoom : findAllRoom,
         createRoom : createRoom,
         get : get,

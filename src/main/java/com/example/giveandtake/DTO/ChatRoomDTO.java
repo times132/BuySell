@@ -20,7 +20,7 @@ public class ChatRoomDTO {
     private Integer rqMsgCount;
     private Integer rcMsgCount;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime msgDate;
 
     public ChatRoom toEntity(){
         return ChatRoom.builder()
@@ -30,18 +30,19 @@ public class ChatRoomDTO {
                 .request(request)
                 .rcMsgCount(rcMsgCount)
                 .rqMsgCount(rqMsgCount)
+                .msgDate(msgDate)
                 .build();
     }
 
 
     @Builder
-    public ChatRoomDTO (Long roomId, String roomName, String request, String receiver, Integer rqMsgCount, Integer rcMsgCount, LocalDateTime createdDate) {
+    public ChatRoomDTO (Long roomId, String roomName, String request, String receiver, Integer rqMsgCount, Integer rcMsgCount, LocalDateTime msgDate) {
         this.roomId =roomId;
         this.roomName= roomName;
         this.request = request;
         this.receiver = receiver;
         this.rcMsgCount = rcMsgCount;
         this.rqMsgCount= rqMsgCount;
-        this.createdDate = createdDate;
+        this.msgDate = msgDate;
     }
 }

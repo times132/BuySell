@@ -29,7 +29,6 @@
                     <div class="srch_bar">
                         <div class="stylish-input-group">
                             <input  type="text" class="search-bar" id="receiver" value="${nickName}" placeholder="닉네임(대화상대)을 입력해주세요"><br>
-                            <input  type="text" class="search-bar" id="room_name" name="room_name"  placeholder="방이름">
                             <span class="input-group-addon">
                             <button type="button" id="creating">채팅요청</button>
                             </span>
@@ -44,7 +43,7 @@
             </div>
             <div class="messages">
                 <div>
-                    <button class="btn btn-info btn-sm" id='deleteBtn'  >채팅그만두기</button>
+                    <button class="delete" id='deleteBtn'  >채팅그만두기</button>
                 </div>
                 <div class="msg_history">
 
@@ -70,7 +69,7 @@
 </body>
 <script>
     init();
-    var room_name = document.getElementById("room_name").value;
+    $('.messages').hide();
     var chatUL = $(".inbox_chat");
     var me = null;
     <sec:authorize access="isAuthenticated()">
@@ -92,10 +91,10 @@
                 str += "<div class='chat_people'>"
                 str += "<div class='chat_ib'>"
                 str += ( sender === data[i].receiver ?
-                    "<h5>"+ data[i].request +"<div class='msgCnt'>"+ data[i].rqMsgCount +"</div>"
-                    +"<span class='chat_date'>Dec 25</span></h5>"
-                    :"<h5>"+ data[i].receiver +"<div class='msgCnt'>"+ data[i].rcMsgCount + "</div>"
-                    +"<span class='chat_date'>Dec 25</span></h5>");
+                    "<h5>"+ data[i].request +"<span class='msgCnt'>"+ data[i].rqMsgCount +"</span>"
+                    +"<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></h5>"
+                    :"<h5>"+ data[i].receiver +"<span class='msgCnt'>"+ data[i].rcMsgCount + "</span>"
+                    +"<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></h5>");
                 str += "<p>" + data[i].roomName+ "</p>";   //메시지 내용이 들어가면 좋을 것 같음
                 str += "<button id='enterBtn' class='btn float-right' >입장</button>";
                 str += "</div></div></div></li></ul></div>";
@@ -109,28 +108,26 @@
 
     }
     var roomId='';
-    var roomName ='';
 
     $("#creating").click(function() {
-        var inputRN = document.getElementById("room_name").value
         var inputreceiver = document.getElementById("receiver").value
-        if ("" === inputRN) {
-            alert("방 제목을 입력해 주십시요.");
+        if (inputreceiver == "") {
+            alert("대화상대를 입력하지 않았습니다.");
             return;
         }
         else {
-            if (inputreceiver == "") {
-                alert("대화상대를 입력하지 않았습니다.");
-                return;
-            }
             var room = {
-                roomName : inputRN,
+                roomName : '대화 내용이 없습니다.',
                 receiver : inputreceiver,
+                request : sender,
+                rcMsgCount : 0,
+                rqMsgCount : 0,
+                msgDate : new Date()
+
             };
 
             chatService.createRoom(room, function (result) {
                 alert(result);
-                document.getElementById("room_name").value="";
                 document.getElementById("receiver").value="";
                 init();
             });
@@ -168,11 +165,13 @@
         init2();
         function init2() {
             // 채팅룸 출력
-            console.log("_____________________"+roomId);
+            console.log("######################################"+roomId);
             if(roomId==""){
                 return;
             }
             chatService.findAllMessages(roomId, function (data) {
+                init();
+                $('.messages').show();
                 var str = "";
                 if (data == null || data.length == 0) {
                     return;
@@ -184,14 +183,14 @@
                         "<div class='sent_msg'>\n" +
                         "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
                         "<p>"+data[i].message+"</p>\n"+
-                        "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"</span></h5>"+
+                        "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
                         "</div></div>"
 
                         :"<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
                         "<div class='incoming_msg'>\n" +
                         "<div class='received_with_msg'>"+
                         "<p>"+data[i].message+"</p>\n"+
-                        "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"</span></h5>"+
+                        "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
                         "</div></div>");
                 }
 
@@ -215,7 +214,7 @@
             this.message = '';
             document.getElementById("message").value = '';
 
-
+            init();
             init2();
         });
 
@@ -226,6 +225,7 @@
                 "message": recv.message,
                 "createdDate": recv.createdDate
             })
+            init();
             init2();
         }
 
@@ -238,11 +238,9 @@
                 message: this.message,
                 createdDate: this.createdDate
             }));
-            init2();
-            chatService.deleteRoom(roomId, function (result) {
-                alert("방에서 더이상대화가 불가합니다.");
-                this.quitRoom();
-            });
+
+            alert("더이상 방에서 대화가 불가합니다.")
+            location.href="/chat/room/stop/"+roomId;
 
         });
 

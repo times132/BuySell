@@ -10,6 +10,7 @@ import com.example.giveandtake.service.ChatService;
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.Dump;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -57,13 +58,11 @@ public class ChatController {
 
 
     // 채팅방 생성
-    @PostMapping("/room")
-    @ResponseBody
-    public String createRoom(@RequestParam String roomName, @RequestParam String receiver, Principal principal) {
-        chatService.createChatRoom(roomName,receiver,principal);
-        String result= "'"+roomName+"'" +"채팅방 개설이 완료되었습니다." ;
-
-        return result;
+    @PostMapping(value = "/room", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE}) //json 방식으로 데이터를 받음
+    public ResponseEntity<String> createRoom(@RequestBody ChatRoomDTO chatRoomDTO){
+        System.out.println("************************Create**************************" + chatRoomDTO);
+        chatService.createChatRoom(chatRoomDTO);
+        return new ResponseEntity<>("채팅방 개설이 완료되었습니다.", HttpStatus.OK);
     }
 
 
@@ -73,7 +72,7 @@ public class ChatController {
     {
         System.out.println("DELETE ROOM");
         chatService.deleteChatRoom(roomId, principal);
-        return "redirect:/chat/rooms";
+        return "redirect:/chat/room";
     }
 
 
