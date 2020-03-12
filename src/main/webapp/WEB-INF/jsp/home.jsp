@@ -28,7 +28,7 @@
 <sec:authorize access="isAnonymous()">
 
     <input type="button" value="로그인" onClick="self.location='/user/login';">
-    <input type="button" value="회원가입" onClick="self.location='/user/email';">
+    <input type="button" value="회원가입" onClick="self.location='/user/signup';">
 
 </sec:authorize>
 

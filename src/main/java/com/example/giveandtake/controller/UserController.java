@@ -40,6 +40,11 @@ public class UserController {
     private MailService mailService;
 
 
+
+    @GetMapping("/user/signup")
+    public String Signup() {
+        return "/user/signup";
+    }
     // 회원가입 페이지
     @GetMapping("/user/signup/{email}")
     public String dispSignup(@PathVariable String email, Model model) {

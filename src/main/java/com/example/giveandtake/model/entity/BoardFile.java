@@ -26,13 +26,18 @@ public class BoardFile {
     @JoinColumn(name = "board_bid")
     private Board board;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Builder
-    public BoardFile(Long fid, String uuid, String uploadPath, String fileName, Boolean image, Board board){
+    public BoardFile(Long fid, String uuid, String uploadPath, String fileName, Boolean image, Board board, User user){
         this.fid = fid;
         this.uuid = uuid;
         this.uploadPath = uploadPath;
         this.fileName = fileName;
         this.image = image;
         this.board = board;
+        this.user =user;
     }
 }

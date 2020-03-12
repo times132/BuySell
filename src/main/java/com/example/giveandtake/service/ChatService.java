@@ -27,20 +27,20 @@ public class ChatService{
 
     //채팅방만들기
     public long createChatRoom(ChatRoomDTO chatRoomDTO){
-        System.out.println("***************create room**************" + chatRoomDTO.getRoomName());
-
+        chatRoomDTO.setMsgDate(LocalDateTime.now());
         return chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
     }
 
-    // 모든 채팅방
+    // 모든 채팅방 조회
     public List<ChatRoom> findAllRoom() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String my_id= ((CustomUserDetails) authentication.getPrincipal()).getUsername();
-        List<ChatRoom> chatList = new ArrayList<>();
+        ArrayList chatList = new ArrayList<>();
         chatList.addAll(chatRoomRepository.findByRequest(my_id));
         chatList.addAll(chatRoomRepository.findByReceiver(my_id));
 
-        Collections.reverse(chatList);
+        Collections.sort(chatList); //시간순서대로 정렬
+        Collections.reverse(chatList); //가장 최근 순으로 반환
         return chatList;
     }
 

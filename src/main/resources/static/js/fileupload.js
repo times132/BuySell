@@ -17,10 +17,13 @@ function checkExtension(fileName, fileSize) {
 }
 
 $("input[type='file']").change(function (e) {
-    console.log(filecount)
+    console.log("COUNT"+filecount)
     var formData = new FormData();
+
     var inputFile = $("input[name='uploadFile']");
+    console.log("***INPUT FILE***"+JSON.stringify(inputFile));
     var files = inputFile[0].files;
+    console.log("**FILES***"+JSON.stringify(files));
     filecount += files.length;
 
     if (filecount > 10){
@@ -28,8 +31,6 @@ $("input[type='file']").change(function (e) {
         filecount -= files.length;
         return false;
     }
-
-
 
     for (var i = 0; i < files.length; i++){
         if (!checkExtension(files[i].name, files[i].size)){
@@ -50,6 +51,10 @@ $("input[type='file']").change(function (e) {
         }
     });
 });
+
+
+
+
 
 function showUploadResult(uploadResultArr) {
     if (!uploadResultArr || uploadResultArr.length == 0) {
