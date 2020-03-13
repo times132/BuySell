@@ -165,10 +165,10 @@
     padding: .5rem;
 }
 .input-image{
-    visibility: hidden;
-    width: 0;
-    height: 0;
-}
+     visibility: hidden;
+     width: 0;
+     height: 0;
+ }
 .uploadimg{
     width: 1.6rem;
     height: 1.6rem;

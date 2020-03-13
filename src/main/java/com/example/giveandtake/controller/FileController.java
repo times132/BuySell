@@ -36,19 +36,19 @@ public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    private String getFolder(Long userid){
+    private String getFolder(Long userid) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         String str = userid + "-" + sdf.format(date);
         return str.replace("-", File.separator);
     }
 
-    private boolean checkImageType(File file){
+    private boolean checkImageType(File file) {
         try {
             String contentType = Files.probeContentType(file.toPath());
 
             return contentType.startsWith("image");
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -57,24 +57,23 @@ public class FileController {
 
     @GetMapping("/display")
     @ResponseBody
-    public ResponseEntity<byte[]> fileGET(String fileName){
+    public ResponseEntity<byte[]> fileGET(String fileName) {
         logger.info("-----File fileGET-----");
 
         File file = new File("D:\\upload\\" + fileName);
 
         ResponseEntity<byte[]> result = null;
 
-        try{
+        try {
             HttpHeaders header = new HttpHeaders();
 
             header.add("Content-Type", Files.probeContentType(file.toPath()));
             result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return result;
     }
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/uploadFile", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -88,11 +87,11 @@ public class FileController {
         File uploadPath = new File(uploadFolder, uploadFolderPath);
 
 
-        if (uploadPath.exists() == false){
+        if (uploadPath.exists() == false) {
             uploadPath.mkdirs();
         }
 
-        for(MultipartFile multipartFile : uploadFile){
+        for (MultipartFile multipartFile : uploadFile) {
 
             logger.info("======================================");
             logger.info("Upload File Name: " + multipartFile.getOriginalFilename());
@@ -111,14 +110,14 @@ public class FileController {
 
             uploadFileName = uuid.toString() + "_" + uploadFileName;
 
-            try{
+            try {
                 File saveFile = new File(uploadPath, uploadFileName);
                 multipartFile.transferTo(saveFile);
 
                 fileDTO.setUploadPath(uploadFolderPath);
                 fileDTO.setUuid(uuid.toString());
 
-                if (checkImageType(saveFile)){
+                if (checkImageType(saveFile)) {
 
                     fileDTO.setImage(true);
 
@@ -132,13 +131,16 @@ public class FileController {
                 }
 
                 list.add(fileDTO);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+
+
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/deleteFile")

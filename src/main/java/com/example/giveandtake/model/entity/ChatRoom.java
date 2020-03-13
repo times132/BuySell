@@ -8,12 +8,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
 @Getter
 @Table(name = "chatrooms")
-public class ChatRoom{
+public class ChatRoom implements Comparable<ChatRoom>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +40,7 @@ public class ChatRoom{
     private LocalDateTime msgDate;
 
 
+
     @Builder
     public ChatRoom(Long roomId , String roomName, String request, String receiver,Integer rqMsgCount,Integer rcMsgCount, LocalDateTime msgDate)
     {
@@ -52,6 +54,10 @@ public class ChatRoom{
     }
 
 
+    @Override
+    public int compareTo(ChatRoom chatRoom) {
+        return this.msgDate.compareTo(chatRoom.msgDate);
+    }
 }
 
 

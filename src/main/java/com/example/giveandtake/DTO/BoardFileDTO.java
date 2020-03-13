@@ -2,6 +2,7 @@ package com.example.giveandtake.DTO;
 
 import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.BoardFile;
+import com.example.giveandtake.model.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

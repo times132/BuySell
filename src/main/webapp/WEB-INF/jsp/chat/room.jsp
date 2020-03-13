@@ -80,6 +80,7 @@
         // 채팅룸 출력
         chatService.findAllRoom(function (data) {
             var str = "";
+            console.log(data);
             if (data == null || data.length == 0) {
                 return;
             }
@@ -91,11 +92,12 @@
                 str += "<div class='chat_people'>"
                 str += "<div class='chat_ib'>"
                 str += ( sender === data[i].receiver ?
-                    "<h5>"+ data[i].request +"<span class='msgCnt'>"+ data[i].rqMsgCount +"</span>"
-                    +"<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></h5>"
-                    :"<h5>"+ data[i].receiver +"<span class='msgCnt'>"+ data[i].rcMsgCount + "</span>"
-                    +"<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></h5>");
+                    "<h5>"+ data[i].request +"<span class='msgCnt'>"+ data[i].rqMsgCount +"</span>" +"</h5>"
+                    :"<h5>"+ data[i].receiver +"<span class='msgCnt'>"+ data[i].rcMsgCount + "</span>" +"</h5>");
+                str +="<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div>"
+                str += "<div>";
                 str += "<p>" + data[i].roomName+ "</p>";   //메시지 내용이 들어가면 좋을 것 같음
+                str += "</div>"
                 str += "<button id='enterBtn' class='btn float-right' >입장</button>";
                 str += "</div></div></div></li></ul></div>";
 
@@ -108,7 +110,6 @@
 
     }
     var roomId='';
-
     $("#creating").click(function() {
         var inputreceiver = document.getElementById("receiver").value
         if (inputreceiver == "") {
@@ -122,9 +123,8 @@
                 request : sender,
                 rcMsgCount : 0,
                 rqMsgCount : 0,
-                msgDate : new Date()
 
-            };
+        };
 
             chatService.createRoom(room, function (result) {
                 alert(result);
@@ -139,9 +139,6 @@
 
     $(document).on("click", "#enterBtn", function(){
         var room_id = $(this).closest("li").data("rid");
-
-
-        alert("입장");
         if(sender != "") {
             location.href="/chat/room/enter/"+room_id;
         }
@@ -155,7 +152,6 @@
         var ws = Stomp.over(sock);
         var roomId = "${roomId}";
         var reconnect = 0;
-        var createdDate = new Date();
         var message = '';
         var messages = [];
 
@@ -209,7 +205,7 @@
                 roomId: roomId,
                 sender: sender,
                 message: this.message,
-                createdDate: this.createdDate
+
             }));
             this.message = '';
             document.getElementById("message").value = '';
