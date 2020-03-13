@@ -175,6 +175,7 @@
             }else{
                 $(arr).each(function (i, file) {
                     if (file.image){
+                        console.log(file.uploadPath)
                         var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
                         if (i === 0){ // 첫번째 요소에 active 부여
                             first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";

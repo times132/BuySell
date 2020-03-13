@@ -204,12 +204,12 @@ public class UserController {
         try{
             File saveFile = new File(uploadPath, uploadFileName);
             uploadProfile.transferTo(saveFile);
-            userService.uploadProfile(userid + "\\profile\\" + uploadFileName, userid);
+            userService.uploadProfile(uploadFileName, userid);
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return new ResponseEntity<>(userid + "\\profile\\" + uploadFileName, HttpStatus.OK);
+        return new ResponseEntity<>(uploadFileName, HttpStatus.OK);
     }
 
 }
