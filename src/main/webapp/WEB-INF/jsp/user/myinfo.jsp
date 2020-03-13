@@ -1,9 +1,11 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
-<script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+
+
 <!------ Include the above in your HEAD tag ---------->
 
 <head>
@@ -18,7 +20,7 @@
 <sec:authentication property="principal" var="userinfo"/>
     <div class="container">
         <div class="row">
-            <div class="col-sm-10"><h1>³»Á¤º¸</h1></div>
+            <div class="col-sm-10"><h1>ë‚´ì •ë³´</h1></div>
         </div>
         <div class="row">
             <div class="col-sm-3"><!--left col-->
@@ -99,8 +101,8 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <br>
-                                    <input class="btn btn-lg btn-success" type="button" value="È¸¿øÁ¤º¸¼öÁ¤" onClick="self.location='/user/modifyuser';">
-                                    <input class="btn btn-lg" type="button" value="È¨À¸·Î ÀÌµ¿" onClick="self.location='/';">
+                                    <input class="btn btn-primary btn-sm" type="button" value="íšŒì›ì •ë³´ìˆ˜ì •" onClick="self.location='/user/modifyuser';">
+                                    <input class="btn btn-primary btn-sm" type="button" value="í™ˆìœ¼ë¡œ ì´ë™" onClick="self.location='/';">
                                 </div>
                             </div>
                         </form>
