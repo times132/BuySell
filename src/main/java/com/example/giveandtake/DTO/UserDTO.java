@@ -38,6 +38,7 @@ public class UserDTO {
     @NotBlank(message = "핸드폰번호는 필수 입력 값입니다.")
     private String phone;
 
+    private String profilePath;
     private Set<Role> roles = new HashSet<>();
 
     public User toEntity() {
@@ -48,18 +49,20 @@ public class UserDTO {
                 .password(password)
                 .phone(phone)
                 .email(email)
+                .profilePath(profilePath)
                 .roles(roles)
                 .build();
     }
 
     @Builder
-    public UserDTO(Long id, String name, String email, String password, String phone, String username, Set<Role> roles) {
+    public UserDTO(Long id, String name, String email, String password, String phone, String username, String profilePath, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.username = username;
+        this.profilePath = profilePath;
         this.roles = roles;
     }
 

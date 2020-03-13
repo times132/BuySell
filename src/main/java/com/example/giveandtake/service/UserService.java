@@ -129,6 +129,24 @@ public class UserService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
+    public void uploadProfile(String path, Long uid){
+        Optional<User> userWapper = userRepository.findById(uid);
+        User user = userWapper.get();
+
+        UserDTO dto = UserDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .password(user.getPassword())
+                .phone(user.getPhone())
+                .username(user.getUsername())
+                .roles(user.getRoles())
+                .profilePath(path)
+                .build();
+
+        userRepository.save(dto.toEntity());
+    }
+
 
     //로그인 후 비밀번호 확인
     public boolean checkPassword(String pw) {

@@ -1,5 +1,4 @@
-<%@ page import="org.springframework.security.core.Authentication" %>
-<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
@@ -13,16 +12,6 @@
 <body>
 <h1>WELCOM TO GIVEANDTAKE</h1>
 <hr>
-<%
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    Object principal = auth.getPrincipal();
-
-    String name = "";
-
-    if(principal != null) {
-        name = auth.getName();
-    }
-%>
 
 
 <sec:authorize access="isAnonymous()">
@@ -35,7 +24,8 @@
 
 
 <sec:authorize access="isAuthenticated()">
-    <h5><%=name%>님.</h5>
+    <sec:authentication property="principal" var="userinfo"/>
+    <h5><c:out value="${userinfo.username}"/>님.</h5>
     <input type="button" value="로그아웃" id="logout">
     <input type="button" value="내정보" onClick="self.location='/user/info';">
     <input type="button" value="채팅" onClick="self.location='/chat/room';">

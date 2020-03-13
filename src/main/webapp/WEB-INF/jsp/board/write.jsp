@@ -117,14 +117,12 @@
 
 
             $(".uploadResult").on("click", ".del-image", function (e) {
-                console.log("onclick")
                 filecount -= 1;
                 var targetFile = $(this).data("file");
                 var type = $(this).data("type");
 
                 var targetLi = $(this).closest("li");
-                console.log(targetFile);
-                console.log(type);
+
                 $.ajax({
                     type: "post",
                     url: "/deleteFile",

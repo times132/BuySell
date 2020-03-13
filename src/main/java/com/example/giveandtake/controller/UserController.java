@@ -1,6 +1,7 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardDTO;
+import com.example.giveandtake.DTO.BoardFileDTO;
 import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.User;
@@ -8,8 +9,12 @@ import com.example.giveandtake.repository.UserRepository;
 import com.example.giveandtake.service.MailService;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,18 +23,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
@@ -161,13 +167,44 @@ public class UserController {
         return "/user/password";
     }
 
-
     // 어드민 페이지
     @GetMapping("/admin")
     public String dispAdmin() {
         return "/admin";
     }
 
+    @PostMapping(value = "/user/uploadProfile", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> profileUpload(MultipartFile uploadProfile, @AuthenticationPrincipal CustomUserDetails user){
+        logger.info("-----User uploadProfile-----");
 
+        Long userid = user.getId();
+        List<BoardFileDTO> list = new ArrayList<>();
+        String uploadFolder = "D:\\upload\\" + userid + "\\profile";
+
+        File uploadPath = new File(uploadFolder);
+
+        if (!uploadPath.exists()){
+            uploadPath.mkdirs();
+        }
+
+        logger.info("======================================");
+        logger.info("Upload File Name: " + uploadProfile.getOriginalFilename());
+
+        String uploadFileName = uploadProfile.getOriginalFilename();
+
+        // IE file path
+        uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
+
+        try{
+            File saveFile = new File(uploadPath, uploadFileName);
+            uploadProfile.transferTo(saveFile);
+            userService.uploadProfile(userid + "\\profile\\" + uploadFileName, userid);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(userid + "\\profile\\" + uploadFileName, HttpStatus.OK);
+    }
 
 }

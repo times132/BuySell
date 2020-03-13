@@ -25,12 +25,13 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private String phone;
     private String email;
+    private String profilePath;
     private Collection<? extends GrantedAuthority> authorities;
 
     public static CustomUserDetails create(User user){
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-        return new CustomUserDetails(user.getId(), user.getUsername(), user.getName(), user.getPassword(), user.getPhone(), user.getEmail(), authorities);
+        return new CustomUserDetails(user.getId(), user.getUsername(), user.getName(), user.getPassword(), user.getPhone(), user.getEmail(), user.getProfilePath(), authorities);
     }
 
     @Override

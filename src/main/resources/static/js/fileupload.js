@@ -17,7 +17,6 @@ function checkExtension(fileName, fileSize) {
 }
 
 $("input[type='file']").change(function (e) {
-    console.log(filecount)
     var formData = new FormData();
     var inputFile = $("input[name='uploadFile']");
     var files = inputFile[0].files;
@@ -29,13 +28,12 @@ $("input[type='file']").change(function (e) {
         return false;
     }
 
-
-
     for (var i = 0; i < files.length; i++){
         if (!checkExtension(files[i].name, files[i].size)){
             return false;
         }
         formData.append("uploadFile", files[i]);
+        console.log(formData)
     }
 
     $.ajax({

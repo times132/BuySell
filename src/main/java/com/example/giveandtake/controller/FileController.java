@@ -84,7 +84,7 @@ public class FileController {
         List<BoardFileDTO> list = new ArrayList<>();
         String uploadFolder = "D:\\upload";
 
-        String uploadFolderPath = getFolder(userid);
+        String uploadFolderPath = getFolder(userid); // 3/2020/03/13
         File uploadPath = new File(uploadFolder, uploadFolderPath);
 
 
