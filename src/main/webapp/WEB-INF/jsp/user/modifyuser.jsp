@@ -1,26 +1,23 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+<script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+<script src="/webjars/jquery/dist/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
 
 <head>
-    <title>íšŒì›ì •ë³´ ìˆ˜ì •</title>
+    <title>È¸¿øÁ¤º¸¼öÁ¤</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="/webjars/jquery/dist/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
 <hr>
 <sec:authentication property="principal" var="userinfo"/>
-<div class="container bootstrap snippet">
+<div class="container">
     <div class="row">
-        <div class="col-sm-10"><h1>ë‚´ì •ë³´</h1></div>
+        <div class="col-sm-10"><h1>³»Á¤º¸</h1></div>
         <div class="col-sm-2"><a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a></div>
     </div>
     <div class="row">
@@ -115,8 +112,8 @@
                                 <br>
                                 <input type="hidden" name="id" value="${userinfo.id}">
                                 <input type="hidden" name="authorities" value="${userinfo.authorities}">
-                                <input class="btn btn-lg btn-success" type="submit" name="submit" id="submit" value="ìˆ˜ì •"/>
-                                <input class="btn btn-lg" type="button" value="í™ˆìœ¼ë¡œ ì´ë™" onClick="self.location='/';">
+                                <input class="btn btn-lg btn-success" type="submit" name="submit" id="submit" value="¼öÁ¤"/>
+                                <input class="btn btn-lg" type="button" value="È¨À¸·Î ÀÌµ¿" onClick="self.location='/';">
                             </div>
                         </div>
                     </form>
@@ -159,7 +156,7 @@
         });
     });
 
-    // ì•„ì´ë”” ìœ íš¨ì„± ê²€ì‚¬(1 = ì¤‘ë³µ / 0 != ì¤‘ë³µ)
+    // ¾ÆÀÌµğ À¯È¿¼º °Ë»ç(1 = Áßº¹ / 0 != Áßº¹)
     idck = 0;
     $("#username").blur(function() {
         var username = $("#username").val();
@@ -167,14 +164,14 @@
             url : '${pageContext.request.contextPath}/user/usernameCheck?username='+ username,
             type : 'get',
             success : function(data) {
-                console.log("1 = ì¤‘ë³µo / 0 = ì¤‘ë³µx : "+ data);
+                console.log("1 = Áßº¹o / 0 = Áßº¹x : "+ data);
                 if (data == 1) {
-                    //ì•„ì´ë””ê°€ ì¡´ì œí•  ê²½ìš° ë¹¨ê¹¡ìœ¼ë¡œ , ì•„ë‹ˆë©´ íŒŒë‘ìœ¼ë¡œ ì²˜ë¦¬í•˜ëŠ” ë””ìì¸
-                    $("#username_check").text("ì‚¬ìš©ì¤‘ì¸ ì•„ì´ë””ì…ë‹ˆë‹¤. ë‹¤ë¥¸ ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”");
+                    //¾ÆÀÌµğ°¡ Á¸Á¦ÇÒ °æ¿ì »¡±øÀ¸·Î , ¾Æ´Ï¸é ÆÄ¶ûÀ¸·Î Ã³¸®ÇÏ´Â µğÀÚÀÎ
+                    $("#username_check").text("»ç¿ëÁßÀÎ ¾ÆÀÌµğÀÔ´Ï´Ù. ´Ù¸¥ ¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä");
                     $("#username_check").css("color", "red");
                     $("#submit").attr("disabled", true);
                 } else {
-                    $("#username_check").text("ì‚¬ìš©ê°€ëŠ¥í•œ ì•„ì´ë””ì…ë‹ˆë‹¤.");
+                    $("#username_check").text("»ç¿ë°¡´ÉÇÑ ¾ÆÀÌµğÀÔ´Ï´Ù.");
                     $("#username_check").css("color", "blue");
                     $("#submit").attr("disabled", false);
                     idck=1;
@@ -184,7 +181,7 @@
                         .attr("disabled", false)
                 }
             }, error : function() {
-                console.log("ì‹¤íŒ¨");
+                console.log("½ÇÆĞ");
             }
         });
     });
