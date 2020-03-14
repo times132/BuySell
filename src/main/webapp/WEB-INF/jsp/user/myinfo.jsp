@@ -23,8 +23,8 @@
         <div class="row">
             <div class="col-sm-3"><!--left col-->
 
-                <div class="text-center">
-                    <img class="img-thumbnail" src="/display?fileName=${userinfo.id}/profile/${userinfo.profilePath}" onerror="this.src='/resources/image/profile.png';"/>
+                <div class="profile-image">
+
                 </div></hr><br>
 
 
@@ -135,7 +135,13 @@
     </div><!--/row-->
 <script>
     $(document).ready(function() {
-
+        var profilepath = "<c:out value="${userinfo.profileImage}"/>";
+        var profile = $(".profile-image");
+        if (profilepath === ""){
+            profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
+        }else{
+            profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
+        }
     });
 </script>
 </body>

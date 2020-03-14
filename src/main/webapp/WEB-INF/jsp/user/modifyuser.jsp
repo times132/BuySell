@@ -32,9 +32,9 @@
         <div class="col-sm-3"><!--left col-->
 
 
-            <div class="profile">
+            <div class="profile-image">
 <%--                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">--%>
-                <img class="img-thumbnail" src="/display?fileName=${userinfo.id}/profile/${userinfo.profilePath}" onerror="this.src='/resources/image/profile.png';"/>
+<%--                <img class="img-thumbnail" src="/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}" onerror="this.src='/resources/image/profile.png';"/>--%>
             </div>
             <h6>Upload a different photo...</h6>
             <input name="uploadProfile" type="file" class="text-center center-block file-upload"></hr><br>
@@ -121,6 +121,7 @@
                                 <br>
                                 <input type="hidden" name="id" value="${userinfo.id}">
                                 <input type="hidden" name="authorities" value="${userinfo.authorities}">
+                                <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
                                 <input class="btn btn-lg btn-success" type="submit" name="submit" id="submit" value="수정"/>
                                 <input class="btn btn-lg" type="button" value="홈으로 이동" onClick="self.location='/';">
                             </div>
@@ -143,50 +144,20 @@
 
     </div><!--/col-9-->
 </div><!--/row-->
+<script type="text/javascript" src="/resources/js/fileupload.js"></script>
 <script>
     $(document).ready(function() {
-        var profilepath = "<c:out value="${userinfo.profilePath}"/>";
-        var userid = ${userinfo.id};
-        var fileCallPath = encodeURIComponent(userid + "/profile/" + profilepath);
-
-        // var str = "<img class='img-thumbnail' src='/display?fileName=" + fileCallPath + "' onerror='this.onerror=null; this.src='/resources/image/profile.png';'/>"
-        //
-        // $(".profile").html(str);
-
-        $(".file-upload").on('change', function(){
-            var formData = new FormData();
-            var inputFile = $("input[name='uploadProfile']");
-            var file = inputFile[0].files[0];
-
-            formData.append("uploadProfile", file);
-
-            $.ajax({
-                type: "POST",
-                url: "/user/uploadProfile",
-                processData: false,
-                contentType: false,
-                data: formData,
-                success: function (result) {
-                    showUploadResult(result);
-                },
-                error: function (error) {
-                    console.log("에러")
-                }
-            });
-        });
-
-        function showUploadResult(uploadResultArr) {
-            if (!uploadResultArr || uploadResultArr.length == 0) {
-                return;
-            }
-
-            var fileCallPath = encodeURIComponent(userid +"/profile/" + uploadResultArr);
-
-            var str = "<img class='img-thumbnail' src='/display?fileName=" + fileCallPath + "'>";
-            var str2 = "<input type='hidden' name='profilePath' value='" + uploadResultArr +"'/>"
-            $("form").append(str2);
-            $(".profile").html(str);
+        <%--var profilepath = "<c:out value="${userinfo.profileImage}"/>";--%>
+        <%--var userid = "<c:out value="${userinfo.id}"/>";--%>
+        var profileImage = "<c:out value="${userinfo.profileImage}"/>";
+        // var fileCallPath = encodeURIComponent(userid + "/profile/" + profilepath);
+        var profile = $(".profile-image");
+        if (profileImage === ""){
+            profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
+        }else{
+            profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
         }
+
     });
 
 

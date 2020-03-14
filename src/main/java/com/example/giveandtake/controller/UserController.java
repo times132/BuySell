@@ -178,38 +178,5 @@ public class UserController {
         return "/admin";
     }
 
-    @PostMapping(value = "/user/uploadProfile", produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> profileUpload(MultipartFile uploadProfile, @AuthenticationPrincipal CustomUserDetails user){
-        logger.info("-----User uploadProfile-----");
-
-        Long userid = user.getId();
-        List<BoardFileDTO> list = new ArrayList<>();
-        String uploadFolder = "D:\\upload\\" + userid + "\\profile";
-
-        File uploadPath = new File(uploadFolder);
-
-        if (!uploadPath.exists()){
-            uploadPath.mkdirs();
-        }
-
-        logger.info("======================================");
-        logger.info("Upload File Name: " + uploadProfile.getOriginalFilename());
-
-        String uploadFileName = uploadProfile.getOriginalFilename();
-
-        // IE file path
-        uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
-
-        try{
-            File saveFile = new File(uploadPath, uploadFileName);
-            uploadProfile.transferTo(saveFile);
-            userService.uploadProfile(uploadFileName, userid);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<>(uploadFileName, HttpStatus.OK);
-    }
 
 }

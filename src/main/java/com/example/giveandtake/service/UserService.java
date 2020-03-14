@@ -129,7 +129,7 @@ public class UserService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
-    public void uploadProfile(String path, Long uid){
+    public void uploadProfile(String fileName, Long uid){
         Optional<User> userWapper = userRepository.findById(uid);
         User user = userWapper.get();
 
@@ -141,7 +141,7 @@ public class UserService implements UserDetailsService {
                 .phone(user.getPhone())
                 .username(user.getUsername())
                 .roles(user.getRoles())
-                .profilePath(path)
+                .profileImage(fileName)
                 .build();
 
         userRepository.save(dto.toEntity());

@@ -30,11 +30,11 @@ public class User extends DateAudit {
     private String phone;
 
     private String email;
-    private String profilePath;
+    private String profileImage;
 
     @PrePersist
     protected void prePersist(){
-        if (this.profilePath == null) this.profilePath = "";
+        if (this.profileImage == null) this.profileImage = "";
     }
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -42,14 +42,14 @@ public class User extends DateAudit {
     private Set<Role> roles = new HashSet<>();
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String username, String name, String password, String phone, String email,Long id, String profilePath, Set<Role> roles){
+    public User(String username, String name, String password, String phone, String email,Long id, String profileImage, Set<Role> roles){
         this.username = username;
         this.name = name;
         this.password = password;
         this.phone = phone;
         this.email = email;
         this.id= id;
-        this.profilePath = profilePath;
+        this.profileImage = profileImage;
         this.roles = roles;
     }
 

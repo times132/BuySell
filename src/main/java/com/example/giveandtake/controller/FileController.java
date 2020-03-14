@@ -2,6 +2,8 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardFileDTO;
 import com.example.giveandtake.common.CustomUserDetails;
+import com.example.giveandtake.service.UserService;
+import lombok.AllArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,18 +25,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
+@AllArgsConstructor
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+
+    private UserService userService;
 
     private String getFolder(Long userid) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -69,11 +72,14 @@ public class FileController {
 
             header.add("Content-Type", Files.probeContentType(file.toPath()));
             result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
-        } catch (IOException e) {
+        }catch (AccessDeniedException e){
+            logger.warn("잘못된 접근입니다.");
+        }catch (IOException e) {
             e.printStackTrace();
         }
         return result;
     }
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/uploadFile", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -139,7 +145,55 @@ public class FileController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/uploadProfile", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> profileUpload(MultipartFile uploadProfile, @AuthenticationPrincipal CustomUserDetails user){
+        logger.info("-----User uploadProfile-----");
 
+        Long userid = user.getId();
+        Map<String, Object> map = new HashMap<>();
+        String uploadFolder = "D:\\upload\\"; // 공통 업로드 경로
+        String uploadFolderPath = userid + "\\profile"; // 개인 추가 업로드 경로
+
+        File uploadPath = new File(uploadFolder, uploadFolderPath);
+
+        if (!uploadPath.exists()){
+            uploadPath.mkdirs();
+        }
+
+        logger.info("======================================");
+        logger.info("Upload File Name: " + uploadProfile.getOriginalFilename());
+
+        String uploadFileName = uploadProfile.getOriginalFilename();
+
+        // IE file path
+        uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
+
+        try{
+            File saveFile = new File(uploadPath, uploadFileName);
+
+            if (checkImageType(saveFile)){
+                uploadProfile.transferTo(saveFile);
+
+                map.put("uploadPath", uploadFolderPath);
+                map.put("fileName", uploadFileName);
+                map.put("image", true);
+
+                FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
+                Thumbnails.of(saveFile)
+                        .size(64, 64)
+                        .outputFormat("jpg")
+                        .toOutputStream(thumbnail);
+
+                thumbnail.close();
+//                userService.uploadProfile(uploadFileName, userid);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
 
 
     @PreAuthorize("isAuthenticated()")

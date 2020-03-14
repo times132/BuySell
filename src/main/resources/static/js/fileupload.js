@@ -1,5 +1,5 @@
 var regex = new RegExp("(.*?)\.(JPG|jpg|jpeg|PNG|png|bmp)$");
-var maxSize = 5242880; // 5MB
+var maxSize = 10485760; // 10MB
 let filecount = 0;
 
 function checkExtension(fileName, fileSize) {
@@ -16,7 +16,7 @@ function checkExtension(fileName, fileSize) {
     return true;
 }
 
-$("input[type='file']").change(function (e) {
+$("input[name='uploadFile']").change(function (e) {
     var formData = new FormData();
     var inputFile = $("input[name='uploadFile']");
     var files = inputFile[0].files;
@@ -32,8 +32,8 @@ $("input[type='file']").change(function (e) {
         if (!checkExtension(files[i].name, files[i].size)){
             return false;
         }
+
         formData.append("uploadFile", files[i]);
-        console.log(formData)
     }
 
     $.ajax({
@@ -48,6 +48,49 @@ $("input[type='file']").change(function (e) {
         }
     });
 });
+
+$("input[name='uploadProfile']").on('change', function(){
+    var formData = new FormData();
+    var inputFile = $("input[name='uploadProfile']");
+    var file = inputFile[0].files[0];
+
+    if (!checkExtension(file.name, file.size)){
+        return false;
+    }
+
+    formData.append("uploadProfile", file);
+
+    $.ajax({
+        type: "POST",
+        url: "/uploadProfile",
+        processData: false,
+        contentType: false,
+        data: formData,
+        dataType: "json",
+        success: function (result) {
+            showUploadProfile(result);
+        },
+        error: function (error) {
+            console.log("에러")
+        }
+    });
+});
+
+function showUploadProfile(uploadResult) {
+    if (!uploadResult || uploadResult.length == 0) {
+        return;
+    }
+    console.log(uploadResult)
+    if (uploadResult.image){
+        var fileCallPath = encodeURIComponent(uploadResult.uploadPath + "/" + uploadResult.fileName);
+
+        var str = "<img class='img-thumbnail' src='/display?fileName=" + fileCallPath + "'>";
+        // var str2 = "<input type='hidden' name='profileImage' value='" + uploadResult.fileName +"'/>"
+        $("#profileImage").val(uploadResult.fileName);
+        $(".profile-image").html(str);
+    }
+
+}
 
 function showUploadResult(uploadResultArr) {
     if (!uploadResultArr || uploadResultArr.length == 0) {
