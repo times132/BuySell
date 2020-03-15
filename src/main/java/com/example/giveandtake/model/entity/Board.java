@@ -2,6 +2,7 @@ package com.example.giveandtake.model.entity;
 
 import com.example.giveandtake.model.audit.DateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,8 +40,13 @@ public class Board extends DateAudit {
     @JsonIgnore
     private List<BoardFile> boardFileList = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"password", "boardList"})
+    private User user;
+
     @Builder
-    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, List<BoardFile> boardFileList){
+    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, List<BoardFile> boardFileList, User user){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
@@ -50,5 +56,6 @@ public class Board extends DateAudit {
         this.viewCnt = viewCnt;
         this.replyCnt = replyCnt;
         this.boardFileList = boardFileList;
+        this.user = user;
     }
 }

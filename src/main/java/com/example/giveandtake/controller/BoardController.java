@@ -4,6 +4,7 @@ import com.ctc.wstx.util.StringUtil;
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
 
+import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -68,10 +70,10 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String writePOST(BoardDTO boardDTO){
+    public String writePOST(BoardDTO boardDTO, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----board registerPOST-----");
 
-        boardService.register(boardDTO);
+        boardService.register(boardDTO, userDetails);
 
         return "redirect:/board";
     }
@@ -108,8 +110,6 @@ public class BoardController {
 
             boardService.addViewCount(bid);
         }
-
-
 
         return "/board/read";
     }

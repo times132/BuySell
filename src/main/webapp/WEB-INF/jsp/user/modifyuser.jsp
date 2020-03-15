@@ -22,7 +22,7 @@
 
 <body>
 <hr>
-<sec:authentication property="principal" var="userinfo"/>
+<sec:authentication property="principal.user" var="userinfo"/>
 <div class="container">
     <div class="row">
         <div class="col-sm-10"><h1>내정보</h1></div>
@@ -72,7 +72,6 @@
                 <div class="tab-pane active" id="home">
                     <hr>
                         <form class="form" action="/user/modifyuser" method="post">
-                            <sec:authentication property="principal" var="userinfo"/>
                         <div class="form-group">
 
                             <div class="col-xs-6">
@@ -120,7 +119,7 @@
                             <div class="col-xs-12">
                                 <br>
                                 <input type="hidden" name="id" value="${userinfo.id}">
-                                <input type="hidden" name="authorities" value="${userinfo.authorities}">
+                                <input type="hidden" name="authorities" value="${userinfo.roles}">
                                 <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
                                 <input class="btn btn-lg btn-success" type="submit" name="submit" id="submit" value="수정"/>
                                 <input class="btn btn-lg" type="button" value="홈으로 이동" onClick="self.location='/';">
@@ -147,10 +146,8 @@
 <script type="text/javascript" src="/resources/js/fileupload.js"></script>
 <script>
     $(document).ready(function() {
-        <%--var profilepath = "<c:out value="${userinfo.profileImage}"/>";--%>
-        <%--var userid = "<c:out value="${userinfo.id}"/>";--%>
         var profileImage = "<c:out value="${userinfo.profileImage}"/>";
-        // var fileCallPath = encodeURIComponent(userid + "/profile/" + profilepath);
+
         var profile = $(".profile-image");
         if (profileImage === ""){
             profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")

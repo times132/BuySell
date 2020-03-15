@@ -2,6 +2,7 @@ package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
+import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.mapper.BoardMapper;
 import com.example.giveandtake.model.entity.Board;
@@ -36,7 +37,9 @@ public class BoardService {
 
     // 게시물 등록
     @Transactional
-    public void register(BoardDTO dto){
+    public void register(BoardDTO dto, CustomUserDetails userDetails){
+
+        dto.setUser(userDetails.getUser());
         Board board = boardRepository.save(boardMapper.toEntity(dto));
         // 첨부 파일 저장
         for (BoardFileDTO fileDTO : dto.getBoardFileList()){

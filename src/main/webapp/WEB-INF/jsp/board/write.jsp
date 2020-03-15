@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col">
                 <form id="writeForm" action="/board/write" method="post">
-                    <sec:authentication property="principal" var="userinfo"/>
+                    <sec:authentication property="principal.user" var="userinfo"/>
                     <div class="form-group">
                         <select class="custom-select col-4" name="btype">
                             <option value="">카테고리</option>

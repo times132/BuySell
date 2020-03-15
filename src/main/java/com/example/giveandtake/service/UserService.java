@@ -57,7 +57,9 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException("email not found :" + email));
-
+        logger.info("#########username : " + user.getName());
+        logger.info("#########profile : " + user.getProfileImage());
+        logger.info("#########role : " + user.getRoles());
         return CustomUserDetails.create(user);
     }
     //유효성 검사

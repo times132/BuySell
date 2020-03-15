@@ -2,6 +2,7 @@ package com.example.giveandtake.model.entity;
 
 import com.example.giveandtake.model.audit.DateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -40,6 +41,10 @@ public class User extends DateAudit {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties({"user", "boardFileList"})
+    private List<Board> boardList;
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
     public User(String username, String name, String password, String phone, String email,Long id, String profileImage, Set<Role> roles){

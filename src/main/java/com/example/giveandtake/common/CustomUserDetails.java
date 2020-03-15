@@ -19,19 +19,20 @@ public class CustomUserDetails implements UserDetails {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetails.class);
 
-    private Long id;
-    private String username;
-    private String name;
-    private String password;
-    private String phone;
-    private String email;
-    private String profileImage;
+//    private Long id;
+//    private String username;
+//    private String name;
+//    private String password;
+//    private String phone;
+//    private String email;
+//    private String profileImage;
+    private User user;
     private Collection<? extends GrantedAuthority> authorities;
 
     public static CustomUserDetails create(User user){
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-        return new CustomUserDetails(user.getId(), user.getUsername(), user.getName(), user.getPassword(), user.getPhone(), user.getEmail(), user.getProfileImage(), authorities);
+        return new CustomUserDetails(user, authorities);
     }
 
     @Override
@@ -41,12 +42,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return user.getUsername();
     }
 
     @Override

@@ -85,7 +85,7 @@ public class FileController {
     @ResponseBody
     public ResponseEntity<List<BoardFileDTO>> uploadFilePOST(MultipartFile[] uploadFile, @AuthenticationPrincipal CustomUserDetails user){
         logger.info("-----File uploadFilePOST-----");
-        Long userid = user.getId();
+        Long userid = user.getUser().getId();
         List<BoardFileDTO> list = new ArrayList<>();
         String uploadFolder = "D:\\upload";
 
@@ -150,7 +150,7 @@ public class FileController {
     public ResponseEntity<Map<String, Object>> profileUpload(MultipartFile uploadProfile, @AuthenticationPrincipal CustomUserDetails user){
         logger.info("-----User uploadProfile-----");
 
-        Long userid = user.getId();
+        Long userid = user.getUser().getId();
         Map<String, Object> map = new HashMap<>();
         String uploadFolder = "D:\\upload\\"; // 공통 업로드 경로
         String uploadFolderPath = userid + "\\profile"; // 개인 추가 업로드 경로

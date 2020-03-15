@@ -17,7 +17,7 @@
 
 <body>
 <hr>
-<sec:authentication property="principal" var="userinfo"/>
+<sec:authentication property="principal.user" var="userinfo"/>
     <div class="container">
         <div class="row">
             <div class="col-sm-10"><h1>내정보</h1></div>
@@ -137,9 +137,10 @@
     </div><!--/row-->
 <script>
     $(document).ready(function() {
-        var profilepath = "<c:out value="${userinfo.profileImage}"/>";
+        var profileImage = "<c:out value="${userinfo.profileImage}"/>";
+
         var profile = $(".profile-image");
-        if (profilepath === ""){
+        if (profileImage === ""){
             profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
         }else{
             profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
