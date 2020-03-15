@@ -87,7 +87,6 @@ public class UserService implements UserDetailsService {
         }
         com.example.giveandtake.model.entity.User user = userWrapper.get();
         return convertEntityToDto(user);
-
     }
     //회원정보 삭제
     @Transactional
@@ -168,15 +167,14 @@ public class UserService implements UserDetailsService {
         }
         return 0;
     }
-    //비밀번호 찾기
+    //비밀번호 찾기 및 변경
     @Transactional
-    public void changePW(String email, String newPW){
-        UserDTO userList = readUserByUsername(email);
-
+    public void changePW(String info, String newPW){
+        UserDTO userDTO = readUserByUsername(info);
+        System.out.println("비밀번호 변경");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        userList.setPassword(passwordEncoder.encode(newPW));
-        userRepository.save(userList.toEntity()).getId();
-        System.out.println("비밀번호 찾기");
+        userDTO.setPassword(passwordEncoder.encode(newPW));
+        userRepository.save(userDTO.toEntity()).getId();
 
     }
     //계정코드 활성화

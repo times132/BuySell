@@ -26,6 +26,7 @@ var userService = (function () {
         $.ajax({
             url: '/user/activate',
             data: email,
+            dataType: 'text',//데이타 타입
             type : 'put',
             async: true,
             success: function (data) {
@@ -41,10 +42,30 @@ var userService = (function () {
         });
     }
 
+    function changePW(password, callback, error) {
+        console.log("CHANGE PASSWORD");
+        $.ajax({
+            url: '/user/changePW',
+            data: password,
+            type : 'put',
+            async: true,
+            success: function (data) {
+                if (callback){
+                    callback(data);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (error){
+                    error(err);
+                }
+            }
+        });
+    }
 
     return {
         checkUsername : checkUsername,
-        changeAct : changeAct
+        changeAct : changeAct,
+        changePW : changePW
     };
 
 

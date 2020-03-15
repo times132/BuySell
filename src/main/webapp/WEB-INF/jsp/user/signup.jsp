@@ -50,14 +50,14 @@
                         <option value="1">+010</option>
                         <option value="2">*</option>
                     </select>
-                    <input name=phone class="form-control" placeholder="PHONE NUMBER" value="${userDto.phone}" type="text">
+                    <input name=phone class="form-control" placeholder="PHONE NUMBER" type="text">
                 </div> <!-- form-group// -->
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-address-card"></i> </span>
                     </div>
                     <input type="text" class="form-control" id="username" name="username" placeholder="NICKNAME" required/>
-                    <div class="check_font" id="username_check"></div><br>
+                    <div class="check_font" id="username_check"></div><p>${valid_username}</p><br>
                 </div> <!-- form-group end.// -->
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
@@ -77,7 +77,7 @@
                 <p>${valid_password}</p>
 
             <div class="form-group">
-                    <button type="submit" name="submit" id="submit" class="btn btn-primary btn-block"> Create Account  </button>
+                    <button type="submit" name="submit" id="submit" class="btn btn-primary btn-block"> Create Account</button>
                 </div> <!-- form-group// -->
                 <p class="text-center">Have an account? <a href="/user/login">Log In</a> </p>
             </form>
