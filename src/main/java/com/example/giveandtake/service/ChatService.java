@@ -53,8 +53,6 @@ public class ChatService{
             }
             System.out.println("###############"+status);
             return status;
-
-
     }
 
     // 모든 채팅방 조회

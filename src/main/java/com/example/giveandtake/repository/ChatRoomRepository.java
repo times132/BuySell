@@ -13,7 +13,6 @@ import java.util.Optional;
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
    List<ChatRoom> findByRoomId(Long roomId);
-   List<ChatRoom> findByRoomName(String roomName);
    List<ChatRoom> findByRequest(String request);
    List<ChatRoom> findByReceiver(String receiver);
 

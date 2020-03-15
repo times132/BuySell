@@ -76,14 +76,6 @@
                 <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
                 <p>${valid_password}</p>
 
-
-                <div class="form-group input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fas fa-camera"></i> </span>
-                    </div>
-                    <button class="form-control"> ADD PHOTO</button>
-                </div> <!-- form-group// -->
-
             <div class="form-group">
                     <button type="submit" name="submit" id="submit" class="btn btn-primary btn-block"> Create Account  </button>
                 </div> <!-- form-group// -->

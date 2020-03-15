@@ -2,6 +2,7 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
+import com.example.giveandtake.DTO.ChatRoomDTO;
 import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.User;
@@ -46,24 +47,27 @@ public class UserController {
     private MailService mailService;
 
 
-
     @GetMapping("/user/signup")
     public String Signup() {
         return "/user/signup";
     }
-    // 회원가입 페이지
-    @GetMapping("/user/signup/{email}")
-    public String dispSignup(@PathVariable String email, Model model) {
-        model.addAttribute("email", email);
-        return "/user/signup";
+
+
+    @RequestMapping(value = "/user/activate")
+    @ResponseBody
+    public ResponseEntity<String> activateUser(@RequestParam(value = "email", required = false) String email, Principal principal){
+
+        userService.changeAct(email, principal);
+        return new ResponseEntity<>("계정이 활성화 되었습니다.", HttpStatus.OK);
     }
 
+
     //이메일 검사
-    @RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
-    @ResponseBody
-    public int idCheck(@RequestParam("email") String email) {
-        return userService.useridCheck(email);
-    }
+//    @RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
+//    @ResponseBody
+//    public int idCheck(@RequestParam("email") String email) {
+//        return userService.useridCheck(email);
+//    }
 
     //중복아이디 검사
     @RequestMapping(value = "/user/usernameCheck", method = RequestMethod.GET)
@@ -117,6 +121,7 @@ public class UserController {
     {
         return "/user/findPW";
     }
+
     //비밀번호 찾기
     @RequestMapping( value = "/user/findpw/{email}" , method=RequestMethod.GET)
     public String findPW(HttpServletRequest request, @PathVariable String email) throws IOException {

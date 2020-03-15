@@ -119,6 +119,7 @@
                             <div class="col-xs-12">
                                 <br>
                                 <input type="hidden" name="id" value="${userinfo.id}">
+                                <input type="hidden" name="activation" value="${userinfo.activation}">
                                 <input type="hidden" name="authorities" value="${userinfo.roles}">
                                 <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
                                 <input class="btn btn-lg btn-success" type="submit" name="submit" id="submit" value="수정"/>
