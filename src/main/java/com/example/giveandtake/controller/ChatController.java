@@ -65,12 +65,6 @@ public class ChatController {
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/room/stop/{roomId}")
-//    public ResponseEntity<String> remove(Principal principal, @PathVariable Long roomId){
-//        System.out.println("++++++++++++++++++++++++++++++DELETE ROOM");
-//        chatService.deleteChatRoom(roomId, principal);
-//        return new ResponseEntity<>("더이상 대화가 불가합니다.", HttpStatus.OK);
-//    }
 
     //채팅방 삭제
     @GetMapping("/room/stop/{roomId}")

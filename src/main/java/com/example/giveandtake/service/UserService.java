@@ -1,10 +1,12 @@
 package com.example.giveandtake.service;
 
 
+import com.example.giveandtake.DTO.ChatRoomDTO;
 import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.common.AppException;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.domain.RoleName;
+import com.example.giveandtake.model.entity.ChatRoom;
 import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.RoleRepository;
@@ -42,8 +44,8 @@ public class UserService implements UserDetailsService {
     public Long joinUser(UserDTO userDto) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userDto.setActivation(false);
         //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
-//        logger.info("########rolefind : " + roleRepository.findByName(RoleName.ROLE_USER));
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set"));
         userDto.setRoles(Collections.singleton(userRole));
@@ -84,15 +86,7 @@ public class UserService implements UserDetailsService {
             userWrapper = userRepository.findByUsername(username);
         }
         com.example.giveandtake.model.entity.User user = userWrapper.get();
-        return UserDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .phone(user.getPhone())
-                .name(user.getName())
-                .username(user.getUsername())
-                .roles(user.getRoles())
-                .build();
+        return convertEntityToDto(user);
 
     }
     //회원정보 삭제
@@ -130,23 +124,13 @@ public class UserService implements UserDetailsService {
         newAuth.setDetails(authentication.getDetails());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
-
+    //사진변경
     public void uploadProfile(String fileName, Long uid){
         Optional<User> userWapper = userRepository.findById(uid);
         User user = userWapper.get();
-
-        UserDTO dto = UserDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getName())
-                .password(user.getPassword())
-                .phone(user.getPhone())
-                .username(user.getUsername())
-                .roles(user.getRoles())
-                .profileImage(fileName)
-                .build();
-
-        userRepository.save(dto.toEntity());
+        UserDTO userDTO = convertEntityToDto(user);
+        userDTO.setProfileImage(fileName);
+        userRepository.save(userDTO.toEntity());
     }
 
 
@@ -195,5 +179,30 @@ public class UserService implements UserDetailsService {
         System.out.println("비밀번호 찾기");
 
     }
+    //계정코드 활성화
+    public void changeAct(String email, Principal principal) {
+        Optional<User> userWapper = userRepository.findByUsername(principal.getName());
+        User user = userWapper.get();
+        UserDTO userDTO = convertEntityToDto(user);
+        userDTO.setEmail(email);
+        userDTO.setActivation(true);
+        userRepository.save(userDTO.toEntity());
+    }
+
+
+    private UserDTO convertEntityToDto(User user){
+        return UserDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .password(user.getPassword())
+                .phone(user.getPhone())
+                .username(user.getUsername())
+                .activation(user.getActivation())
+                .roles(user.getRoles())
+                .profileImage(user.getProfileImage())
+                .build();
+    }
+
 
 }

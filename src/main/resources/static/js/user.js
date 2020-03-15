@@ -21,10 +21,30 @@ var userService = (function () {
         });
     }
 
+    function changeAct(email, callback, error) {
+        console.log("ACTIVATION");
+        $.ajax({
+            url: '/user/activate',
+            data: email,
+            type : 'put',
+            async: true,
+            success: function (data) {
+                if (callback){
+                    callback(data);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (error){
+                    error(err);
+                }
+            }
+        });
+    }
 
 
     return {
-        checkUsername : checkUsername
+        checkUsername : checkUsername,
+        changeAct : changeAct
     };
 
 

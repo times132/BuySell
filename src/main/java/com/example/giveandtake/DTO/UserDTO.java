@@ -39,6 +39,9 @@ public class UserDTO {
     private String phone;
 
     private String profileImage;
+
+    private Boolean activation;
+
     private Set<Role> roles = new HashSet<>();
 
     public User toEntity() {
@@ -49,19 +52,21 @@ public class UserDTO {
                 .password(password)
                 .phone(phone)
                 .email(email)
+                .activation(activation)
                 .profileImage(profileImage)
                 .roles(roles)
                 .build();
     }
 
     @Builder
-    public UserDTO(Long id, String name, String email, String password, String phone, String username, String profileImage, Set<Role> roles) {
+    public UserDTO(Long id, String name, String email, String password, String phone, String username, String profileImage, Boolean activation, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.username = username;
+        this.activation=activation;
         this.profileImage = profileImage;
         this.roles = roles;
     }

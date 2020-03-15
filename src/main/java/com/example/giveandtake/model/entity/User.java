@@ -31,7 +31,10 @@ public class User extends DateAudit {
     private String phone;
 
     private String email;
+
     private String profileImage;
+
+    private Boolean activation;
 
     @PrePersist
     protected void prePersist(){
@@ -51,7 +54,7 @@ public class User extends DateAudit {
     private List<Reply> replyList;
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String username, String name, String password, String phone, String email,Long id, String profileImage, Set<Role> roles){
+    public User(String username, String name, String password, String phone, String email,Long id, String profileImage, Boolean activation, Set<Role> roles){
         this.username = username;
         this.name = name;
         this.password = password;
@@ -59,6 +62,7 @@ public class User extends DateAudit {
         this.email = email;
         this.id= id;
         this.profileImage = profileImage;
+        this.activation = activation;
         this.roles = roles;
     }
 
