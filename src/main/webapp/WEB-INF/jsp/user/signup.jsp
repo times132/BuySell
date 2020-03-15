@@ -76,7 +76,7 @@
                 <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
                 <p>${valid_password}</p>
 
-            </form>
+
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-camera"></i> </span>
@@ -133,7 +133,6 @@
 
 
     });
-
 
     $(function(){
         $("#alert-success").hide();

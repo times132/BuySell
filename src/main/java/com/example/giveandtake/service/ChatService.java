@@ -12,6 +12,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -24,11 +25,36 @@ public class ChatService{
 
     private ChatRoomRepository chatRoomRepository;
     private ChatMessageRepository chatMessageRepository;
-
+    private UserService userService;
     //채팅방만들기
-    public long createChatRoom(ChatRoomDTO chatRoomDTO){
-        chatRoomDTO.setMsgDate(LocalDateTime.now());
-        return chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
+    public String createChatRoom(ChatRoomDTO chatRoomDTO){
+
+            String status = "ok";
+            //닉네임 존재여부 확인
+            int result = userService.usernameCheck(chatRoomDTO.getReceiver());
+            if(result == 0){
+                status = "존재하지 않는 닉네임입니다.";
+                return status;
+            }
+            //채팅방 중복검사
+            List<ChatRoom> chatList = new ArrayList<>();
+            chatList.addAll(chatRoomRepository.findByRequest(chatRoomDTO.getRequest()));
+            chatList.addAll(chatRoomRepository.findByReceiver(chatRoomDTO.getRequest()));
+            for (ChatRoom chatRoom: chatList){
+                if(chatRoom.getReceiver().equals(chatRoomDTO.getReceiver()) || chatRoom.getRequest().equals(chatRoomDTO.getReceiver())){
+                    status = "채팅방이 이미 존재합니다.";
+                }
+            }
+
+            if (status.equals("ok")){
+                status = "채팅방 개설이 완료되었습니다.";
+                chatRoomDTO.setMsgDate(LocalDateTime.now());
+                chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
+            }
+            System.out.println("###############"+status);
+            return status;
+
+
     }
 
     // 모든 채팅방 조회

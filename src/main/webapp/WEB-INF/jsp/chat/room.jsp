@@ -117,23 +117,20 @@
             return;
         }
         else {
-            var room = {
-                roomName : '대화 내용이 없습니다.',
-                receiver : inputreceiver,
-                request : sender,
-                rcMsgCount : 0,
-                rqMsgCount : 0,
+                    var room = {
+                        roomName : '대화 내용이 없습니다.',
+                        receiver : inputreceiver,
+                        request : sender,
+                        rcMsgCount : 0,
+                        rqMsgCount : 0,
 
-        };
+                    };
 
-            chatService.createRoom(room, function (result) {
-                alert(result);
-                document.getElementById("receiver").value="";
-                init();
-            });
-
-
-
+                    chatService.createRoom(room, function (result) {
+                        alert(result);
+                        document.getElementById("receiver").value="";
+                        init();
+                    });
         }
     });
 
@@ -154,14 +151,13 @@
         var reconnect = 0;
         var message = '';
         var messages = [];
-
+        console.log("룸아이디 타입"+typeof(roomId));
         //최초시작시 세팅
 
         var messageDIV = $(".msg_history");
         init2();
         function init2() {
             // 채팅룸 출력
-            console.log("######################################"+roomId);
             if(roomId==""){
                 return;
             }
@@ -235,14 +231,12 @@
                 createdDate: this.createdDate
             }));
 
-            alert("더이상 방에서 대화가 불가합니다.")
-            location.href="/chat/room/stop/"+roomId;
+            alert("더이상 대화가 불가합니다.");
+            location.href="/chat/room/stop/"+parseInt(roomId);
+
 
         });
 
-        function quitRoom() {
-            location.href = "/chat/room";
-        }
 
         //연결
         function connect() {

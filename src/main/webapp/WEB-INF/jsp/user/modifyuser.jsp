@@ -1,13 +1,13 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
 <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
 <head>
-    <title>È¸¿øÁ¤º¸¼öÁ¤</title>
+    <title>íšŒì›ì •ë³´ìˆ˜ì •</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -25,7 +25,7 @@
 <sec:authentication property="principal.user" var="userinfo"/>
 <div class="container">
     <div class="row">
-        <div class="col-sm-10"><h1>³»Á¤º¸</h1></div>
+        <div class="col-sm-10"><h1>ë‚´ì •ë³´</h1></div>
         <div class="col-sm-2"><a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a></div>
     </div>
     <div class="row">
@@ -121,8 +121,8 @@
                                 <input type="hidden" name="id" value="${userinfo.id}">
                                 <input type="hidden" name="authorities" value="${userinfo.roles}">
                                 <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
-                                <input class="btn btn-lg btn-success" type="submit" name="submit" id="submit" value="¼öÁ¤"/>
-                                <input class="btn btn-lg" type="button" value="È¨À¸·Î ÀÌµ¿" onClick="self.location='/';">
+                                <input class="btn btn-lg btn-success" type="submit" name="submit" id="submit" value="ìˆ˜ì •"/>
+                                <input class="btn btn-lg" type="button" value="í™ˆìœ¼ë¡œ ì´ë™" onClick="self.location='/';">
                             </div>
                         </div>
                     </form>
@@ -144,6 +144,7 @@
     </div><!--/col-9-->
 </div><!--/row-->
 <script type="text/javascript" src="/resources/js/fileupload.js"></script>
+<script type="text/javascript" src="/resources/js/user.js"></script>
 <script>
     $(document).ready(function() {
         var profileImage = "<c:out value="${userinfo.profileImage}"/>";
@@ -157,23 +158,19 @@
 
     });
 
-
-    // ¾ÆÀÌµğ À¯È¿¼º °Ë»ç(1 = Áßº¹ / 0 != Áßº¹)
+    // ì•„ì´ë”” ìœ íš¨ì„± ê²€ì‚¬(1 = ì¤‘ë³µ / 0 != ì¤‘ë³µ)
     idck = 0;
-    $("#username").blur(function() {
+    $("#username").keyup(function() {
         var username = $("#username").val();
-        $.ajax({
-            url : '${pageContext.request.contextPath}/user/usernameCheck?username='+ username,
-            type : 'get',
-            success : function(data) {
-                console.log("1 = Áßº¹o / 0 = Áßº¹x : "+ data);
+
+        userService.checkUsername(username, function (data) {
                 if (data == 1) {
-                    //¾ÆÀÌµğ°¡ Á¸Á¦ÇÒ °æ¿ì »¡±øÀ¸·Î , ¾Æ´Ï¸é ÆÄ¶ûÀ¸·Î Ã³¸®ÇÏ´Â µğÀÚÀÎ
-                    $("#username_check").text("»ç¿ëÁßÀÎ ¾ÆÀÌµğÀÔ´Ï´Ù. ´Ù¸¥ ¾ÆÀÌµğ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä");
+                    //ì•„ì´ë””ê°€ ì¡´ì œí•  ê²½ìš° ë¹¨ê¹¡ìœ¼ë¡œ , ì•„ë‹ˆë©´ íŒŒë‘ìœ¼ë¡œ ì²˜ë¦¬í•˜ëŠ” ë””ìì¸
+                    $("#username_check").text("ì‚¬ìš©ì¤‘ì¸ ì•„ì´ë””ì…ë‹ˆë‹¤. ë‹¤ë¥¸ ì•„ì´ë””ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”");
                     $("#username_check").css("color", "red");
                     $("#submit").attr("disabled", true);
                 } else {
-                    $("#username_check").text("»ç¿ë°¡´ÉÇÑ ¾ÆÀÌµğÀÔ´Ï´Ù.");
+                    $("#username_check").text("ì‚¬ìš©ê°€ëŠ¥í•œ ì•„ì´ë””ì…ë‹ˆë‹¤.");
                     $("#username_check").css("color", "blue");
                     $("#submit").attr("disabled", false);
                     idck=1;
@@ -182,9 +179,6 @@
                     $("#submit")
                         .attr("disabled", false)
                 }
-            }, error : function() {
-                console.log("½ÇÆĞ");
-            }
         });
     });
 </script>

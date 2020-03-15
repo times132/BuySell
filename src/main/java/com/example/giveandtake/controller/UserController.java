@@ -58,7 +58,7 @@ public class UserController {
         return "/user/signup";
     }
 
-    //중복이메일 검사
+    //이메일 검사
     @RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
     @ResponseBody
     public int idCheck(@RequestParam("email") String email) {

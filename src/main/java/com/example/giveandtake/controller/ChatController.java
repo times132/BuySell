@@ -22,7 +22,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Controller
-@RequestMapping("/chat")
+@RequestMapping("chat")
 @MessageMapping("/chat")
 public class ChatController {
 
@@ -60,22 +60,25 @@ public class ChatController {
     // 채팅방 생성
     @PostMapping(value = "/room", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE}) //json 방식으로 데이터를 받음
     public ResponseEntity<String> createRoom(@RequestBody ChatRoomDTO chatRoomDTO){
-        System.out.println("************************Create**************************" + chatRoomDTO);
-        chatService.createChatRoom(chatRoomDTO);
-        return new ResponseEntity<>("채팅방 개설이 완료되었습니다.", HttpStatus.OK);
+
+        String status = chatService.createChatRoom(chatRoomDTO);
+        return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
+//    @GetMapping(value = "/room/stop/{roomId}")
+//    public ResponseEntity<String> remove(Principal principal, @PathVariable Long roomId){
+//        System.out.println("++++++++++++++++++++++++++++++DELETE ROOM");
+//        chatService.deleteChatRoom(roomId, principal);
+//        return new ResponseEntity<>("더이상 대화가 불가합니다.", HttpStatus.OK);
+//    }
 
-    //채팅그만두기 화면
+    //채팅방 삭제
     @GetMapping("/room/stop/{roomId}")
-    public String stopChat(@PathVariable Long roomId, Principal principal)
-    {
-        System.out.println("DELETE ROOM");
+    public String remove(Principal principal,@PathVariable Long roomId){
+        System.out.println("++++++++++++++++++++++++++++++DELETE ROOM");
         chatService.deleteChatRoom(roomId, principal);
         return "redirect:/chat/room";
     }
-
-
     // 채팅방 입장 화면
     @GetMapping("/room/enter/{roomId}")
     public String roomDetail(Model model, @PathVariable Long roomId) {
