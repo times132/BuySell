@@ -19,8 +19,6 @@
 <body>
     <%@include file="../include/header.jsp"%>
 
-
-
     <div class="container">
         <!-- 수정, 삭제, 목록 버튼-->
         <div class="btnlist mb-1">

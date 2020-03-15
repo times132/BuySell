@@ -35,7 +35,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-price-text">&#8361;</span>
                             </div>
-                            <input type="text" class="form-control" name="price" placeholder="가격">
+                            <input type="text" class="form-control" name="price" placeholder="가격" onkeyup="return this.value=this.value.replace(/[^0-9]/g,'');">
                         </div>
                     </div>
                     <div class="form-group">
