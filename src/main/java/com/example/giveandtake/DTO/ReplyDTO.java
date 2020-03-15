@@ -1,10 +1,10 @@
 package com.example.giveandtake.DTO;
 
-import com.example.giveandtake.model.entity.Reply;
+import com.example.giveandtake.model.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -14,28 +14,9 @@ public class ReplyDTO {
 
     private Long rid;
     private Long bid;
-
     private String reply;
     private String replyer;
-
+    @JsonIgnoreProperties({"id", "replyList", "boardList", "password", "email", "phone", "profileImage", "roles"})
+    private User user;
     private LocalDateTime createdDate;
-
-    public Reply toEntity(){
-        return Reply.builder()
-                .rid(rid)
-                .bid(bid)
-                .reply(reply)
-                .replyer(replyer)
-                .build();
-    }
-
-    @Builder
-    public ReplyDTO(Long rid, Long bid, String reply, String replyer, LocalDateTime createdDate) {
-        this.rid = rid;
-        this.bid = bid;
-        this.reply = reply;
-        this.replyer = replyer;
-        this.createdDate = createdDate;
-    }
-
 }

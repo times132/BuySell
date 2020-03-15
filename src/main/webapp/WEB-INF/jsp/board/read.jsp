@@ -26,7 +26,7 @@
         <div class="btnlist mb-1">
             <sec:authentication property="principal" var="userinfo"/>
             <sec:authorize access="isAuthenticated()">
-                <c:if test="${userinfo.username eq boardDto.writer}">
+                <c:if test="${userinfo.username eq boardDto.user.username}">
                     <button class="btn btn-primary btn-sm" data-oper="modify">수정</button>
                     <button class="btn btn-danger btn-sm" data-oper="remove">삭제</button>
                 </c:if>
@@ -71,7 +71,7 @@
                             <div class="writer-dropdown">
                                 <span class="h6">판매자 : </span>
                                 <button type="button" class="writer btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="writer h6"><c:out value="${boardDto.writer}"></c:out></span>
+                                    <span class="writer h6"><c:out value="${boardDto.user.username}"></c:out></span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
                                     <a class="dropdown-item" href="#" id="board">게시글 보기</a>
@@ -129,7 +129,7 @@
 
         <form id="operForm" action="/board/modify" method="get">
             <input type="hidden" id="bid" name="bid" value="<c:out value="${boardDto.bid}"/>">
-            <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.writer}"/>">
+            <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.user.username}"/>">
             <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">
             <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">
             <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
@@ -141,7 +141,7 @@
     $(document).ready(function () {
         console.log("<c:out value="${boardDto.createdDate}"/>")
         var operForm = $("#operForm");
-        var username = "<c:out value="${boardDto.writer}"/>";
+        var username = "<c:out value="${boardDto.user.username}"/>";
 
         // 닉네임 클릭 후 채팅 클릭 이벤트
         $("#chatting").on("click", function (e) {
@@ -226,10 +226,10 @@
     var bidValue = "<c:out value="${boardDto.bid}"/>";
     var replyUL = $(".replyList");
 
-    var replyer = null;
+    var curUser = null;
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
-        replyer = '${userinfo.username}';
+        curUser = '${userinfo.username}';
     </sec:authorize>
 
     showList(1);
@@ -252,11 +252,11 @@
             }
             for (var i = 0, len = data.content.length || 0; i < len; i++){
                 str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
-                str += "<div class='reply-header'><strong id='replyer' class='primary-font'>" + data.content[i].replyer + "</strong>";
+                str += "<div class='reply-header'><strong id='replyer' class='primary-font'>" + data.content[i].user.username + "</strong>";
                 str += " <small class='text-muted'>" + commonService.displayTime(data.content[i].createdDate) + "</small>";
 
                 str += "</div>";
-                str += (replyer === data.content[i].replyer ?
+                str += (curUser === data.content[i].user.username ?
                     "<div class='reply-header-btn'><button id='modReplyBtn' class='btn btn-sm btn-link text-muted'>수정</button>" + "\|" +
                     "<button id='removeReplyBtn' class='btn btn-sm btn-link text-muted'>삭제</button></div>" :
                     '');
@@ -329,7 +329,6 @@
     $("#addReplyBtn").on("click", function (e) {
         var reply = {
             reply: inputReply.val(),
-            replyer: replyer,
             bid: bidValue
         };
         replyService.add(reply, function (result) {
@@ -345,7 +344,7 @@
 
         replyService.get(rid, function (reply) {
             replyCopy = reply.reply;
-            replyerCopy = reply.replyer;
+            replyerCopy = reply.user.username;
         });
     });
 
@@ -361,22 +360,6 @@
         $("#reply_"+rid).html(str);
     });
 
-    // 댓글 삭제
-    $(document).on("click", "#removeReplyBtn", function(){
-        var rid = $(this).closest("li").data("rid");
-        var originalReplyer = replyerCopy;
-
-        if (replyer != originalReplyer){
-            alert("자신의 댓글만 삭제가 가능합니다");
-            return;
-        }
-
-        replyService.remove(rid, originalReplyer, function (result) {
-            alert(result);
-            showList(pageNum);
-        });
-    });
-
     // 수정한 댓글 전송
     $(document).on("click", "#modifyconfirm", function () {
         var rid = $(this).closest("li").data("rid");
@@ -384,7 +367,7 @@
 
         var reply = {
             reply: modReply.val(),
-            rid: rid
+            rid: rid,
         };
 
         replyService.update(reply, function (result) {
@@ -398,5 +381,21 @@
     $(document).on("click", "#modifycancel", function () {
         showList(pageNum);
     })
+
+    // 댓글 삭제
+    $(document).on("click", "#removeReplyBtn", function(){
+        var rid = $(this).closest("li").data("rid");
+        var originalReplyer = replyerCopy;
+
+        if (curUser != originalReplyer){
+            alert("자신의 댓글만 삭제가 가능합니다");
+            return;
+        }
+
+        replyService.remove(rid, originalReplyer, function (result) {
+            alert(result);
+            showList(pageNum);
+        });
+    });
 </script>
 </html>

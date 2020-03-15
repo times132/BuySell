@@ -1,6 +1,7 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.ReplyDTO;
+import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.service.ReplyService;
 import com.example.giveandtake.common.Criteria;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -30,10 +32,10 @@ public class ReplyController {
     private UserService userService;
 
     @PostMapping(value = "/new", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE}) //json 방식으로 데이터를 받음
-    public ResponseEntity<String> writePOST(@RequestBody ReplyDTO replyDTO){
+    public ResponseEntity<String> writePOST(@RequestBody ReplyDTO replyDTO, @AuthenticationPrincipal CustomUserDetails userDetails){
         // POST 방식으로 json 데이터를 받아 @RequestBody를 이용하여 Reply 타입으로 변환
         logger.info("-----reply writePOST-----");
-        replyService.writeReply(replyDTO);
+        replyService.writeReply(replyDTO, userDetails);
         return new ResponseEntity<>("댓글 등록이 완료되었습니다.", HttpStatus.OK);
     }
 
@@ -54,9 +56,10 @@ public class ReplyController {
     }
 
     @PutMapping(value = "{rid}", consumes = "application/json")
-    public ResponseEntity<String> modifyPOST(@RequestBody ReplyDTO replyDTO, @PathVariable("rid") Long rid){
+    public ResponseEntity<String> modifyPOST(@RequestBody ReplyDTO replyDTO, @PathVariable("rid") Long rid, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----reply modifyPUT-----");
 
+        replyDTO.setUser(userDetails.getUser());
         replyDTO.setRid(rid);
 
         return replyService.updateReply(replyDTO).equals(rid) ? new ResponseEntity<>("댓글 수정이 완료되었습니다.", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

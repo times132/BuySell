@@ -46,6 +46,10 @@ public class User extends DateAudit {
     @JsonIgnoreProperties({"user", "boardFileList"})
     private List<Board> boardList;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties({"user"})
+    private List<Reply> replyList;
+
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
     public User(String username, String name, String password, String phone, String email,Long id, String profileImage, Set<Role> roles){
         this.username = username;

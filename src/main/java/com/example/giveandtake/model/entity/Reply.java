@@ -1,10 +1,12 @@
 package com.example.giveandtake.model.entity;
 
 import com.example.giveandtake.model.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -17,18 +19,21 @@ public class Reply extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rid;
-    @Column(updatable=false)
+    @Column(updatable = false)
     private Long bid;
 
     private String reply;
-    @Column(updatable=false)
-    private String replyer;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"id", "replyList", "boardList", "password", "email", "profileImage", "phone", "roles"})
+    private User user;
 
     @Builder
-    public Reply(Long rid, Long bid, String reply, String replyer){
+    public Reply(Long rid, Long bid, String reply, User user){
         this.rid = rid;
         this.bid = bid;
         this.reply = reply;
-        this.replyer = replyer;
+        this.user = user;
     }
 }

@@ -3,6 +3,7 @@ package com.example.giveandtake.service;
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.ReplyDTO;
 import com.example.giveandtake.common.Criteria;
+import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.mapper.BoardMapper;
 import com.example.giveandtake.mapper.ReplyMapper;
 import com.example.giveandtake.model.entity.Board;
@@ -33,13 +34,15 @@ public class ReplyService {
     private ReplyMapper replyMapper;
 
     @Transactional
-    public Long writeReply(ReplyDTO dto){
+    public Long writeReply(ReplyDTO dto, CustomUserDetails userDetails){
         Optional<Board> boardWapper = boardRepository.findById(dto.getBid());
         BoardDTO boarddto = boardMapper.toDTO(boardWapper.get());
         boarddto.setReplyCnt(boarddto.getReplyCnt()+1);
         boardRepository.save(boardMapper.toEntity(boarddto));
 
-        return replyRepository.save(dto.toEntity()).getRid();
+        dto.setUser(userDetails.getUser());
+
+        return replyRepository.save(replyMapper.toEntity(dto)).getRid();
     }
 
     public Page<Reply> readReplyList(Long bid, Criteria cri){
@@ -57,8 +60,8 @@ public class ReplyService {
         return replyMapper.toDTO(reply);
     }
 
-    public Long updateReply(ReplyDTO replyDTO){
-        return replyRepository.save(replyDTO.toEntity()).getRid();
+    public Long updateReply(ReplyDTO dto){
+        return replyRepository.save(replyMapper.toEntity(dto)).getRid();
     }
 
     @Transactional
