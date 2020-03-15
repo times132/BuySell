@@ -101,12 +101,8 @@ public class UserController {
 
     // 로그인 실패 페이지
     @GetMapping("/user/login/error")
-    public void dispFailurLogin(HttpServletResponse response) throws IOException {
-        response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println("<script>alert('로그인에 실패하였습니다.'); location.href='/user/login';</script>");
-        out.flush();
+    public String dispFailurLogin(){
+        return "redirect:/user/login";
     }
 
     // 로그아웃 후 홈으로 이동
