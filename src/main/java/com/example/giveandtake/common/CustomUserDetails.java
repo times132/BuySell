@@ -19,13 +19,6 @@ public class CustomUserDetails implements UserDetails {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetails.class);
 
-//    private Long id;
-//    private String username;
-//    private String name;
-//    private String password;
-//    private String phone;
-//    private String email;
-//    private String profileImage;
     private User user;
     private Collection<? extends GrantedAuthority> authorities;
 

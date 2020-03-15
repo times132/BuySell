@@ -39,8 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .authorizeRequests()
                 // 페이지 권한 설정
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/myinfo").hasRole("USER")
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/chat/room").hasAuthority("USER")
                 .antMatchers("/**").permitAll()
                 .and()
                 .formLogin()
@@ -70,13 +70,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.eraseCredentials(false).userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
-
-
-
-
-
-
-
 
 }
 
