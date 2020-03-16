@@ -24,29 +24,7 @@ var mailService = (function () {
         });
     }
 
-    // function signup(email, callback, error) {
-    //     $.ajax({
-    //         type: "get",
-    //         url: "/user/signup",
-    //         data: email,
-    //         dataType: 'text',//데이타 타입
-    //         async: true,
-    //         success: function (result) {
-    //             if (callback){
-    //                 callback(result);
-    //             }
-    //         },
-    //         error: function (xhr, status, err) {
-    //             if (error){
-    //                 error(err);
-    //                 alert("실패");
-    //             }
-    //         }
-    //     });
-    // }
-
     return {
-
         sendEmail : sendEmail,
     };
 

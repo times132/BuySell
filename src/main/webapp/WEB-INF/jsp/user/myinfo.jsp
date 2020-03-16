@@ -44,22 +44,19 @@
                     <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
                 </ul>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">Social Media</div>
-                    <div class="panel-body">
-                        <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
-                    </div>
-                </div>
 
             </div><!--/col-3-->
             <div class="col-sm-9">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-                    <li><a data-toggle="tab" href="#myboards">Board</a></li>
-                    <li><a data-toggle="tab" href="#email">이메일 인증 및 계정 활성화</a></li>
+                    <li class="nav-item"><a  class="nav-link active" data-toggle="tab" href="#home">내정보</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#myboards">Board</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#email">이메일 인증</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#withdrawal">회원탈퇴</a></li>
                 </ul>
 
 
+
+                <!--------------------------------------내정보---------------------------------------------------->
                 <div class="tab-content">
                     <div class="tab-pane active" id="home">
                         <hr>
@@ -96,16 +93,18 @@
                                 <div class="col-xs-12">
                                     <br>
                                     <input class="btn btn-primary btn-sm" type="button" value="회원정보수정" onClick="self.location='/user/modifyuser';">
-                                    <input class="btn btn-danger btn-sm" type="button" value="회원탈퇴" onClick="self.location='/user/password';">
                                     <input class="btn btn-primary btn-sm" type="button" value="홈으로 이동" onClick="self.location='/';">
                                 </div>
                             </div>
                         </form>
 
-                        <hr>
 
-                    </div><!--/tab-pane-->
-                    <div class="tab-pane" id="myboards">
+                    </div>
+
+
+                <!--------------------------------------게시판---------------------------------------------------->
+
+                <div class="tab-pane" id="myboards">
 
                         <h2></h2>
 
@@ -115,16 +114,50 @@
 
                         </form>
 
-                    </div><!--/tab-pane-->
-                    <div class="tab-pane" id="email">
+                </div><!--/tab-pane-->
+                <!--------------------------------------이메일인증---------------------------------------------------->
+                <div class="tab-pane" id="email">
+                        <sec:authorize access="hasAnyAuthority('GUEST')">
+                        <br>
+                        <br>
                         <h6>이메일 인증 (이메일인증을 받으시면 보다 나은 서비스를 이용할 수 있습니다.)</h6>
                         <br> <br>
                             <label for="email">이메일</label>
-                            <input class="form-control" type="text" id="e_mail" name="email" placeholder="EMAIL" required>
-                            <span><input class="btn btn-primary btn-sm" type="button" id="auth" value="이메일 인증받기"/></span>
-                    </div>
+                            <input class="form-control" type="text" id="e_mail" name="email" value="${userinfo.email}" readonly="readonly"  required><br>
+                            <input class="btn btn-primary btn-sm" type="button" id="auth" value="이메일 인증받기"/>
+                        </sec:authorize>
 
+
+                        <sec:authorize access="hasAnyAuthority('ADMIN', 'USER')">
+                        <br>
+                        <br>
+                            <h6>이메일 인증 완료</h6>
+                            <input class="form-control" type="text"  value="${userinfo.email}" readonly="readonly" required><br>
+
+                        </sec:authorize>
+                </div>
+                <!-------------------------------------- 회원탈퇴 ---------------------------------------------------->
+                <div class="tab-pane" id="withdrawal">
+                        <form action="/user/delete" method="post">
+
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <h4>PASSWORD</h4>
+                                        <input type="password" class="form-control" name="password" id="pwd1" placeholder="password" title="enter your password.">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd2"><h4>CONFIRM PASSWORD</h4></label>
+                                    <input type="password" class="form-control" name="password2" id="pwd2" placeholder="비밀번호 확인" title="enter your password2.">
+                                    <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
+                                    <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
+                                    <p>${valid_password}</p>
+                                </div>
+
+                            <button class="btn btn-danger btn-sm" id="submit" type="submit">회원탈퇴</button>
+                        </form>
                 </div><!--/tab-pane-->
+
             </div><!--/tab-content-->
 
         </div><!--/col-9-->
@@ -144,7 +177,6 @@
     $('#auth').click(function(){
 
         var email = $('#e_mail').val();
-        var param = "email" + "=" + $("#e_mail").val();
         console.log(email);
         var e_mail = {
                 email : email
@@ -154,7 +186,7 @@
                 for(var i=0; i<2; i++) {
                     var code = prompt("인증번호를 입력해주세요");
                     if (code == result) {
-                        userService.changeAct(param, function (result) {
+                        userService.changeAct(e_mail, function (result) {
                             alert(result);
                             return;
                         });
@@ -169,7 +201,23 @@
             });
     });
 
-
+    $(function(){
+        $("#alert-success").hide();
+        $("#alert-danger").hide();
+        $("input").keyup(function(){
+            var pwd1=$("#pwd1").val(); var pwd2=$("#pwd2").val();
+            if(pwd1 != "" || pwd2 != ""){
+                if(pwd1 == pwd2){
+                $("#alert-success").show();
+                $("#alert-danger").hide();
+                $("#submit").removeAttr("disabled"); }
+            else{
+                $("#alert-success").hide(); $("#alert-danger").show();
+                $("#submit").attr("disabled", "disabled");
+            }
+            }
+        });
+    });
 
 </script>
 </body>

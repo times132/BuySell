@@ -2,8 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-<script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+
 <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
 <!------ Include the above in your HEAD tag ---------->
 
 <head>
@@ -53,18 +54,12 @@
                 <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
             </ul>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">Social Media</div>
-                <div class="panel-body">
-                    <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
-                </div>
-            </div>
 
         </div><!--/col-3-->
         <div class="col-sm-9">
             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#home">Home</a></li>
-                <li><a data-toggle="tab" href="#myboards">Board</a></li>
+                <li class="nav-item"><a  class="nav-link active" data-toggle="tab" href="#home">Home</a></li>
+                <li class="nav-item"><a  class="nav-link" data-toggle="tab" href="#changePW">비밀번호 변경</a></li>
             </ul>
 
 
@@ -77,7 +72,8 @@
                             <div class="col-xs-6">
                                 <label for="username"><H4>NICKNAME</H4></label>
                                 <input type="text" class="form-control" id="username" name="username" value="${userinfo.username}" required>
-                                <div class="check_font" id="username_check"></div><br>
+                                <p>${valid_username}</p>
+                                <div class="alert alert-danger" id="username_check">사용할 수 없는 닉네임입니다.</div><br>
                             </div>
                         </div>
                         <div class="form-group">
@@ -88,7 +84,6 @@
                         </div>
 
                         <div class="form-group">
-
                             <div class="col-xs-6">
                                 <h4>EMAIL</h4>
                                 <input type="text" class="form-control" name="email" value="${userinfo.email}" readonly="readonly" placeholder="enter phone" title="enter your phone number if any.">
@@ -103,16 +98,9 @@
                         </div>
 
                         <div class="form-group">
-
                             <div class="col-xs-6">
                                 <h4>PASSWORD</h4>
-                                <input type="password" class="form-control" name="password"  value="${userinfo.password}" placeholder="password" title="enter your password.">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <label for="password2"><h4>CONFIRM PASSWORD</h4></label>
-                                <input type="password" class="form-control" name="password2" id="password2" placeholder="password2" title="enter your password2.">
+                                <input type="password" class="form-control" name="password"  placeholder="password" title="enter your password.">
                             </div>
                         </div>
                         <div class="form-group">
@@ -122,8 +110,8 @@
                                 <input type="hidden" name="activation" value="${userinfo.activation}">
                                 <input type="hidden" name="authorities" value="${userinfo.roles}">
                                 <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
-                                <input class="btn btn-lg btn-success" type="submit" name="submit" id="submit" value="수정"/>
-                                <input class="btn btn-lg" type="button" value="홈으로 이동" onClick="self.location='/';">
+                                <input class="btn btn-sm btn-primary" type="submit" id="modify"  value="수정"/>
+                                <input class="btn btn-sm btn-primary" type="button" value="홈" onClick="self.location='/';">
                             </div>
                         </div>
                     </form>
@@ -131,12 +119,28 @@
                     <hr>
 
                 </div><!--/tab-pane-->
-                <div class="tab-pane" id="myboards">
 
-
-                </div><!--/tab-pane-->
-                <div class="tab-pane" id="settings">
-
+                <div class="tab-pane" id="changePW">
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <h4>PASSWORD</h4>
+                            <input type="password" class="form-control" id="password"  placeholder="password" title="enter your password.">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <h4>PASSWORD</h4>
+                            <input type="password" class="form-control" name="password" id="pwd1" placeholder="password" title="enter your password.">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd2"><h4>CONFIRM PASSWORD</h4></label>
+                        <input type="password" class="form-control" name="password2" id="pwd2" placeholder="비밀번호 확인" title="enter your password2.">
+                        <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
+                        <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
+                        <p>${valid_password}</p>
+                    </div>
+                    <input class="btn btn-sm btn-primary" type="submit" id=submit name="submit" value="변경"/>
                 </div>
 
             </div><!--/tab-pane-->
@@ -158,29 +162,62 @@
         }
 
     });
-
+    $("#username_check").hide();
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
     idck = 0;
     $("#username").keyup(function() {
         var username = $("#username").val();
-
+        $("#username_check").hide();
         userService.checkUsername(username, function (data) {
-                if (data == 1) {
-                    //아이디가 존제할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
-                    $("#username_check").text("사용중인 아이디입니다. 다른 아이디를 입력해주세요");
-                    $("#username_check").css("color", "red");
-                    $("#submit").attr("disabled", true);
-                } else {
-                    $("#username_check").text("사용가능한 아이디입니다.");
-                    $("#username_check").css("color", "blue");
-                    $("#submit").attr("disabled", false);
-                    idck=1;
-                }
-                if(idck==1){
-                    $("#submit")
-                        .attr("disabled", false)
-                }
+            if (data == 1) {
+                $("#username_check").show();
+                $("#modify").attr("disabled", true);
+                idck=0;
+            }
+            else {
+                $("#username_check").hide();
+                idck=1;
+            }
+            if(idck==1){
+                $("#modify")
+                    .removeAttr("disabled");
+            }
         });
+    });
+
+    $(function(){
+        $("#alert-success").hide();
+        $("#alert-danger").hide();
+        $("input").keyup(function(){
+            var pwd1=$("#pwd1").val();
+            var pwd2=$("#pwd2").val();
+            if(pwd1 != "" || pwd2 != ""){
+                if(pwd1 == pwd2){
+                    $("#alert-success").show();
+                    $("#alert-danger").hide();
+                    $("#submit").removeAttr("disabled"); }
+                else{
+                    $("#alert-success").hide(); $("#alert-danger").show();
+                    $("#submit").attr("disabled", "disabled");
+                }
+            }
+        });
+    });
+
+    $("#submit").click(function(){
+        var password = $("#password").val();
+        var pwd1 = $("#pwd1").val();
+        console.log("newPW:"+password);
+        console.log("newPW:"+pwd1);
+        var info = {
+            password : password,
+            newPW : pwd1
+        };
+        userService.changePW(info, function (result) {
+            alert(result);
+            return;
+        });
+
     });
 </script>
 </body>

@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userDto.setActivation(false);
         //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+        Role userRole = roleRepository.findByName(RoleName.GUEST)
                 .orElseThrow(() -> new AppException("User Role not set"));
         userDto.setRoles(Collections.singleton(userRole));
 
@@ -87,7 +87,6 @@ public class UserService implements UserDetailsService {
         }
         com.example.giveandtake.model.entity.User user = userWrapper.get();
         return convertEntityToDto(user);
-
     }
     //회원정보 삭제
     @Transactional
@@ -159,7 +158,7 @@ public class UserService implements UserDetailsService {
     }
 
     //이메일 중복검사
-    public int useridCheck(String email)
+    public int emailCheck(String email)
     {
         Optional<User> user = userRepository.findByEmail(email);
         System.out.println("값은 이메일 "+user.isPresent());
@@ -168,15 +167,14 @@ public class UserService implements UserDetailsService {
         }
         return 0;
     }
-    //비밀번호 찾기
+    //비밀번호 찾기 및 변경
     @Transactional
-    public void changePW(String email, String newPW){
-        UserDTO userList = readUserByUsername(email);
-
+    public void changePW(String info, String newPW){
+        UserDTO userDTO = readUserByUsername(info);
+        System.out.println("비밀번호 변경");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        userList.setPassword(passwordEncoder.encode(newPW));
-        userRepository.save(userList.toEntity()).getId();
-        System.out.println("비밀번호 찾기");
+        userDTO.setPassword(passwordEncoder.encode(newPW));
+        userRepository.save(userDTO.toEntity()).getId();
 
     }
     //계정코드 활성화
@@ -185,7 +183,9 @@ public class UserService implements UserDetailsService {
         User user = userWapper.get();
         UserDTO userDTO = convertEntityToDto(user);
         userDTO.setEmail(email);
-        userDTO.setActivation(true);
+        Role userRole = roleRepository.findByName(RoleName.USER)
+                .orElseThrow(() -> new AppException("User Role not set"));
+        userDTO.setRoles(Collections.singleton(userRole));
         userRepository.save(userDTO.toEntity());
     }
 

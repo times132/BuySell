@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,21 +56,20 @@ public class UserController {
 
     @RequestMapping(value = "/user/activate")
     @ResponseBody
-    public ResponseEntity<String> activateUser(@RequestParam(value = "email", required = false) String email, Principal principal){
+    public ResponseEntity<String> activateUser(@RequestParam(value = "email") String email, Principal principal){
 
         userService.changeAct(email, principal);
         return new ResponseEntity<>("계정이 활성화 되었습니다.", HttpStatus.OK);
     }
 
-
-    //이메일 검사
-//    @RequestMapping(value = "/user/idCheck", method = RequestMethod.GET)
-//    @ResponseBody
-//    public int idCheck(@RequestParam("email") String email) {
-//        return userService.useridCheck(email);
-//    }
-
-    //중복아이디 검사
+    //중복이메일 검사
+    @RequestMapping(value = "/user/emailCheck", method = RequestMethod.GET)
+    @ResponseBody
+    public int emailCheck(@RequestParam("email") String email) {
+        System.out.println(email);
+        return userService.emailCheck(email);
+    }
+    //중복닉네임 검사
     @RequestMapping(value = "/user/usernameCheck", method = RequestMethod.GET)
     @ResponseBody
     public int usernameCheck(@RequestParam("username") String username) {
@@ -77,6 +77,7 @@ public class UserController {
         return userService.usernameCheck(username);
     }
 
+    //회원가입
     @PostMapping("/user/signup")
     public String execSignup(@Valid UserDTO userDto, Errors errors, Model model) {
         if (errors.hasErrors()) {
@@ -106,8 +107,12 @@ public class UserController {
 
     // 로그인 실패 페이지
     @GetMapping("/user/login/error")
-    public String dispFailurLogin(){
-        return "redirect:/user/login";
+    public void dispFailurLogin(HttpServletResponse response)throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println("<script>alert('로그인에 실패하였습니다.'); location.href='/user/login';</script>");
+        out.flush();
     }
 
     // 로그아웃 후 홈으로 이동
@@ -125,7 +130,7 @@ public class UserController {
     //비밀번호 찾기
     @RequestMapping( value = "/user/findpw/{email}" , method=RequestMethod.GET)
     public String findPW(HttpServletRequest request, @PathVariable String email) throws IOException {
-        System.out.println("##########################################이메일"+ email);
+        System.out.println("이메일"+ email);
         String mailType = "findpw";
         String code = mailService.sendMail(email, request, mailType);
         userService.changePW(email, code);
@@ -136,8 +141,12 @@ public class UserController {
 
     // 접근 거부 페이지
     @GetMapping("/user/denied")
-    public String dispDenied() {
-        return "/user/denied";
+    public void disAllowance(HttpServletResponse response)throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println("<script>alert('접근 권한이 없습니다. 이메일 인증을 진행해 주세요'); location.href='/user/info';</script>");
+        out.flush();
     }
 
 
@@ -154,27 +163,54 @@ public class UserController {
         return "/user/modifyuser";
     }
 
-    @PostMapping ("/user/modifyuser")
-    public String modifyuser(UserDTO userList){
-        userService.modify(userList);
-        return "redirect:/user/info";
+    //회원정보수정
+    @RequestMapping(value = "/user/modifyuser", method = RequestMethod.POST)
+    @ResponseBody
+    public void modifyuser(UserDTO userList, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        if(userService.checkPassword(userList.getPassword())){
+            userService.modify(userList);
+            out.println("<script>alert('수정이 완료되었습니다.'); location.href='/user/info';</script>");
+        }
+        else{
+            out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");
+        }
+        out.flush();
     }
-    // 회원 탈퇴
-    @GetMapping ("/user/password")
-    public String disdeleteuser() {
-        return "/user/password";
-    }
-    //비밀번호 확인 후 탈퇴
-    @PostMapping ("/user/password")
-    public String disdeleteuser(String password,Principal principal, HttpSession httpSession){
+    //비밀번호변경
+    @PutMapping("/user/changePW")
+    @ResponseBody
+    public ResponseEntity<String> changePW(@RequestParam String newPW, @RequestParam String password , Principal principal){
+        System.out.println("CHANGE PW");
+        if(userService.checkPassword(password))
+        {
+            userService.changePW(principal.getName(), newPW);
+            return new ResponseEntity<>("비밀번호 변경이 완료되었습니다.", HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("기존의 비밀번호가 틀립니다.", HttpStatus.OK);
+        }
 
+    }
+
+    //비밀번호 확인 후 탈퇴
+    @PostMapping ("/user/delete")
+    public void disdeleteuser(String password,Principal principal, HttpSession httpSession, HttpServletResponse response) throws IOException{
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
         if(userService.checkPassword(password))
         {
             userService.delete(principal.getName());
             httpSession.invalidate();
-            return  "redirect:/user/logout";
+            out.println("<script>alert('탈퇴가 완료되었습니다.'); location.href='/user/logout';</script>");
         }
-        return "/user/password";
+        else{
+            out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");
+        }
+        out.flush();
     }
 
     // 어드민 페이지
