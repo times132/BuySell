@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
-    Page<Reply> findAllByBid(Long bid, Pageable pageable);
-    @Query(value = "select bid from replys where rid=?1", nativeQuery=true)
+    Page<Reply> findAllByBoardBid(Long bid, Pageable pageable);
+    @Query(value = "select board_id from replys where rid=?1", nativeQuery=true)
     Long findBidByRid(Long rid);
-    Long countByBid(Long bid);
+    Long countByBoardBid(Long bid);
 }

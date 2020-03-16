@@ -19,9 +19,6 @@ public class Reply extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rid;
-    @Column(updatable = false)
-    private Long bid;
-
     private String reply;
 
     @ManyToOne
@@ -29,11 +26,16 @@ public class Reply extends DateAudit {
     @JsonIgnoreProperties({"id", "replyList", "boardList", "password", "email", "profileImage", "phone", "roles"})
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "board_bid")
+    @JsonIgnoreProperties({"replyList", "boardFileList", "user"})
+    private Board board;
+
     @Builder
-    public Reply(Long rid, Long bid, String reply, User user){
+    public Reply(Long rid, String reply, User user, Board board){
         this.rid = rid;
-        this.bid = bid;
         this.reply = reply;
         this.user = user;
+        this.board = board;
     }
 }

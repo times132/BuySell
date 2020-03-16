@@ -40,6 +40,10 @@ public class Board extends DateAudit {
     @JsonIgnore
     private List<BoardFile> boardFileList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Reply> replyList;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"password", "boardList"})

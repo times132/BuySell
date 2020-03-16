@@ -61,7 +61,7 @@ public class UserService implements UserDetailsService {
                 () -> new UsernameNotFoundException("email not found :" + email));
         logger.info("#########username : " + user.getName());
         logger.info("#########profile : " + user.getProfileImage());
-        logger.info("#########role : " + user.getRoles());
+        if (user.getActivation()) logger.info("#########role : " + user.getActivation());
         return CustomUserDetails.create(user);
     }
     //유효성 검사

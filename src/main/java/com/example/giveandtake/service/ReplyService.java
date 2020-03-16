@@ -35,11 +35,16 @@ public class ReplyService {
 
     @Transactional
     public Long writeReply(ReplyDTO dto, CustomUserDetails userDetails){
-        Optional<Board> boardWapper = boardRepository.findById(dto.getBid());
-        BoardDTO boarddto = boardMapper.toDTO(boardWapper.get());
+        Optional<Board> boardWapper = boardRepository.findById(dto.getBid()); // board 영속화
+        Board board = boardWapper.get();
+
+        // board 댓글 수 증가
+        BoardDTO boarddto = boardMapper.toDTO(board);
         boarddto.setReplyCnt(boarddto.getReplyCnt()+1);
         boardRepository.save(boardMapper.toEntity(boarddto));
 
+        // 댓글에 부모 설정
+        dto.setBoard(board);
         dto.setUser(userDetails.getUser());
 
         return replyRepository.save(replyMapper.toEntity(dto)).getRid();
@@ -48,7 +53,7 @@ public class ReplyService {
     public Page<Reply> readReplyList(Long bid, Criteria cri){
         Pageable pageable = PageRequest.of(cri.getPage()-1, cri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
 
-        Page<Reply> page = replyRepository.findAllByBid(bid, pageable);
+        Page<Reply> page = replyRepository.findAllByBoardBid(bid, pageable);
 
         return page;
     }
@@ -76,6 +81,6 @@ public class ReplyService {
     }
 
     public Long countReply(Long bid){
-        return replyRepository.countByBid(bid);
+        return replyRepository.countByBoardBid(bid);
     }
 }

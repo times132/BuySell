@@ -1,5 +1,6 @@
 package com.example.giveandtake.DTO;
 
+import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -18,5 +19,6 @@ public class ReplyDTO {
     private String replyer;
     @JsonIgnoreProperties({"id", "replyList", "boardList", "password", "email", "phone", "profileImage", "roles"})
     private User user;
+    private Board board;
     private LocalDateTime createdDate;
 }
