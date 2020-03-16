@@ -21,6 +21,25 @@ var userService = (function () {
         });
     }
 
+    function checkEmail(email, callback, error) {
+        console.log("CHECK EMAIL");
+        $.ajax({
+            url : '/user/emailCheck?email='+ email,
+            type : 'get',
+            async: true,
+            success: function (data) {
+                if (callback){
+                    callback(data);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (error){
+                    error(err);
+                }
+            }
+        });
+    }
+
     function changeAct(email, callback, error) {
         console.log("ACTIVATION");
         $.ajax({
@@ -63,6 +82,7 @@ var userService = (function () {
     }
 
     return {
+        checkEmail : checkEmail,
         checkUsername : checkUsername,
         changeAct : changeAct,
         changePW : changePW

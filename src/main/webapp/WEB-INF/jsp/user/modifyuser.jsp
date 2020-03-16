@@ -73,7 +73,7 @@
                                 <label for="username"><H4>NICKNAME</H4></label>
                                 <input type="text" class="form-control" id="username" name="username" value="${userinfo.username}" required>
                                 <p>${valid_username}</p>
-                                <div class="check_font" id="username_check"></div><br>
+                                <div class="alert alert-danger" id="username_check">사용할 수 없는 닉네임입니다.</div><br>
                             </div>
                         </div>
                         <div class="form-group">
@@ -110,7 +110,7 @@
                                 <input type="hidden" name="activation" value="${userinfo.activation}">
                                 <input type="hidden" name="authorities" value="${userinfo.roles}">
                                 <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
-                                <input class="btn btn-sm btn-primary" type="submit"  value="수정"/>
+                                <input class="btn btn-sm btn-primary" type="submit" id="modify"  value="수정"/>
                                 <input class="btn btn-sm btn-primary" type="button" value="홈" onClick="self.location='/';">
                             </div>
                         </div>
@@ -162,28 +162,26 @@
         }
 
     });
-
+    $("#username_check").hide();
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
     idck = 0;
     $("#username").keyup(function() {
         var username = $("#username").val();
-
+        $("#username_check").hide();
         userService.checkUsername(username, function (data) {
-                if (data == 1) {
-                    //아이디가 존제할 경우 빨깡으로 , 아니면 파랑으로 처리하는 디자인
-                    $("#username_check").text("사용중인 아이디입니다. 다른 아이디를 입력해주세요");
-                    $("#username_check").css("color", "red");
-                    $("#submit").attr("disabled", true);
-                } else {
-                    $("#username_check").text("사용가능한 아이디입니다.");
-                    $("#username_check").css("color", "blue");
-                    $("#submit").attr("disabled", false);
-                    idck=1;
-                }
-                if(idck==1){
-                    $("#submit")
-                        .attr("disabled", false)
-                }
+            if (data == 1) {
+                $("#username_check").show();
+                $("#modify").attr("disabled", true);
+                idck=0;
+            }
+            else {
+                $("#username_check").hide();
+                idck=1;
+            }
+            if(idck==1){
+                $("#modify")
+                    .removeAttr("disabled");
+            }
         });
     });
 

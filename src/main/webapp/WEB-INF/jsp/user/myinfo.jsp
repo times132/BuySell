@@ -50,7 +50,7 @@
                 <ul class="nav nav-tabs">
                     <li class="nav-item"><a  class="nav-link active" data-toggle="tab" href="#home">내정보</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#myboards">Board</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#email">이메일 인증 및 계정 활성화</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#email">이메일 인증</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#withdrawal">회원탈퇴</a></li>
                 </ul>
 
@@ -117,13 +117,24 @@
                 </div><!--/tab-pane-->
                 <!--------------------------------------이메일인증---------------------------------------------------->
                 <div class="tab-pane" id="email">
+                        <sec:authorize access="hasAnyAuthority('GUEST')">
                         <br>
                         <br>
                         <h6>이메일 인증 (이메일인증을 받으시면 보다 나은 서비스를 이용할 수 있습니다.)</h6>
                         <br> <br>
                             <label for="email">이메일</label>
-                            <input class="form-control" type="text" id="e_mail" name="email" placeholder="EMAIL" required><br>
+                            <input class="form-control" type="text" id="e_mail" name="email" value="${userinfo.email}" readonly="readonly"  required><br>
                             <input class="btn btn-primary btn-sm" type="button" id="auth" value="이메일 인증받기"/>
+                        </sec:authorize>
+
+
+                        <sec:authorize access="hasAnyAuthority('ADMIN', 'USER')">
+                        <br>
+                        <br>
+                            <h6>이메일 인증 완료</h6>
+                            <input class="form-control" type="text"  value="${userinfo.email}" readonly="readonly" required><br>
+
+                        </sec:authorize>
                 </div>
                 <!-------------------------------------- 회원탈퇴 ---------------------------------------------------->
                 <div class="tab-pane" id="withdrawal">

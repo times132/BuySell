@@ -62,8 +62,14 @@ public class UserController {
         return new ResponseEntity<>("계정이 활성화 되었습니다.", HttpStatus.OK);
     }
 
-
-    //중복아이디 검사
+    //중복이메일 검사
+    @RequestMapping(value = "/user/emailCheck", method = RequestMethod.GET)
+    @ResponseBody
+    public int emailCheck(@RequestParam("email") String email) {
+        System.out.println(email);
+        return userService.emailCheck(email);
+    }
+    //중복닉네임 검사
     @RequestMapping(value = "/user/usernameCheck", method = RequestMethod.GET)
     @ResponseBody
     public int usernameCheck(@RequestParam("username") String username) {
@@ -124,7 +130,7 @@ public class UserController {
     //비밀번호 찾기
     @RequestMapping( value = "/user/findpw/{email}" , method=RequestMethod.GET)
     public String findPW(HttpServletRequest request, @PathVariable String email) throws IOException {
-        System.out.println("##########################################이메일"+ email);
+        System.out.println("이메일"+ email);
         String mailType = "findpw";
         String code = mailService.sendMail(email, request, mailType);
         userService.changePW(email, code);
@@ -135,8 +141,12 @@ public class UserController {
 
     // 접근 거부 페이지
     @GetMapping("/user/denied")
-    public String dispDenied() {
-        return "/user/denied";
+    public void disAllowance(HttpServletResponse response)throws IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println("<script>alert('접근 권한이 없습니다. 이메일 인증을 진행해 주세요'); location.href='/user/info';</script>");
+        out.flush();
     }
 
 

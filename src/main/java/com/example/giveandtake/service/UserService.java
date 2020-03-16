@@ -158,7 +158,7 @@ public class UserService implements UserDetailsService {
     }
 
     //이메일 중복검사
-    public int useridCheck(String email)
+    public int emailCheck(String email)
     {
         Optional<User> user = userRepository.findByEmail(email);
         System.out.println("값은 이메일 "+user.isPresent());
