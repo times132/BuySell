@@ -166,9 +166,11 @@ public class UserService implements UserDetailsService {
         userDTO.setPassword(passwordEncoder.encode(newPW));
         userRepository.save(userDTO.toEntity()).getId();
 
+
     }
     //계정코드 활성화
     public void changeAct(String email, Principal principal) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<User> userWapper = userRepository.findByUsername(principal.getName());
         User user = userWapper.get();
         UserDTO userDTO = convertEntityToDto(user);
@@ -177,7 +179,10 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new AppException("User Role not set"));
         userDTO.setRoles(Collections.singleton(userRole));
         userRepository.save(userDTO.toEntity());
-        loadUserByUsername(userDTO.getEmail()); //
+        UserDetails userDetails = loadUserByUsername(userDTO.getEmail()); // 수정된 유저 정보 가져옴
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
+        newAuth.setDetails(authentication.getDetails());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
 

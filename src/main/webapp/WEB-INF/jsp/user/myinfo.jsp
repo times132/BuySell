@@ -188,6 +188,7 @@
                     if (code == result) {
                         userService.changeAct(e_mail, function (result) {
                             alert(result);
+                            location.href = "/user/info";
                             return;
                         });
                         return;
@@ -197,7 +198,6 @@
                 }
                 alert("인증번호가 3회이상 틀렸습니다. 이메일 전송을 다시시도해주세요");
                 location.href = "/user/info";
-
             });
     });
 
