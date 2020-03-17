@@ -1,4 +1,5 @@
 package com.example.giveandtake.common;
+import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,10 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import sun.jvm.hotspot.memory.SystemDictionary;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -21,11 +21,17 @@ public class CustomUserDetails implements UserDetails {
 
     private User user;
     private Collection<? extends GrantedAuthority> authorities;
+    private Set<Role> authList;
 
     public static CustomUserDetails create(User user){
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-        return new CustomUserDetails(user, authorities);
+        Set<Role> authList = user.getRoles();
+        System.out.println(authList);
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        for (Role role : authList) {
+            authorities.add(new SimpleGrantedAuthority(role.getName().name()));
+        }
+
+        return new CustomUserDetails(user, authorities, authList);
     }
 
     @Override

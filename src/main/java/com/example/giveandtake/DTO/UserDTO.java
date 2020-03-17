@@ -42,7 +42,7 @@ public class UserDTO {
 
     private Boolean activation;
 
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public User toEntity() {
         return User.builder()

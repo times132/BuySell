@@ -117,7 +117,7 @@
                 </div><!--/tab-pane-->
                 <!--------------------------------------이메일인증---------------------------------------------------->
                 <div class="tab-pane" id="email">
-                        <sec:authorize access="hasAnyAuthority('GUEST')">
+                        <sec:authorize access="hasRole('GUEST')">
                         <br>
                         <br>
                         <h6>이메일 인증 (이메일인증을 받으시면 보다 나은 서비스를 이용할 수 있습니다.)</h6>
@@ -128,7 +128,7 @@
                         </sec:authorize>
 
 
-                        <sec:authorize access="hasAnyAuthority('ADMIN', 'USER')">
+                        <sec:authorize access="hasAnyRole('ADMIN', 'USER')">
                         <br>
                         <br>
                             <h6>이메일 인증 완료</h6>
@@ -196,7 +196,7 @@
                     }
                 }
                 alert("인증번호가 3회이상 틀렸습니다. 이메일 전송을 다시시도해주세요");
-                location.href = "/user/info"
+                location.href = "/user/info";
 
             });
     });

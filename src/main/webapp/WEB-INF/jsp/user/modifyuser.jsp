@@ -23,7 +23,7 @@
 
 <body>
 <hr>
-<sec:authentication property="principal.user" var="userinfo"/>
+<sec:authentication property="principal" var="userinfo"/>
 <div class="container">
     <div class="row">
         <div class="col-sm-10"><h1>내정보</h1></div>
@@ -71,7 +71,7 @@
 
                             <div class="col-xs-6">
                                 <label for="username"><H4>NICKNAME</H4></label>
-                                <input type="text" class="form-control" id="username" name="username" value="${userinfo.username}" required>
+                                <input type="text" class="form-control" id="username" name="username" value="${userinfo.user.username}" required>
                                 <p>${valid_username}</p>
                                 <div class="alert alert-danger" id="username_check">사용할 수 없는 닉네임입니다.</div><br>
                             </div>
@@ -79,21 +79,21 @@
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>NAME</h4>
-                                <input type="text" class="form-control" name="name" value="${userinfo.name}" placeholder="NAME" title="enter your last name if any.">
+                                <input type="text" class="form-control" name="name" value="${userinfo.user.name}" placeholder="NAME" title="enter your last name if any.">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>EMAIL</h4>
-                                <input type="text" class="form-control" name="email" value="${userinfo.email}" readonly="readonly" placeholder="enter phone" title="enter your phone number if any.">
+                                <input type="text" class="form-control" name="email" value="${userinfo.user.email}" readonly="readonly" placeholder="enter phone" title="enter your phone number if any.">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>PHONE NUMBER</h4>
-                                <input type="text" class="form-control" name="phone" value="${userinfo.phone}"  placeholder="enter mobile number" title="enter your mobile number if any.">
+                                <input type="text" class="form-control" name="phone" value="${userinfo.user.phone}"  placeholder="enter mobile number" title="enter your mobile number if any.">
                             </div>
                         </div>
 
@@ -106,10 +106,9 @@
                         <div class="form-group">
                             <div class="col-xs-12">
                                 <br>
-                                <input type="hidden" name="id" value="${userinfo.id}">
-                                <input type="hidden" name="activation" value="${userinfo.activation}">
-                                <input type="hidden" name="authorities" value="${userinfo.roles}">
-                                <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
+                                <input type="hidden" name="id" value="${userinfo.user.id}">
+                                <input type="hidden" name="activation" value="${userinfo.user.activation}">
+                                <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.user.profileImage}">
                                 <input class="btn btn-sm btn-primary" type="submit" id="modify"  value="수정"/>
                                 <input class="btn btn-sm btn-primary" type="button" value="홈" onClick="self.location='/';">
                             </div>
@@ -151,14 +150,16 @@
 <script type="text/javascript" src="/resources/js/fileupload.js"></script>
 <script type="text/javascript" src="/resources/js/user.js"></script>
 <script>
+    var authority = $("#role");
+    console.log("###role"+ authority)
     $(document).ready(function() {
-        var profileImage = "<c:out value="${userinfo.profileImage}"/>";
+        var profileImage = "<c:out value="${userinfo.user.profileImage}"/>";
 
         var profile = $(".profile-image");
         if (profileImage === ""){
             profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
         }else{
-            profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
+            profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.user.id}/profile/${userinfo.user.profileImage}'/>")
         }
 
     });

@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userDto.setActivation(false);
         //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
-        Role userRole = roleRepository.findByName(RoleName.GUEST)
+        Role userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
                 .orElseThrow(() -> new AppException("User Role not set"));
         userDto.setRoles(Collections.singleton(userRole));
 
@@ -61,7 +61,8 @@ public class UserService implements UserDetailsService {
                 () -> new UsernameNotFoundException("email not found :" + email));
         logger.info("#########username : " + user.getName());
         logger.info("#########profile : " + user.getProfileImage());
-        if (user.getActivation()) logger.info("#########role : " + user.getActivation());
+        logger.info("#########roles : " + user.getRoles());
+
         return CustomUserDetails.create(user);
     }
     //유효성 검사
@@ -100,22 +101,11 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void modify(UserDTO userList){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String password = ((CustomUserDetails) authentication.getPrincipal()).getPassword();
-        if(!password.equals(userList.getPassword())) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            userList.setPassword(passwordEncoder.encode(userList.getPassword()));
-        }
-        Set<Role> roles = new HashSet<>();
 
-        for (GrantedAuthority a : authentication.getAuthorities()){
-            logger.info("############AUTH : " + a);
-            roles.add(Role.builder()
-                    .id((long) (RoleName.valueOf(a.getAuthority()).ordinal()+1))
-                    .name(RoleName.valueOf(a.getAuthority()))
-                    .build());
-        }
-        userList.setRoles(roles);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        userList.setPassword(passwordEncoder.encode(userList.getPassword()));
 
+        userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getAuthList());
         userRepository.save(userList.toEntity()).getId();
 
         UserDetails userDetails = loadUserByUsername(userList.getEmail()); // 수정된 유저 정보 가져옴
@@ -183,10 +173,11 @@ public class UserService implements UserDetailsService {
         User user = userWapper.get();
         UserDTO userDTO = convertEntityToDto(user);
         userDTO.setEmail(email);
-        Role userRole = roleRepository.findByName(RoleName.USER)
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set"));
         userDTO.setRoles(Collections.singleton(userRole));
         userRepository.save(userDTO.toEntity());
+        loadUserByUsername(userDTO.getEmail()); //
     }
 
 

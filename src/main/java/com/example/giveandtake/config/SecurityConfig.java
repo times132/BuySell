@@ -39,8 +39,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable()
                 .authorizeRequests()
                 // 페이지 권한 설정
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/chat/room").hasAuthority("USER")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/chat/room").hasRole("USER")
                 .antMatchers("/**").permitAll()
                 .and()
                 .formLogin()
