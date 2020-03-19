@@ -45,6 +45,7 @@
             <div class="messages">
                 <div>
                     <button class="delete" id='deleteBtn'  >채팅그만두기</button>
+                    <button onClick="self.location='/';" type="button"> <i class="fa fa-home" aria-hidden="true"></i> </button>
                 </div>
                 <div class="msg_history">
 
@@ -186,7 +187,7 @@
                         "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
                         "</div></div>");
                 }
-
+                console.log(str);
                 messageDIV.html(str);
 
             });
@@ -197,7 +198,7 @@
 
             this.message = document.getElementById("message").value;
             console.log("SEND MESSAGE" + this.message);
-            ws.send("/pub/chat/message", {}, JSON.stringify({
+            ws.send("/app/chat/message", {}, JSON.stringify({
                 type: 'TALK',
                 roomId: roomId,
                 sender: sender,
@@ -224,7 +225,7 @@
 
         //삭제
         $(document).on("click", "#deleteBtn", function () {
-            ws.send("/pub/chat/message", {}, JSON.stringify({
+            ws.send("/app/chat/message", {}, JSON.stringify({
                 type: 'QUIT',
                 roomId: roomId,
                 sender: sender,
@@ -233,7 +234,7 @@
             }));
 
             alert("더이상 대화가 불가합니다.");
-            location.href="/chat/room/stop/"+parseInt(roomId);
+            location.href="/chat/room/stop/"+roomId;
 
 
         });
@@ -243,7 +244,7 @@
         function connect() {
             // pub/sub event
             ws.connect({}, function (frame) {
-                ws.subscribe("/sub/chat/room/" + roomId, function (message) {
+                ws.subscribe("/user/queue/chat/room/" + roomId, function (message) {
                     var recv = JSON.parse(message.body);
                     recvMessage(recv);
                 });

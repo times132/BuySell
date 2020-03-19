@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ChatMessageDTO {
 
-    private Long roomId;
+    private String roomId;
 
     private String sender; // 메시지 보낸사람
 
@@ -31,7 +31,7 @@ public class ChatMessageDTO {
     }
 
     @Builder
-    public ChatMessageDTO(Long roomId, String sender, ChatMessage.MessageType type, String message) {
+    public ChatMessageDTO(String roomId, String sender, ChatMessage.MessageType type, String message) {
         this.roomId = roomId;
         this.sender = sender;
         this.type = type;

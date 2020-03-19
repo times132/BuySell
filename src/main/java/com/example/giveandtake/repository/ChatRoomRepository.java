@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-   List<ChatRoom> findByRoomId(Long roomId);
+public interface ChatRoomRepository extends JpaRepository<ChatRoom, String> {
+   List<ChatRoom> findByRoomId(String roomId);
    List<ChatRoom> findByRequest(String request);
    List<ChatRoom> findByReceiver(String receiver);
 

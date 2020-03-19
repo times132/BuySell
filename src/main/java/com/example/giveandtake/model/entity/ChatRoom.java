@@ -17,8 +17,7 @@ import java.util.List;
 public class ChatRoom implements Comparable<ChatRoom>{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
+    private String roomId;
 
     @Column
     private String roomName;
@@ -42,7 +41,7 @@ public class ChatRoom implements Comparable<ChatRoom>{
 
 
     @Builder
-    public ChatRoom(Long roomId , String roomName, String request, String receiver,Integer rqMsgCount,Integer rcMsgCount, LocalDateTime msgDate)
+    public ChatRoom(String roomId , String roomName, String request, String receiver,Integer rqMsgCount,Integer rcMsgCount, LocalDateTime msgDate)
     {
         this.roomId = roomId;
         this.roomName =roomName;
