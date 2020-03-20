@@ -22,7 +22,7 @@ public class ChatMessage extends DateAudit {
     private Long msgNum;
 
     @Column
-    private Long roomId; // 방번호
+    private String roomId; // 방번호
 
     @Column
     private String sender; // 메시지 보낸사람
@@ -35,7 +35,7 @@ public class ChatMessage extends DateAudit {
 
 
     @Builder
-    public ChatMessage(Long roomId , String sender, MessageType type, String message) {
+    public ChatMessage(String roomId , String sender, MessageType type, String message) {
         this.roomId = roomId;
         this.sender = sender;
         this.type = type;

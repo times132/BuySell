@@ -81,11 +81,33 @@ var userService = (function () {
         });
     }
 
+    function findPW(email, callback, error) {
+        $.ajax({
+            type: "POST",
+            url: "/user/findpw",
+            data: email,
+            dataType: 'text',//데이타 타입
+            async: true,
+            success: function (result) {
+                if (callback){
+                    callback(result);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (error){
+                    error(err);
+                    alert("실패");
+                }
+            }
+        });
+    }
+
     return {
         checkEmail : checkEmail,
         checkUsername : checkUsername,
         changeAct : changeAct,
-        changePW : changePW
+        changePW : changePW,
+        findPW : findPW
     };
 
 

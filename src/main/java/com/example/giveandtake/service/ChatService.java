@@ -48,10 +48,11 @@ public class ChatService{
 
             if (status.equals("ok")){
                 status = "채팅방 개설이 완료되었습니다.";
+                String randomId = UUID.randomUUID().toString();
+                chatRoomDTO.setRoomId(randomId);
                 chatRoomDTO.setMsgDate(LocalDateTime.now());
                 chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
             }
-            System.out.println("###############"+status);
             return status;
     }
 
@@ -69,7 +70,7 @@ public class ChatService{
     }
 
     //특정채팅방 조회
-    public List<ChatRoom> findRoomById(Long roomId) {
+    public List<ChatRoom> findRoomById(String roomId) {
         return chatRoomRepository.findByRoomId(roomId);
     }
 
@@ -100,11 +101,16 @@ public class ChatService{
             chatRoomDTO.setRqMsgCount(num+1);
         }
         chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
-        messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
+        String to =chatRoomDTO.getReceiver();
+        if (chatRoomDTO.getReceiver().equals(principal.getName())){
+            to = chatRoomDTO.getRequest();
+        }
+
+        messagingTemplate.convertAndSendToUser(to,"/queue/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
 
     }
     //채팅방 삭제
-    public void deleteChatRoom(Long roomId, Principal principal) {
+    public void deleteChatRoom(String roomId, Principal principal) {
         List<ChatRoom> chatRoom = chatRoomRepository.findByRoomId(roomId);
         ChatRoom chats = chatRoom.get(0);
         ChatRoomDTO chatRoomDTO = convertEntityToDto(chats);
@@ -124,7 +130,7 @@ public class ChatService{
     }
 
     //채팅방 메시지 리스트 가져오기
-    public List<ChatMessage> findMessages(Long roomId, Principal principal) {
+    public List<ChatMessage> findMessages(String roomId, Principal principal) {
         List<ChatMessage> messages = chatMessageRepository.findMessageByRoomId(roomId);
         String name = principal.getName();
         List<ChatRoom> chatRooms = chatRoomRepository.findByRoomId(roomId);
@@ -155,4 +161,12 @@ public class ChatService{
     }
 
 
+    public boolean checkAccess(Principal principal, String roomId) {
+        List<ChatRoom> chatRoom = chatRoomRepository.findByRoomId(roomId);
+        ChatRoom chats = chatRoom.get(0);
+        if(!chats.getReceiver().equals(principal.getName()) && !chats.getRequest().equals(principal.getName())){
+            return false;
+        }
+        return true;
+    }
 }

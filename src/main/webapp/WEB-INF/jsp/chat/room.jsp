@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Chatting room</title>
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
     <link href="/resources/css/chat.css" rel="stylesheet">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
@@ -14,6 +15,7 @@
     <script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/chat.js"></script>
+
 </head>
 <body>
 <div class="container">
@@ -23,14 +25,13 @@
             <div class="inbox_people">
                 <div class="headind_srch">
                     <div class="recent_heading">
-                        <h4>Recent</h4>
-                        <a class="gobackhome" href="/">홈으로 이동</a><br>
+                        <h4>GIVE AND TAKE TALK</h4>
                     </div>
                     <div class="srch_bar">
                         <div class="stylish-input-group">
-                            <input  type="text" class="search-bar" id="receiver" value="${nickName}" placeholder="닉네임(대화상대)을 입력해주세요"><br>
+                            <input type="text" id="receiver" class="search-bar"  placeholder="Search" >
                             <span class="input-group-addon">
-                            <button type="button" id="creating">채팅요청</button>
+                                    <button id=creating type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
                             </span>
                         </div>
                     </div>
@@ -44,6 +45,7 @@
             <div class="messages">
                 <div>
                     <button class="delete" id='deleteBtn'  >채팅그만두기</button>
+                    <button onClick="self.location='/';" type="button"> <i class="fa fa-home" aria-hidden="true"></i> </button>
                 </div>
                 <div class="msg_history">
 
@@ -185,7 +187,7 @@
                         "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
                         "</div></div>");
                 }
-
+                console.log(str);
                 messageDIV.html(str);
 
             });
@@ -196,7 +198,7 @@
 
             this.message = document.getElementById("message").value;
             console.log("SEND MESSAGE" + this.message);
-            ws.send("/pub/chat/message", {}, JSON.stringify({
+            ws.send("/app/chat/message", {}, JSON.stringify({
                 type: 'TALK',
                 roomId: roomId,
                 sender: sender,
@@ -223,7 +225,7 @@
 
         //삭제
         $(document).on("click", "#deleteBtn", function () {
-            ws.send("/pub/chat/message", {}, JSON.stringify({
+            ws.send("/app/chat/message", {}, JSON.stringify({
                 type: 'QUIT',
                 roomId: roomId,
                 sender: sender,
@@ -232,7 +234,7 @@
             }));
 
             alert("더이상 대화가 불가합니다.");
-            location.href="/chat/room/stop/"+parseInt(roomId);
+            location.href="/chat/room/stop/"+roomId;
 
 
         });
@@ -242,7 +244,7 @@
         function connect() {
             // pub/sub event
             ws.connect({}, function (frame) {
-                ws.subscribe("/sub/chat/room/" + roomId, function (message) {
+                ws.subscribe("/user/queue/chat/room/" + roomId, function (message) {
                     var recv = JSON.parse(message.body);
                     recvMessage(recv);
                 });

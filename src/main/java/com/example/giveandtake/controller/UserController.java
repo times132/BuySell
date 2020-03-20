@@ -1,45 +1,28 @@
 package com.example.giveandtake.controller;
 
-import com.example.giveandtake.DTO.BoardDTO;
-import com.example.giveandtake.DTO.BoardFileDTO;
-import com.example.giveandtake.DTO.ChatRoomDTO;
 import com.example.giveandtake.DTO.UserDTO;
-import com.example.giveandtake.common.CustomUserDetails;
-import com.example.giveandtake.model.entity.User;
-import com.example.giveandtake.repository.UserRepository;
 import com.example.giveandtake.service.MailService;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
-import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
-import java.util.*;
+import java.util.Map;
 
 @Controller
 @AllArgsConstructor
@@ -69,7 +52,6 @@ public class UserController {
     @RequestMapping(value = "/user/activate")
     @ResponseBody
     public ResponseEntity<String> activateUser(@RequestParam(value = "email") String email, Principal principal){
-
         userService.changeAct(email, principal);
         return new ResponseEntity<>("계정이 활성화 되었습니다.", HttpStatus.OK);
     }
@@ -140,14 +122,14 @@ public class UserController {
     }
 
     //비밀번호 찾기
-    @RequestMapping( value = "/user/findpw/{email}" , method=RequestMethod.GET)
-    public String findPW(HttpServletRequest request, @PathVariable String email) throws IOException {
+    @RequestMapping( value = "/user/findpw" , method=RequestMethod.POST)
+    public String findPW(HttpServletRequest request, @RequestParam String email){
         System.out.println("이메일"+ email);
         String mailType = "findpw";
         String code = mailService.sendMail(email, request, mailType);
         userService.changePW(email, code);
 
-        return "/user/login";
+        return "로그인창으로 이동합니다.";
     }
 
 
@@ -178,12 +160,12 @@ public class UserController {
     //회원정보수정
     @RequestMapping(value = "/user/modifyuser", method = RequestMethod.POST)
     @ResponseBody
-    public void modifyuser(UserDTO userList, HttpServletResponse response) throws IOException {
+    public void modifyuser(UserDTO user, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        if(userService.checkPassword(userList.getPassword())){
-            userService.modify(userList);
+        if(userService.checkPassword(user.getPassword())){
+            userService.modify(user);
             out.println("<script>alert('수정이 완료되었습니다.'); location.href='/user/info';</script>");
         }
         else{

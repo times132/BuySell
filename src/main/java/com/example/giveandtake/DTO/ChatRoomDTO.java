@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class ChatRoomDTO {
 
 
-    private Long roomId;
+    private String roomId;
     private String roomName;
     private String request;  //대화요청하는 사람
     private String receiver; //대화요청 받는 사람
@@ -36,7 +36,7 @@ public class ChatRoomDTO {
 
 
     @Builder
-    public ChatRoomDTO (Long roomId, String roomName, String request, String receiver, Integer rqMsgCount, Integer rcMsgCount, LocalDateTime msgDate) {
+    public ChatRoomDTO (String roomId, String roomName, String request, String receiver, Integer rqMsgCount, Integer rcMsgCount, LocalDateTime msgDate) {
         this.roomId =roomId;
         this.roomName= roomName;
         this.request = request;
