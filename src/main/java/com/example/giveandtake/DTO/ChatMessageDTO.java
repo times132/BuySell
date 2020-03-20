@@ -1,7 +1,9 @@
 package com.example.giveandtake.DTO;
 
+import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.ChatMessage;
 
+import com.example.giveandtake.model.entity.ChatRoom;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,17 +15,16 @@ import java.time.LocalDateTime;
 public class ChatMessageDTO {
 
     private String roomId;
-
     private String sender; // 메시지 보낸사람
-
     private ChatMessage.MessageType type; // 메시지 타입
     private String message; // 메시지
 
+    private ChatRoom chatRoom;
     private LocalDateTime createdDate;
 
     public ChatMessage toEntity(){
         return ChatMessage.builder()
-                .roomId(roomId)
+                .chatRoom(chatRoom)
                 .type(type)
                 .sender(sender)
                 .message(message)
@@ -31,8 +32,8 @@ public class ChatMessageDTO {
     }
 
     @Builder
-    public ChatMessageDTO(String roomId, String sender, ChatMessage.MessageType type, String message) {
-        this.roomId = roomId;
+    public ChatMessageDTO(ChatRoom chatRoom, String sender, ChatMessage.MessageType type, String message) {
+        this.chatRoom = chatRoom;
         this.sender = sender;
         this.type = type;
         this.message = message;

@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userDto.setActivation(false);
         //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
-        Role userRole = roleRepository.findByName(RoleName.GUEST)
+        Role userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
                 .orElseThrow(() -> new AppException("User Role not set"));
         userDto.setRoles(Collections.singleton(userRole));
 
@@ -181,7 +181,7 @@ public class UserService implements UserDetailsService {
         User user = userWapper.get();
         UserDTO userDTO = convertEntityToDto(user);
         userDTO.setEmail(email);
-        Role userRole = roleRepository.findByName(RoleName.USER)
+        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set"));
         userDTO.setRoles(Collections.singleton(userRole));
         userRepository.save(userDTO.toEntity());

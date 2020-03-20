@@ -12,7 +12,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -76,38 +76,46 @@ public class ChatService{
 
 
     //대화내용 저장
+    @Transactional
     public void createMessage(ChatMessageDTO chatMessageDTO, Principal principal) {
         if (ChatMessage.MessageType.QUIT.equals(chatMessageDTO.getType())) {
             chatMessageDTO.setMessage(chatMessageDTO.getSender() + "님이 방에서 나갔습니다.");
             chatMessageDTO.setSender("[알림]");
         }
+        List<ChatRoom> chatRooms = chatRoomRepository.findByRoomId(chatMessageDTO.getRoomId());
+        ChatRoom chatRoom = chatRooms.get(0);
+        chatMessageDTO.setChatRoom(chatRoom);
+
+
 
         Long msgNum = chatMessageRepository.save(chatMessageDTO.toEntity()).getMsgNum();
         Optional <ChatMessage> chatMessageList = chatMessageRepository.findByMsgNum(msgNum);
         ChatMessage chatMessage = chatMessageList.get();
-        List<ChatRoom> chatRooms = chatRoomRepository.findByRoomId(chatMessage.getRoomId());
-        ChatRoom chats = chatRooms.get(0);
-        ChatRoomDTO chatRoomDTO = convertEntityToDto(chats);
+
+
+
+        ChatRoomDTO chatRoomDTO = convertEntityToDto(chatRoom);
         chatRoomDTO.setMsgDate(chatMessage.getCreatedDate()); //최근 메세지 시간을 채팅방 시간으로 입력
-        chatRoomDTO.setRoomName(chatMessage.getMessage());
+        chatRoomDTO.setRoomName(chatMessage.getMessage()); //방이름을 최근 메세지 내용으로 설정
         String name = principal.getName();
         //메시지 개수 설정
-        if(name.equals(chats.getReceiver())){
-            int num = chats.getRcMsgCount();
+        if(name.equals(chatRoom.getReceiver())){
+            int num = chatRoom.getRcMsgCount();
             chatRoomDTO.setRcMsgCount(num+1); //나의 메시지 개수 증가
         }
         else {
-            int num = chats.getRqMsgCount();
+            int num = chatRoom.getRqMsgCount();
             chatRoomDTO.setRqMsgCount(num+1);
         }
         chatRoomRepository.save(chatRoomDTO.toEntity()).getRoomId();
+
+
         String to =chatRoomDTO.getReceiver();
         if (chatRoomDTO.getReceiver().equals(principal.getName())){
             to = chatRoomDTO.getRequest();
         }
 
         messagingTemplate.convertAndSendToUser(to,"/queue/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
-
     }
     //채팅방 삭제
     public void deleteChatRoom(String roomId, Principal principal) {
@@ -129,13 +137,14 @@ public class ChatService{
         }
     }
 
-    //채팅방 메시지 리스트 가져오기
+    //채팅방 대화내용 모두 가져오기
     public List<ChatMessage> findMessages(String roomId, Principal principal) {
-        List<ChatMessage> messages = chatMessageRepository.findMessageByRoomId(roomId);
+
         String name = principal.getName();
         List<ChatRoom> chatRooms = chatRoomRepository.findByRoomId(roomId);
         ChatRoom chats = chatRooms.get(0);
         ChatRoomDTO chatRoomDTO = convertEntityToDto(chats);
+        List<ChatMessage> messages = chatMessageRepository.findMessageByChatRoom(chats);
         //메시지 개수 설정
         if(name.equals(chats.getReceiver())){
             chatRoomDTO.setRqMsgCount(0); //상대방이 보낸 메세지 개수 리셋

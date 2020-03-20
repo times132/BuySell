@@ -39,7 +39,7 @@ public class UserController {
 //        Cookie cookie = new Cookie("JSESSIONID", null);
         String email = (String) session.getAttribute("email");
         String name = (String) session.getAttribute("name");
-        logger.info("이메일 : " + session.getAttribute("email"));
+        logger.info("S일 : " + session.getAttribute("email"));
         logger.info("이름 : " + session.getAttribute("name"));
         model.addAttribute("name", name);
         model.addAttribute("email", email);

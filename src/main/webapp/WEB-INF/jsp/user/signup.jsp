@@ -22,8 +22,9 @@
         <article class="card-body mx-auto" style="max-width: 400px;">
             <h4 class="card-title mt-3 text-center">Create Account</h4>
             <p>
-                <a href="#" class="btn btn-block btn-twitter"> <i class="fab fa-twitter"></i>   Login via Twitter</a>
-                <a href="#" class="btn btn-block btn-facebook"> <i class="fab fa-facebook-f"></i>   Login via facebook</a>
+                <a href="/oauth2/authorization/google" class="btn btn-block btn-twitter"> <i class="fab fa-google"></i>   Login via Google</a>
+                <a href="/oauth2/authorization/kakao" class="btn btn-block btn-facebook"> <i class="fab fa-kickstarter-k"></i>   Login via kakaotalk</a>
+                <a href="#" class="btn btn-block btn-facebook"> <i class="fab fa-facebook"></i>   Login via facebook</a>
             </p>
             <p class="divider-text">
                 <span class="bg-light">OR</span>

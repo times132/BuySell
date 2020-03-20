@@ -21,8 +21,9 @@ public class ChatMessage extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long msgNum;
 
-    @Column
-    private String roomId; // 방번호
+    @ManyToOne(targetEntity = ChatRoom.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "room_id")
+    private ChatRoom chatRoom; // 방번호
 
     @Column
     private String sender; // 메시지 보낸사람
@@ -35,8 +36,8 @@ public class ChatMessage extends DateAudit {
 
 
     @Builder
-    public ChatMessage(String roomId , String sender, MessageType type, String message) {
-        this.roomId = roomId;
+    public ChatMessage(ChatRoom chatRoom , String sender, MessageType type, String message) {
+        this.chatRoom = chatRoom;
         this.sender = sender;
         this.type = type;
         this.message = message;

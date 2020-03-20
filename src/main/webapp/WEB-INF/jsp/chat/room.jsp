@@ -70,6 +70,11 @@
 
 </body>
 <script>
+    // playInit = setInterval(function() {
+    //     init();
+    //     init2();
+    // }, 1000);
+    //
     init();
     $('.messages').hide();
     var chatUL = $(".inbox_chat");
@@ -92,6 +97,7 @@
                 str += "<ul>"
                 str += "<li class='chat_li' data-rid='" + data[i].roomId + "'>";
                 str += "<div class='chat_people'>"
+                str += "<div class='chat_img'> <img src='/resources/image/profile.png'> </div>"
                 str += "<div class='chat_ib'>"
                 str += ( sender === data[i].receiver ?
                     "<h5>"+ data[i].request +"<span class='msgCnt'>"+ data[i].rqMsgCount +"</span>" +"</h5>"
@@ -180,8 +186,11 @@
                         "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
                         "</div></div>"
 
-                        :"<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
+                        :
+
                         "<div class='incoming_msg'>\n" +
+                        "<div class='incoming_msg_img'><img src='/resources/image/profile.png'> </div>"+
+                        "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
                         "<div class='received_with_msg'>"+
                         "<p>"+data[i].message+"</p>\n"+
                         "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
@@ -207,9 +216,9 @@
             }));
             this.message = '';
             document.getElementById("message").value = '';
-
-            init();
             init2();
+            init();
+
         });
 
         function recvMessage(recv) {
@@ -247,6 +256,8 @@
                 ws.subscribe("/user/queue/chat/room/" + roomId, function (message) {
                     var recv = JSON.parse(message.body);
                     recvMessage(recv);
+                    init();
+                    init2();
                 });
 
             }, function (error) {
