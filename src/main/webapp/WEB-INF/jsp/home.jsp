@@ -25,7 +25,7 @@
 
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="userinfo"/>
-    <h5><c:out value="${userinfo.username}"/>님.</h5>
+<%--    <h5><c:out value="${userinfo.username}"/>님.</h5>--%>
     <input type="button" value="로그아웃" id="logout">
     <input type="button" value="내정보" onClick="self.location='/user/info';">
     <input type="button" value="채팅" onClick="self.location='/chat/room';">
@@ -34,6 +34,9 @@
 
 <input type="button" value="게시판" onClick="self.location='/board';">
 <input type="button" value="어드민" onClick="self.location='/admin';">
+
+<a href="/oauth2/authorization/google"><img src="/resources/image/google.png"></a>
+<a href="/oauth2/authorization/kakao"><img src="/resources/image/kakaolink_btn_medium.png"></a>
 <script>
 
     $("#logout").click(function() {

@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -49,7 +51,17 @@ public class UserController {
 
 
     @GetMapping("/user/signup")
-    public String Signup() {
+    public String Signup(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+//        Cookie cookie = new Cookie("JSESSIONID", null);
+        String email = (String) session.getAttribute("email");
+        String name = (String) session.getAttribute("name");
+        logger.info("이메일 : " + session.getAttribute("email"));
+        logger.info("이름 : " + session.getAttribute("name"));
+        model.addAttribute("name", name);
+        model.addAttribute("email", email);
+//        cookie.setMaxAge(0);
+        session.invalidate();
         return "/user/signup";
     }
 

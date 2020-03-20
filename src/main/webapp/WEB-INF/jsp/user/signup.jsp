@@ -33,13 +33,13 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                     </div>
-                    <input name="name" class="form-control" placeholder="FULL NAME" type="text" required/>
+                    <input name="name" class="form-control" placeholder="FULL NAME" type="text" value="${name}" required/>
                 </div> <!-- form-group// -->
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                     </div>
-                    <input name="email"  class="form-control" id="email" placeholder="EMAIL ADDRESS" type="email" required/>
+                    <input name="email"  class="form-control" id="email" placeholder="EMAIL ADDRESS" value="${email}" type="email" required/>
                 </div> <!-- form-group// -->
                 <div class="alert alert-danger" id="email_check">이미 사용중인 이메일 입니다.</div>
                 <p>${valid_email}</p>
