@@ -135,25 +135,35 @@ public class UserService implements UserDetailsService {
 
 
     //아이디 중복확인
-    public int usernameCheck(String username)  {
+    public boolean usernameCheck(String username)  {
         Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByUsername(username);
         System.out.println(username);
         System.out.println("값은 아이디 "+user.isPresent());
         if(user.isPresent()){
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
-    //이메일 중복검사
-    public int emailCheck(String email)
+
+    public boolean emailCheck(String email)
     {
         Optional<User> user = userRepository.findByEmail(email);
         System.out.println("값은 이메일 "+user.isPresent());
         if(user.isPresent()){
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
+    }
+    //닉네임 중복검사
+    public boolean nicknameCheck(String nickname)
+    {
+        Optional<User> user = userRepository.findByNickname(nickname);
+        System.out.println("값은 이메일 "+user.isPresent());
+        if(user.isPresent()){
+            return true;
+        }
+        return false;
     }
     //비밀번호 찾기 및 변경
     @Transactional

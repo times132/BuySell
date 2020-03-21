@@ -2,14 +2,10 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.GoogleDTO;
 import com.example.giveandtake.DTO.KakaoDTO;
-import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,16 +18,12 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,7 +83,7 @@ public class OAuth2Controller{
             Map<String, Object> kakaoaccount = kakao.getKakaoAccount();
             logger.info("이메일 동의 함"); // 가입했는지 확인
             logger.info("이메일: " + kakaoaccount.get("email"));
-            if (userService.emailCheck(kakaoaccount.get("email").toString()) == 1){ // booleam으로 바꾸자
+            if (userService.emailCheck(kakaoaccount.get("email").toString())){ // booleam으로 바꾸자
                 logger.info("이미 가입된 이메일입니다.");
                 UserDetails userDetails = userService.loadUserByUsername(kakaoaccount.get("email").toString());
 

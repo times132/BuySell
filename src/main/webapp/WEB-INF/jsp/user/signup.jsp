@@ -32,36 +32,11 @@
             <form  action="/user/signup" method="post">
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
-                    </div>
-                    <input name="name" class="form-control" placeholder="FULL NAME" type="text" value="${name}" required/>
-                </div> <!-- form-group// -->
-                <div class="form-group input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
-                    </div>
-                    <input name="email"  class="form-control" id="email" placeholder="EMAIL ADDRESS" value="${email}" type="email" required/>
-                </div> <!-- form-group// -->
-                <div class="alert alert-danger" id="email_check">이미 사용중인 이메일 입니다.</div>
-                <p>${valid_email}</p>
-                <div class="form-group input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
-                    </div>
-                    <select class="custom-select" style="max-width: 120px;">
-                        <option selected="">---</option>
-                        <option value="1">+010</option>
-                        <option value="2">*</option>
-                    </select>
-                    <input name=phone class="form-control" placeholder="PHONE NUMBER" type="text">
-                </div> <!-- form-group// -->
-                <div class="form-group input-group">
-                    <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-address-card"></i> </span>
                     </div>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="NICKNAME" required/>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="ID" required/>
                 </div> <!-- form-group end.// -->
-                <div class="alert alert-danger" id="username_check">이미 사용중인 닉네임입니다.</div><p>${valid_username}</p><br>
+                <div class="alert alert-danger" id="username_check">이미 사용중인 ID입니다.</div><p>${valid_username}</p><br>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
@@ -78,6 +53,39 @@
                 <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
                 <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
                 <p>${valid_password}</p>
+
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <input name="name" class="form-control" placeholder="FULL NAME" type="text" value="${name}" required/>
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <input name="email"  class="form-control" id="email" placeholder="EMAIL ADDRESS" value="${email}" type="email" required/>
+                </div> <!-- form-group// -->
+                <p>${valid_email}</p>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                    </div>
+                    <select class="custom-select" style="max-width: 120px;">
+                        <option selected="">---</option>
+                        <option value="1">+010</option>
+                        <option value="2">*</option>
+                    </select>
+                    <input name=phone class="form-control" placeholder="PHONE NUMBER" type="text">
+                </div> <!-- form-group// -->
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fas fa-address-card"></i> </span>
+                    </div>
+                    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="NICKNAME" required/>
+                </div> <!-- form-group end.// -->
+                <div class="alert alert-danger" id="nickname_check">이미 사용중인 닉네임입니다.</div><p>${valid_nickname}</p><br>
+
 
             <div class="form-group">
                     <button type="submit" name="submit" id="submit" class="btn btn-primary btn-block"> Create Account</button>
@@ -96,16 +104,16 @@
         .attr("disabled", true);
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
     idck1 = 0;
-    $("#email").keyup(function() {
-        var email = $("#email").val();
+    $("#nickname").keyup(function() {
+        var nickname = $("#nickname").val();
 
-        userService.checkEmail(email, function (data) {
-            if (data == 1) {
-                $("#email_check").show();
+        userService.checkEmail(nickname, function (data) {
+            if (data) {
+                $("#nickname_check").show();
                 $("#submit").attr("disabled", true);
                 idck1=0;
             } else {
-                $("#email_check").hide();
+                $("#nickname_check").hide();
                 idck1 = 1;
             }
             if(idck==1 && idck1==1){
@@ -114,7 +122,7 @@
             }
         });
     });
-    $("#email_check").hide();
+    $("#nickname_check").hide();
     $("#username_check").hide();
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
     idck = 0;

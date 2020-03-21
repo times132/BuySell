@@ -71,9 +71,9 @@
 
                             <div class="col-xs-6">
                                 <label for="username"><H4>NICKNAME</H4></label>
-                                <input type="text" class="form-control" id="username" name="username" value="${userinfo.user.username}" required>
+                                <input type="text" class="form-control" id="username" name="username" value="${userinfo.user.username}" readonly="readonly" required>
                                 <p>${valid_username}</p>
-                                <div class="alert alert-danger" id="username_check">사용할 수 없는 닉네임입니다.</div><br>
+                                <div class="alert alert-danger" id="username_check">사용할 수 없는 ID입니다.</div><br>
                             </div>
                         </div>
                         <div class="form-group">
@@ -82,6 +82,13 @@
                                 <input type="text" class="form-control" name="name" value="${userinfo.user.name}" placeholder="NAME" title="enter your last name if any.">
                             </div>
                         </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <h4>NICKNAME</h4>
+                                    <input type="text" class="form-control" name="nickname" value="${userinfo.user.nickname}"  placeholder="enter phone" title="enter your phone number if any.">
+                                </div>
+                            </div>
 
                         <div class="form-group">
                             <div class="col-xs-6">
@@ -170,7 +177,7 @@
         var username = $("#username").val();
         $("#username_check").hide();
         userService.checkUsername(username, function (data) {
-            if (data == 1) {
+            if (data) {
                 $("#username_check").show();
                 $("#modify").attr("disabled", true);
                 idck=0;

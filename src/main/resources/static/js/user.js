@@ -3,7 +3,7 @@ console.log("user module****************************");
 var userService = (function () {
 
     function checkUsername(username, callback, error) {
-        console.log("CHECK USERNAME");
+        console.log("CHECK ID");
         $.ajax({
             url : '/user/usernameCheck?username='+ username,
             type : 'get',
@@ -21,10 +21,10 @@ var userService = (function () {
         });
     }
 
-    function checkEmail(email, callback, error) {
-        console.log("CHECK EMAIL");
+    function checkEmail(nickname, callback, error) {
+        console.log("CHECK NICKNAME");
         $.ajax({
-            url : '/user/emailCheck?email='+ email,
+            url : '/user/nicknameCheck?nickname='+ nickname,
             type : 'get',
             async: true,
             success: function (data) {

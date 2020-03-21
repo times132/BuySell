@@ -31,8 +31,8 @@ public class ChatService{
 
             String status = "ok";
             //닉네임 존재여부 확인
-            int result = userService.usernameCheck(chatRoomDTO.getReceiver());
-            if(result == 0){
+            boolean result = userService.nicknameCheck(chatRoomDTO.getReceiver());
+            if(result == false){
                 status = "존재하지 않는 닉네임입니다.";
                 return status;
             }

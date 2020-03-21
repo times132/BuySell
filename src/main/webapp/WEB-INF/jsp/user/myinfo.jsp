@@ -63,14 +63,22 @@
                             <div class="form-group">
 
                                 <div class="col-xs-6">
-                                    <h4>NICKNAME</h4>
-                                    <input type="text" class="form-control" name="username" value="${userinfo.username}" readonly="readonly" placeholder="NICKNAME" title="enter your first name if any.">
+                                    <h4>ID</h4>
+                                    <input type="text" class="form-control" name="username" value="${userinfo.username}" readonly="readonly" placeholder="ID" title="enter your first name if any.">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-6">
                                     <h4>NAME</h4>
                                     <input type="text" class="form-control" name="name" value="${userinfo.name}" readonly="readonly" placeholder="NAME" title="enter your last name if any.">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+                                    <h4>NICKNAME</h4>
+                                    <input type="text" class="form-control" name="nickname" value="${userinfo.nickname}" readonly="readonly" placeholder="NICKNAME" title="enter your first name if any.">
                                 </div>
                             </div>
 

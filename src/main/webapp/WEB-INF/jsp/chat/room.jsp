@@ -81,7 +81,7 @@
     var me = null;
     <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="userinfo"/>;
-    sender = '${userinfo.username}';
+    sender = '${userinfo.user.nickname}';
     </sec:authorize>
     function init() {
         // 채팅룸 출력

@@ -21,19 +21,24 @@
 
 </sec:authorize>
 
+<sec:authorize access="hasAnyRole('SOCIAL')">
 
+    <input type="button" value="로그인" onClick="self.location='/user/login';">
+    <input type="button" value="회원가입" onClick="self.location='/user/signup';">
 
-<sec:authorize access="isAuthenticated()">
+</sec:authorize>
+
+<sec:authorize access="hasAnyRole('ADMIN', 'USER', 'GUEST')">
     <sec:authentication property="principal" var="userinfo"/>
 <%--    <h5><c:out value="${userinfo.username}"/>님.</h5>--%>
     <input type="button" value="로그아웃" id="logout">
     <input type="button" value="내정보" onClick="self.location='/user/info';">
     <input type="button" value="채팅" onClick="self.location='/chat/room';">
-
+    <input type="button" value="게시판" onClick="self.location='/board';">
+    <input type="button" value="어드민" onClick="self.location='/admin';">
 </sec:authorize>
 
-<input type="button" value="게시판" onClick="self.location='/board';">
-<input type="button" value="어드민" onClick="self.location='/admin';">
+
 
 <a href="/oauth2/authorization/google"><img src="/resources/image/google.png"></a>
 <a href="/oauth2/authorization/kakao"><img src="/resources/image/kakaolink_btn_medium.png"></a>

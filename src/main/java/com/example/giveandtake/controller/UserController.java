@@ -57,18 +57,18 @@ public class UserController {
     }
 
     //중복이메일 검사
-    @RequestMapping(value = "/user/emailCheck", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/nicknameCheck", method = RequestMethod.GET)
     @ResponseBody
-    public int emailCheck(@RequestParam("email") String email) {
-        System.out.println(email);
-        return userService.emailCheck(email);
+    public boolean emailCheck(@RequestParam("nickname") String nickname) {
+        System.out.println(nickname);
+        return userService.nicknameCheck(nickname);
     }
     //중복닉네임 검사
     @RequestMapping(value = "/user/usernameCheck", method = RequestMethod.GET)
     @ResponseBody
-    public int usernameCheck(@RequestParam("username") String username) {
+    public boolean usernameCheck(@RequestParam("username") String username) {
         System.out.println(username);
-        return userService.usernameCheck(username);
+        return userService.nicknameCheck(username);
     }
 
     //회원가입

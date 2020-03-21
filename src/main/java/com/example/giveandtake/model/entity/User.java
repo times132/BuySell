@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,9 @@ public class User extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private String nickname;
 
     private String name;
 
@@ -54,8 +58,9 @@ public class User extends DateAudit {
     private List<Reply> replyList;
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String username, String name, String password, String phone, String email,Long id, String profileImage, Boolean activation, Set<Role> roles){
+    public User(String username, String nickname, String name, String password, String phone, String email,Long id, String profileImage, Boolean activation, Set<Role> roles){
         this.username = username;
+        this.nickname = nickname;
         this.name = name;
         this.password = password;
         this.phone = phone;

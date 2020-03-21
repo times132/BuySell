@@ -20,8 +20,11 @@ import java.util.Set;
 public class UserDTO {
     private Long id;
 
-    @NotBlank(message = "닉네임은 필수 입력 값입니다.")
+    @NotBlank(message = "ID 필수 입력 값입니다.")
     private String username;
+
+    @NotBlank(message = "ID 필수 입력 값입니다.")
+    private String nickname;
 
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
     @Email(message = "이메일 형식에 맞지 않습니다. 이메일 형식으로 입력해주세요.")  //이메일 양식이어야 함
@@ -48,6 +51,7 @@ public class UserDTO {
         return User.builder()
                 .id(id)
                 .username(username)
+                .nickname(nickname)
                 .name(name)
                 .password(password)
                 .phone(phone)
@@ -59,8 +63,9 @@ public class UserDTO {
     }
 
     @Builder
-    public UserDTO(Long id, String name, String email, String password, String phone, String username, String profileImage, Boolean activation, Set<Role> roles) {
+    public UserDTO(Long id, String nickname, String name, String email, String password, String phone, String username, String profileImage, Boolean activation, Set<Role> roles) {
         this.id = id;
+        this.nickname = nickname;
         this.name = name;
         this.email = email;
         this.password = password;
