@@ -30,7 +30,6 @@ public class CustomUserDetails implements UserDetails {
         for (Role role : authList) {
             authorities.add(new SimpleGrantedAuthority(role.getName().name()));
         }
-
         return new CustomUserDetails(user, authorities, authList);
     }
 

@@ -80,7 +80,7 @@ public class OAuth2Controller{
 
 
 
-        return "hello";
+        return "/user/signup";
     }
 
     private String kakaoOauth(KakaoDTO kakao, HttpSession session){

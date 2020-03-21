@@ -16,7 +16,7 @@ import java.util.Map;
 @Setter
 @ToString
 public class GoogleDTO implements OAuth2User {
-    private List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
+    private List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_SOCIAL");
     private String sub;
     private String name;
     private String picture;

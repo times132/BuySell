@@ -17,7 +17,7 @@ import java.util.Map;
 @Setter
 @ToString
 public class KakaoDTO implements OAuth2User {
-    private List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
+    private List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_SOCIAL");
     private String id;
     @JsonProperty("kakao_account")
     private Map<String, Object> kakaoAccount;

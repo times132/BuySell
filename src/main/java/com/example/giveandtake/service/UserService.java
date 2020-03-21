@@ -56,9 +56,9 @@ public class UserService implements UserDetailsService {
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new UsernameNotFoundException("email not found :" + email));
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(name).orElseThrow(
+                () -> new UsernameNotFoundException("name not found :" + name));
 
         return CustomUserDetails.create(user);
     }
@@ -103,17 +103,7 @@ public class UserService implements UserDetailsService {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userList.setPassword(passwordEncoder.encode(userList.getPassword()));
         }
-        Set<Role> roles = new HashSet<>();
-
-        for (GrantedAuthority a : authentication.getAuthorities()){
-            logger.info("############AUTH : " + a);
-            roles.add(Role.builder()
-                    .id((long) (RoleName.valueOf(a.getAuthority()).ordinal()+1))
-                    .name(RoleName.valueOf(a.getAuthority()))
-                    .build());
-        }
-        userList.setRoles(roles);
-
+        userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getAuthList());
         userRepository.save(userList.toEntity()).getId();
 
         UserDetails userDetails = loadUserByUsername(userList.getEmail()); // 수정된 유저 정보 가져옴
