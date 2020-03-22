@@ -42,7 +42,7 @@ public class UserDTO {
     private String phone;
 
     private String profileImage;
-
+    private String provider;
     private Boolean activation;
 
     private Set<Role> roles;
@@ -58,12 +58,13 @@ public class UserDTO {
                 .email(email)
                 .activation(activation)
                 .profileImage(profileImage)
+                .provider(provider)
                 .roles(roles)
                 .build();
     }
 
     @Builder
-    public UserDTO(Long id, String nickname, String name, String email, String password, String phone, String username, String profileImage, Boolean activation, Set<Role> roles) {
+    public UserDTO(Long id, String nickname, String name, String email, String password, String phone, String username, String profileImage, String provider, Boolean activation, Set<Role> roles) {
         this.id = id;
         this.nickname = nickname;
         this.name = name;
@@ -72,6 +73,7 @@ public class UserDTO {
         this.phone = phone;
         this.username = username;
         this.activation=activation;
+        this.provider = provider;
         this.profileImage = profileImage;
         this.roles = roles;
     }

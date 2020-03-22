@@ -21,14 +21,14 @@
 
 </sec:authorize>
 
-<sec:authorize access="hasAnyRole('SOCIAL')">
+<%--<sec:authorize access="hasAnyRole('SOCIAL')">--%>
 
-    <input type="button" value="로그인" onClick="self.location='/user/login';">
-    <input type="button" value="회원가입" onClick="self.location='/user/signup';">
+<%--    <input type="button" value="로그인" onClick="self.location='/user/login';">--%>
+<%--    <input type="button" value="회원가입" onClick="self.location='/user/signup';">--%>
 
-</sec:authorize>
+<%--</sec:authorize>--%>
 
-<sec:authorize access="hasAnyRole('ADMIN', 'USER', 'GUEST')">
+<sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="userinfo"/>
 <%--    <h5><c:out value="${userinfo.username}"/>님.</h5>--%>
     <input type="button" value="로그아웃" id="logout">
@@ -38,10 +38,6 @@
     <input type="button" value="어드민" onClick="self.location='/admin';">
 </sec:authorize>
 
-
-
-<a href="/oauth2/authorization/google"><img src="/resources/image/google.png"></a>
-<a href="/oauth2/authorization/kakao"><img src="/resources/image/kakaolink_btn_medium.png"></a>
 <script>
 
     $("#logout").click(function() {

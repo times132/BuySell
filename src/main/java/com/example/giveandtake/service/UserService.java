@@ -39,16 +39,18 @@ public class UserService implements UserDetailsService {
     private RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-
     @Transactional
     public Long joinUser(UserDTO userDto) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userDto.setActivation(false);
-        //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
-        Role userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
-                .orElseThrow(() -> new AppException("User Role not set"));
-        userDto.setRoles(Collections.singleton(userRole));
+        if (userDto.getProvider() == null){
+            logger.info("걸림?");
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            userDto.setActivation(false);
+            //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
+            Role userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
+                    .orElseThrow(() -> new AppException("User Role not set"));
+            userDto.setRoles(Collections.singleton(userRole));
+        }
 
         return userRepository.save(userDto.toEntity()).getId();
     }
@@ -103,7 +105,7 @@ public class UserService implements UserDetailsService {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userList.setPassword(passwordEncoder.encode(userList.getPassword()));
         }
-        userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getAuthList());
+        userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getUser().getRoles());
         userRepository.save(userList.toEntity()).getId();
 
         UserDetails userDetails = loadUserByUsername(userList.getEmail()); // 수정된 유저 정보 가져옴

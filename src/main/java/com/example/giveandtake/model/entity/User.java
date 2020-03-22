@@ -22,22 +22,15 @@ public class User extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column
     private String nickname;
-
     private String name;
-
     private String username;
-
     private String password;
-
     private String phone;
-
     private String email;
-
     private String profileImage;
-
+    private String provider;
     private Boolean activation;
 
     @PrePersist
@@ -58,7 +51,7 @@ public class User extends DateAudit {
     private List<Reply> replyList;
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String username, String nickname, String name, String password, String phone, String email,Long id, String profileImage, Boolean activation, Set<Role> roles){
+    public User(String username, String nickname, String name, String password, String phone, String email,Long id, String profileImage, String provider, Boolean activation, Set<Role> roles){
         this.username = username;
         this.nickname = nickname;
         this.name = name;
@@ -67,6 +60,7 @@ public class User extends DateAudit {
         this.email = email;
         this.id= id;
         this.profileImage = profileImage;
+        this.provider = provider;
         this.activation = activation;
         this.roles = roles;
     }

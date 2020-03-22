@@ -2,8 +2,14 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.GoogleDTO;
 import com.example.giveandtake.DTO.KakaoDTO;
+import com.example.giveandtake.DTO.UserDTO;
+import com.example.giveandtake.common.CustomUserDetails;
+import com.example.giveandtake.domain.RoleName;
+import com.example.giveandtake.model.entity.Role;
+import com.example.giveandtake.repository.RoleRepository;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +32,9 @@ import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/oauth")
@@ -34,6 +43,7 @@ public class OAuth2Controller{
 
     private final OAuth2AuthorizedClientService authorizedClientService;
     private UserService userService;
+    private RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(OAuth2Controller.class);
 
     @GetMapping(value = "/login")
@@ -46,58 +56,82 @@ public class OAuth2Controller{
         OAuth2AccessToken accessToken = oAuth2AuthorizedClient.getAccessToken();
         OAuth2RefreshToken refreshToken = oAuth2AuthorizedClient.getRefreshToken();
 //        KakaoDTO kakao = (KakaoDTO) oAuth2AuthenticationToken.getPrincipal();
-//        logger.info("#######PRINCIPAL : " + principal);
+        logger.info("#######PRINCIPAL : " + principal);
 //        logger.info("#######kakao : " + kakao);
 //        logger.info("#######kakao account : " + kakao.getKakaoAccount());
 //        logger.info("#######kakao proper : " + kakao.getProperties());
 //        logger.info("#######kakao attr : " + kakao.getAttributes());
 //        logger.info("#######PRINCIPAL : " + oAuth2AuthenticationToken.getAuthorizedClientRegistrationId());
 //        logger.info("#######PRINCIPAL : " + oAuth2AuthenticationToken.getPrincipal().getAttributes());
-//        logger.info("#######PRINCIPAL : " + accessToken);
+        logger.info("#######accesstoken : " + accessToken.getTokenValue());
 //        logger.info("#######PRINCIPAL : " + refreshToken);
 //        logger.info("#######PRINCIPAL : " + oAuth2AuthorizedClient.getAccessToken().getExpiresAt().atZone(ZoneId.of("Asia/Seoul")));
         String oauthclient = oAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
         if (oauthclient.equals("google")){
             logger.info("구글");
             GoogleDTO google = (GoogleDTO) oAuth2AuthenticationToken.getPrincipal();
+            googleOauth(google);
+
         }else if (oauthclient.equals("kakao")){
             KakaoDTO kakao = (KakaoDTO) oAuth2AuthenticationToken.getPrincipal();
 
-            logger.info("#######kakao account : " + kakao.getKakaoAccount());
-            logger.info("#######kakao proper : " + kakao.getProperties());
+//            logger.info("#######kakao account : " + kakao.getKakaoAccount());
+//            logger.info("#######kakao proper : " + kakao.getProperties());
+//            logger.info("#######kakao attr : " + kakao.getAttributes());
             logger.info("#######kakao attr : " + kakao.getAttributes());
 
-            return "redirect:" + kakaoOauth(kakao, session);
+            kakaoOauth(kakao);
+
         }
-
-
-
-        return "/user/signup";
+        return "redirect:/";
     }
 
-    private String kakaoOauth(KakaoDTO kakao, HttpSession session){
-        if ((boolean) kakao.getKakaoAccount().get("email_needs_agreement")){ // 이메일 동의 안했을때
-            session.setAttribute("name", kakao.getProperties().get("nickname"));
-            return "/user/signup";
-        }else{ // 이메일 동의했을때
-            Map<String, Object> kakaoaccount = kakao.getKakaoAccount();
-            logger.info("이메일 동의 함"); // 가입했는지 확인
-            logger.info("이메일: " + kakaoaccount.get("email"));
-            if (userService.emailCheck(kakaoaccount.get("email").toString())){ // booleam으로 바꾸자
-                logger.info("이미 가입된 이메일입니다.");
-                UserDetails userDetails = userService.loadUserByUsername(kakaoaccount.get("email").toString());
+    private void kakaoOauth(KakaoDTO kakao){
+        String username = "KA_" + kakao.getName();
+        if (!userService.usernameCheck(username)){ // 가입 안됬을 때
+            UserDTO userDto = UserDTO.builder()
+                    .username(username)
+                    .email(String.valueOf(kakao.getKakaoAccount().get("email")))
+                    .roles(kakao.getAuthorities()
+                            .stream()
+                            .map(role -> Role.builder().id((long)RoleName.valueOf(role.getAuthority()).ordinal()+1).name(RoleName.valueOf(role.getAuthority())).build())
+                            .collect(Collectors.toSet()))
+                    .name(String.valueOf(kakao.getAttributes().get("nickname")))
+                    .provider("kakao")
+                    .build();
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-                SecurityContext securityContext = SecurityContextHolder.getContext();
-                securityContext.setAuthentication(authentication);
+            userService.joinUser(userDto);
 
-                return "/";
-            }else { // 동의했는데 가입안됬을때
-                logger.info("가입안됨");
-                session.setAttribute("name", kakao.getProperties().get("nickname"));
-                session.setAttribute("email", kakaoaccount.get("email"));
-                return "/user/signup";
-            }
         }
+        UserDetails userDetails = userService.loadUserByUsername(username);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+    }
+
+    private void googleOauth(GoogleDTO google){
+        logger.info("######GOOGLE : " + google);
+        String username = "GO_" + google.getSub();
+        if (!userService.usernameCheck(username)){
+            UserDTO userDto = UserDTO.builder()
+                    .username(username)
+                    .email(google.getEmail())
+                    .nickname(String.valueOf(google.getAttributes().get("name")))
+                    .roles(google.getAuthorities()
+                            .stream()
+                            .map(role -> Role.builder().id((long)RoleName.valueOf(role.getAuthority()).ordinal()+1).name(RoleName.valueOf(role.getAuthority())).build())
+                            .collect(Collectors.toSet()))
+                    .provider("google")
+                    .build();
+
+            userService.joinUser(userDto);
+        }
+
+        UserDetails userDetails = userService.loadUserByUsername(username);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
     }
 }

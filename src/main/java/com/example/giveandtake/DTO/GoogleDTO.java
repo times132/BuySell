@@ -16,18 +16,17 @@ import java.util.Map;
 @Setter
 @ToString
 public class GoogleDTO implements OAuth2User {
-    private List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_SOCIAL");
+    private List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
     private String sub;
-    private String name;
-    private String picture;
+    private String given_name;
+    private String family_name;
     private String email;
+
     @Override
     public Map<String, Object> getAttributes() {
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("sub", sub);
-        attributes.put("name", name);
-        attributes.put("picture", picture);
         attributes.put("email", email);
+        attributes.put("name", family_name+given_name);
 
         return attributes;
     }

@@ -24,9 +24,8 @@
             <div class="card-header">
                 <h3>LOGIN</h3>
                 <div class="d-flex justify-content-end social_icon">
-                    <span><i class="fab fa-facebook-square"></i></span>
-                    <span><i class="fab fa-google-plus-square"></i></span>
-                    <span><a href="/oauth2/authorization/kakao"><img src="/resources/image/kakaolink_btn_medium.png"/></a></span>
+                    <span><a href="/oauth2/authorization/google"><img src="/resources/image/google.png"/></a></span>
+                    <span><a href="/oauth2/authorization/kakao"><img src="/resources/image/kakao.png"/></a></span>
                 </div>
             </div>
             <div class="card-body">
