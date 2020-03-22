@@ -45,7 +45,8 @@ public class UserService implements UserDetailsService {
             logger.info("걸림?");
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            userDto.setActivation(false);
+            userDto.setActivation(true);
+            userDto.setProvider("giveandtake");
             //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
             Role userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
                     .orElseThrow(() -> new AppException("User Role not set"));
@@ -100,15 +101,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void modify(UserDTO userList){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String password = ((CustomUserDetails) authentication.getPrincipal()).getPassword();
-        if(!password.equals(userList.getPassword())) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            userList.setPassword(passwordEncoder.encode(userList.getPassword()));
-        }
+        userList.setPassword(((CustomUserDetails) authentication.getPrincipal()).getPassword());
         userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getUser().getRoles());
+
         userRepository.save(userList.toEntity()).getId();
 
-        UserDetails userDetails = loadUserByUsername(userList.getEmail()); // 수정된 유저 정보 가져옴
+        UserDetails userDetails = loadUserByUsername(userList.getUsername()); // 수정된 유저 정보 가져옴
+        System.out.println(userDetails);
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
         newAuth.setDetails(authentication.getDetails());
         SecurityContextHolder.getContext().setAuthentication(newAuth);

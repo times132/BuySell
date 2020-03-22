@@ -22,6 +22,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -153,7 +156,10 @@ public class UserController {
 
     // 회원 정보 수정
     @GetMapping ("/user/modifyuser")
-    public String dismodifyuser() {
+    public String dismodifyuser(Model model) {
+        List<String> socialList = new ArrayList<String>(Arrays.asList("KA", "GO"));
+        System.out.println(socialList);
+        model.addAttribute("socialList", socialList);
         return "/user/modifyuser";
     }
 
@@ -164,12 +170,19 @@ public class UserController {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        if(userService.checkPassword(user.getPassword())){
+        System.out.println("정보-----------------"+user);
+
+        if(user.getUsername().contains("KA")||user.getUsername().contains("GO")){
             userService.modify(user);
             out.println("<script>alert('수정이 완료되었습니다.'); location.href='/user/info';</script>");
         }
         else{
-            out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");
+            if (userService.checkPassword(user.getPassword())){
+                userService.modify(user);
+                out.println("<script>alert('수정이 완료되었습니다.'); location.href='/user/info';</script>");
+            }
+            else
+            {out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");}
         }
         out.flush();
     }
@@ -184,6 +197,7 @@ public class UserController {
             return new ResponseEntity<>("비밀번호 변경이 완료되었습니다.", HttpStatus.OK);
         }
         else{
+
             return new ResponseEntity<>("기존의 비밀번호가 틀립니다.", HttpStatus.OK);
         }
 

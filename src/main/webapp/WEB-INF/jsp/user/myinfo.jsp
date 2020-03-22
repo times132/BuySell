@@ -64,7 +64,7 @@
 
                                 <div class="col-xs-6">
                                     <h4>ID</h4>
-                                    <input type="text" class="form-control" name="username" value="${userinfo.username}" readonly="readonly" placeholder="ID" title="enter your first name if any.">
+                                    <input type="text" class="form-control" name="username" value="${userinfo.username}" readonly="readonly" placeholder="ID">
                                 </div>
                             </div>
                             <div class="form-group">

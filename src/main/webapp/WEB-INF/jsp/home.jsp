@@ -21,13 +21,6 @@
 
 </sec:authorize>
 
-<%--<sec:authorize access="hasAnyRole('SOCIAL')">--%>
-
-<%--    <input type="button" value="로그인" onClick="self.location='/user/login';">--%>
-<%--    <input type="button" value="회원가입" onClick="self.location='/user/signup';">--%>
-
-<%--</sec:authorize>--%>
-
 <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="userinfo"/>
 <%--    <h5><c:out value="${userinfo.username}"/>님.</h5>--%>

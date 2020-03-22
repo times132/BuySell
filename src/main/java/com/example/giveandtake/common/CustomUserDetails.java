@@ -22,7 +22,6 @@ public class CustomUserDetails implements UserDetails {
 
     public static CustomUserDetails create(User user){
         Set<Role> authList = user.getRoles();
-        System.out.println(authList);
         Set<GrantedAuthority> authorities = new HashSet<>();
         for (Role role : authList) {
             authorities.add(new SimpleGrantedAuthority(role.getName().name()));

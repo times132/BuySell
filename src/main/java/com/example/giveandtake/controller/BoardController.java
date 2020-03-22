@@ -41,8 +41,6 @@ public class BoardController {
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     private BoardService boardService;
-    private UserService userService;
-
 
     @GetMapping
     public String list(SearchCriteria searchCri, Model model){

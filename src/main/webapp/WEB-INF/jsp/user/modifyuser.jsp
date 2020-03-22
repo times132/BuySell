@@ -1,5 +1,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
@@ -23,7 +24,7 @@
 
 <body>
 <hr>
-<sec:authentication property="principal" var="userinfo"/>
+<sec:authentication property="principal.user" var="userinfo"/>
 <div class="container">
     <div class="row">
         <div class="col-sm-10"><h1>내정보</h1></div>
@@ -70,8 +71,8 @@
                         <div class="form-group">
 
                             <div class="col-xs-6">
-                                <label for="username"><H4>NICKNAME</H4></label>
-                                <input type="text" class="form-control" id="username" name="username" value="${userinfo.user.username}" readonly="readonly" required>
+                                <label for="username"><H4>ID</H4></label>
+                                <input type="text" class="form-control" id="username" name="username" value="${userinfo.username}" readonly="readonly" required>
                                 <p>${valid_username}</p>
                                 <div class="alert alert-danger" id="username_check">사용할 수 없는 ID입니다.</div><br>
                             </div>
@@ -79,43 +80,46 @@
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>NAME</h4>
-                                <input type="text" class="form-control" name="name" value="${userinfo.user.name}" placeholder="NAME" title="enter your last name if any.">
+                                <input type="text" class="form-control" name="name" value="${userinfo.name}" placeholder="NAME" title="enter your last name if any.">
                             </div>
                         </div>
 
                             <div class="form-group">
                                 <div class="col-xs-6">
                                     <h4>NICKNAME</h4>
-                                    <input type="text" class="form-control" name="nickname" value="${userinfo.user.nickname}"  placeholder="enter phone" title="enter your phone number if any.">
+                                    <input type="text" class="form-control" name="nickname" value="${userinfo.nickname}"  placeholder="enter phone" title="enter your phone number if any.">
                                 </div>
                             </div>
 
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>EMAIL</h4>
-                                <input type="text" class="form-control" name="email" value="${userinfo.user.email}" readonly="readonly" placeholder="enter phone" title="enter your phone number if any.">
+                                <input type="text" class="form-control" name="email" value="${userinfo.email}" readonly="readonly" placeholder="enter phone" title="enter your phone number if any.">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>PHONE NUMBER</h4>
-                                <input type="text" class="form-control" name="phone" value="${userinfo.user.phone}"  placeholder="enter mobile number" title="enter your mobile number if any.">
+                                <input type="text" class="form-control" name="phone" value="${userinfo.phone}"  placeholder="enter mobile number" title="enter your mobile number if any.">
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <div class="col-xs-6">
-                                <h4>PASSWORD</h4>
-                                <input type="password" class="form-control" name="password"  placeholder="password" title="enter your password.">
-                            </div>
-                        </div>
+                         <c:set var="provider" value="${userinfo.provider}"/>
+                            <c:if test = "${provider eq 'giveandtake'}">
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <h4>PASSWORD</h4>
+                                        <input type="password" class="form-control" name="password"  placeholder="password" title="enter your password.">
+                                    </div>
+                                </div>
+                         </c:if>
                         <div class="form-group">
                             <div class="col-xs-12">
                                 <br>
-                                <input type="hidden" name="id" value="${userinfo.user.id}">
-                                <input type="hidden" name="activation" value="${userinfo.user.activation}">
-                                <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.user.profileImage}">
+                                <input type="hidden" name="id" value="${userinfo.id}">
+                                <input type="hidden" name="activation" value="${userinfo.activation}">
+                                <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
+                                <input type="hidden" name="provider" value="${userinfo.provider}">
                                 <input class="btn btn-sm btn-primary" type="submit" id="modify"  value="수정"/>
                                 <input class="btn btn-sm btn-primary" type="button" value="홈" onClick="self.location='/';">
                             </div>
@@ -160,13 +164,13 @@
     var authority = $("#role");
     console.log("###role"+ authority)
     $(document).ready(function() {
-        var profileImage = "<c:out value="${userinfo.user.profileImage}"/>";
+        var profileImage = "<c:out value="${userinfo.profileImage}"/>";
 
         var profile = $(".profile-image");
         if (profileImage === ""){
             profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
         }else{
-            profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.user.id}/profile/${userinfo.user.profileImage}'/>")
+            profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
         }
 
     });
