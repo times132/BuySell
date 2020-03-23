@@ -29,7 +29,6 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-10"><h1>내정보</h1></div>
-        <div class="col-sm-2"><a href="/users" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a></div>
     </div>
     <div class="row">
         <div class="col-sm-3"><!--left col-->
@@ -75,20 +74,19 @@
                                 <label for="username"><H4>ID</H4></label>
                                 <input type="text" class="form-control" id="username" name="username" value="${userinfo.username}" readonly="readonly" required>
                                 <p>${valid_username}</p>
-                                <div class="alert alert-danger" id="username_check">사용할 수 없는 ID입니다.</div><br>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>NAME</h4>
-                                <input type="text" class="form-control" name="name" value="${userinfo.name}" placeholder="NAME" title="enter your last name if any.">
+                                <input type="text" class="form-control" name="name" value="${userinfo.name}" placeholder="NAME">
                             </div>
                         </div>
 
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <h4>NICKNAME</h4>
-                                    <input type="text" class="form-control" name="nickname" value="${userinfo.nickname}"  placeholder="enter phone" title="enter your phone number if any.">
+                                    <label for="nickname"><h4>NICKNAME</h4></label>
+                                    <input type="text" class="form-control" id="nickname" name="nickname" value="${userinfo.nickname}"  placeholder="NICKNAME" title="enter your phone number if any.">
                                 </div>
                             </div>
                             <div class="alert alert-danger" id="nickname_check">사용할 수 없는 닉네임입니다.</div><br>
@@ -102,14 +100,14 @@
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>PHONE NUMBER</h4>
-                                <input type="text" class="form-control" name="phone" value="${userinfo.phone}"  placeholder="enter mobile number" title="enter your mobile number if any.">
+                                <input type="text" class="form-control" name="phone" value="${userinfo.phone}"  placeholder="PHONE NUMBER" >
                             </div>
                         </div>
                          <c:if test = "${provider eq 'giveandtake'}">
                                 <div class="form-group">
                                     <div class="col-xs-6">
                                         <h4>PASSWORD</h4>
-                                        <input type="password" class="form-control" name="password"  placeholder="password" title="enter your password.">
+                                        <input type="password" class="form-control" name="password"  placeholder="PASSWORD">
                                     </div>
                                 </div>
                          </c:if>
@@ -182,12 +180,12 @@
         $("#nickname_check").hide();
         userService.checkNickname(nickname, function (data) {
             if (data) {
-                $("#username_check").show();
+                $("#nickname_check").show();
                 $("#modify").attr("disabled", true);
                 idck=0;
             }
             else {
-                $("#username_check").hide();
+                $("#nickname_check").hide();
                 idck=1;
             }
             if(idck==1){
