@@ -21,7 +21,7 @@ var userService = (function () {
         });
     }
 
-    function checkEmail(nickname, callback, error) {
+    function checkNickname(nickname, callback, error) {
         console.log("CHECK NICKNAME");
         $.ajax({
             url : '/user/nicknameCheck?nickname='+ nickname,
@@ -103,7 +103,7 @@ var userService = (function () {
     }
 
     return {
-        checkEmail : checkEmail,
+        checkNickname : checkNickname,
         checkUsername : checkUsername,
         changeAct : changeAct,
         changePW : changePW,

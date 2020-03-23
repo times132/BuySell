@@ -25,6 +25,7 @@
 <body>
 <hr>
 <sec:authentication property="principal.user" var="userinfo"/>
+<c:set var="provider" value="${userinfo.provider}"/>
 <div class="container">
     <div class="row">
         <div class="col-sm-10"><h1>내정보</h1></div>
@@ -90,11 +91,11 @@
                                     <input type="text" class="form-control" name="nickname" value="${userinfo.nickname}"  placeholder="enter phone" title="enter your phone number if any.">
                                 </div>
                             </div>
-
+                            <div class="alert alert-danger" id="nickname_check">사용할 수 없는 닉네임입니다.</div><br>
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>EMAIL</h4>
-                                <input type="text" class="form-control" name="email" value="${userinfo.email}" readonly="readonly" placeholder="enter phone" title="enter your phone number if any.">
+                                <input type="text" class="form-control" name="email" value="${userinfo.email}" readonly="readonly" title="enter your email">
                             </div>
                         </div>
 
@@ -104,8 +105,7 @@
                                 <input type="text" class="form-control" name="phone" value="${userinfo.phone}"  placeholder="enter mobile number" title="enter your mobile number if any.">
                             </div>
                         </div>
-                         <c:set var="provider" value="${userinfo.provider}"/>
-                            <c:if test = "${provider eq 'giveandtake'}">
+                         <c:if test = "${provider eq 'giveandtake'}">
                                 <div class="form-group">
                                     <div class="col-xs-6">
                                         <h4>PASSWORD</h4>
@@ -174,13 +174,13 @@
         }
 
     });
-    $("#username_check").hide();
+    $("#nickname_check").hide();
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
     idck = 0;
-    $("#username").keyup(function() {
-        var username = $("#username").val();
-        $("#username_check").hide();
-        userService.checkUsername(username, function (data) {
+    $("#nickname").keyup(function() {
+        var nickname = $("#nickname").val();
+        $("#nickname_check").hide();
+        userService.checkNickname(nickname, function (data) {
             if (data) {
                 $("#username_check").show();
                 $("#modify").attr("disabled", true);

@@ -107,7 +107,7 @@
     $("#nickname").keyup(function() {
         var nickname = $("#nickname").val();
 
-        userService.checkEmail(nickname, function (data) {
+        userService.checkNickname(nickname, function (data) {
             if (data) {
                 $("#nickname_check").show();
                 $("#submit").attr("disabled", true);

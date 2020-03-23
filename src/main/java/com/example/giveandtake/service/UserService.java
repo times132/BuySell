@@ -160,7 +160,7 @@ public class UserService implements UserDetailsService {
     public boolean nicknameCheck(String nickname)
     {
         Optional<User> user = userRepository.findByNickname(nickname);
-        System.out.println("값은 이메일 "+user.isPresent());
+        System.out.println("값 "+user.isPresent());
         if(user.isPresent()){
             return true;
         }
@@ -192,6 +192,8 @@ public class UserService implements UserDetailsService {
     private UserDTO convertEntityToDto(User user){
         return UserDTO.builder()
                 .id(user.getId())
+                .nickname(user.getNickname())
+                .provider(user.getProvider())
                 .email(user.getEmail())
                 .name(user.getName())
                 .password(user.getPassword())

@@ -3,6 +3,7 @@ package com.example.giveandtake.controller;
 import com.example.giveandtake.DTO.GoogleDTO;
 import com.example.giveandtake.DTO.KakaoDTO;
 import com.example.giveandtake.DTO.UserDTO;
+import com.example.giveandtake.common.AppException;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.domain.RoleName;
 import com.example.giveandtake.model.entity.Role;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,9 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -72,7 +72,9 @@ public class OAuth2Controller{
             GoogleDTO google = (GoogleDTO) oAuth2AuthenticationToken.getPrincipal();
             googleOauth(google);
 
-        }else if (oauthclient.equals("kakao")){
+        }
+
+        else if (oauthclient.equals("kakao")){
             KakaoDTO kakao = (KakaoDTO) oAuth2AuthenticationToken.getPrincipal();
 
 //            logger.info("#######kakao account : " + kakao.getKakaoAccount());
@@ -87,15 +89,30 @@ public class OAuth2Controller{
     }
 
     private void kakaoOauth(KakaoDTO kakao){
+
         String username = "KA_" + kakao.getName();
+        String kakaoemail = String.valueOf(kakao.getKakaoAccount().get("email"));
+
+
         if (!userService.usernameCheck(username)){ // 가입 안됬을 때
+            Set<Role> roles= kakao.getAuthorities()
+                    .stream()
+                    .map(role -> Role.builder().id((long)RoleName.valueOf(role.getAuthority()).ordinal()+1).name(RoleName.valueOf(role.getAuthority())).build())
+                    .collect(Collectors.toSet());
+
+            if (!kakaoemail.equals("null")){ //email이 없을 때때
+                System.out.println("계정이 있습니다." +  kakaoemail);
+                Role userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
+                        .orElseThrow(() -> new AppException("User Role not set"));
+                roles = Collections.singleton(userRole);
+            }
+
+
+
             UserDTO userDto = UserDTO.builder()
                     .username(username)
-                    .email(String.valueOf(kakao.getKakaoAccount().get("email")))
-                    .roles(kakao.getAuthorities()
-                            .stream()
-                            .map(role -> Role.builder().id((long)RoleName.valueOf(role.getAuthority()).ordinal()+1).name(RoleName.valueOf(role.getAuthority())).build())
-                            .collect(Collectors.toSet()))
+                    .email(kakaoemail)
+                    .roles(roles)
                     .name(String.valueOf(kakao.getAttributes().get("nickname")))
                     .provider("kakao")
                     .build();
