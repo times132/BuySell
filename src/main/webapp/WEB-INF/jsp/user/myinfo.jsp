@@ -131,12 +131,12 @@
                         <h6>이메일 인증 (이메일인증을 받으시면 보다 나은 서비스를 이용할 수 있습니다.)</h6>
                         <br> <br>
                             <label for="email">이메일</label>
-                            <c:set var="email" value="${userinfo.email}"/>
-                            <c:if test = "${email eq 'null'}">
-                                <input type="text" class="form-control" name="email" value="${userinfo.email}" placeholder="이메일을 입력해주세요" title="enter your email">
+                            <c:set var="mail" value="${userinfo.email}"/>
+                            <c:if test = "${mail eq 'null'}">
+                                <input type="text" class="form-control" id="e_mail" name="email" placeholder="이메일을 입력해주세요" title="enter your email">
                             </c:if>
-                            <c:if test = "${email ne 'null'}">
-                                <input type="text" class="form-control" name="email" value="${userinfo.email}" readonly="readonly" title="enter your email">
+                            <c:if test = "${mail ne 'null'}">
+                                <input type="text" class="form-control" id="e_mail" name="email" value="${userinfo.email}" readonly="readonly" title="enter your email">
                             </c:if>
                             <input class="btn btn-primary btn-sm" type="button" id="auth" value="이메일 인증받기"/>
                         </sec:authorize>

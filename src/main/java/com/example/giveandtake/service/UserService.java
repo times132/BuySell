@@ -176,9 +176,10 @@ public class UserService implements UserDetailsService {
         userRepository.save(userDTO.toEntity()).getId();
 
     }
-    //계정코드 활성화
+    //계정 USER 로 변환
     public void changeAct(String email, Principal principal) {
-        Optional<User> userWapper = userRepository.findByUsername(principal.getName());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> userWapper = userRepository.findByNickname(principal.getName());
         User user = userWapper.get();
         UserDTO userDTO = convertEntityToDto(user);
         userDTO.setEmail(email);
@@ -186,6 +187,12 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new AppException("User Role not set"));
         userDTO.setRoles(Collections.singleton(userRole));
         userRepository.save(userDTO.toEntity());
+        UserDetails userDetails = loadUserByUsername(userDTO.getUsername()); // 수정된 유저 정보 가져옴
+        System.out.println(userDetails);
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
+        newAuth.setDetails(authentication.getDetails());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
     }
 
 
