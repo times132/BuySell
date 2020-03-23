@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <textarea class="form-control" name="content" rows="10" placeholder="본문"></textarea>
                     </div>
-                    <input type="hidden" name="writer" value="${userinfo.username}"> <br>
+                    <input type="hidden" name="writer" value="${userinfo.nickname}"> <br>
                 </form>
             </div>
 

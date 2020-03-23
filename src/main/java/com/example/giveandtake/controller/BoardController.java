@@ -121,12 +121,12 @@ public class BoardController {
         model.addAttribute("boardDto", boardDto);
     }
 
-    @PreAuthorize("principal.username == #dto.writer")
+//    @PreAuthorize("principal.user.nickname == #dto.writer")
     @PostMapping("/modify")
-    public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto){
+    public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----board modifyPOST-----");
 
-        boardService.update(dto);
+        boardService.update(dto, userDetails);
 
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }

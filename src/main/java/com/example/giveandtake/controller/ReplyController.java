@@ -31,6 +31,7 @@ public class ReplyController {
     private ReplyService replyService;
     private UserService userService;
 
+    // 댓글 등록
     @PostMapping(value = "/new", consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE}) //json 방식으로 데이터를 받음
     public ResponseEntity<String> writePOST(@RequestBody ReplyDTO replyDTO, @AuthenticationPrincipal CustomUserDetails userDetails){
         // POST 방식으로 json 데이터를 받아 @RequestBody를 이용하여 Reply 타입으로 변환
@@ -39,6 +40,7 @@ public class ReplyController {
         return new ResponseEntity<>("댓글 등록이 완료되었습니다.", HttpStatus.OK);
     }
 
+    // 댓글 페이지 가져오기
     @GetMapping(value = "/pages/{bid}/{page}", produces = "application/json") // json 방식으로 리턴해줌
     public ResponseEntity<Page<Reply>> listGET(@PathVariable("bid") Long bid, @PathVariable("page") Integer page){
         logger.info("-----Reply readListGET-----");
@@ -48,6 +50,7 @@ public class ReplyController {
         return new ResponseEntity<>(replyService.readReplyList(bid, cri), HttpStatus.OK);
     }
 
+    // 댓글 하나 읽기
     @GetMapping(value = "{rid}", produces = "application/json")
     public ResponseEntity<ReplyDTO> readGET(@PathVariable("rid") Long rid){
         logger.info("-----reply readGET-----");
@@ -55,17 +58,16 @@ public class ReplyController {
         return new ResponseEntity<>(replyService.readReply(rid), HttpStatus.OK);
     }
 
+    // 댓글 수정
     @PutMapping(value = "{rid}", consumes = "application/json")
     public ResponseEntity<String> modifyPOST(@RequestBody ReplyDTO replyDTO, @PathVariable("rid") Long rid, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----reply modifyPUT-----");
 
-        replyDTO.setUser(userDetails.getUser());
-        replyDTO.setRid(rid);
-
-        return replyService.updateReply(replyDTO).equals(rid) ? new ResponseEntity<>("댓글 수정이 완료되었습니다.", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return replyService.updateReply(replyDTO, userDetails).equals(rid) ? new ResponseEntity<>("댓글 수정이 완료되었습니다.", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PreAuthorize("principal.username == #dto.replyer")
+    // 댓글 삭제
+    @PreAuthorize("principal.user.nickname == #dto.replyer")
     @DeleteMapping(value = "{rid}")
     public ResponseEntity<String> remove(@RequestBody ReplyDTO dto, @PathVariable("rid") Long rid){
         logger.info("-----reply removeDELETE-----");

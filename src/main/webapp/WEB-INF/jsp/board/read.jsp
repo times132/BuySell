@@ -15,6 +15,8 @@
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/reply.js"></script>
     <script type="text/javascript" src="/resources/js/common.js"></script>
+
+
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
@@ -24,7 +26,7 @@
         <div class="btnlist mb-1">
             <sec:authentication property="principal" var="userinfo"/>
             <sec:authorize access="isAuthenticated()">
-                <c:if test="${userinfo.username eq boardDto.user.username}">
+                <c:if test="${userinfo.user.nickname eq boardDto.user.nickname}">
                     <button class="btn btn-primary btn-sm" data-oper="modify">수정</button>
                     <button class="btn btn-danger btn-sm" data-oper="remove">삭제</button>
                 </c:if>
@@ -67,13 +69,15 @@
                             <h4 class="price"><fmt:formatNumber value="${boardDto.price}"/>원</h4>
 
                             <div class="writer-dropdown">
-                                <span class="h6">판매자 : </span>
-                                <button type="button" class="writer btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="writer h6"><c:out value="${boardDto.user.username}"></c:out></span>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
-                                    <a class="dropdown-item" href="#" id="board">게시글 보기</a>
-                                    <a class="dropdown-item" href="#" id="chatting">1:1채팅</a>
+                                <div class='profile'>
+                                    <img src='/display?fileName=${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
+                                    <button type="button" class="writer btn btn-link btn-sm dropdown-toggle pro" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="writer h6"><c:out value="${boardDto.user.nickname}"></c:out></span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
+                                        <a class="dropdown-item" href="#" id="board">게시글 보기</a>
+                                        <a class="dropdown-item" href="#" id="chatting">1:1채팅</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -127,7 +131,7 @@
 
         <form id="operForm" action="/board/modify" method="get">
             <input type="hidden" id="bid" name="bid" value="<c:out value="${boardDto.bid}"/>">
-            <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.user.username}"/>">
+            <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.user.nickname}"/>">
             <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">
             <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">
             <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
@@ -137,14 +141,16 @@
 </body>
 <script>
     $(document).ready(function () {
-        console.log("<c:out value="${boardDto.createdDate}"/>")
+
         var operForm = $("#operForm");
-        var username = "<c:out value="${boardDto.user.username}"/>";
+        var nickname = "<c:out value="${boardDto.user.nickname}"/>";
+        var path = "<c:out value="${boardDto.user.profileImage}"/>";
+        console.log(path)
 
         // 닉네임 클릭 후 채팅 클릭 이벤트
         $("#chatting").on("click", function (e) {
             alert("채팅창으로 이동합니다.");
-            location.href="/chat/rooom/"+username;
+            location.href="/chat/rooom/"+nickname;
         })
 
         // 삭제, 수정, 목록 버튼 이벤트
@@ -173,7 +179,7 @@
             }else{
                 $(arr).each(function (i, file) {
                     if (file.image){
-                        console.log(file.uploadPath)
+
                         var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
                         if (i === 0){ // 첫번째 요소에 active 부여
                             first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
@@ -196,7 +202,7 @@
         // 썸네일 사진 클릭시 이벤트
         $(".carousel-inner").on("click", "div", function (e) {
             var liobj = $(this);
-            console.log(liobj);
+
             var path = encodeURIComponent(liobj.data("path") + "/" + liobj.data("uuid") + "_" + liobj.data("filename"));
 
             showImage(path.replace(new RegExp(/\\/g),"/"));
@@ -227,7 +233,7 @@
     var curUser = null;
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
-        curUser = '${userinfo.username}';
+        curUser = '${userinfo.user.nickname}';
     </sec:authorize>
 
     showList(1);
@@ -249,12 +255,14 @@
                 return;
             }
             for (var i = 0, len = data.content.length || 0; i < len; i++){
+                console.log(data.content[i])
                 str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
-                str += "<div class='reply-header'><strong id='replyer' class='primary-font'>" + data.content[i].user.username + "</strong>";
+                str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id + "/profile/s_" + data.content[i].user.profileImage + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
+                str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickname + "</strong>";
                 str += " <small class='text-muted'>" + commonService.displayTime(data.content[i].createdDate) + "</small>";
 
                 str += "</div>";
-                str += (curUser === data.content[i].user.username ?
+                str += (curUser === data.content[i].user.nickname ?
                     "<div class='reply-header-btn'><button id='modReplyBtn' class='btn btn-sm btn-link text-muted'>수정</button>" + "\|" +
                     "<button id='removeReplyBtn' class='btn btn-sm btn-link text-muted'>삭제</button></div>" :
                     '');
@@ -342,7 +350,7 @@
 
         replyService.get(rid, function (reply) {
             replyCopy = reply.reply;
-            replyerCopy = reply.user.username;
+            replyerCopy = reply.user.nickname;
         });
     });
 

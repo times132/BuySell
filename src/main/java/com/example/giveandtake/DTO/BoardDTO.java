@@ -3,6 +3,7 @@ package com.example.giveandtake.DTO;
 import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.BoardFile;
 import com.example.giveandtake.model.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ public class BoardDTO {
     private Integer replyCnt;
     private LocalDateTime createdDate;
     private List<BoardFileDTO> boardFileList = new ArrayList<>();
+    @JsonIgnore
     private User user;
 
     @Builder

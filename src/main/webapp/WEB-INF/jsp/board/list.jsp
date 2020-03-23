@@ -74,7 +74,7 @@
                                 <fmt:formatNumber value="${board.price}" type="currency"/>
                             </td>
                             <td class="writer">
-                                <c:out value="${board.user.username}"/>
+                                <c:out value="${board.user.nickname}"/>
                             </td>
                             <td class="time">
                                 <javatime:format pattern="yy.MM.dd" value="${board.createdDate}"/>

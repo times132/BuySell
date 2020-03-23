@@ -87,7 +87,7 @@
         // 채팅룸 출력
         chatService.findAllRoom(function (data) {
             var str = "";
-            console.log(data);
+            console.log("Data:", data);
             if (data == null || data.length == 0) {
                 return;
             }

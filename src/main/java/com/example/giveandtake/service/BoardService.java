@@ -38,7 +38,6 @@ public class BoardService {
     // 게시물 등록
     @Transactional
     public void register(BoardDTO dto, CustomUserDetails userDetails){
-
         dto.setUser(userDetails.getUser());
         Board board = boardRepository.save(boardMapper.toEntity(dto));
         // 첨부 파일 저장
@@ -77,7 +76,8 @@ public class BoardService {
 
     // 게시물 업데이트
     @Transactional
-    public void update(BoardDTO dto){
+    public void update(BoardDTO dto, CustomUserDetails userDetails){
+        dto.setUser(userDetails.getUser());
         Board board = boardRepository.save(boardMapper.toEntity(dto));
 
         // 기존 게시물에 있던 사진 uuid 저장
@@ -87,13 +87,6 @@ public class BoardService {
                 .collect(Collectors.toSet());
 
         for (BoardFileDTO fileDTO : dto.getBoardFileList()){
-//            uuidList.remove(fileDTO.getUuid()); // 기존 게시물에서 삭제된 uuid만 저장
-//            BoardFile boardFile = boardFileRepository.findByUuid(fileDTO.getUuid()); //uuid로 검색해서
-//            if (boardFile != null){ // 있으면 update
-//                fileDTO.setFid(boardFile.getFid());
-//            }
-//            fileDTO.setBoard(board);
-//            boardFileRepository.save(boardMapper.fileToEntity(fileDTO));
             uuidList.remove(fileDTO.getUuid());
             fileDTO.setBoard(board);
             boardFileRepository.save(boardMapper.fileToEntity(fileDTO));
@@ -115,7 +108,6 @@ public class BoardService {
 
     @Transactional
     public void addViewCount(Long bid){
-        logger.info("######addcount#######");
         Optional<Board> boardWrapper = boardRepository.findById(bid);
         Board board = boardWrapper.get();
         BoardDTO boardDTO = boardMapper.toDTO(board);

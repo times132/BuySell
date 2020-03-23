@@ -40,6 +40,7 @@ public class ReplyService {
 
         // board 댓글 수 증가
         BoardDTO boarddto = boardMapper.toDTO(board);
+        boarddto.setUser(board.getUser());
         boarddto.setReplyCnt(boarddto.getReplyCnt()+1);
         boardRepository.save(boardMapper.toEntity(boarddto));
 
@@ -65,8 +66,12 @@ public class ReplyService {
         return replyMapper.toDTO(reply);
     }
 
-    public Long updateReply(ReplyDTO dto){
-        return replyRepository.save(replyMapper.toEntity(dto)).getRid();
+    public Long updateReply(ReplyDTO dto, CustomUserDetails userDetails){
+        Reply reply = replyRepository.findById(dto.getRid()).get();
+        ReplyDTO modifyReply = replyMapper.toDTO(reply);
+        modifyReply.setReply(dto.getReply());
+
+        return replyRepository.save(replyMapper.toEntity(modifyReply)).getRid();
     }
 
     @Transactional

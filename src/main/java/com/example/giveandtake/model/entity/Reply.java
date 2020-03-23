@@ -10,7 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Getter
 @Table(name = "replys")
@@ -23,7 +23,7 @@ public class Reply extends DateAudit {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"id", "replyList", "boardList", "password", "email", "profileImage", "phone", "roles"})
+    @JsonIgnoreProperties({"replyList", "boardList", "password", "email", "phone", "roles", "provider", "username", "name", "createdDate", "updatedDate", "activation"})
     private User user;
 
     @ManyToOne

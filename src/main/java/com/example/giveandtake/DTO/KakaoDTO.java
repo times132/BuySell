@@ -1,7 +1,6 @@
 package com.example.giveandtake.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jdk.internal.jline.internal.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -70,6 +70,22 @@
 .dropdown-toggle::after{
     display: none!important;
 }
+.profile img{
+    object-fit: cover;
+    object-position: top;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    padding-bottom: 0;
+}
+.reply-profile{
+    object-fit: cover;
+    object-position: top;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    margin-right: .5rem;
+}
 
 .card-body{
     border-top: 1px solid lightgray;
@@ -93,6 +109,7 @@
 .replyList li{
     border-width: thick;
     border-bottom: 1px dashed;
+    margin-top: .5rem;
 }
 #addReplyBtn, #modifyconfirm{
     margin-left: 0.5rem;
