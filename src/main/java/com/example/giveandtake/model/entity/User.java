@@ -50,6 +50,12 @@ public class User extends DateAudit {
     @JsonIgnoreProperties({"user"})
     private List<Reply> replyList;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"user"})
+    private List<ChatUsers> chats;
+
+
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
     public User(String username, String nickname, String name, String password, String phone, String email,Long id, String profileImage, String provider, Boolean activation, Set<Role> roles){
         this.username = username;

@@ -1,15 +1,15 @@
 package com.example.giveandtake.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -24,33 +24,20 @@ public class ChatRoom implements Comparable<ChatRoom>{
     private String roomName;
 
     @Column
-    private String request;
-
-    @Column
-    private String receiver;
-
-    @Column
-    private Integer rqMsgCount;
-
-    @Column
-    private Integer rcMsgCount;
-
-
-    @Column
     private LocalDateTime msgDate;
 
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"chatRoom"})
+    private List<ChatUsers> users = new ArrayList<>();
 
 
     @Builder
-    public ChatRoom(String roomId , String roomName, String request, String receiver,Integer rqMsgCount,Integer rcMsgCount, LocalDateTime msgDate)
+    public ChatRoom(String roomId , String roomName, LocalDateTime msgDate, List<ChatUsers> users)
     {
         this.roomId = roomId;
         this.roomName =roomName;
-        this.request = request;
-        this.receiver = receiver;
-        this.rqMsgCount =rqMsgCount;
-        this.rcMsgCount=rcMsgCount;
         this.msgDate = msgDate;
+        this.users = users;
     }
 
 

@@ -51,6 +51,11 @@ public class UserController {
         return "/user/signup";
     }
 
+    @RequestMapping(value = "/user/getUserInfo",method = RequestMethod.GET)
+    public UserDTO getUserInfo(@RequestParam(value = "nickname") String nickname){
+        return userService.readUserByUsername(nickname);
+    }
+
 
     @RequestMapping(value = "/user/activate")
     @ResponseBody
@@ -59,14 +64,21 @@ public class UserController {
         return new ResponseEntity<>("계정이 활성화 되었습니다.", HttpStatus.OK);
     }
 
-    //중복이메일 검사
+    //중복닉네임 검사
+    @RequestMapping(value = "/user/emailCheck", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean emailCheck(@RequestParam("email") String email) {
+        return userService.emailCheck(email);
+    }
+
+    //중복닉네임 검사
     @RequestMapping(value = "/user/nicknameCheck", method = RequestMethod.GET)
     @ResponseBody
-    public boolean emailCheck(@RequestParam("nickname") String nickname) {
+    public boolean nickNameCheck(@RequestParam("nickname") String nickname) {
         System.out.println(nickname);
         return userService.nicknameCheck(nickname);
     }
-    //중복닉네임 검사
+    //중복아이디 검사
     @RequestMapping(value = "/user/usernameCheck", method = RequestMethod.GET)
     @ResponseBody
     public boolean usernameCheck(@RequestParam("username") String username) {

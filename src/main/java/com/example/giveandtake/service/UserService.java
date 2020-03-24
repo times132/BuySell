@@ -86,7 +86,7 @@ public class UserService implements UserDetailsService {
         else {
             userWrapper = userRepository.findByUsername(username);
         }
-        com.example.giveandtake.model.entity.User user = userWrapper.get();
+        User user = userWrapper.get();
         return convertEntityToDto(user);
     }
     //회원정보 삭제
@@ -168,8 +168,9 @@ public class UserService implements UserDetailsService {
     }
     //비밀번호 찾기 및 변경
     @Transactional
-    public void changePW(String info, String newPW){
-        UserDTO userDTO = readUserByUsername(info);
+    public void changePW(String nickname, String newPW){
+        Optional<User> user = userRepository.findByNickname(nickname);
+        UserDTO userDTO = convertEntityToDto(user.get());
         System.out.println("비밀번호 변경");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDTO.setPassword(passwordEncoder.encode(newPW));

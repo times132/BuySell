@@ -1,18 +1,16 @@
 package com.example.giveandtake.repository;
 
+import com.example.giveandtake.model.entity.ChatRoom;
 import com.example.giveandtake.model.entity.ChatUsers;
 import com.example.giveandtake.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-
-      Optional<User> findByEmail(String email);
-      Optional<User> findByUsername(String username);
-      Optional<User> findByNickname(String nickname);
-
+public interface ChatUsersRepository extends JpaRepository<ChatUsers, Long> {
+    List<ChatUsers> findAllByChatRoom(String roomId);
+    List<ChatUsers> findAllByUser(User user);
 }

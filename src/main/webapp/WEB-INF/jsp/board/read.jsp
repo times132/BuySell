@@ -184,7 +184,8 @@
                         if (i === 0){ // 첫번째 요소에 active 부여
                             first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
                             str += "<div class='carousel-item active' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
-                        }else{
+                        }
+                        else{
                             first += "<li data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
                             str += "<div class='carousel-item' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
                         }
@@ -255,9 +256,11 @@
                 return;
             }
             for (var i = 0, len = data.content.length || 0; i < len; i++){
-                console.log(data.content[i])
+                console.log(data.content[i]);
                 str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
-                str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id + "/profile/s_" + data.content[i].user.profileImage + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
+                str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id
+                    + "/profile/s_" + data.content[i].user.profileImage
+                    + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
                 str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickname + "</strong>";
                 str += " <small class='text-muted'>" + commonService.displayTime(data.content[i].createdDate) + "</small>";
 

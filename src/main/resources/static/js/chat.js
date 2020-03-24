@@ -4,10 +4,27 @@ var chatService = (function () {
 
     function findAllRoom(callback, error) {
         console.log("GET CHAT FIND ALL ROOM");
+        $.getJSON("/chat/rooms", function (data) {
+            if (callback){
 
+                callback(data);
+            }
+        }).fail(function (xhr, status, err) {
+            if (error){
+                error(err);
+            }
+        });
+
+    }
+
+    function createRoom(nickname, callback, error) {
+        console.log("CREATE CHAT ROOM");
+        console.log(nickname);
         $.ajax({
-            type: "get",
-            url: "/chat/rooms",
+            type: "post",
+            url: "/chat/room",
+            data: nickname,
+            dataType: 'text',
             async: true,
             success: function (result) {
                 if (callback){
@@ -17,27 +34,7 @@ var chatService = (function () {
             error: function (xhr, status, err) {
                 if (error){
                     error(err);
-                }
-            }
-        });
-    }
-
-    function createRoom(room, callback, error) {
-        // console.log("CREATE CHAT ROOM");
-        console.log(room);
-        $.ajax({
-            type: "post",
-            url: "/chat/room",
-            data: JSON.stringify(room),
-            contentType: "application/json; charset=utf-8",
-            success: function (result) {
-                if (callback){
-                    callback(result);
-                }
-            },
-            error: function (xhr, status, err) {
-                if (error){
-                    error(err);
+                    alert("실패");
                 }
             }
         });

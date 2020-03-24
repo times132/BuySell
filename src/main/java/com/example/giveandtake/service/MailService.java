@@ -1,11 +1,9 @@
 package com.example.giveandtake.service;
 
 
-import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 import java.util.Random;
 
 @Service

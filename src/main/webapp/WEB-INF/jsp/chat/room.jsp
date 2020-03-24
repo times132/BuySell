@@ -73,7 +73,7 @@
     // playInit = setInterval(function() {
     //     init();
     //     init2();
-    // }, 1000);
+    // }, 2000);
     //
     init();
     $('.messages').hide();
@@ -87,7 +87,7 @@
         // 채팅룸 출력
         chatService.findAllRoom(function (data) {
             var str = "";
-            console.log("Data:", data);
+            console.log("Data:", JSON.stringify(data));
             if (data == null || data.length == 0) {
                 return;
             }
@@ -97,14 +97,20 @@
                 str += "<ul>"
                 str += "<li class='chat_li' data-rid='" + data[i].roomId + "'>";
                 str += "<div class='chat_people'>"
-                str += "<div class='chat_img'> <img src='/resources/image/profile.png'> </div>"
                 str += "<div class='chat_ib'>"
-                str += ( sender === data[i].receiver ?
-                    "<h5>"+ data[i].request +"<span class='msgCnt'>"+ data[i].rqMsgCount +"</span>" +"</h5>"
-                    :"<h5>"+ data[i].receiver +"<span class='msgCnt'>"+ data[i].rcMsgCount + "</span>" +"</h5>");
+                for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
+                    if (sender != data[i].users[a].user.nickname) {
+                        str += "<div class='chat_img'> <img src='/display?fileName=" + data[i].users[a].user.id
+                            + "/profile/s_" + data[i].users[a].user.profileImage
+                            + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
+                            +"</div>"
+                        str += "<div class='chat_ib'>"
+                        str += "<h5>" + data[i].users[a].user.nickname + "<span class='msgCnt'>" + data[i].users[a].msgCount + "</span>" + "</h5>";
+                    }
+                }
                 str +="<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div>"
                 str += "<div>";
-                str += "<p>" + data[i].roomName+ "</p>";   //메시지 내용이 들어가면 좋을 것 같음
+                str += "<p>" + data[i].roomName+ "</p>";
                 str += "</div>"
                 str += "<button id='enterBtn' class='btn float-right' >입장</button>";
                 str += "</div></div></div></li></ul></div>";
@@ -125,19 +131,13 @@
             return;
         }
         else {
-                    var room = {
-                        roomName : '대화 내용이 없습니다.',
-                        receiver : inputreceiver,
-                        request : sender,
-                        rcMsgCount : 0,
-                        rqMsgCount : 0,
-
+                    var nickname = {
+                        nickname : inputreceiver
                     };
 
-                    chatService.createRoom(room, function (result) {
+                    chatService.createRoom(nickname, function (result) {
                         alert(result);
                         document.getElementById("receiver").value="";
-                        init();
                     });
         }
     });

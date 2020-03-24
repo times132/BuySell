@@ -32,11 +32,12 @@
             email : email
         };
         userService.checkEmail(email, function (data) {
-            if (data == 0) {
+            if (data == false) {
                 $("#email_check").show();
                 $("#submit").attr("disabled", true);
                 idck=0;
-            } else {
+            }
+            else {
                 $("#email_check").hide();
                 idck= 1;
             }
@@ -46,7 +47,8 @@
                     .click(function() {
                         alert("임시비밀번호가 고객님의 이메일로 전송되었습니다. 이메일을 확인해주세요");
                         userService.findPW(e_mail, function (result) {
-                        location.href = "/user/login"
+                            alert(result);
+                            location.href = "/user/login"
                     });
 
                 });
