@@ -1,5 +1,6 @@
 package com.example.giveandtake.DTO;
 
+import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
 import com.example.giveandtake.model.entity.ChatUsers;
 import lombok.*;
@@ -18,13 +19,16 @@ public class ChatRoomDTO {
     private String roomId;
     private String roomName;
     private List<ChatUsers> users = new ArrayList<>();
+    private List<ChatMessage> messages = new ArrayList<>();
 
     private LocalDateTime msgDate;
+
 
     public ChatRoom toEntity(){
         return ChatRoom.builder()
                 .roomId(roomId)
                 .roomName(roomName)
+                .messages(messages)
                 .users(users)
                 .msgDate(msgDate)
                 .build();
@@ -32,10 +36,11 @@ public class ChatRoomDTO {
 
 
     @Builder
-    public ChatRoomDTO (String roomId, String roomName,List<ChatUsers> users, LocalDateTime msgDate) {
+    public ChatRoomDTO (String roomId, String roomName,List<ChatUsers> users, List<ChatMessage> messages, LocalDateTime msgDate) {
         this.roomId =roomId;
         this.roomName= roomName;
         this.users = users;
+        this.messages = messages;
         this.msgDate = msgDate;
     }
 }

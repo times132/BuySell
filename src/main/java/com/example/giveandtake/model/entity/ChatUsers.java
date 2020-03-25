@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "chatusers")
 public class ChatUsers{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cid;

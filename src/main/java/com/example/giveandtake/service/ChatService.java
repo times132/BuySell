@@ -13,7 +13,9 @@ import com.example.giveandtake.repository.ChatMessageRepository;
 import com.example.giveandtake.repository.ChatRoomRepository;
 import com.example.giveandtake.repository.ChatUsersRepository;
 import com.example.giveandtake.repository.UserRepository;
+import jdk.internal.jline.internal.Nullable;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,13 +31,12 @@ import java.util.*;
 public class ChatService{
     private final SimpMessageSendingOperations messagingTemplate;
 
+    private UserService userService;
+    private ChatMapper chatMapper;
+
     private ChatRoomRepository chatRoomRepository;
     private ChatMessageRepository chatMessageRepository;
     private UserRepository userRepository;
-    private UserService userService;
-
-
-    private ChatMapper chatMapper;
     private ChatUsersRepository chatUsersRepository;
 
     //채팅방만들기
@@ -68,7 +69,6 @@ public class ChatService{
                     }
                 }
             }
-
 
             //USER 목록 생성
             List<User> participant = new ArrayList<User>();
@@ -116,29 +116,34 @@ public class ChatService{
     public List<ChatRoom> findRoomById(String roomId) {
         return chatRoomRepository.findALLByRoomId(roomId);
     }
-//
-//
-//    //대화내용 저장
+
+    //대화내용 저장
     @Transactional
     public void createMessage(ChatMessageDTO chatMessageDTO, Principal principal) {
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(chatMessageDTO.getRoomId());
+        List<ChatUsers> users = chatRoom.getUsers();
+
         if (ChatMessage.MessageType.QUIT.equals(chatMessageDTO.getType())) {
             chatMessageDTO.setMessage(chatMessageDTO.getSender() + "님이 방에서 나갔습니다.");
             chatMessageDTO.setSender("[알림]");
+            if (users.size() == 1){ return;}
         }
-        ChatRoom chatRoom = chatRoomRepository.findByRoomId(chatMessageDTO.getRoomId());
+
         chatMessageDTO.setChatRoom(chatRoom);
+        ChatMessage chatMessage = chatMessageRepository.save(chatMessageDTO.toEntity()); //메시지 DB저장
 
-        Long msgNum = chatMessageRepository.save(chatMessageDTO.toEntity()).getMsgNum();
-        Optional <ChatMessage> chatMessageList = chatMessageRepository.findByMsgNum(msgNum);
-        ChatMessage chatMessage = chatMessageList.get();
 
+        List<ChatMessage> messages = chatRoom.getMessages();
+        messages.add(chatMessage);
         ChatRoomDTO chatRoomDTO = chatMapper.RoomToDto(chatRoom);
+        chatRoomDTO.setMessages(messages);
         chatRoomDTO.setMsgDate(chatMessage.getCreatedDate()); //최근 메세지 시간을 채팅방 시간으로 입력
         chatRoomDTO.setRoomName(chatMessage.getMessage()); //방이름을 최근 메세지 내용으로 설정
         String nickname = principal.getName();
+
         //메시지 개수 설정
-        List<ChatUsers> users = chatRoom.getUsers();
         String to = null;
+
         for (ChatUsers user : users){
             if (!user.getUser().getNickname().equals(nickname)){
                 ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
@@ -147,25 +152,30 @@ public class ChatService{
                 to= user.getUser().getNickname();
             }
         }
+
         chatRoomRepository.save(chatRoomDTO.toEntity());
+
         messagingTemplate.convertAndSendToUser(to,"/queue/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
 
     }
 //채팅방 삭제
-    @Transactional
     public void deleteChatRoom(String roomId, Principal principal) {
         System.out.println("DELETE USER");
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
-//        List<ChatUsers> users = chatRoom.getUsers();
-//            for (ChatUsers user : users){
-//                if (user.getUser().getNickname().equals(principal.getName())){
-//                    System.out.println("**************DELETE USER"+user.getCid());
-//                    chatUsersRepository.deleteById(user.getCid());
-//                }
-//            }
-//        if(chatRoom.getUsers().isEmpty()){
+        List<ChatUsers> users = chatRoom.getUsers();
+        if (users.size() == 1){
             chatRoomRepository.deleteById(roomId);
-//        }
+            return;
+        }
+        System.out.println("USERS++++++++++++"+users);
+            for (ChatUsers user : users){
+                if (user.getUser().getNickname().equals(principal.getName())){
+                    System.out.println("**************DELETE USER"+user.getCid());
+                    chatUsersRepository.deleteUserById(user.getCid());
+                    System.out.println("**************FINISH DELETING USER"+user.getCid());
+
+                }
+            }
 
     }
 
@@ -174,7 +184,7 @@ public class ChatService{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User me = ((CustomUserDetails) authentication.getPrincipal()).getUser();
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
-        List<ChatMessage> messages = chatMessageRepository.findMessageByChatRoom(chatRoom);
+        List<ChatMessage> messages = chatRoom.getMessages();
         List<ChatUsers> users = chatRoom.getUsers();
         //메세지수 0
         for (ChatUsers user : users){
@@ -184,7 +194,6 @@ public class ChatService{
                 chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));
             }
         }
-
         return messages;
     }
 
@@ -193,12 +202,8 @@ public class ChatService{
         User me = ((CustomUserDetails) authentication.getPrincipal()).getUser();
         List<ChatUsers> chatUsers = chatUsersRepository.findAllByUser(me); //본인이 속해있는 모든 채팅방 정보 SELECT
         for (ChatUsers chatUser : chatUsers){
-            if (chatUser.getChatRoom().getRoomId().equals(roomId)){
-                return true;
-            }
+            if (chatUser.getChatRoom().getRoomId().equals(roomId)){return true; }
         }
-
         return false;
-
     }
 }

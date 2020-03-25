@@ -14,4 +14,5 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, String> {
    ChatRoom findByRoomId(String roomId);
 
    List<ChatRoom> findALLByRoomId(String roomId);
+
 }

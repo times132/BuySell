@@ -26,17 +26,22 @@ public class ChatRoom implements Comparable<ChatRoom>{
     @Column
     private LocalDateTime msgDate;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"chatRoom"})
     private List<ChatUsers> users = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"chatRoom"})
+    private List<ChatMessage> messages = new ArrayList<>();
+
     @Builder
-    public ChatRoom(String roomId , String roomName, LocalDateTime msgDate, List<ChatUsers> users)
+    public ChatRoom(String roomId , String roomName, LocalDateTime msgDate, List<ChatUsers> users, List<ChatMessage> messages)
     {
         this.roomId = roomId;
         this.roomName =roomName;
         this.msgDate = msgDate;
+        this.messages = messages;
         this.users = users;
     }
 

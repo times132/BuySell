@@ -17,14 +17,14 @@ public class ChatMessageRepositoryTest {
     @Autowired
     private ChatMessageRepository chatMessageRepository;
 
-    @Test
-    public void findMessage(){
-
-        List<ChatMessage> chatList = chatMessageRepository.findMessageByRoomId(Long.valueOf(49));
-
-        ChatMessage chats = chatList.get(0);
-        System.out.println(chatList.get(0));
-        assertThat(chats.getMsgNum(), is(378L));
-    }
+//    @Test
+//    public void findMessage(){
+//
+//        List<ChatMessage> chatList = chatMessageRepository.findMessageByRoomId(Long.valueOf(49));
+//
+//        ChatMessage chats = chatList.get(0);
+//        System.out.println(chatList.get(0));
+//        assertThat(chats.getMsgNum(), is(378L));
+//    }
 
 }

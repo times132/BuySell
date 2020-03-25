@@ -1,6 +1,7 @@
 package com.example.giveandtake.model.entity;
 
 import com.example.giveandtake.model.audit.DateAudit;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,9 @@ public class ChatMessage extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long msgNum;
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = ChatRoom.class, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "room_id")
+    @JsonIgnoreProperties({"roomName", "msgCnt"})
     private ChatRoom chatRoom; // 방번호
 
     @Column

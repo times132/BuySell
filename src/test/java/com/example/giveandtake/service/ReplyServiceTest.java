@@ -15,15 +15,15 @@ public class ReplyServiceTest {
     @Autowired
     private ReplyService replyService;
 
-    @Test
-    public void replyUpdate(){
-        ReplyDTO replyDTO = ReplyDTO.builder()
-                .rid(24L)
-                .bid(2L)
-                .reply("댓글 업데이트")
-                .replyer("iu")
-                .build();
-
-        replyService.updateReply(replyDTO);
-    }
+//    @Test
+//    public void replyUpdate(){
+//        ReplyDTO replyDTO = ReplyDTO.builder()
+//                .rid(24L)
+//                .bid(2L)
+//                .reply("댓글 업데이트")
+//                .replyer("iu")
+//                .build();
+//
+//        replyService.updateReply(replyDTO);
+//    }
 }

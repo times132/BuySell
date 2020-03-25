@@ -18,37 +18,37 @@ public class ReplyRepositoryTest {
     @Autowired
     private ReplyRepository replyRepository;
 
-    @Test
-    public void saveReply(){
-        for (int i = 0; i < 10; i++){
-            ReplyDTO dto = ReplyDTO.builder()
-                    .bid(2L)
-                    .reply("더미 데이터" + i)
-                    .replyer("dlwlrma")
-                    .build();
+//    @Test
+//    public void saveReply(){
+//        for (int i = 0; i < 10; i++){
+//            ReplyDTO dto = ReplyDTO.builder()
+//                    .bid(2L)
+//                    .reply("더미 데이터" + i)
+//                    .replyer("dlwlrma")
+//                    .build();
+//
+//            replyRepository.save(dto.toEntity());
+//        }
+//
+//    }
 
-            replyRepository.save(dto.toEntity());
-        }
+//    @Test
+//    public void readReply(){
+//        Optional<Reply> optional = replyRepository.findById(6L);
+//        Reply reply = optional.get();
+//        ReplyDTO dto = ReplyDTO.builder()
+//                .rid(reply.getRid())
+//                .bid(reply.getBid())
+//                .reply(reply.getReply())
+//                .replyer(reply.getReplyer())
+//                .createdDate(reply.getCreatedDate())
+//                .build();
+//
+//        logger.info(dto.toString());
+//    }
 
-    }
-
-    @Test
-    public void readReply(){
-        Optional<Reply> optional = replyRepository.findById(6L);
-        Reply reply = optional.get();
-        ReplyDTO dto = ReplyDTO.builder()
-                .rid(reply.getRid())
-                .bid(reply.getBid())
-                .reply(reply.getReply())
-                .replyer(reply.getReplyer())
-                .createdDate(reply.getCreatedDate())
-                .build();
-
-        logger.info(dto.toString());
-    }
-
-    @Test
-    public void deleteReply(){
-        replyRepository.deleteById(3L);
-    }
+//    @Test
+//    public void deleteReply(){
+//        replyRepository.deleteById(3L);
+//    }
 }

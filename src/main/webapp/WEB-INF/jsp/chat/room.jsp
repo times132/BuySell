@@ -191,25 +191,32 @@
                        "<span class='chat_date'>" + chatService.displayTime(data[i].createdDate) + "   " + "</span></h5>" +
                        "</div></div>"
                    }
-                    else {
+                   else{
                        str +=
                         "<div class='incoming_msg'>\n" +
-                        "<div class='incoming_msg_img'>"
-                       for (var a = 0, length = data[i].chatRoom.users.length || 0; a < length; a++) {
-                           if (sender != data[i].chatRoom.users[a].user.nickname) {
-                               str += "<img src='/display?fileName=" + data[i].chatRoom.users[a].user.id +
-                                   "/profile/s_" + data[i].chatRoom.users[a].user.profileImage +
-                                   "' onerror=\"this.src = '/resources/image/profile.png'\"/>" +
-                                   "</div>";
+                        "<div class='incoming_msg_img'>";
+
+                       if("[알림]" == data[i].sender){
+                           str += "<img src='/resources/image/info2.png'>"
+                       }
+                       else {
+                           for (var a = 0, length = data[i].chatRoom.users.length || 0; a < length; a++) {
+                               if (data[i].sender == data[i].chatRoom.users[a].user.nickname) {
+                                   str += "<img src='/display?fileName=" + data[i].chatRoom.users[a].user.id +
+                                       "/profile/s_" + data[i].chatRoom.users[a].user.profileImage +
+                                       "' onerror=\"this.src = '/resources/image/profile.png'\"/>";
+                                   break;
+                               }
                            }
                        }
                         str +=
+                        "</div>"+
                         "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
                         "<div class='received_with_msg'>"+
                         "<p>"+data[i].message+"</p>\n"+
                         "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
                         "</div></div>"
-                        }
+                   }
                 }
                 console.log(str);
                 messageDIV.html(str);
