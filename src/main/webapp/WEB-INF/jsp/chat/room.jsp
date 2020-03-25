@@ -87,11 +87,10 @@
         // 채팅룸 출력
         chatService.findAllRoom(function (data) {
             var str = "";
-            console.log("Data:", JSON.stringify(data));
             if (data == null || data.length == 0) {
                 return;
             }
-            console.log("data" + data);
+            console.log("data" + JSON.stringify(data));
             for (var i = 0, len = data.length || 0; i < len; i++) {
                 str += "<div class='chat_list'>"
                 str += "<ul>"
@@ -100,12 +99,16 @@
                 str += "<div class='chat_ib'>"
                 for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
                     if (sender != data[i].users[a].user.nickname) {
-                        str += "<div class='chat_img'> <img src='/display?fileName=" + data[i].users[a].user.id
+                        str += "<div class='chat_img'> "
+                            +"<img src='/display?fileName=" + data[i].users[a].user.id
                             + "/profile/s_" + data[i].users[a].user.profileImage
                             + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
                             +"</div>"
                         str += "<div class='chat_ib'>"
-                        str += "<h5>" + data[i].users[a].user.nickname + "<span class='msgCnt'>" + data[i].users[a].msgCount + "</span>" + "</h5>";
+                        str += "<h5>" + data[i].users[a].user.nickname+"</h5>";
+                    }
+                    else{
+                         str += "<span class='msgCnt'>" + data[i].users[a].msgCount + "</span>";
                     }
                 }
                 str +="<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div>"
@@ -171,30 +174,42 @@
             }
             chatService.findAllMessages(roomId, function (data) {
                 init();
+                console.log("**************"+JSON.stringify(data));
                 $('.messages').show();
                 var str = "";
                 if (data == null || data.length == 0) {
                     return;
 
                 }
+
                 for (var i = 0, len = data.length || 0; i < len; i++) {
-                    str += ( sender === data[i].sender ?
-                        "<div class='outgoing_msg'>\n" +
-                        "<div class='sent_msg'>\n" +
-                        "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
-                        "<p>"+data[i].message+"</p>\n"+
-                        "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
-                        "</div></div>"
-
-                        :
-
+                   if(sender == data[i].sender) {
+                       str +=   "<div class='outgoing_msg'>\n" +
+                       "<div class='sent_msg'>\n" +
+                       "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
+                       "<p>" + data[i].message + "</p>\n" +
+                       "<span class='chat_date'>" + chatService.displayTime(data[i].createdDate) + "   " + "</span></h5>" +
+                       "</div></div>"
+                   }
+                    else {
+                       str +=
                         "<div class='incoming_msg'>\n" +
-                        "<div class='incoming_msg_img'><img src='/resources/image/profile.png'> </div>"+
+                        "<div class='incoming_msg_img'>"
+                       for (var a = 0, length = data[i].chatRoom.users.length || 0; a < length; a++) {
+                           if (sender != data[i].chatRoom.users[a].user.nickname) {
+                               str += "<img src='/display?fileName=" + data[i].chatRoom.users[a].user.id +
+                                   "/profile/s_" + data[i].chatRoom.users[a].user.profileImage +
+                                   "' onerror=\"this.src = '/resources/image/profile.png'\"/>" +
+                                   "</div>";
+                           }
+                       }
+                        str +=
                         "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
                         "<div class='received_with_msg'>"+
                         "<p>"+data[i].message+"</p>\n"+
                         "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
-                        "</div></div>");
+                        "</div></div>"
+                        }
                 }
                 console.log(str);
                 messageDIV.html(str);
@@ -216,9 +231,8 @@
             }));
             this.message = '';
             document.getElementById("message").value = '';
-            init2();
             init();
-
+            init2();
         });
 
         function recvMessage(recv) {
@@ -243,6 +257,7 @@
             }));
 
             alert("더이상 대화가 불가합니다.");
+            init();
             location.href="/chat/room/stop/"+roomId;
 
 

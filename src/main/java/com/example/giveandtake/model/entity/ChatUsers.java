@@ -23,7 +23,7 @@ public class ChatUsers{
 
     @ManyToOne
     @JoinColumn(name = "room_id")
-    @JsonIgnoreProperties({"roomName"})
+    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="roomId")
     @JsonIdentityReference(alwaysAsId=true)
     private ChatRoom chatRoom;
 

@@ -21,7 +21,7 @@ public class ChatMessage extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long msgNum;
 
-    @ManyToOne(targetEntity = ChatRoom.class, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = ChatRoom.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom; // 방번호
 

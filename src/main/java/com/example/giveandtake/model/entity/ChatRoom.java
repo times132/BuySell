@@ -26,7 +26,7 @@ public class ChatRoom implements Comparable<ChatRoom>{
     @Column
     private LocalDateTime msgDate;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"chatRoom"})
     private List<ChatUsers> users = new ArrayList<>();
 

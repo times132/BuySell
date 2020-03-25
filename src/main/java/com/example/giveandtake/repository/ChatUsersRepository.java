@@ -11,6 +11,9 @@ import java.util.List;
 
 @Repository
 public interface ChatUsersRepository extends JpaRepository<ChatUsers, Long> {
-    List<ChatUsers> findAllByChatRoom(String roomId);
+
     List<ChatUsers> findAllByUser(User user);
+
+    @Override
+    void deleteById(Long cid);
 }

@@ -43,11 +43,11 @@ public class ChatController {
     }
 
     // 특정 채팅방 조회
-//    @GetMapping("/room/{roomId}")
-//    @ResponseBody
-//    public List<ChatRoom> roomInfo(@PathVariable String roomId) {
-//        return chatService.findRoomById(roomId);
-//    }
+    @GetMapping("/room/{roomId}")
+    @ResponseBody
+    public List<ChatRoom> roomInfo(@PathVariable String roomId) {
+        return chatService.findRoomById(roomId);
+    }
 
 
     // 채팅 리스트 화면
@@ -73,50 +73,51 @@ public class ChatController {
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-//
-//    //채팅방 삭제
-//    @GetMapping("/room/stop/{roomId}")
-//    public String remove(Principal principal,@PathVariable String roomId){
-//        System.out.println("DELETE ROOM");
-//        chatService.deleteChatRoom(roomId, principal);
-//        return "redirect:/chat/room";
-//    }
-//    // 채팅방 입장 화면
-//    @GetMapping("/room/enter/{roomId}")
-//    public String roomDetail(Model model, @PathVariable String roomId, Principal principal, HttpServletResponse response)throws IOException
-//    {
-//        if(chatService.checkAccess(principal, roomId)) {
-//            model.addAttribute("roomId", roomId);
-//            System.out.println("true");
-//        }
-//        else {
-//            response.setContentType("text/html; charset=UTF-8");
-//            response.setCharacterEncoding("UTF-8");
-//            PrintWriter out = response.getWriter();
-//            out.println("<script>alert('부적절한 시도를 하였습니다.');location.href='/chat/room';</script>");
-//            out.flush();
-//
-//        }
-//        return "/chat/room";
-//    }
-//
+
+    //채팅방 삭제
+    @GetMapping("/room/stop/{roomId}")
+    public String remove(Principal principal,@PathVariable String roomId){
+        System.out.println("DELETE ROOM");
+        chatService.deleteChatRoom(roomId, principal);
+        return "redirect:/chat/room";
+    }
+    // 채팅방 입장 화면
+    @GetMapping("/room/enter/{roomId}")
+    public String roomDetail(Model model, @PathVariable String roomId, HttpServletResponse response)throws IOException
+    {
+        if(chatService.checkAccess(roomId)) {
+            model.addAttribute("roomId", roomId);
+            System.out.println("true");
+        }
+        else {
+            response.setContentType("text/html; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('부적절한 시도를 하였습니다.');location.href='/chat/room';</script>");
+            out.flush();
+
+        }
+        return "/chat/room";
+    }
+
 //
 //    //메시지보내기
-//    @MessageMapping("/message")
-//    @SendToUser
-//    public void message(ChatMessageDTO chatMessageDTO, Principal principal) {
-//        chatService.createMessage(chatMessageDTO ,principal);
-//
-//    }
-//
-//    //메시지 조회-입장시
-//    @GetMapping("/messages/{roomId}")
-//    @ResponseBody
-//    public List<ChatMessage> MessageInfo(@PathVariable String roomId, Principal principal) {
-//        if(chatService.checkAccess(principal, roomId)) {
-//            return chatService.findMessages(roomId, principal);
-//        }
-//        return null;
-//    }
+    @MessageMapping("/message")
+    @SendToUser
+    public void message(ChatMessageDTO chatMessageDTO, Principal principal) {
+       chatService.createMessage(chatMessageDTO ,principal);
+
+    }
+
+    //메시지 조회-입장시
+    @GetMapping("/messages/{roomId}")
+    @ResponseBody
+    public List<ChatMessage> MessageInfo(@PathVariable String roomId, Principal principal) {
+        if(chatService.checkAccess(roomId))
+        {
+            return chatService.findMessages(roomId);
+        }
+        return null;
+    }
 
 }
