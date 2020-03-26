@@ -57,26 +57,6 @@ var userService = (function () {
             }
         });
     }
-    function changeAct(email, callback, error) {
-        console.log("ACTIVATION");
-        $.ajax({
-            url: '/user/activate',
-            data: email,
-            dataType: 'text',//데이타 타입
-            type : 'put',
-            async: true,
-            success: function (data) {
-                if (callback){
-                    callback(data);
-                }
-            },
-            error: function (xhr, status, err) {
-                if (error){
-                    error(err);
-                }
-            }
-        });
-    }
 
     function changePW(password, callback, error) {
         console.log("CHANGE PASSWORD");
@@ -122,7 +102,6 @@ var userService = (function () {
     return {
         checkNickname : checkNickname,
         checkUsername : checkUsername,
-        changeAct : changeAct,
         changePW : changePW,
         findPW : findPW,
         checkEmail : checkEmail

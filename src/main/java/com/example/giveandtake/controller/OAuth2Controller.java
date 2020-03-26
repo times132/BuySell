@@ -49,6 +49,7 @@ public class OAuth2Controller{
     @GetMapping(value = "/login")
     public String oauthlogin(@AuthenticationPrincipal Principal principal, HttpServletRequest request){
         HttpSession session = request.getSession();
+
         Map<String, Object> attributes = new HashMap<>();
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) principal;
 

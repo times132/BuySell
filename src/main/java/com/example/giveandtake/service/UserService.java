@@ -146,7 +146,7 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-
+    //이메일검사
     public boolean emailCheck(String email)
     {
         Optional<User> user = userRepository.findByEmail(email);
@@ -178,9 +178,10 @@ public class UserService implements UserDetailsService {
 
     }
     //계정 USER 로 변환
-    public void changeAct(String email, Principal principal) {
+    public void changeAct(String email) {
+        System.out.println("EMAIL"+email);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> userWapper = userRepository.findByNickname(principal.getName());
+        Optional<User> userWapper = userRepository.findByNickname(authentication.getName());
         User user = userWapper.get();
         UserDTO userDTO = convertEntityToDto(user);
         userDTO.setEmail(email);

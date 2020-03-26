@@ -34,7 +34,7 @@ img{ max-width:100%;}
     width:80%;
     padding:2px 0 4px 6px;
     background:none;
-}
+}z
 
 
 .srch_bar .input-group-addon button {
@@ -94,7 +94,7 @@ ul{
 
 .incoming_msg_img {
     display: inline-block;
-    width: 6%;
+    width: 7%;
 }
 .incoming_msg_img img{
     object-fit: cover;

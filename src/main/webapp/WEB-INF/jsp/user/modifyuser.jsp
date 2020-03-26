@@ -35,8 +35,7 @@
 
 
             <div class="profile-image">
-<%--                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">--%>
-<%--                <img class="img-thumbnail" src="/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}" onerror="this.src='/resources/image/profile.png';"/>--%>
+
             </div>
             <h6>Upload a different photo...</h6>
             <input name="uploadProfile" type="file" class="text-center center-block file-upload"></hr><br>
@@ -59,13 +58,15 @@
         </div><!--/col-3-->
         <div class="col-sm-9">
             <ul class="nav nav-tabs">
-                <li class="nav-item"><a  class="nav-link active" data-toggle="tab" href="#home">Home</a></li>
+                <li class="nav-item"><a  class="nav-link active" data-toggle="tab" href="#CHANGE">CHANGE</a></li>
+                <c:if test = "${provider eq 'giveandtake'}">
                 <li class="nav-item"><a  class="nav-link" data-toggle="tab" href="#changePW">비밀번호 변경</a></li>
+                </c:if>
             </ul>
 
 
             <div class="tab-content">
-                <div class="tab-pane active" id="home">
+                <div class="tab-pane active" id="CHANGE">
                     <hr>
                         <form class="form" action="/user/modifyuser" method="post">
                         <div class="form-group">
@@ -137,7 +138,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <h4>PASSWORD</h4>
+                            <h4>NEW PASSWORD</h4>
                             <input type="password" class="form-control" name="password" id="pwd1" placeholder="password" title="enter your password.">
                         </div>
                     </div>

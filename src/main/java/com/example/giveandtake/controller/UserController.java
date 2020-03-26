@@ -57,12 +57,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/user/activate")
-    @ResponseBody
-    public ResponseEntity<String> activateUser(@RequestParam(value = "email") String email, Principal principal){
-        userService.changeAct(email, principal);
-        return new ResponseEntity<>("계정이 활성화 되었습니다.", HttpStatus.OK);
-    }
+
 
     //중복닉네임 검사
     @RequestMapping(value = "/user/emailCheck", method = RequestMethod.GET)
@@ -75,7 +70,6 @@ public class UserController {
     @RequestMapping(value = "/user/nicknameCheck", method = RequestMethod.GET)
     @ResponseBody
     public boolean nickNameCheck(@RequestParam("nickname") String nickname) {
-        System.out.println(nickname);
         return userService.nicknameCheck(nickname);
     }
     //중복아이디 검사
@@ -162,16 +156,16 @@ public class UserController {
 //<----------------회원정보 --------------------------------------------------------------------------------------------------->
 // 내 정보 페이지
     @GetMapping("/user/info")
-    public String dispMyInfo() {
-    return "/user/myinfo";
+    public String dispMyInfo(Model model) {
+        List<String> socialList = new ArrayList<String>(Arrays.asList("kakao", "google"));
+        System.out.println(socialList);
+        model.addAttribute("socialList", socialList);return "/user/myinfo";
     }
 
     // 회원 정보 수정
     @GetMapping ("/user/modifyuser")
-    public String dismodifyuser(Model model) {
-        List<String> socialList = new ArrayList<String>(Arrays.asList("KA", "GO"));
-        System.out.println(socialList);
-        model.addAttribute("socialList", socialList);
+    public String dismodifyuser() {
+
         return "/user/modifyuser";
     }
 
@@ -214,7 +208,6 @@ public class UserController {
         }
 
     }
-
     //비밀번호 확인 후 탈퇴
     @PostMapping ("/user/delete")
     public void disdeleteuser(String password,Principal principal, HttpSession httpSession, HttpServletResponse response) throws IOException{

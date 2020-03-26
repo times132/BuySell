@@ -23,9 +23,29 @@ var mailService = (function () {
             }
         });
     }
+    function checkCode(checking, callback, error) {
+        $.ajax({
+            type: "get",
+            url: "/mail/checkCode",
+            data: checking,
+            async: true,
+            success: function (result) {
+                if (callback){
+                    callback(result);
+                }
+            },
+            error: function (xhr, status, err) {
+                if (error){
+                    error(err);
+                    alert("실패");
+                }
+            }
+        });
+    }
 
     return {
         sendEmail : sendEmail,
+        checkCode : checkCode
     };
 
 

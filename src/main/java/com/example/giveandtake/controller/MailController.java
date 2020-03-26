@@ -30,11 +30,21 @@ public class MailController {
     @PostMapping("/user/auth")
     @ResponseBody
     public String sendmail(@RequestParam String email, HttpServletRequest request) {
-        System.out.println("이메일은"+email);
+        System.out.println("이메일은" + email);
         String mailType =  "join";
-        String code = mailService.sendMail(email, request, mailType);
+        String alert = mailService.sendMail(email, request, mailType);
 
-        return code;
+        return alert;
+    }
+
+
+    @RequestMapping(value = "/mail/checkCode", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean checkCode(@RequestParam String codekey, @RequestParam String email, HttpServletRequest request) {
+
+        boolean note= mailService.checkCode(request, codekey, email);
+        System.out.println(note);
+        return note;
     }
 
 }

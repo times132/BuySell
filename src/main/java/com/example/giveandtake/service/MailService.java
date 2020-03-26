@@ -4,6 +4,7 @@ package com.example.giveandtake.service;
 import com.example.giveandtake.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Random;
 
 @Service
@@ -20,7 +22,9 @@ public class MailService {
 
     @Resource(name="mailSender")
     private JavaMailSender sender;
-    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
 
     //이메일 보내기
@@ -30,7 +34,7 @@ public class MailService {
         String to = email; // 받는 사람 이메일
         String title ="";
         String content = "";
-
+        HttpSession session = request.getSession();
         if(mailType == "join") {
             title = "[GIVEANDTAKE] 회원가입 인증 이메일 입니다."; // 제목
             content = System.getProperty("line.separator") + //한줄씩 줄간격을 두기위해 작성
@@ -45,7 +49,7 @@ public class MailService {
 
         }
 
-        if(mailType=="findpw"){
+        if(mailType.equals("findpw")){
             title = "[GIVEANDTAKE] 비밀번호 찾기 임시비밀번호 이메일 입니다.";    //제목
             content =
                             System.getProperty("line.separator")+
@@ -81,15 +85,16 @@ public class MailService {
             sender.send(message);
             logger.info("메일을 보냈습니다.");
 
-            return key;
+
+            session.setAttribute("key", key);
+            return "true";
+
 
 
         } catch (Exception e) {
             System.out.println(e);
-            logger.info("메일보내기를 실패하였습니다.");
+            return "메일보내기를 실패하였습니다. 존재하지 않는 이메일일 수 있습니다.";
         }
-        return "null";
-
     }
 
 
@@ -97,7 +102,7 @@ public class MailService {
     private boolean lowerCheck;
     private int size;
 
-    public String getKey(boolean lowerCheck, int size) {
+    public String getKey(boolean lowerCheck, int size){
         this.lowerCheck = lowerCheck;
         this.size = size;
         return init();
@@ -125,4 +130,19 @@ public class MailService {
     }
 
 
+    public boolean checkCode(HttpServletRequest request, String codekey, String email){
+     HttpSession session = request.getSession();
+     String key = (String) session.getAttribute("key");
+        System.out.println(email);
+        System.out.println(key);
+         if(codekey.equals(key)){
+             System.out.println("일치#############");
+             session.removeAttribute("key");
+             userService.changeAct(email);
+
+             return true;
+        }
+        System.out.println("불일치#############");
+         return false;
+    }
 }
