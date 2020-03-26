@@ -18,14 +18,16 @@
 
 </head>
 <body>
+<sec:authentication property="principal.user" var="userinfo"/>
 <div class="container">
-    <h3 class=" text-center">GIVEANDTAKE</h3>
+    <a href="/"><h3 class=" text-center" >GIVEANDTAKE</h3></a>
     <div class="chatting">
         <div class="inbox_all">
             <div class="inbox_people">
-                <div class="headind_srch">
+                <div class="heading_srch">
                     <div class="recent_heading">
-                        <h4>GIVE AND TAKE TALK</h4>
+                        <span><img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}' onerror="this.src = '/resources/image/profile.png'"/>
+                        <br><h4>ME : ${userinfo.nickname}</h4></span>
                     </div>
                     <div class="srch_bar">
                         <div class="stylish-input-group">
@@ -37,16 +39,15 @@
                     </div>
                 </div>
                 <div class="inbox_chat">
-                    <div class="chat_list">
+                        <div class="chat_list">
 
-                    </div>
+                        </div>
                 </div>
             </div>
             <div class="messages">
-                <div>
                     <button class="delete" id='deleteBtn'  >채팅그만두기</button>
                     <button onClick="self.location='/';" type="button"> <i class="fa fa-home" aria-hidden="true"></i> </button>
-                </div>
+
                 <div class="msg_history">
 
 
@@ -60,6 +61,7 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
 
 
@@ -70,14 +72,9 @@
 
 </body>
 <script>
-    // playInit = setInterval(function() {
-    //     init();
-    //     init2();
-    // }, 2000);
-    //
     init();
     $('.messages').hide();
-    var chatUL = $(".inbox_chat");
+    var chatUL = $(".chat_list");
     var me = null;
     <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="userinfo"/>;
@@ -90,61 +87,51 @@
             if (data == null || data.length == 0) {
                 return;
             }
-            console.log("data" + JSON.stringify(data));
             for (var i = 0, len = data.length || 0; i < len; i++) {
-                str += "<div class='chat_list'>"
-                str += "<ul>"
+                str += "<div class='chat'><ul>"
                 str += "<li class='chat_li' data-rid='" + data[i].roomId + "'>";
                 str += "<div class='chat_people'>"
-                str += "<div class='chat_ib'>"
-                for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
-                    if (sender != data[i].users[a].user.nickname) {
-                        str += "<div class='chat_img'> "
-                            +"<img src='/display?fileName=" + data[i].users[a].user.id
-                            + "/profile/s_" + data[i].users[a].user.profileImage
-                            + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
-                            +"</div>"
-                        str += "<div class='chat_ib'>"
-                        str += "<h5>" + data[i].users[a].user.nickname+"</h5>";
-                    }
-                    else{
-                        str +="<span class='label label-warning'>"
-                        str += "&ensp;"
-                        str += data[i].users[a].msgCount
-                        str += "&ensp;"
-                        str +="</span>";
-                    }
+                str += "<div class='chat_img'> "
+                if(data[i].users.length == 1){
+                    str += "<img src='/resources/image/profile.png'>" + "</div>";
                 }
-                str +="<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div>"
-                str += "<div>";
+                else{for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
+                    if (sender != data[i].users[a].user.nickname) {
+                            str += "<img src='/display?fileName=" + data[i].users[a].user.id
+                            +     "/profile/s_" + data[i].users[a].user.profileImage
+                            +    "' onerror=\"this.src='/resources/image/profile.png'\"/>"
+                            + "</div>"
+                        str += "<div class='chat_ib'>"
+                        str += "<h5>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span>" + "</h5>";
+                    }
+                }}
+
                 str += "<p>" + data[i].roomName+ "</p>";
-                str += "</div>"
-                str += "<button id='enterBtn' class='btn float-right' >입장</button>";
-                str += "</div></div></div></li></ul></div>";
+                str += "<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></div>"
+                str += "<button id='enterBtn' class='btn float-right'><img class='btn-img' src='/resources/image/enter.png'></button>";
+                str += "</div></li></ul></div>";
 
             }
-
             chatUL.html(str);
-
-
         });
 
     }
     var roomId='';
     $("#creating").click(function() {
-        var inputreceiver = document.getElementById("receiver").value
-        if (inputreceiver == "") {
+        var inputNick = document.getElementById("receiver").value
+        if (inputNick == "") {
             alert("대화상대를 입력하지 않았습니다.");
             return;
         }
         else {
                     var nickname = {
-                        nickname : inputreceiver
+                        nickname : inputNick
                     };
 
                     chatService.createRoom(nickname, function (result) {
                         alert(result);
                         document.getElementById("receiver").value="";
+                        init();
                     });
         }
     });
@@ -203,13 +190,20 @@
                        if("[알림]" == data[i].sender){
                            str += "<img src='/resources/image/info2.png'>"
                        }
-                       else {
-                           for (var a = 0, length = data[i].chatRoom.users.length || 0; a < length; a++) {
-                               if (data[i].sender == data[i].chatRoom.users[a].user.nickname) {
-                                   str += "<img src='/display?fileName=" + data[i].chatRoom.users[a].user.id +
-                                       "/profile/s_" + data[i].chatRoom.users[a].user.profileImage +
-                                       "' onerror=\"this.src = '/resources/image/profile.png'\"/>";
-                                   break;
+
+                       else{
+                           //사용자가 1명인 경우
+                           if (data[i].chatRoom.users.length == 1){
+                               str += "<img src='/resources/image/profile.png'>"
+                           }
+                           else {
+                               for (var a = 0, length = data[i].chatRoom.users.length || 0; a < length; a++) {
+                                   if (data[i].sender == data[i].chatRoom.users[a].user.nickname) {
+                                       str += "<img src='/display?fileName=" + data[i].chatRoom.users[a].user.id +
+                                           "/profile/s_" + data[i].chatRoom.users[a].user.profileImage +
+                                           "' onerror=\"this.src = '/resources/image/profile.png'\"/>";
+                                       break;
+                                   }
                                }
                            }
                        }
@@ -224,13 +218,11 @@
                 }
                 console.log(str);
                 messageDIV.html(str);
-
             });
 
         }
 
         $(document).on("click", "#sending", function () {
-
             this.message = document.getElementById("message").value;
             console.log("SEND MESSAGE" + this.message);
             ws.send("/app/chat/message", {}, JSON.stringify({
@@ -270,7 +262,6 @@
             alert("더이상 대화가 불가합니다.");
             init();
             location.href="/chat/room/stop/"+roomId;
-
 
         });
 

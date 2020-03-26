@@ -1,61 +1,76 @@
 .container{max-width:1000px; margin:auto;}
 img{ max-width:100%;}
 .inbox_people {
-    background: #f8f8f8 none repeat scroll 0 0;
+    background: #A7CEE2 none repeat scroll 0 0;
     float: left;
     overflow: hidden;
-    width: 40%; border-right:1px solid #c4c4c4;
+    width: 40%; border-right:1.5px solid #c4c4c4;
 }
 .inbox_all {
-    border: 1px solid #c4c4c4;
+    border: 1.5px solid white;
     clear: both;
     overflow: hidden;
 }
 .top_spac{ margin: 20px 0 0;}
 
 
-.recent_heading {float: left; width:40%;}
+.recent_heading {float: left; width:50%;}
+.recent_heading img{
+    float : left;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 40%;
+    height: 70px;
+    width : 70px;
+    padding-bottom: 4px;
+}
+.recent_heading span h4 {
+    float: right;
+    color:#626262;
+    font-size: 15px;
+    font-weight: 600;
+    margin: auto;
+}
 .srch_bar {
     display: inline-block;
     text-align: right;
     width: 100%;
 }
-.headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
+/*검색창 밑 줄*/
+.heading_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1.5px solid white;}
 
-.recent_heading h4 {
-    color: #51e3d4;
-    font-size: 20px;
-    margin: auto;
-}
 
+/*검색창*/
 .srch_bar input{
-    border:3px solid #51e3d4;
-    border-radius: 30px;
+    border:3px solid white;
+    border-radius: 10px;
     width:80%;
     padding:2px 0 4px 6px;
-    background:none;
-}z
-
-
-.srch_bar .input-group-addon button {
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-    border: medium none;
-    padding: 0;
-    color: black;
-    font-size: 18px;
+    background: white;
 }
+ /*검색버튼*/
+ .srch_bar .input-group-addon button {
+     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+     border: medium none;
+     padding: 0;
+     color: #A7CEE2;
+     font-size: 18px;
+ }
 .srch_bar .input-group-addon { margin: 0 0 0 -27px;}
-
-.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 5px 0;}
-.chat_ib h5 div{ font-size:13px; float:right; margin: auto}
-.chat_ib p{ font-size:14px; color:#989898; margin:auto}
-.chat_ib span{
+/*닉네임*/
+.chat_ib h5{ font-size:17px; color: #626262; margin:0 0 5px 0; font-weight : 600;}
+/*시간*/
+.chat_ib div{ font-size:13px; float:right; margin: auto}
+/*최근 메세지 내용*/
+.chat_ib p{ font-size:14px; color:dimgray; margin:auto}
+/*메세지 개수*/
+.chat_ib h5 span{
     vertical-align:top;
     float: right;
-    font-size:17px;
-    font-weight : bold;
+    font-weight : 500;
+    font-size:14px;
     width: auto;
-    height: auto;
+    height: 18px;
     border-radius:35%;
     text-align: center;
     background-color: crimson;
@@ -64,34 +79,43 @@ img{ max-width:100%;}
 }
 .chat_img {
     float: left;
-    width: 12%;
+    width: 17%;
 }
+/*이미지*/
 .chat_img img{
     object-fit: cover;
     object-position: top;
     border-radius: 40%;
-    width: 2.2rem;
-    height: 2.2rem;
+    height: 50px;
+    width : 50px;
     padding-bottom: 0;
 }
 .chat_ib {
     float: left;
     padding: 0 0 0 15px;
-    width: 88%;
+    width: 78%;
 }
-ul{
-    list-style:none;
+.chat_ib button {
+    padding-bottom: 0;
+    float: right;
+    background-color: transparent;
+    border-radius: 30%;
+    border:0px transparent solid;
 }
 
-.chat_people{ overflow:hidden; clear:both;}
-.chat_list {
-    border-bottom: 1px solid #c4c4c4;
+/*각 사람당 칸*/
+.Chat{
+    border-bottom: 1.2px solid white;
     margin: 0;
     padding: 18px 16px 10px;
 }
-.inbox_chat { height: 550px; overflow-y: scroll;}
 
-.active_chat{ background:#ebebeb;}
+.chat_people{ overflow:hidden; clear:both;}
+
+.inbox_chat { height: 550px; overflow-y: scroll;}
+.inbox_chat ul{
+    list-style-type: none;
+}
 
 .incoming_msg_img {
     display: inline-block;
@@ -134,7 +158,7 @@ ul{
 }
 
 .sent_msg p {
-    background: #51e3d4 none repeat scroll 0 0;
+    background: #A7CEE2 none repeat scroll 0 0;
     border-radius: 3px;
     font-size: 14px;
     margin: 0; color:#fff;
@@ -157,7 +181,7 @@ ul{
 
 .type_msg { border-top: 1px solid #c4c4c4;position: relative;}
 .msg_send_btn {
-    background: #51e3d4 none repeat scroll 0 0;
+    background: #A7CEE2 none repeat scroll 0 0;
     border: medium none;
     border-radius: 50%;
     color: #fff;

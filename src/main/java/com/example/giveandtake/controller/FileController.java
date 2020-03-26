@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -72,9 +73,11 @@ public class FileController {
 
             header.add("Content-Type", Files.probeContentType(file.toPath()));
             result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
-        }catch (AccessDeniedException e){
+        }
+        catch (AccessDeniedException e){
             logger.warn("잘못된 접근입니다.");
-        }catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return result;
