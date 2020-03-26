@@ -108,7 +108,11 @@
                         str += "<h5>" + data[i].users[a].user.nickname+"</h5>";
                     }
                     else{
-                         str += "<span class='msgCnt'>" + data[i].users[a].msgCount + "</span>";
+                        str +="<span class='label label-warning'>"
+                        str += "&ensp;"
+                        str += data[i].users[a].msgCount
+                        str += "&ensp;"
+                        str +="</span>";
                     }
                 }
                 str +="<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div>"
