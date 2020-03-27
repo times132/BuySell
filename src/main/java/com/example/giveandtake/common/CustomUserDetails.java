@@ -1,6 +1,6 @@
 package com.example.giveandtake.common;
-import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.model.entity.UserRoles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -21,10 +21,11 @@ public class CustomUserDetails implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static CustomUserDetails create(User user){
-        Set<Role> authList = user.getRoles();
+        Set<UserRoles> authList = user.getRoles();
         Set<GrantedAuthority> authorities = new HashSet<>();
-        for (Role role : authList) {
-            authorities.add(new SimpleGrantedAuthority(role.getName().name()));
+        for (UserRoles role: authList) {
+            authorities.add(new SimpleGrantedAuthority(role.getRole().getName().name()));
+            System.out.println(role.getRole().getName().name());
         }
         return new CustomUserDetails(user, authorities);
     }

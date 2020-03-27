@@ -1,16 +1,12 @@
 package com.example.giveandtake.DTO;
 
-import com.example.giveandtake.model.entity.Board;
-import com.example.giveandtake.model.entity.Role;
-import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.model.entity.UserRoles;
 import lombok.*;
 
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -45,38 +41,9 @@ public class UserDTO {
     private String provider;
     private Boolean activation;
 
-    private Set<Role> roles;
+    private Set<UserRoles> roles = new HashSet<>();
 
-    public User toEntity() {
-        return User.builder()
-                .id(id)
-                .username(username)
-                .nickname(nickname)
-                .name(name)
-                .password(password)
-                .phone(phone)
-                .email(email)
-                .activation(activation)
-                .profileImage(profileImage)
-                .provider(provider)
-                .roles(roles)
-                .build();
-    }
 
-    @Builder
-    public UserDTO(Long id, String nickname, String name, String email, String password, String phone, String username, String profileImage, String provider, Boolean activation, Set<Role> roles) {
-        this.id = id;
-        this.nickname = nickname;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.username = username;
-        this.activation=activation;
-        this.provider = provider;
-        this.profileImage = profileImage;
-        this.roles = roles;
-    }
 
 
 }

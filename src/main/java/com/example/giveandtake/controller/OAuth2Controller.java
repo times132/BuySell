@@ -1,21 +1,20 @@
 package com.example.giveandtake.controller;
 
-import com.example.giveandtake.DTO.GoogleDTO;
-import com.example.giveandtake.DTO.KakaoDTO;
-import com.example.giveandtake.DTO.UserDTO;
+import com.example.giveandtake.DTO.*;
 import com.example.giveandtake.common.AppException;
-import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.domain.RoleName;
+import com.example.giveandtake.mapper.UserMapper;
 import com.example.giveandtake.model.entity.Role;
+import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.RoleRepository;
+import com.example.giveandtake.repository.UserRepository;
+import com.example.giveandtake.repository.UserRolesRepository;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,8 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/oauth")
@@ -45,6 +42,9 @@ public class OAuth2Controller{
     private UserService userService;
     private RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(OAuth2Controller.class);
+    private UserRepository userRepository;
+    private UserMapper userMapper;
+    private UserRolesRepository userRolesRepository;
 
     @GetMapping(value = "/login")
     public String oauthlogin(@AuthenticationPrincipal Principal principal, HttpServletRequest request){
@@ -89,40 +89,45 @@ public class OAuth2Controller{
         return "redirect:/";
     }
 
+
     private void kakaoOauth(KakaoDTO kakao){
 
         String username = "KA_" + kakao.getName();
         String kakaoemail = String.valueOf(kakao.getKakaoAccount().get("email"));
 
-
         if (!userService.usernameCheck(username)){ // 가입 안됬을 때
-            Set<Role> roles= kakao.getAuthorities()
-                    .stream()
-                    .map(role -> Role.builder().id((long)RoleName.valueOf(role.getAuthority()).ordinal()+1).name(RoleName.valueOf(role.getAuthority())).build())
-                    .collect(Collectors.toSet());
-
-            if (!kakaoemail.equals("null")){ //email이 없을 때때
-                System.out.println("계정이 있습니다." +  kakaoemail);
-                Role userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
+//            Set<Role> roles= kakao.getAuthorities()
+//                    .stream()
+//                    .map(role -> Role.builder().id((long)RoleName.valueOf(role.getAuthority()).ordinal()+1).name(RoleName.valueOf(role.getAuthority())).build())
+//                    .collect(Collectors.toSet());
+            UserRolesDTO userRole = new UserRolesDTO();
+            Role role;
+            if (kakaoemail.equals("null")){ //email이 없을 때
+                System.out.println("롤게스트");
+                role = roleRepository.findByName(RoleName.ROLE_GUEST)
                         .orElseThrow(() -> new AppException("User Role not set"));
-                roles = Collections.singleton(userRole);
+            }
+            else {
+                System.out.println("롤유저");
+                role = roleRepository.findByName(RoleName.ROLE_USER)
+                        .orElseThrow(() -> new AppException("User Role not set"));
             }
 
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUsername(username);
+            userDTO.setEmail(kakaoemail);
+            userDTO.setName(String.valueOf(kakao.getAttributes().get("nickname")));
+            userDTO.setNickname(String.valueOf(kakao.getAttributes().get("nickname")));
+            userDTO.setProvider("kakao");
+            User user = userRepository.save(userMapper.toEntity(userDTO));
 
-
-            UserDTO userDto = UserDTO.builder()
-                    .username(username)
-                    .email(kakaoemail)
-                    .roles(roles)
-                    .name(String.valueOf(kakao.getAttributes().get("nickname")))
-                    .provider("kakao")
-                    .build();
-
-            userService.joinUser(userDto);
+            //ROLE 저장
+            userRole.setRole(role);
+            userRole.setUser(user);
+            userRolesRepository.save(userMapper.userRolestoEntity(userRole));
 
         }
         UserDetails userDetails = userService.loadUserByUsername(username);
-
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
@@ -131,23 +136,28 @@ public class OAuth2Controller{
     private void googleOauth(GoogleDTO google){
         logger.info("######GOOGLE : " + google);
         String username = "GO_" + google.getSub();
+        UserDTO userDTO = new UserDTO();
         if (!userService.usernameCheck(username)){
-            UserDTO userDto = UserDTO.builder()
-                    .username(username)
-                    .email(google.getEmail())
-                    .nickname(String.valueOf(google.getAttributes().get("name")))
-                    .roles(google.getAuthorities()
-                            .stream()
-                            .map(role -> Role.builder().id((long)RoleName.valueOf(role.getAuthority()).ordinal()+1).name(RoleName.valueOf(role.getAuthority())).build())
-                            .collect(Collectors.toSet()))
-                    .provider("google")
-                    .build();
 
-            userService.joinUser(userDto);
+            userDTO.setUsername(username);
+            userDTO.setEmail(google.getEmail());
+            userDTO.setNickname(String.valueOf(google.getAttributes().get("name")));
+            userDTO.setProvider("google");
+            User user = userRepository.save(userMapper.toEntity(userDTO));
+
+
+            //ROLE 저장
+            Role role = roleRepository.findByName(RoleName.ROLE_USER)
+                    .orElseThrow(() -> new AppException("User Role not set"));
+            UserRolesDTO userRole = new UserRolesDTO();
+            userRole.setUser(user);
+            userRole.setRole(role);
+            userRolesRepository.save(userMapper.userRolestoEntity(userRole));
+
         }
 
         UserDetails userDetails = userService.loadUserByUsername(username);
-
+        System.out.println("AUTH ??"+userDetails.getAuthorities());
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);

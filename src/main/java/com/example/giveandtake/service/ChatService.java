@@ -49,9 +49,9 @@ public class ChatService{
                 status = "존재하지 않는 닉네임입니다.";
                 return status;
             }
-            User me = userRepository.findByNickname(principal.getName()).get();
+            User me = userRepository.findByNickname(principal.getName());
             System.out.println(me);
-            User receiver = userRepository.findByNickname(nickname).get();
+            User receiver = userRepository.findByNickname(nickname);
 
             //채팅방 중복검사
             List<ChatUsers> chatList = chatUsersRepository.findAllByUser(me); //본인이 속해있는 모든 채팅방 정보 SELECT

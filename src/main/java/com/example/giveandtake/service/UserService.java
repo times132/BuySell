@@ -1,23 +1,24 @@
 package com.example.giveandtake.service;
 
 
-import com.example.giveandtake.DTO.ChatRoomDTO;
 import com.example.giveandtake.DTO.UserDTO;
+import com.example.giveandtake.DTO.UserRolesDTO;
 import com.example.giveandtake.common.AppException;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.domain.RoleName;
-import com.example.giveandtake.model.entity.ChatRoom;
+import com.example.giveandtake.mapper.UserMapper;
 import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.model.entity.UserRoles;
 import com.example.giveandtake.repository.RoleRepository;
 import com.example.giveandtake.repository.UserRepository;
-import com.sun.mail.imap.IMAPStore;
+import com.example.giveandtake.repository.UserRolesRepository;
+import jdk.internal.jline.internal.Nullable;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
-import java.security.Principal;
 import java.util.*;
 
 @Service
@@ -38,33 +38,38 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-
+    private UserMapper userMapper;
+    private UserRolesRepository userRolesRepository;
+    //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
     @Transactional
-    public Long joinUser(UserDTO userDto) {
+    public void joinUser(UserDTO userDto) {
         if (userDto.getProvider() == null){
-            logger.info("걸림?");
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             userDto.setActivation(true);
             userDto.setProvider("giveandtake");
-            //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
-            Role userRole = roleRepository.findByName(RoleName.ROLE_GUEST)
-                    .orElseThrow(() -> new AppException("User Role not set"));
-            userDto.setRoles(Collections.singleton(userRole));
-        }
+            User user = userRepository.save(userMapper.toEntity(userDto));
 
-        return userRepository.save(userDto.toEntity()).getId();
+            //Role 저장
+            Role role = roleRepository.findByName(RoleName.ROLE_GUEST)
+                    .orElseThrow(() -> new AppException("User Role not set"));
+            UserRolesDTO userRole = new UserRolesDTO();
+            userRole.setUser(user);
+            userRole.setRole(role);
+            userRolesRepository.save(userMapper.userRolestoEntity(userRole));
+            return;
+        }
+       userRepository.save(userMapper.toEntity(userDto));
     }
 
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(name).orElseThrow(
-                () -> new UsernameNotFoundException("name not found :" + name));
-
+        User user = userRepository.findByUsername(name);
         return CustomUserDetails.create(user);
     }
+
     //유효성 검사
     public Map<String, String> validateHandling(Errors errors) {
         Map<String, String> validatorResult = new HashMap<>();
@@ -79,21 +84,20 @@ public class UserService implements UserDetailsService {
 
     //회원정보 가져오기
     public UserDTO readUserByUsername(String username) {
-        Optional<User> userWrapper;
+        User user;
         if(username.contains("@")){
-            userWrapper = userRepository.findByEmail(username);
+            user = userRepository.findByEmail(username);
         }
         else {
-            userWrapper = userRepository.findByUsername(username);
+            user = userRepository.findByUsername(username);
         }
-        User user = userWrapper.get();
-        return convertEntityToDto(user);
+
+        return userMapper.convertEntityToDto(user);
     }
     //회원정보 삭제
     @Transactional
     public void delete(String username) {
-        Optional<com.example.giveandtake.model.entity.User> userList = userRepository.findByUsername(username);
-        com.example.giveandtake.model.entity.User user = userList.get();
+        User user = userRepository.findByUsername(username);
         userRepository.deleteById(user.getId());
     }
 
@@ -104,10 +108,9 @@ public class UserService implements UserDetailsService {
         userList.setPassword(((CustomUserDetails) authentication.getPrincipal()).getPassword());
         userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getUser().getRoles());
 
-        userRepository.save(userList.toEntity()).getId();
-
+        userRepository.save(userMapper.toEntity(userList)).getId();
         UserDetails userDetails = loadUserByUsername(userList.getUsername()); // 수정된 유저 정보 가져옴
-        System.out.println(userDetails);
+        System.out.println("걸림??"+userDetails.getAuthorities());
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
         newAuth.setDetails(authentication.getDetails());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
@@ -116,9 +119,9 @@ public class UserService implements UserDetailsService {
     public void uploadProfile(String fileName, Long uid){
         Optional<User> userWapper = userRepository.findById(uid);
         User user = userWapper.get();
-        UserDTO userDTO = convertEntityToDto(user);
+        UserDTO userDTO = userMapper.convertEntityToDto(user);
         userDTO.setProfileImage(fileName);
-        userRepository.save(userDTO.toEntity());
+        userRepository.save(userMapper.toEntity(userDTO));
     }
 
 
@@ -136,10 +139,12 @@ public class UserService implements UserDetailsService {
 
 
     //아이디 중복확인
+    @Nullable
+    @Transactional
     public boolean usernameCheck(String username)  {
-        Optional<com.example.giveandtake.model.entity.User> user = userRepository.findByUsername(username);
+        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
         System.out.println(username);
-        System.out.println("값은 아이디 "+user.isPresent());
+        System.out.println("아이디 중복확인" + user.isPresent());
         if(user.isPresent()){
             return true;
         }
@@ -147,20 +152,25 @@ public class UserService implements UserDetailsService {
     }
 
     //이메일검사
+    @Nullable
+    @Transactional
     public boolean emailCheck(String email)
     {
-        Optional<User> user = userRepository.findByEmail(email);
-        System.out.println("값은 이메일 "+user.isPresent());
+
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
+        System.out.println("값");
         if(user.isPresent()){
             return true;
         }
         return false;
     }
     //닉네임 중복검사
+    @Nullable
+    @Transactional
     public boolean nicknameCheck(String nickname)
     {
-        Optional<User> user = userRepository.findByNickname(nickname);
-        System.out.println("값 "+user.isPresent());
+        Optional<User> user = Optional.ofNullable(userRepository.findByNickname(nickname));
+        System.out.println("값 "+user);
         if(user.isPresent()){
             return true;
         }
@@ -169,50 +179,38 @@ public class UserService implements UserDetailsService {
     //비밀번호 찾기 및 변경
     @Transactional
     public void changePW(String nickname, String newPW){
-        Optional<User> user = userRepository.findByNickname(nickname);
-        UserDTO userDTO = convertEntityToDto(user.get());
+        User user = userRepository.findByNickname(nickname);
+        UserDTO userDTO = userMapper.convertEntityToDto(user);
         System.out.println("비밀번호 변경");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDTO.setPassword(passwordEncoder.encode(newPW));
-        userRepository.save(userDTO.toEntity()).getId();
+        userRepository.save(userMapper.toEntity(userDTO)).getId();
 
     }
     //계정 USER 로 변환
     public void changeAct(String email) {
         System.out.println("EMAIL"+email);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> userWapper = userRepository.findByNickname(authentication.getName());
-        User user = userWapper.get();
-        UserDTO userDTO = convertEntityToDto(user);
-        userDTO.setEmail(email);
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+        User user = userRepository.findByNickname(authentication.getName());
+        Set<UserRoles> userRoles = user.getRoles();
+
+        userRoles.clear(); //Role 모두 지우기
+        Role role = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set"));
-        userDTO.setRoles(Collections.singleton(userRole));
-        userRepository.save(userDTO.toEntity());
+        UserRolesDTO userRole = new UserRolesDTO();
+        userRole.setUser(user);
+        userRole.setRole(role);
+        userRoles.add(userMapper.userRolestoEntity(userRole));
+        UserDTO userDTO = userMapper.convertEntityToDto(user);
+        userDTO.setEmail(email);
+        userDTO.setRoles(userRoles);
+
+        userRepository.save(userMapper.toEntity(userDTO));
         UserDetails userDetails = loadUserByUsername(userDTO.getUsername()); // 수정된 유저 정보 가져옴
         System.out.println(userDetails);
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
         newAuth.setDetails(authentication.getDetails());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-
     }
-
-
-    private UserDTO convertEntityToDto(User user){
-        return UserDTO.builder()
-                .id(user.getId())
-                .nickname(user.getNickname())
-                .provider(user.getProvider())
-                .email(user.getEmail())
-                .name(user.getName())
-                .password(user.getPassword())
-                .phone(user.getPhone())
-                .username(user.getUsername())
-                .activation(user.getActivation())
-                .roles(user.getRoles())
-                .profileImage(user.getProfileImage())
-                .build();
-    }
-
 
 }

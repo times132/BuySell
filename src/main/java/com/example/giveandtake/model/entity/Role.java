@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -27,9 +28,13 @@ public class Role {
     @NaturalId
     private RoleName name;
 
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<UserRoles> users;
+
     @Builder
-    public Role(Long id, RoleName name){
+    public Role(Long id, RoleName name, Set<UserRoles> users){
         this.id = id;
         this.name = name;
+        this.users =users;
     }
 }
