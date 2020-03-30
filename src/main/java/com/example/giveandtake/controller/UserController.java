@@ -57,8 +57,6 @@ public class UserController {
     }
 
 
-
-
     //중복닉네임 검사
     @RequestMapping(value = "/user/emailCheck", method = RequestMethod.GET)
     @ResponseBody

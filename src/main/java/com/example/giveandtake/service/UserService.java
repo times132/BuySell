@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
     private UserRolesRepository userRolesRepository;
     //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
     @Transactional
-    public void joinUser(UserDTO userDto) {
+    public User joinUser(UserDTO userDto) {
         if (userDto.getProvider() == null){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -57,10 +57,9 @@ public class UserService implements UserDetailsService {
             userRole.setUser(user);
             userRole.setRole(role);
             userRolesRepository.save(userMapper.userRolestoEntity(userRole));
-            return;
         }
 
-       userRepository.save(userMapper.toEntity(userDto));
+       return userRepository.save(userMapper.toEntity(userDto));
     }
 
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
@@ -215,4 +214,16 @@ public class UserService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
+    public void makeRole(User user) {
+        Role role = roleRepository.findByName(RoleName.ROLE_GUEST)
+                .orElseThrow(() -> new AppException("User Role not set"));
+        if(!user.getEmail().equals("null")){
+            role = roleRepository.findByName(RoleName.ROLE_USER)
+                    .orElseThrow(() -> new AppException("User Role not set"));
+        }
+        UserRolesDTO userRole = new UserRolesDTO();
+        userRole.setUser(user);
+        userRole.setRole(role);
+        userRolesRepository.save(userMapper.userRolestoEntity(userRole));
+    }
 }
