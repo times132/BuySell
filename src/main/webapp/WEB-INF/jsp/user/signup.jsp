@@ -130,7 +130,7 @@
         var username = $("#username").val();
         $("#username_check").hide();
         userService.checkUsername(username, function (data) {
-            if (data == 1) {
+            if (data) {
                 $("#username_check").show();
                 $("#submit").attr("disabled", true);
                 idck=0;

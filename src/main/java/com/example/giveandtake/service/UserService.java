@@ -13,7 +13,6 @@ import com.example.giveandtake.model.entity.UserRoles;
 import com.example.giveandtake.repository.RoleRepository;
 import com.example.giveandtake.repository.UserRepository;
 import com.example.giveandtake.repository.UserRolesRepository;
-import jdk.internal.jline.internal.Nullable;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +139,6 @@ public class UserService implements UserDetailsService {
 
 
     //아이디 중복확인
-    @Nullable
     @Transactional
     public boolean usernameCheck(String username)  {
         Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
@@ -153,7 +151,6 @@ public class UserService implements UserDetailsService {
     }
 
     //이메일검사
-    @Nullable
     @Transactional
     public boolean emailCheck(String email)
     {
@@ -166,7 +163,6 @@ public class UserService implements UserDetailsService {
         return false;
     }
     //닉네임 중복검사
-    @Nullable
     @Transactional
     public boolean nicknameCheck(String nickname)
     {

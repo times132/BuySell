@@ -75,7 +75,7 @@ public class UserController {
     @ResponseBody
     public boolean usernameCheck(@RequestParam("username") String username) {
         System.out.println(username);
-        return userService.nicknameCheck(username);
+        return userService.usernameCheck(username);
     }
 
     //회원가입
