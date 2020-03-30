@@ -199,7 +199,7 @@
                                     <th style="width: 15%" scope="col">이메일</th>
                                     <th style="width: 15%" scope="col">핸드폰</th>
                                     <th style="width: 10%" scope="col">가입일자</th>
-                                    <th style="width: 5%" scope="col"></th>
+                                    <th style="width: 5%" scope="col">권한</th>
                                     <th style="width: 5%" scope="col"></th>
                                 </tr>
                                 </thead>
@@ -229,8 +229,10 @@
                                         <td class="time">
                                             <javatime:format pattern="yy.MM.dd" value="${user.createdDate}"/>
                                         </td>
-                                        <td class="modify">
-
+                                        <td class="role">
+                                            <c:forEach items="${user.roles}" var="role">
+                                                <span class='badge badge-pill badge-primary notification'>${role.role.name}</span>
+                                            </c:forEach>
                                         </td>
                                         <td class="deleting">
                                             <button class='btn float-right'>

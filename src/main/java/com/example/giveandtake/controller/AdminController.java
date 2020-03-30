@@ -2,10 +2,7 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
-import com.example.giveandtake.model.entity.Board;
-import com.example.giveandtake.model.entity.ChatRoom;
-import com.example.giveandtake.model.entity.User;
-import com.example.giveandtake.model.entity.UserRoles;
+import com.example.giveandtake.model.entity.*;
 import com.example.giveandtake.service.AdminService;
 import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.service.UserService;
@@ -56,6 +53,23 @@ public class AdminController {
                 .build());
         return "/admin/userinfo";
     }
+    //회원 롤 관리
+    @GetMapping("/userrole")
+    public String userrole(SearchCriteria searchCri, Model model) {
+        searchCri.setPageSize(10); // 한 화면에 유저 10개씩 표시
+        Page<UserRoles> userPage = adminService.getRole(searchCri);
+        List<Role> roles= adminService.findAllRole();
+        model.addAttribute("roles", roles );
+        model.addAttribute("userRole", userPage.getContent());
+        model.addAttribute("pageMaker", Pagination.builder()
+                .cri(searchCri)
+                .total(userPage.getTotalElements())
+                .realEndPage(userPage.getTotalPages())
+                .listSize(5) // 페이징 5로 설정
+                .build());
+        return "/admin/role";
+    }
+
     //회원 탈퇴
     @GetMapping("/userinfo/delete")
     public String delete(@RequestParam("username") String username, @ModelAttribute("cri") SearchCriteria cri) {
@@ -64,14 +78,21 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/userrole")
-    public String role() {
-        return "/admin/role";
+    //롤 삭제
+    @GetMapping("/userrole/delete")
+    public String deleteUserRole(@RequestParam("id") Long id, @ModelAttribute("cri") SearchCriteria cri) {
+        System.out.println("**delete**" + id);
+        adminService.deleteUserRole(id);
+        return "redirect:/admin/userrole";
     }
-    @GetMapping(value = "/roleList", produces = "application/json")
-    public ResponseEntity<List<UserRoles>> userRole() {
-        List<UserRoles> userRoles = adminService.getRole("admin");
-        return new ResponseEntity<>(userRoles, HttpStatus.OK);
+    //롤 추가
+    @GetMapping("/userrole/add")
+    public String addUserRole(@RequestParam("username") String username, @RequestParam("roleName") String roleName, @ModelAttribute("cri") SearchCriteria cri) {
+        System.out.println("**delete**" + username);
+        adminService.addUserRole(username, roleName);
+        return "redirect:/admin/userrole";
     }
+
+
 
 }

@@ -162,75 +162,109 @@
             <h2>계정 권한 삭제 및 추가</h2>
             <hr>
             <div class="row">
+            <c:forEach items="${roles}" var="role">
+                <c:set var="rolename" value="${role.name}"/>
                 <div class="form-group col-md-12">
                     <div class="card card-default" id="info">
                         <div class="card-header">
-                            관리자
+                            <h4>${rolename}</h4>
+                            <button class='btn float-right'>
+                                <a class="add" href='<c:out value="${rolename}"/>'>
+                                    <img class='btn-img' src='/resources/image/add.png'>
+                                </a>
+                            </button>
+                            <input class="float-right" id="input" type="text" placeholder="아이디를 입력해주세요">
                         </div>
-                        <div class="card-body">
-                            <div class="admin-body">
-                            <%--  어드민리스트  --%>
-                                <ul class="adminList">
+                <div class="card-body">
 
+                            <form id="searchForm" action="/admin/userinfo" method="get">
+                                <div class="row justify-content-md-center">
+                                    <div class="input-group input-group-sm mb-3 col-lg-8">
+                                        <div class="input-group-append">
+                                            <select name="type" class="form-control form-control-sm" id="exampleFormControlSelect1">
+                                                <option value=""<c:out value="${pageMaker.cri.type == null ? 'selected' : ''}"/>>--</option>
+                                                <option value="E">아이디</option>
+                                                <option value="N">닉네임</option>
+                                            </select>
+                                        </div>
+                                        <input hidden="hidden" /> <%--엔터키 방지--%>
+                                        <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary"  type="button" id="button-addon2">검색</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="page" value="<c:out value="${pageMaker.cri.page}"/>"/>
+                            </form>
+                            <table class="table table-responsive table-sm table-hover">
+                                <thead>
+                                <tr>
+                                    <th style="width: 6%" scope="col">#</th>
+                                    <th style="width: 20%" scope="col">아이디</th>
+                                    <th style="width: 12%" scope="col">닉네임</th>
+                                    <th style="width: 10%" scope="col">권한</th>
+                                    <th style="width: 5%" scope="col"></th>
+                                    <th style="width: 5%" scope="col"></th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <!-- CONTENTS !-->
+                                <c:forEach items="${userRole}" var="userRole">
+                                    <c:if test = "${rolename eq userRole.role.name}">
+                                    <tr>
+                                        <th scope="row">
+                                            <c:out value="${userRole.id}"/>
+                                        </th>
+                                        <td class="userName">
+                                            <c:out value="${userRole.user.username}"/>
+                                        </td>
+                                        <td class="nickname">
+                                            <c:out value="${userRole.user.nickname}"/>
+                                        </td>
+                                        <td class="role">
+                                            <span class='badge badge-pill badge-primary notification'>${userRole.role.name}</span>
+                                        </td>
+                                        <td class="deleting">
+                                            <button class='btn float-right'>
+                                                <a class="delete" href='<c:out value="${userRole.id}"/>'>
+                                                    <img class='btn-img' src='/resources/image/remove.png'>
+                                                </a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </c:if>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+
+                            <div class="reply-footer">
+                                <%-- 페이징 --%>
+                                <ul class="pagination pagination-sm justify-content-center">
+                                    <c:if test="${pageMaker.prev}">
+                                        <li class="page-item"><a class="prev" href="${pageMaker.startPage - 1}">이전</a></li>
+                                    </c:if>
+                                    <c:forEach var="page" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                                        <li class="page-item ${pageMaker.cri.page == page ? "active" : ""}"><a class="page" href="${page}">${page}</a></li>
+                                    </c:forEach>
+                                    <c:if test="${pageMaker.next}">
+                                        <li class="page-item"><a class="next" href="${pageMaker.endPage + 1}">다음</a></li>
+                                    </c:if>
                                 </ul>
                             </div>
 
-                            <div class="admin-footer">
-<%--                                페이징--%>
-                            </div>
+
+                            <form id="actionForm" action="/admin/userinfo" method="get">
+                                <input type="hidden" name="page" value="${pageMaker.cri.page}">
+                                <input type="hidden" name="type" value="${pageMaker.cri.type}">
+                                <input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+                            </form>
 
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-12">
-                    <div class="card card-default" >
-                        <div class="card-header">
-                            유저
-                        </div>
-                        <div class="card-body">
-                            <div class="admin-body">
-                                <%--  유저리스트  --%>
-                                <ul class="userList">
-
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-12">
-                    <div class="card card-default" >
-                        <div class="card-header">
-                            게스트
-                        </div>
-                        <div class="card-body">
-                            <div class="admin-body">
-                                <%--  유저리스트  --%>
-                                <ul class="guestList">
-
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            <div class="form-group col-md-12">
-                <div class="card card-default" >
-                    <div class="card-header">
-                        소셜
-                    </div>
-                    <div class="card-body">
-                        <div class="admin-body">
-                            <%--  소셜리스트  --%>
-                            <ul class="socialList">
-
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+            </c:forEach>
         </div>
 
         </div>
@@ -242,50 +276,94 @@
 <script type="text/javascript" src="/resources/js/admin.js"></script>
 <script>
     $(document).ready(function () {
-        var adminUL = $(".adminList");
-        var userUL = $(".userList");
-        var guestUL = $(".guestList");
-        var socialUL = $(".socialList");
-        // 댓글 목록 출력
-        adminService.roleList(function (data) {
-            var str = "";
-            if (data == null || data.length == 0) {
-                return;
+        $(".delete").on("click", function (e) {
+            e.preventDefault();
+            var check = confirm("선택한 회원의 권한삭제를 진행하시겠습니까?");
+            if(check) {
+                actionForm.append("<input type='hidden' name='id' value='" + $(this).attr("href") + "'>");
+                actionForm.attr("action", "/admin/userrole/delete");
+                actionForm.submit();
             }
-            for (var i = 0, len = data.length || 0; i < len; i++) {
-                console.log("data"+JSON.stringify(data[i]));
-                str += "<li class='roleli' data-id='" + data[i].id + "'>";
-                str += "<strong class='primary-font'>" + data[i].user.nickname + "</strong>";
-                str += "<strong class='primary-font'>" + data[i].user.username + "</strong>";
-                switch (data[i].role){
-                    case "ROLE_ADMIN" :
-                        str += "<span class='badge badge-pill badge-warning notification'>" + data[i].role + "</span></strong>";
-                        str += "</li>";
-                        adminUL.html(str);
-                        break;
-                    case "ROLE_USER" :
-                        str += "<span class='badge badge-pill badge-success notification'>" + data[i].role + "</span></strong>";
-                        str += "</li>";
-                        userUL.html(str);
-                        break;
-                    case "ROLE_GUEST" :
-                        str += "<span class='badge badge-pill badge-primary notification'>" + data[i].role + "</span></strong>";
-                        str += "</li>";
-                        guestUL.html(str);
-                        break;
-                    default :
-                        str += "<span class='badge badge-pill badge-dark notification'>" + data[i].role + "</span></strong>";
-                        str += "</li>";
-                        socialUL.html(str);
-                        break;
-                }
-                str ="";
-                console.log("str :"+ str);
-            }
-
         });
 
+        $(".add").on("click", function (e) {
+            e.preventDefault();
+            var input = document.getElementById("input").value;
+            if(input == ""){
+                alert("아이디를 입력해주세요");
+                return;
+            }
+            var check = confirm("선택한 회원의 권한추가를 진행하시겠습니까?"+ input);
+            if(check) {
+                actionForm.append("<input type='hidden' name='roleName' value='" + $(this).attr("href") + "'>");
+                actionForm.append("<input type='hidden' name='username' value='" + input+ "'>");
+                actionForm.attr("action", "/admin/userrole/add");
+                actionForm.submit();
+            }
+        });
+        var actionForm = $("#actionForm");
+        $(".page-item a").on("click", function (e){
+            e.preventDefault();
+            console.log("click");
+            actionForm.find("input[name='page']").val($(this).attr("href"));
+            actionForm.submit();
+        });
 
+        var searchForm = $("#searchForm");
+        $("#searchForm button").on("click", function (e) {
+            if (!searchForm.find("option:selected").val()){
+                alert("검색종류를 선택하세요.");
+                return false;
+            }
+            if (!searchForm.find("input[name='keyword']").val()){
+                alert("키워드를 입력하세요.");
+                return false;
+            }
+            searchForm.find("input[name='page']").val("1");
+            e.preventDefault();
+            searchForm.submit();
+        });
+    });
+    $(function () {
+        $('.navbar-toggle-sidebar').click(function () {
+            $('.navbar-nav').toggleClass('slide-in');
+            $('.side-body').toggleClass('body-slide-in');
+            $('#search').removeClass('in').addClass('collapse').slideUp(200);
+        });
+
+        $('#search-trigger').click(function () {
+            $('.navbar-nav').removeClass('slide-in');
+            $('.side-body').removeClass('body-slide-in');
+            $('.search-input').focus();
+        });
+    });
+    $(".sidebar-dropdown > a").click(function() {
+        $(".sidebar-submenu").slideUp(200);
+        if (
+            $(this)
+                .parent()
+                .hasClass("active")
+        ) {
+            $(".sidebar-dropdown").removeClass("active");
+            $(this)
+                .parent()
+                .removeClass("active");
+        } else {
+            $(".sidebar-dropdown").removeClass("active");
+            $(this)
+                .next(".sidebar-submenu")
+                .slideDown(200);
+            $(this)
+                .parent()
+                .addClass("active");
+        }
+    });
+
+    $("#close-sidebar").click(function() {
+        $(".page-wrapper").removeClass("toggled");
+    });
+    $("#show-sidebar").click(function() {
+        $(".page-wrapper").addClass("toggled");
     });
 
 </script>

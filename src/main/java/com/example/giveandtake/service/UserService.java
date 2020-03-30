@@ -59,6 +59,7 @@ public class UserService implements UserDetailsService {
             userRolesRepository.save(userMapper.userRolestoEntity(userRole));
             return;
         }
+
        userRepository.save(userMapper.toEntity(userDto));
     }
 
