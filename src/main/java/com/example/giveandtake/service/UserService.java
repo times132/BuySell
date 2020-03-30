@@ -99,6 +99,7 @@ public class UserService implements UserDetailsService {
     public void delete(String username) {
         User user = userRepository.findByUsername(username);
         userRepository.deleteById(user.getId());
+        return;
     }
 
     //회원정보 수정

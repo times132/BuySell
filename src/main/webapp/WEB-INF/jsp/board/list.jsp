@@ -48,7 +48,7 @@
                             <th style="width: 10%" scope="col">가격</th>
                             <th style="width: 10%" scope="col">작성자</th>
                             <th style="width: 10%" scope="col">작성일</th>
-                            <th style="width: 7%" scope="col">조회</th>
+                            <th style="width: 10%" scope="col">조회</th>
                         </tr>
                     </thead>
 
@@ -151,6 +151,7 @@
                 actionForm.find("input[name='page']").val($(this).attr("href"));
                 actionForm.submit();
             });
+
             var searchForm = $("#searchForm");
             $("#searchForm button").on("click", function (e) {
                 if (!searchForm.find("option:selected").val()){

@@ -1,5 +1,6 @@
 package com.example.giveandtake.model.entity;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +19,13 @@ public class UserRoles{
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"profileImag","replyList", "boardList", "password", "email", "phone", "roles", "provider", "name", "createdDate", "updatedDate", "activation","chats"})
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
+    @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="name")
+    @JsonIdentityReference(alwaysAsId=true)
     private Role role;
 
     @Builder
