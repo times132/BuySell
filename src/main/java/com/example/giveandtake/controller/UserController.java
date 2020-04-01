@@ -57,7 +57,7 @@ public class UserController {
     }
 
 
-    //중복닉네임 검사
+    //중복이메일 검사
     @RequestMapping(value = "/user/emailCheck", method = RequestMethod.GET)
     @ResponseBody
     public boolean emailCheck(@RequestParam("email") String email) {
@@ -75,10 +75,10 @@ public class UserController {
     @ResponseBody
     public boolean usernameCheck(@RequestParam("username") String username) {
         System.out.println(username);
-        return userService.nicknameCheck(username);
+        return userService.usernameCheck(username);
     }
 
-    //회원가입
+    //회원가입, 회원추가
     @PostMapping("/user/signup")
     public String execSignup(@Valid UserDTO userDto, Errors errors, Model model) {
         if (errors.hasErrors()) {
@@ -148,6 +148,7 @@ public class UserController {
         PrintWriter out = response.getWriter();
         out.println("<script>alert('접근 권한이 없습니다. 이메일 인증을 진행해 주세요'); location.href='/user/info';</script>");
         out.flush();
+
     }
 
 

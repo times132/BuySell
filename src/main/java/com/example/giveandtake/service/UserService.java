@@ -13,12 +13,14 @@ import com.example.giveandtake.model.entity.UserRoles;
 import com.example.giveandtake.repository.RoleRepository;
 import com.example.giveandtake.repository.UserRepository;
 import com.example.giveandtake.repository.UserRolesRepository;
-import jdk.internal.jline.internal.Nullable;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,24 +44,34 @@ public class UserService implements UserDetailsService {
     private UserRolesRepository userRolesRepository;
     //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
     @Transactional
-    public User joinUser(UserDTO userDto) {
+    public void joinUser(UserDTO userDto) {
+        User user = new User();
+        Role role = new Role();
         if (userDto.getProvider() == null){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             userDto.setActivation(true);
             userDto.setProvider("giveandtake");
-            User user = userRepository.save(userMapper.toEntity(userDto));
+            user = userRepository.save(userMapper.toEntity(userDto));
 
             //Role 저장
-            Role role = roleRepository.findByName(RoleName.ROLE_GUEST)
+            role = roleRepository.findByName(RoleName.ROLE_GUEST)
                     .orElseThrow(() -> new AppException("User Role not set"));
-            UserRolesDTO userRole = new UserRolesDTO();
-            userRole.setUser(user);
-            userRole.setRole(role);
-            userRolesRepository.save(userMapper.userRolestoEntity(userRole));
         }
-
-       return userRepository.save(userMapper.toEntity(userDto));
+        else {
+            user = userRepository.save(userMapper.toEntity(userDto));
+            role = roleRepository.findByName(RoleName.ROLE_GUEST)
+                    .orElseThrow(() -> new AppException("User Role not set"));
+            if(!user.getEmail().equals("null")){
+                role = roleRepository.findByName(RoleName.ROLE_USER)
+                        .orElseThrow(() -> new AppException("User Role not set"));
+            }
+        }
+        UserRolesDTO userRole = new UserRolesDTO();
+        userRole.setUser(user);
+        userRole.setRole(role);
+        UserRoles userRoles = userRolesRepository.save(userMapper.userRolestoEntity(userRole));
+        user.getRoles().add(userRoles);
     }
 
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
@@ -108,14 +120,19 @@ public class UserService implements UserDetailsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         userList.setPassword(((CustomUserDetails) authentication.getPrincipal()).getPassword());
         userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getUser().getRoles());
-
         userRepository.save(userMapper.toEntity(userList)).getId();
-        UserDetails userDetails = loadUserByUsername(userList.getUsername()); // 수정된 유저 정보 가져옴
-        System.out.println("걸림??"+userDetails.getAuthorities());
+        updateSecurityContext(authentication , userList.getUsername());
+    }
+
+    //시큐리티컨텍스트 업데이트
+    public void updateSecurityContext(Authentication authentication, String username) {
+        UserDetails userDetails = loadUserByUsername(username); // 수정된 유저 정보 가져옴
+        System.out.println("걸림?? ##########AUTH#############"+userDetails.getAuthorities());
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
         newAuth.setDetails(authentication.getDetails());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
+
     //사진변경
     public void uploadProfile(String fileName, Long uid){
         Optional<User> userWapper = userRepository.findById(uid);
@@ -140,7 +157,6 @@ public class UserService implements UserDetailsService {
 
 
     //아이디 중복확인
-    @Nullable
     @Transactional
     public boolean usernameCheck(String username)  {
         Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
@@ -153,7 +169,6 @@ public class UserService implements UserDetailsService {
     }
 
     //이메일검사
-    @Nullable
     @Transactional
     public boolean emailCheck(String email)
     {
@@ -166,7 +181,6 @@ public class UserService implements UserDetailsService {
         return false;
     }
     //닉네임 중복검사
-    @Nullable
     @Transactional
     public boolean nicknameCheck(String nickname)
     {
@@ -207,23 +221,8 @@ public class UserService implements UserDetailsService {
         userDTO.setRoles(userRoles);
 
         userRepository.save(userMapper.toEntity(userDTO));
-        UserDetails userDetails = loadUserByUsername(userDTO.getUsername()); // 수정된 유저 정보 가져옴
-        System.out.println(userDetails);
-        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
-        newAuth.setDetails(authentication.getDetails());
-        SecurityContextHolder.getContext().setAuthentication(newAuth);
+        updateSecurityContext(authentication , userDTO.getUsername());
     }
 
-    public void makeRole(User user) {
-        Role role = roleRepository.findByName(RoleName.ROLE_GUEST)
-                .orElseThrow(() -> new AppException("User Role not set"));
-        if(!user.getEmail().equals("null")){
-            role = roleRepository.findByName(RoleName.ROLE_USER)
-                    .orElseThrow(() -> new AppException("User Role not set"));
-        }
-        UserRolesDTO userRole = new UserRolesDTO();
-        userRole.setUser(user);
-        userRole.setRole(role);
-        userRolesRepository.save(userMapper.userRolestoEntity(userRole));
-    }
+
 }

@@ -99,11 +99,12 @@
 <!--container end.//-->
 <script>
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
-    idck1 = 0;
     $("#submit")
         .attr("disabled", true);
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
     idck1 = 0;
+    $("#nickname_check").hide();
+    $("#username_check").hide();
     $("#nickname").keyup(function() {
         var nickname = $("#nickname").val();
 
@@ -122,15 +123,14 @@
             }
         });
     });
-    $("#nickname_check").hide();
-    $("#username_check").hide();
+
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
     idck = 0;
     $("#username").keyup(function() {
         var username = $("#username").val();
         $("#username_check").hide();
         userService.checkUsername(username, function (data) {
-            if (data == 1) {
+            if (data) {
                 $("#username_check").show();
                 $("#submit").attr("disabled", true);
                 idck=0;

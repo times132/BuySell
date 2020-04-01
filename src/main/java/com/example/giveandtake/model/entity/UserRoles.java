@@ -19,7 +19,7 @@ public class UserRoles{
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"profileImag","replyList", "boardList", "password", "email", "phone", "roles", "provider", "name", "createdDate", "updatedDate", "activation","chats"})
+    @JsonIgnoreProperties({"profileImage","replyList", "boardList", "password", "email", "phone", "roles", "provider", "name", "createdDate", "updatedDate", "activation","chats"})
     private User user;
 
     @ManyToOne
