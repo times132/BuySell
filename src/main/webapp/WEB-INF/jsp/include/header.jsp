@@ -1,45 +1,63 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<style>
-    .navbar{
-        margin-bottom: 1rem;
-    }
-</style>
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">
-        <a class="navbar-brand" href="/">
-            <img src="http://placehold.it/150x50?text=Logo" alt="">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        게시판
-                    </a>
-                    <!-- Here's the magic. Add the .animate and .slide-in classes to your .dropdown-menu and you're all set! -->
-                    <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/board">전체보기</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">기프티콘</a>
-                        <a class="dropdown-item" href="#">디지털/가전</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-            </ul>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chatting room</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <link href="/resources/css/header.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="/resources/js/chat.js"></script>
+
+</head>
+<body>
+
+<div id="navbar">
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="navbar pull-right">
+                    <li class="upper-links"><a class="links" href="/">HOME</a></li>
+                    <li class="upper-links"><a class="links" href="/board">게시판</a></li>
+                    <sec:authorize access="isAnonymous()">
+                        <li class="upper-links"><a class="links" href="/user/login">로그인</a></li>
+                        <li class="upper-links"><a class="links" href="/user/signup">회원가입</a></li>
+                    </sec:authorize>
+                    <sec:authorize access="isAuthenticated()">
+
+                        <sec:authentication property="principal.user" var="userinfo"/>
+                        <li class="upper-links"><a class="links" href="/chat/room">채팅</a></li>
+                        <li class="upper-links" id="logout"><a  class="links" href="/user/logout">로그아웃</a></li>
+                        <li class="upper-links dropdown"><a class="links" href="#"><c:out value="${userinfo.nickname}"/>님.</a>
+                            <ul class="dropdown-menu">
+                                <li class="profile-li"><a class="profile-links" href="/user/info">내정보</a></li>
+                                <li class="profile-li"><a class="profile-links" href="#">내게시물</a></li>
+                                <li class="profile-li"><a class="profile-links" href="http://clashhacks.in/">찜한 목록</a></li>
+                                <li class="profile-li"><a class="profile-links" href="http://clashhacks.in/">Link</a></li>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+</div>
+<script>
+    $("#logout").click(function() {
+        location.href="/user/logout";
+        alert("로그아웃이 완료되었습니다.")
+    });
+
+    var search = $("#search");
+    $("#search button").on("click", function (e) {
+        if (!search.find("input[name='keyword']").val()){
+            alert("키워드를 입력하세요.");
+            return false;
+        }
+        e.preventDefault();
+        search.submit();
+    });
+</script>
+</body>

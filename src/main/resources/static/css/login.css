@@ -23,7 +23,7 @@ html,body{
 .social_icon span{
     font-size: 60px;
     margin-left: 10px;
-    color: #FFC312;
+    color: #ffe11b;
 }
 
 .social_icon span:hover{
@@ -43,7 +43,7 @@ html,body{
 
 .input-group-prepend span{
     width: 40px;
-    background-color: #FFC312;
+    background-color: #ffe11b;
     color: black;
     border:0 !important;
 }
@@ -66,13 +66,13 @@ input:focus{
     margin-right: 5px;
 }
 
-.login_btn{
+#login_btn{
     color: black;
-    background-color: #FFC312;
+    background-color: #ffe11b;
     width: 100px;
 }
 
-.login_btn:hover{
+#login_btn:hover{
     color: black;
     background-color: white;
 }

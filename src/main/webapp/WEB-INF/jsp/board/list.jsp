@@ -16,7 +16,7 @@
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
-
+    <%@include file="../include/search.jsp"%>
     <div class="container">
         <div class="row">
             <div class="col-lg-3">
@@ -38,7 +38,30 @@
                 </sec:authorize>
 
                 <a href="/board">전체보기</a>
-                <a href="/">홈</a>
+
+
+                <%--검색 폼--%>
+                <form id="searchForm" action="/board" method="get">
+                    <div class="row justify-content-md-right">
+                        <div class="input-group input-group-sm mb-1 col-lg-5">
+                            <div class="input-group-append">
+                                <select name="type" class="form-control form-control-sm" id="exampleFormControlSelect1">
+                                    <option value=""<c:out value="${pageMaker.cri.type == null ? 'selected' : ''}"/>>--</option>
+                                    <option value="TC">제목+내용</option>
+                                    <option value="W">작성자</option>
+                                </select>
+                            </div>
+                            <input hidden="hidden" /> <%--엔터키 방지--%>
+                            <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="page" value="<c:out value="${pageMaker.cri.page}"/>"/>
+                </form>
+
                 <table class="table table-responsive table-sm table-hover">
                     <thead>
                         <tr>
@@ -102,27 +125,7 @@
                     </ul>
                 </div>
 
-                <%--검색 폼--%>
-                <form id="searchForm" action="/board" method="get">
-                    <div class="row justify-content-md-center">
-                        <div class="input-group input-group-sm mb-3 col-lg-8">
-                            <div class="input-group-append">
-                                <select name="type" class="form-control form-control-sm" id="exampleFormControlSelect1">
-                                    <option value=""<c:out value="${pageMaker.cri.type == null ? 'selected' : ''}"/>>--</option>
-                                    <option value="TC">제목+내용</option>
-                                    <option value="W">작성자</option>
-                                </select>
-                            </div>
-                            <input hidden="hidden" /> <%--엔터키 방지--%>
-                            <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary"  type="button" id="button-addon2">검색</button>
-                            </div>
-                        </div>
-                    </div>
 
-                    <input type="hidden" name="page" value="<c:out value="${pageMaker.cri.page}"/>"/>
-                </form>
 
 
 
@@ -168,7 +171,7 @@
             });
 
 
-        })
+        });
     </script>
 </body>
 </html>

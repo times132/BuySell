@@ -1,4 +1,4 @@
-.container{max-width:1000px; margin:auto;}
+.container{max-width:800px; margin:auto;}
 img{ max-width:100%;}
 .inbox_people {
     background: #A7CEE2 none repeat scroll 0 0;
@@ -53,12 +53,12 @@ img{ max-width:100%;}
      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
      border: medium none;
      padding: 0;
-     color: #A7CEE2;
+     color: #2874f0;
      font-size: 18px;
  }
 .srch_bar .input-group-addon { margin: 0 0 0 -27px;}
 /*닉네임*/
-.chat_ib h5{ font-size:17px; color: #626262; margin:0 0 5px 0; font-weight : 600;}
+.chat_ib h5{ font-size:17px; color: #626262; margin:0 0 5px 0; font-weight : 600; cursor: pointer;}
 /*시간*/
 .chat_ib div{ font-size:13px; float:right; margin: auto}
 /*최근 메세지 내용*/
@@ -109,7 +109,6 @@ img{ max-width:100%;}
     margin: 0;
     padding: 18px 16px 10px;
 }
-
 .chat_people{ overflow:hidden; clear:both;}
 
 .inbox_chat { height: 550px; overflow-y: scroll;}
@@ -135,6 +134,7 @@ img{ max-width:100%;}
     vertical-align: top;
     width: 92%;
 }
+
 .received_with_msg p {
     background: #ebebeb none repeat scroll 0 0;
     border-radius: 3px;

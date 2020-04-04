@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
 </head>
 <body>

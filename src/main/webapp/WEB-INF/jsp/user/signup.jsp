@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css"  id="bootstrap-css">
 <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
@@ -15,7 +15,7 @@
 
 </head>
 <body>
-
+<%@include file="../include/header.jsp"%>
 <div class="container">
 
     <div class="card bg-light">

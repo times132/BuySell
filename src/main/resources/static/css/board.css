@@ -108,7 +108,7 @@
 }
 .replyList li{
     border-width: thick;
-    border-bottom: 1px dashed;
+    border-bottom: 1px outset;
     margin-top: .5rem;
 }
 #addReplyBtn, #modifyconfirm{

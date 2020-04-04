@@ -19,8 +19,10 @@
 </head>
 <body>
 <sec:authentication property="principal.user" var="userinfo"/>
+
+<%@include file="../include/header.jsp"%>
+<BR>
 <div class="container">
-    <a href="/"><h3 class=" text-center" >GIVEANDTAKE</h3></a>
     <div class="chatting">
         <div class="inbox_all">
             <div class="inbox_people">
@@ -31,7 +33,7 @@
                     </div>
                     <div class="srch_bar">
                         <div class="stylish-input-group">
-                            <input type="text" id="receiver" class="search-bar"  placeholder="Search" >
+                            <input type="text" id="receiver" class="search-bar" placeholder="Search" >
                             <span class="input-group-addon">
                                     <button id=creating type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
                             </span>
@@ -45,11 +47,14 @@
                 </div>
             </div>
             <div class="messages">
-                    <button class="delete" id='deleteBtn'  >채팅그만두기</button>
-                    <button onClick="self.location='/';" type="button"> <i class="fa fa-home" aria-hidden="true"></i> </button>
+                <div class="row msgheader">
+                    <div class='col-md-12'>
+                    <button id='deleteBtn' class='btn float-right'><img class='btn-img' src='/resources/image/delete.png'></button>
+                    <button class='btn float-right' onClick="self.location='/chat/room';"><img class='btn-img' src='/resources/image/enter.png'></button>
+                    </div>
+                </div>
 
                 <div class="msg_history">
-
 
                 </div>
 
@@ -63,10 +68,6 @@
             </div>
             </div>
         </div>
-
-
-
-
     </div>
 </div>
 
@@ -98,19 +99,17 @@
                 else{for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
                     if (sender != data[i].users[a].user.nickname) {
                             str += "<img src='/display?fileName=" + data[i].users[a].user.id
-                            +     "/profile/s_" + data[i].users[a].user.profileImage
-                            +    "' onerror=\"this.src='/resources/image/profile.png'\"/>"
+                            +"/profile/s_" + data[i].users[a].user.profileImage
+                            +"' onerror=\"this.src='/resources/image/profile.png'\"/>"
                             + "</div>"
                         str += "<div class='chat_ib'>"
-                        str += "<h5>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span>" + "</h5>";
+                        str += "<h5 id='enterBtn'>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span>" + "</h5>";
                     }
                 }}
 
                 str += "<p>" + data[i].roomName+ "</p>";
                 str += "<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></div>"
-                str += "<button id='enterBtn' class='btn float-right'><img class='btn-img' src='/resources/image/enter.png'></button>";
                 str += "</div></li></ul></div>";
-
             }
             chatUL.html(str);
         });
@@ -157,6 +156,7 @@
         //최초시작시 세팅
 
         var messageDIV = $(".msg_history");
+        var check =true;
         init2();
         function init2() {
             // 채팅룸 출력
@@ -168,6 +168,7 @@
                 console.log("**************"+JSON.stringify(data));
                 $('.messages').show();
                 var str = "";
+                var str2 = "";
                 if (data == null || data.length == 0) {
                     return;
 
@@ -175,7 +176,7 @@
 
                 for (var i = 0, len = data.length || 0; i < len; i++) {
                    if(sender == data[i].sender) {
-                       str +=   "<div class='outgoing_msg'>\n" +
+                       str += "<div class='outgoing_msg'>\n" +
                        "<div class='sent_msg'>\n" +
                        "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
                        "<p>" + data[i].message + "</p>\n" +
@@ -216,7 +217,9 @@
                         "</div></div>"
                    }
                 }
+
                 console.log(str);
+
                 messageDIV.html(str);
             });
 
@@ -251,17 +254,20 @@
 
         //삭제
         $(document).on("click", "#deleteBtn", function () {
-            ws.send("/app/chat/message", {}, JSON.stringify({
-                type: 'QUIT',
-                roomId: roomId,
-                sender: sender,
-                message: this.message,
-                createdDate: this.createdDate
-            }));
+            var check = confirm("채팅방을 삭제하시겠습니까? 삭제하면 더이상 대화가 불가합니다.");
+            if(check) {
+                ws.send("/app/chat/message", {}, JSON.stringify({
+                    type: 'QUIT',
+                    roomId: roomId,
+                    sender: sender,
+                    message: this.message,
+                    createdDate: this.createdDate
+                }));
 
-            alert("더이상 대화가 불가합니다.");
-            init();
-            location.href="/chat/room/stop/"+roomId;
+                alert("삭제가 완료되었습니다.");
+                init();
+                location.href = "/chat/room/stop/" + roomId;
+            }
 
         });
 

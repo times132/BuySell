@@ -1,5 +1,5 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
@@ -20,6 +20,7 @@
 </head>
 
 <body>
+<%@include file="../include/header.jsp"%>
 <hr>
 <sec:authentication property="principal.user" var="userinfo"/>
 <c:set var="provider" value="${userinfo.provider}"/>

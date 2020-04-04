@@ -12,6 +12,7 @@
     <link href="/resources/css/board.css" rel="stylesheet">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/resources/js/chat.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/reply.js"></script>
     <script type="text/javascript" src="/resources/js/common.js"></script>
@@ -20,7 +21,7 @@
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
-
+    <%@include file="../include/search.jsp"%>
     <div class="container">
         <!-- 수정, 삭제, 목록 버튼-->
         <div class="btnlist mb-1">
@@ -143,14 +144,20 @@
     $(document).ready(function () {
 
         var operForm = $("#operForm");
-        var nickname = "<c:out value="${boardDto.user.nickname}"/>";
+        var nickName = "<c:out value="${boardDto.user.nickname}"/>";
         var path = "<c:out value="${boardDto.user.profileImage}"/>";
         console.log(path)
 
         // 닉네임 클릭 후 채팅 클릭 이벤트
         $("#chatting").on("click", function (e) {
-            alert("채팅창으로 이동합니다.");
-            location.href="/chat/rooom/"+nickname;
+            var nickname = {
+                nickname : nickName
+            };
+
+            chatService.createRoom(nickname, function (result) {
+                alert(result);
+            });
+            location.href="/chat/room";
         })
 
         // 삭제, 수정, 목록 버튼 이벤트
@@ -176,7 +183,8 @@
                 $(".carousel-control-prev").hide();
                 $(".carousel-control-next").hide();
 
-            }else{
+            }
+            else{
                 $(arr).each(function (i, file) {
                     if (file.image){
 
