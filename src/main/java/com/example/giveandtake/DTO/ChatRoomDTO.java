@@ -17,7 +17,7 @@ public class ChatRoomDTO {
 
 
     private String roomId;
-    private String roomName;
+    private String recentMsg;
     private List<ChatUsers> users = new ArrayList<>();
     private List<ChatMessage> messages = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class ChatRoomDTO {
     public ChatRoom toEntity(){
         return ChatRoom.builder()
                 .roomId(roomId)
-                .roomName(roomName)
+                .recentMsg(recentMsg)
                 .messages(messages)
                 .users(users)
                 .msgDate(msgDate)
@@ -36,9 +36,9 @@ public class ChatRoomDTO {
 
 
     @Builder
-    public ChatRoomDTO (String roomId, String roomName,List<ChatUsers> users, List<ChatMessage> messages, LocalDateTime msgDate) {
+    public ChatRoomDTO (String roomId, String recentMsg,List<ChatUsers> users, List<ChatMessage> messages, LocalDateTime msgDate) {
         this.roomId =roomId;
-        this.roomName= roomName;
+        this.recentMsg= recentMsg;
         this.users = users;
         this.messages = messages;
         this.msgDate = msgDate;

@@ -12,6 +12,5 @@ import org.mapstruct.Mapper;
 public interface ChatMapper {
     ChatUsers userToEntity(ChatUsersDTO dto);
     ChatUsersDTO toDTO(ChatUsers chatUsers);
-
     ChatRoomDTO RoomToDto(ChatRoom chatRoom);
 }

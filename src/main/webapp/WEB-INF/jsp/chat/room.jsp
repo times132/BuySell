@@ -69,9 +69,6 @@
             </div>
         </div>
     </div>
-</div>
-
-</body>
 <script>
     init();
     $('.messages').hide();
@@ -92,7 +89,7 @@
                 str += "<div class='chat'><ul>"
                 str += "<li class='chat_li' data-rid='" + data[i].roomId + "'>";
                 str += "<div class='chat_people'>"
-                str += "<div class='chat_img'> "
+                str += "<div id='enterBtn' class='chat_img'> "
                 if(data[i].users.length == 1){
                     str += "<img src='/resources/image/profile.png'>" + "</div>";
                 }
@@ -103,11 +100,12 @@
                             +"' onerror=\"this.src='/resources/image/profile.png'\"/>"
                             + "</div>"
                         str += "<div class='chat_ib'>"
-                        str += "<h5 id='enterBtn'>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span>" + "</h5>";
+                        str += (data[i].users[a].msgCount === 0 ? "<h5 id='enterBtn'>" + data[i].users[a].user.nickname+"</h5>"
+                            :"<h5 id='enterBtn'>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span></h5>");
                     }
                 }}
 
-                str += "<p>" + data[i].roomName+ "</p>";
+                str += "<p>" + data[i].recentMsg+ "</p>";
                 str += "<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></div>"
                 str += "</div></li></ul></div>";
             }
@@ -151,12 +149,8 @@
         var roomId = "${roomId}";
         var reconnect = 0;
         var message = '';
-        var messages = [];
-        console.log("룸아이디 타입"+typeof(roomId));
         //최초시작시 세팅
-
         var messageDIV = $(".msg_history");
-        var check =true;
         init2();
         function init2() {
             // 채팅룸 출력
@@ -165,7 +159,6 @@
             }
             chatService.findAllMessages(roomId, function (data) {
                 init();
-                console.log("**************"+JSON.stringify(data));
                 $('.messages').show();
                 var str = "";
                 var str2 = "";
@@ -217,9 +210,6 @@
                         "</div></div>"
                    }
                 }
-
-                console.log(str);
-
                 messageDIV.html(str);
             });
 
@@ -227,7 +217,6 @@
 
         $(document).on("click", "#sending", function () {
             this.message = document.getElementById("message").value;
-            console.log("SEND MESSAGE" + this.message);
             ws.send("/app/chat/message", {}, JSON.stringify({
                 type: 'TALK',
                 roomId: roomId,
@@ -241,16 +230,6 @@
             init2();
         });
 
-        function recvMessage(recv) {
-            this.messages.push({
-                "type": recv.type,
-                "sender": recv.sender,
-                "message": recv.message,
-                "createdDate": recv.createdDate
-            })
-            init();
-            init2();
-        }
 
         //삭제
         $(document).on("click", "#deleteBtn", function () {
@@ -263,12 +242,10 @@
                     message: this.message,
                     createdDate: this.createdDate
                 }));
-
                 alert("삭제가 완료되었습니다.");
                 init();
                 location.href = "/chat/room/stop/" + roomId;
             }
-
         });
 
 
@@ -276,14 +253,16 @@
         function connect() {
             // pub/sub event
             ws.connect({}, function (frame) {
-                ws.subscribe("/user/queue/chat/room/" + roomId, function (message) {
-                    var recv = JSON.parse(message.body);
-                    recvMessage(recv);
+                ws.subscribe("/queue/chat/room/" + roomId, function (message) {
                     init();
                     init2();
                 });
-
-            }, function (error) {
+            ws.subscribe("/user/queue/chat/room", function (message) {
+                init();
+                init2();
+             });
+            }
+            , function (error) {
                 if (reconnect++ <= 5) {
                     setTimeout(function () {
                         console.log("connection reconnect");
@@ -297,4 +276,5 @@
 
         connect();
 </script>
+</body>
 </html>

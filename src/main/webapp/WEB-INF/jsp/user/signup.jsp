@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css"  id="bootstrap-css">
+<link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css" id="bootstrap-css">
 <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
 <script type="text/javascript" src="/resources/js/user.js"></script>
 <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
@@ -16,20 +16,18 @@
 </head>
 <body>
 <%@include file="../include/header.jsp"%>
+<br>
 <div class="container">
-
     <div class="card bg-light">
-        <article class="card-body mx-auto" style="max-width: 400px;">
-            <h4 class="card-title mt-3 text-center">Create Account</h4>
-            <p>
-                <a href="/oauth2/authorization/google" class="btn btn-block btn-twitter"> <i class="fab fa-google"></i>   Login via Google</a>
-                <a href="/oauth2/authorization/kakao" class="btn btn-block btn-facebook"> <i class="fab fa-kickstarter-k"></i>   Login via kakaotalk</a>
-                <a href="#" class="btn btn-block btn-facebook"> <i class="fab fa-facebook"></i>   Login via facebook</a>
+        <article class="card-body mx-auto" style= "width: 400px;">
+            <p class="social">
+                <a href="/oauth2/authorization/google" class="btn btn-block btn-google"> <i class="fab fa-google"></i>&ensp;Login via Google</a>
+                <a href="/oauth2/authorization/kakao" class="btn btn-block btn-kakao"> <i class="fab fa-kickstarter-k"></i>&ensp;Login via KAKAO</a>
             </p>
             <p class="divider-text">
                 <span class="bg-light">OR</span>
             </p>
-            <form  action="/user/signup" method="post">
+            <form action="/user/signup" method="post">
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-address-card"></i> </span>
@@ -71,11 +69,6 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
                     </div>
-                    <select class="custom-select" style="max-width: 120px;">
-                        <option selected="">---</option>
-                        <option value="1">+010</option>
-                        <option value="2">*</option>
-                    </select>
                     <input name=phone class="form-control" placeholder="PHONE NUMBER" type="text">
                 </div> <!-- form-group// -->
                 <div class="form-group input-group">
@@ -90,7 +83,7 @@
             <div class="form-group">
                     <button type="submit" name="submit" id="submit" class="btn btn-primary btn-block"> Create Account</button>
                 </div> <!-- form-group// -->
-                <p class="text-center">Have an account? <a href="/user/login">Log In</a> </p>
+                <p class="text-center">계정이 있으십니까? <a href="/user/login">Log In</a> </p>
             </form>
         </article>
     </div> <!-- card.// -->

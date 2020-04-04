@@ -21,7 +21,7 @@ public class ChatRoom implements Comparable<ChatRoom>{
     private String roomId;
 
     @Column
-    private String roomName;
+    private String recentMsg;
 
     @Column
     private LocalDateTime msgDate;
@@ -36,10 +36,10 @@ public class ChatRoom implements Comparable<ChatRoom>{
     private List<ChatMessage> messages = new ArrayList<>();
 
     @Builder
-    public ChatRoom(String roomId , String roomName, LocalDateTime msgDate, List<ChatUsers> users, List<ChatMessage> messages)
+    public ChatRoom(String roomId , String recentMsg, LocalDateTime msgDate, List<ChatUsers> users, List<ChatMessage> messages)
     {
         this.roomId = roomId;
-        this.roomName =roomName;
+        this.recentMsg =recentMsg;
         this.msgDate = msgDate;
         this.messages = messages;
         this.users = users;

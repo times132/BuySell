@@ -56,14 +56,7 @@ public class ChatController {
         return "/chat/room";
     }
 
-//    // 채팅 리스트 화면
-//    @GetMapping("/rooom/{nickName}")
-//    public String nicknameinrooms(Model model,@PathVariable String nickName) {
-//        model.addAttribute("nickName", nickName);
-//        return "/chat/room";
-//    }
-//
-//
+
     // 채팅방 생성
     @RequestMapping( value = "/room" , method=RequestMethod.POST)
     @ResponseBody

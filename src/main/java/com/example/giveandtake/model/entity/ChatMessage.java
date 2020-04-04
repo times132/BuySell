@@ -24,7 +24,7 @@ public class ChatMessage extends DateAudit {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
-    @JsonIgnoreProperties({"roomName", "msgCnt"})
+    @JsonIgnoreProperties({"recentMsg", "msgCnt", "messages"})
     private ChatRoom chatRoom; // 방번호
 
     @Column

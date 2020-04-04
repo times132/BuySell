@@ -79,7 +79,7 @@ public class ChatService{
                 status = "채팅방 개설이 완료되었습니다.";
                 String randomId = UUID.randomUUID().toString();
                 chatRoomDTO.setRoomId(randomId);
-                chatRoomDTO.setRoomName("대화내용이 없습니다.");
+                chatRoomDTO.setRecentMsg("대화내용이 없습니다.");
                 chatRoomDTO.setMsgDate(LocalDateTime.now());
                 ChatRoom chatRoom = chatRoomRepository.save(chatRoomDTO.toEntity());
                 //Chat User
@@ -130,31 +130,30 @@ public class ChatService{
         chatMessageDTO.setChatRoom(chatRoom);
         ChatMessage chatMessage = chatMessageRepository.save(chatMessageDTO.toEntity()); //메시지 DB저장
 
-
         List<ChatMessage> messages = chatRoom.getMessages();
         messages.add(chatMessage);
         ChatRoomDTO chatRoomDTO = chatMapper.RoomToDto(chatRoom);
         chatRoomDTO.setMessages(messages);
         chatRoomDTO.setMsgDate(chatMessage.getCreatedDate()); //최근 메세지 시간을 채팅방 시간으로 입력
-        chatRoomDTO.setRoomName(chatMessage.getMessage()); //방이름을 최근 메세지 내용으로 설정
+        chatRoomDTO.setRecentMsg(chatMessage.getMessage()); //최근 메세지 내용으로 설정
         String nickname = principal.getName();
 
-        //메시지 개수 설정
-        String to = null;
 
+        String to = null;
+        //메시지 개수 설정
         for (ChatUsers user : users){
             if (user.getUser().getNickname().equals(nickname)){
                 ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
                 chatUsersDTO.setMsgCount(user.getMsgCount()+1);  ////내가보낸 메시지 수 +1
                 chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));
+            }
+            else {
                 to= user.getUser().getNickname();
             }
         }
-
         chatRoomRepository.save(chatRoomDTO.toEntity());
-        System.out.println("ChatMessage############# "+chatMessage);
-        messagingTemplate.convertAndSendToUser(to,"/queue/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
-
+        messagingTemplate.convertAndSend("/queue/chat/room/" + chatMessageDTO.getRoomId(), chatMessage);
+        messagingTemplate.convertAndSendToUser(to,"/queue/chat/room", chatMessage);
     }
 //채팅방 삭제
     public void deleteChatRoom(String roomId, Principal principal) {
@@ -165,13 +164,9 @@ public class ChatService{
             chatRoomRepository.deleteById(roomId);
             return;
         }
-        System.out.println("USERS++++++++++++"+users);
             for (ChatUsers user : users){
                 if (user.getUser().getNickname().equals(principal.getName())){
-                    System.out.println("**************DELETE USER"+user.getCid());
                     chatUsersRepository.deleteUserById(user.getCid());
-                    System.out.println("**************FINISH DELETING USER"+user.getCid());
-
                 }
             }
 
