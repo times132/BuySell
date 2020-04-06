@@ -1,7 +1,8 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<!DOCTYPE html>
+<html>
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/css/myinfo.css">
 
@@ -54,7 +55,6 @@
             <div class="col-sm-9">
                 <ul class="nav nav-tabs">
                     <li class="nav-item"><a  class="nav-link active" data-toggle="tab" href="#home">내정보</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#myboards">Board</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#email">이메일 인증</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#withdrawal">회원탈퇴</a></li>
                 </ul>
@@ -110,24 +110,8 @@
                                 </div>
                             </div>
                         </form>
-
-
                     </div>
 
-
-                <!--------------------------------------게시판---------------------------------------------------->
-
-                <div class="tab-pane" id="myboards">
-
-                        <h2></h2>
-
-                        <hr>
-                        <form class="form" action="##" method="post">
-
-
-                        </form>
-
-                </div><!--/tab-pane-->
                 <!--------------------------------------이메일인증---------------------------------------------------->
                 <div class="tab-pane" id="email">
                         <sec:authorize access="hasAnyRole('GUEST','SOCIAL')">
@@ -309,3 +293,4 @@
 
 </script>
 </body>
+</html>

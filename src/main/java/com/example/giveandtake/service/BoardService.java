@@ -9,6 +9,7 @@ import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.BoardFile;
 import com.example.giveandtake.repository.BoardFileRepository;
 import com.example.giveandtake.repository.BoardRepository;
+import javassist.compiler.Parser;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,10 +56,12 @@ public class BoardService {
 
         if (SearchCri.getType().equals("")){
             page = boardRepository.findAll(pageable);
-        }else if (SearchCri.getType().equals("TC")){
+        }else if (SearchCri.getType().equals("TC")){ // 제목+내용으로 검색
             page = boardRepository.findAllByTitleContainingOrContentContaining(SearchCri.getKeyword(), SearchCri.getKeyword(), pageable);
-        }else{
+        }else if (SearchCri.getType().equals("W")){ // 작성자로 검색
             page = boardRepository.findAllByWriter(SearchCri.getKeyword(), pageable);
+        }else{ // id로 검색
+            page = boardRepository.findAllByUserId(Long.parseLong(SearchCri.getKeyword()), pageable);
         }
 
         return page;

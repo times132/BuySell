@@ -43,7 +43,18 @@ public class UserDTO {
 
     private Set<UserRoles> roles = new HashSet<>();
 
-
-
-
+    @Builder
+    public UserDTO(Long id, String username, String nickname, String email, String password, String name, String phone, String profileImage, String provider, Boolean activation, Set<UserRoles> roles) {
+        this.id = id;
+        this.username = username;
+        this.nickname = nickname;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+        this.profileImage = profileImage;
+        this.provider = provider;
+        this.activation = activation;
+        this.roles = roles;
+    }
 }

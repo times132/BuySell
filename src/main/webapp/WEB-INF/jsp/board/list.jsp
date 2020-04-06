@@ -97,7 +97,7 @@
                                 <fmt:formatNumber value="${board.price}" type="currency"/>
                             </td>
                             <td class="writer">
-                                <c:out value="${board.user.nickname}"/>
+                                <c:out value="${board.writer}"/>
                             </td>
                             <td class="time">
                                 <javatime:format pattern="yy.MM.dd" value="${board.createdDate}"/>
@@ -110,7 +110,7 @@
                     </tbody>
                 </table>
 
-                <div class="reply-footer">
+                <div class="list-footer">
                     <%-- 페이징 --%>
                     <ul class="pagination pagination-sm justify-content-center">
                         <c:if test="${pageMaker.prev}">
@@ -140,6 +140,8 @@
 
     <script>
         $(document).ready(function () {
+            var actionForm = $("#actionForm");
+
             $(".move").on("click", function (e) {
                 e.preventDefault();
                 actionForm.append("<input type='hidden' name='bid' value='"+$(this).attr("href")+"'>");
@@ -147,7 +149,6 @@
                 actionForm.submit();
             });
 
-            var actionForm = $("#actionForm");
             $(".page-item a").on("click", function (e) {
                 e.preventDefault();
                 console.log("click");

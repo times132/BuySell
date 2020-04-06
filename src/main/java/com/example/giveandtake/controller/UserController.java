@@ -1,11 +1,17 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.UserDTO;
+import com.example.giveandtake.common.Criteria;
+import com.example.giveandtake.common.Pagination;
+import com.example.giveandtake.common.SearchCriteria;
+import com.example.giveandtake.model.entity.Board;
+import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.service.MailService;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +40,7 @@ public class UserController {
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private MailService mailService;
+    private BoardService boardService;
 
 
     @GetMapping("/user/signup")
@@ -55,7 +62,6 @@ public class UserController {
     public UserDTO getUserInfo(@RequestParam(value = "nickname") String nickname){
         return userService.readUserByUsername(nickname);
     }
-
 
     //중복이메일 검사
     @RequestMapping(value = "/user/emailCheck", method = RequestMethod.GET)
@@ -225,5 +231,22 @@ public class UserController {
         out.flush();
     }
 
+    @GetMapping(value = "/user/{userid}")
+    public String boardUser(@PathVariable("userid") Long id, Model model, SearchCriteria searchCri){
+        searchCri.setType("I");
+        searchCri.setKeyword(String.valueOf(id));
 
+        Page<Board> boardPage = boardService.getList(searchCri);
+
+        model.addAttribute("userinfo", userService.readUserById(id));
+        model.addAttribute("boardList", boardPage.getContent());
+        model.addAttribute("pageMaker", Pagination.builder()
+                .cri(searchCri)
+                .total(boardPage.getTotalElements())
+                .realEndPage(boardPage.getTotalPages())
+                .listSize(5) // 페이징 5로 설정
+                .build());
+
+        return "/user/userboard";
+    }
 }

@@ -106,6 +106,16 @@ public class UserService implements UserDetailsService {
 
         return userMapper.convertEntityToDto(user);
     }
+
+    public UserDTO readUserById(Long id){
+        User user = userRepository.findById(id).get();
+
+        return UserDTO.builder()
+                .id(user.getId())
+                .nickname(user.getNickname())
+                .profileImage(user.getProfileImage())
+                .build();
+    }
     //회원정보 삭제
     @Transactional
     public void delete(String username) {

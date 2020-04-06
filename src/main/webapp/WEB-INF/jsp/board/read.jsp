@@ -73,10 +73,10 @@
                                 <div class='profile'>
                                     <img src='/display?fileName=${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
                                     <button type="button" class="writer btn btn-link btn-sm dropdown-toggle pro" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="writer h6"><c:out value="${boardDto.user.nickname}"></c:out></span>
+                                        <span class="writer h6"><c:out value="${boardDto.writer}"></c:out></span>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
-                                        <a class="dropdown-item" href="#" id="board">게시글 보기</a>
+                                        <a class="dropdown-item" href="/user/${boardDto.user.id}" id="board">게시글 보기</a>
                                         <a class="dropdown-item" href="#" id="chatting">1:1채팅</a>
                                     </div>
                                 </div>
@@ -142,11 +142,18 @@
 </body>
 <script>
     $(document).ready(function () {
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+        var checkUserBoard = getParameterByName("id");
 
+        console.log();
         var operForm = $("#operForm");
         var nickName = "<c:out value="${boardDto.user.nickname}"/>";
         var path = "<c:out value="${boardDto.user.profileImage}"/>";
-        console.log(path)
 
         // 닉네임 클릭 후 채팅 클릭 이벤트
         $("#chatting").on("click", function (e) {
@@ -158,7 +165,7 @@
                 alert(result);
             });
             location.href="/chat/room";
-        })
+        });
 
         // 삭제, 수정, 목록 버튼 이벤트
         $("button[data-oper='remove']").on("click", function (e) {
@@ -168,8 +175,16 @@
             operForm.attr("action", "/board/modify").submit();
         });
         $("button[data-oper='list']").on("click", function (e) {
-            operForm.find("#bid").remove();
-            operForm.attr("action", "/board");
+            if (checkUserBoard === ""){
+                operForm.find("#bid").remove();
+                operForm.find("#writer").remove();
+                operForm.attr("action", "/board");
+            }else{
+                operForm.find("#bid").remove();
+                operForm.find("#writer").remove();
+                operForm.attr("action", "/user/"+checkUserBoard);
+            }
+
             operForm.submit();
         });
 
