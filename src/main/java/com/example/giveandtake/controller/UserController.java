@@ -238,7 +238,7 @@ public class UserController {
 
         Page<Board> boardPage = boardService.getList(searchCri);
 
-        model.addAttribute("userinfo", userService.readUserById(id));
+        model.addAttribute("user", userService.readUserById(id));
         model.addAttribute("boardList", boardPage.getContent());
         model.addAttribute("pageMaker", Pagination.builder()
                 .cri(searchCri)

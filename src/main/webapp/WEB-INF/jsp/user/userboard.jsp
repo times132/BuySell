@@ -1,4 +1,3 @@
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
@@ -23,7 +22,7 @@
     <hr>
     <div class="container">
         <div class="row">
-            <div class="col-sm-10"><h1>${userinfo.nickname}</h1></div>
+            <div class="col-sm-10"><h1>${user.nickname}</h1></div>
         </div>
         <div class="row">
             <div class="col-3"><!--left col-->
@@ -113,8 +112,8 @@
                     </ul>
                 </div>
 
-                <form id="actionForm" action="/user/${userinfo.id}" method="get">
-                    <input type="hidden" name="id" value="${userinfo.id}">
+                <form id="actionForm" action="/user/${user.id}" method="get">
+                    <input type="hidden" name="id" value="${user.id}">
                     <input type="hidden" name="page" value="${pageMaker.cri.page}">
                 </form>
             </div><!--/col-9-->
@@ -122,13 +121,13 @@
     </div>
     <script>
         $(document).ready(function() {
-            var profileImage = "<c:out value="${userinfo.profileImage}"/>";
+            var profileImage = "<c:out value="${user.profileImage}"/>";
             var profile = $(".profile-image");
             if (profileImage === ""){
                 profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
             }
             else{
-                profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
+                profile.html("<img class='img-thumbnail' src='/display?fileName=${user.id}/profile/${user.profileImage}'/>")
             }
             var actionForm = $("#actionForm");
             $(".move").on("click", function (e) {
