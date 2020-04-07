@@ -78,11 +78,12 @@ var userService = (function () {
         });
     }
 
-    function findPW(email, callback, error) {
+    function findPW(username, callback, error) {
+        console.log("FIND PASSWORD");
         $.ajax({
             type: "POST",
             url: "/user/findpw",
-            data: email,
+            data: username,
             dataType: 'text',//데이타 타입
             async: true,
             success: function (result) {
@@ -104,7 +105,6 @@ var userService = (function () {
         checkUsername : checkUsername,
         changePW : changePW,
         findPW : findPW,
-        checkEmail : checkEmail
     };
 
 

@@ -133,7 +133,7 @@
                     <div class="form-group">
                         <div class="col-xs-6">
                             <h4>PASSWORD</h4>
-                            <input type="password" class="form-control" id="password"  placeholder="password" title="enter your password.">
+                            <input type="password" class="form-control" id="password" placeholder="password" title="enter your password.">
                         </div>
                     </div>
                     <div class="form-group">
@@ -218,9 +218,11 @@
     $("#submit").click(function(){
         var password = $("#password").val();
         var pwd1 = $("#pwd1").val();
+        var userName = "<c:out value="${userinfo.username}"/>";
         console.log("newPW:"+password);
         console.log("newPW:"+pwd1);
         var info = {
+            username : userName,
             password : password,
             newPW : pwd1
         };

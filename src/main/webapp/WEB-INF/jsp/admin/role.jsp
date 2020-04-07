@@ -190,7 +190,7 @@
                                         <input hidden="hidden" /> <%--엔터키 방지--%>
                                         <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary"  type="button" id="button-addon2">검색</button>
+                                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
                                         </div>
                                     </div>
                                 </div>
