@@ -7,6 +7,7 @@ import com.example.giveandtake.common.AppException;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.domain.RoleName;
 import com.example.giveandtake.mapper.UserMapper;
+import com.example.giveandtake.model.entity.ChatUsers;
 import com.example.giveandtake.model.entity.Role;
 import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.model.entity.UserRoles;
@@ -16,6 +17,8 @@ import com.example.giveandtake.repository.UserRolesRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -116,6 +119,8 @@ public class UserService implements UserDetailsService {
                 .profileImage(user.getProfileImage())
                 .build();
     }
+
+
     //회원정보 삭제
     @Transactional
     public void delete(String username) {
@@ -136,6 +141,7 @@ public class UserService implements UserDetailsService {
 
     //시큐리티컨텍스트 업데이트
     public void updateSecurityContext(Authentication authentication, String username) {
+
         UserDetails userDetails = loadUserByUsername(username); // 수정된 유저 정보 가져옴
         System.out.println("걸림?? ##########AUTH#############"+userDetails.getAuthorities());
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
@@ -201,12 +207,12 @@ public class UserService implements UserDetailsService {
         }
         return false;
     }
-    //비밀번호 찾기 및 변경
+    //비밀번호 변경
     @Transactional
-    public void changePW(String nickname, String newPW){
-        User user = userRepository.findByNickname(nickname);
+    public void changePW(String username, String newPW){
+        User user = userRepository.findByUsername(username);
+
         UserDTO userDTO = userMapper.convertEntityToDto(user);
-        System.out.println("비밀번호 변경");
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDTO.setPassword(passwordEncoder.encode(newPW));
         userRepository.save(userMapper.toEntity(userDTO)).getId();
@@ -233,6 +239,13 @@ public class UserService implements UserDetailsService {
         userRepository.save(userMapper.toEntity(userDTO));
         updateSecurityContext(authentication , userDTO.getUsername());
     }
+
+    //이메일 반환
+    public String  getEmailByUsername(String username) {
+        UserDTO user = readUserByUsername(username);
+        return  user.getEmail();
+    }
+
 
 
 }

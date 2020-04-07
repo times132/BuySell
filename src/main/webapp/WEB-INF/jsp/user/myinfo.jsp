@@ -164,7 +164,7 @@
                         <br>
                         <br>
                             <h6>이메일 인증 완료</h6>
-                            <input class="form-control" type="text"  value="${userinfo.email}" readonly="readonly" required><br>
+                            <input class="form-control" type="text" value="${userinfo.email}" readonly="readonly" required><br>
 
                         </sec:authorize>
                 </div>
@@ -250,9 +250,7 @@
     $('#confirm').click(function(){
 
         var email = $('#e_mail').val();
-        console.log(email);
         var code = $('#code').val();
-        console.log(code);
         var checking = {
             codekey : code,
             email : email

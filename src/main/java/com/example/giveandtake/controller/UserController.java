@@ -5,6 +5,9 @@ import com.example.giveandtake.common.Criteria;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
+import com.example.giveandtake.model.entity.ChatRoom;
+import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.service.AdminService;
 import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.service.MailService;
 import com.example.giveandtake.service.UserService;
@@ -41,6 +44,7 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private MailService mailService;
     private BoardService boardService;
+    private AdminService adminService;
 
 
     @GetMapping("/user/signup")
@@ -128,21 +132,38 @@ public class UserController {
         return "redirect:/";
     }
 
+    //아이디 찾기
+    @GetMapping("/user/findID")
+    public String findID(SearchCriteria searchCri, Model model, @RequestParam String email)
+    {
+        System.out.println("EMAIL_______________"+email);
+        searchCri.setType("E");
+        searchCri.setKeyword(email);
+        Page<User> userPage = adminService.getList(searchCri);
+        model.addAttribute("userList", userPage.getContent());
+        return "/user/findPW";
+    }
+
+    //비밀번호찾기
     @GetMapping("/user/findpw")
     public String findpw()
     {
         return "/user/findPW";
     }
 
-    //비밀번호 찾기
-    @RequestMapping( value = "/user/findpw" , method=RequestMethod.POST)
-    public String findPW(HttpServletRequest request, @RequestParam String email){
-        System.out.println("이메일"+ email);
-        String mailType = "findpw";
-        String code = mailService.sendMail(email, request, mailType);
-        userService.changePW(email, code);
 
-        return "로그인창으로 이동합니다.";
+    //메일로 비밀번호 보내기
+    @RequestMapping( value = "/user/findpw" , method=RequestMethod.POST)
+    @ResponseBody
+    public String findPW(HttpServletRequest request, @RequestParam String username){
+        String email = userService.getEmailByUsername(username);
+        String mailType = "findpw";
+        String alert = mailService.sendMail(email, request, mailType);
+        HttpSession session = request.getSession();
+        String key = (String) session.getAttribute("key");
+        userService.changePW(username, key);
+        session.removeAttribute("key");
+        return alert;
     }
 
 
@@ -183,7 +204,7 @@ public class UserController {
         PrintWriter out = response.getWriter();
         System.out.println("정보-----------------"+user);
 
-        if(user.getUsername().contains("KA")||user.getUsername().contains("GO")){
+        if(!user.getProvider().equals("giveandtake")){
             userService.modify(user);
             out.println("<script>alert('수정이 완료되었습니다.'); location.href='/user/info';</script>");
         }
@@ -200,11 +221,11 @@ public class UserController {
     //비밀번호변경
     @PutMapping("/user/changePW")
     @ResponseBody
-    public ResponseEntity<String> changePW(@RequestParam String newPW, @RequestParam String password , Principal principal){
+    public ResponseEntity<String> changePW(@RequestParam String newPW, @RequestParam String password,  @RequestParam String username){
         System.out.println("CHANGE PW");
         if(userService.checkPassword(password))
         {
-            userService.changePW(principal.getName(), newPW);
+            userService.changePW(username, newPW);
             return new ResponseEntity<>("비밀번호 변경이 완료되었습니다.", HttpStatus.OK);
         }
         else{
