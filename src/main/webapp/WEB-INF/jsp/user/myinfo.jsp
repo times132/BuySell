@@ -223,6 +223,8 @@
 <script>
     $(document).ready(function() {
         var profileImage = "<c:out value="${userinfo.profileImage}"/>";
+
+
         var profile = $(".profile-image");
         if (profileImage === ""){
             profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")

@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.List;
@@ -54,18 +53,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/chat/room").hasRole("USER")
                 .antMatchers("/**").permitAll()
                 .and()
+                .formLogin()
+                .loginPage("/user/login")
+                .defaultSuccessUrl("/")
+                .permitAll()
+                .failureUrl("/user/login/error")
+                .and()
                 .oauth2Login()
                 .userInfoEndpoint()
                 .customUserType(KakaoDTO.class, "kakao")
                 .customUserType(GoogleDTO.class, "google")
                 .and()
                 .defaultSuccessUrl("/oauth/login")
-                .and()
-                .formLogin()
-                .loginPage("/user/login")
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .failureUrl("/user/login/error")
+
                 .and() // 로그아웃 설정
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
@@ -123,6 +123,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return null;
     }
 }
-
 
 

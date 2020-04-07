@@ -77,6 +77,9 @@ public class FileController {
         catch (AccessDeniedException e){
             logger.warn("잘못된 접근입니다.");
         }
+        catch (NoSuchFileException e){
+            logger.warn("사진이 없습니다");
+        }
         catch (IOException e) {
             e.printStackTrace();
         }

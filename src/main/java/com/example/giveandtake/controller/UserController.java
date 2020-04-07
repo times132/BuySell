@@ -164,7 +164,8 @@ public class UserController {
     public String dispMyInfo(Model model) {
         List<String> socialList = new ArrayList<String>(Arrays.asList("kakao", "google"));
         System.out.println(socialList);
-        model.addAttribute("socialList", socialList);return "/user/myinfo";
+        model.addAttribute("socialList", socialList);
+        return "/user/myinfo";
     }
 
     // 회원 정보 수정

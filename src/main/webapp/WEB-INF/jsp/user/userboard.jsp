@@ -69,26 +69,47 @@
                             <th scope="row">
                                 <c:out value="${board.bid}"/>
                             </th>
+
                             <td class="btype">
                                 <c:out value="${board.btype}"/>
                             </td>
-                            <td class="title">
-                                <a class="move" href='<c:out value="${board.bid}"/>'>
-                                    <c:out value="${board.title}"/>
-                                </a>
-                                <a>
-                                    [<c:out value="${board.replyCnt}"/>]
-                                </a>
-                            </td>
+
+                            <c:if test="${board.sellcheck eq true}">
+                                <td class="title-sell">
+                                    <a class="move" href='<c:out value="${board.bid}"/>'>
+                                        <c:out value="${board.title}"/>
+                                    </a>
+                                    <span class="replycnt">
+                                        [<c:out value="${board.replyCnt}"/>]
+                                    </span>
+                                    <span class="sold">
+                                        완료
+                                    </span>
+                                </td>
+                            </c:if>
+                            <c:if test="${board.sellcheck eq false}">
+                                <td class="title">
+                                    <a class="move" href='<c:out value="${board.bid}"/>'>
+                                        <c:out value="${board.title}"/>
+                                    </a>
+                                    <span class="replycnt">
+                                        [<c:out value="${board.replyCnt}"/>]
+                                    </span>
+                                </td>
+                            </c:if>
+
                             <td class="price">
                                 <fmt:formatNumber value="${board.price}" type="currency"/>
                             </td>
+
                             <td class="writer">
                                 <c:out value="${board.writer}"/>
                             </td>
+
                             <td class="time">
                                 <javatime:format pattern="yy.MM.dd" value="${board.createdDate}"/>
                             </td>
+
                             <td class="viewCnt">
                                 <c:out value="${board.viewCnt}"/>
                             </td>

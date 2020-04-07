@@ -39,29 +39,6 @@
 
                 <a href="/board">전체보기</a>
 
-
-                <%--검색 폼--%>
-                <form id="searchForm" action="/board" method="get">
-                    <div class="row justify-content-md-right">
-                        <div class="input-group input-group-sm mb-1 col-lg-5">
-                            <div class="input-group-append">
-                                <select name="type" class="form-control form-control-sm" id="exampleFormControlSelect1">
-                                    <option value=""<c:out value="${pageMaker.cri.type == null ? 'selected' : ''}"/>>--</option>
-                                    <option value="TC">제목+내용</option>
-                                    <option value="W">작성자</option>
-                                </select>
-                            </div>
-                            <input hidden="hidden" /> <%--엔터키 방지--%>
-                            <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <input type="hidden" name="page" value="<c:out value="${pageMaker.cri.page}"/>"/>
-                </form>
-
                 <table class="table table-responsive table-sm table-hover">
                     <thead>
                         <tr>
@@ -82,26 +59,47 @@
                             <th scope="row">
                                 <c:out value="${board.bid}"/>
                             </th>
+
                             <td class="btype">
                                 <c:out value="${board.btype}"/>
                             </td>
-                            <td class="title">
-                                <a class="move" href='<c:out value="${board.bid}"/>'>
-                                    <c:out value="${board.title}"/>
-                                </a>
-                                <a>
-                                    [<c:out value="${board.replyCnt}"/>]
-                                </a>
-                            </td>
+
+                            <c:if test="${board.sellcheck eq true}">
+                                <td class="title-sell">
+                                    <a class="move" href='<c:out value="${board.bid}"/>'>
+                                        <c:out value="${board.title}"/>
+                                    </a>
+                                    <span class="replycnt">
+                                        [<c:out value="${board.replyCnt}"/>]
+                                    </span>
+                                    <span class="sold">
+                                        완료
+                                    </span>
+                                </td>
+                            </c:if>
+                            <c:if test="${board.sellcheck eq false}">
+                                <td class="title">
+                                    <a class="move" href='<c:out value="${board.bid}"/>'>
+                                        <c:out value="${board.title}"/>
+                                    </a>
+                                    <span class="replycnt">
+                                        [<c:out value="${board.replyCnt}"/>]
+                                    </span>
+                                </td>
+                            </c:if>
+
                             <td class="price">
                                 <fmt:formatNumber value="${board.price}" type="currency"/>
                             </td>
+
                             <td class="writer">
                                 <c:out value="${board.writer}"/>
                             </td>
+
                             <td class="time">
                                 <javatime:format pattern="yy.MM.dd" value="${board.createdDate}"/>
                             </td>
+
                             <td class="viewCnt">
                                 <c:out value="${board.viewCnt}"/>
                             </td>
@@ -125,7 +123,27 @@
                     </ul>
                 </div>
 
+                <%--검색 폼--%>
+                <form id="searchForm" action="/board" method="get">
+                    <div class="row justify-content-center">
+                        <div class="input-group input-group-sm mb-1 col-lg-8">
+                            <div class="input-group-append">
+                                <select name="type" class="form-control form-control-sm" id="exampleFormControlSelect1">
+                                    <option value=""<c:out value="${pageMaker.cri.type == null ? 'selected' : ''}"/>>--</option>
+                                    <option value="TC">제목+내용</option>
+                                    <option value="W">작성자</option>
+                                </select>
+                            </div>
+                            <input hidden="hidden" /> <%--엔터키 방지--%>
+                            <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
+                            </div>
+                        </div>
+                    </div>
 
+                    <input type="hidden" name="page" value="<c:out value="${pageMaker.cri.page}"/>"/>
+                </form>
 
 
 

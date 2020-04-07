@@ -22,7 +22,7 @@ public class BoardFile {
     private String fileName;
     private Boolean image;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_bid")
     private Board board;
 

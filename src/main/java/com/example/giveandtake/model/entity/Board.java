@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class Board extends DateAudit {
 
     private Integer viewCnt;
     private Integer replyCnt;
+    @ColumnDefault("0")
+    private boolean sellcheck;
 
     @PrePersist
     protected void prePersist(){
@@ -44,13 +47,13 @@ public class Board extends DateAudit {
     @JsonIgnore
     private List<Reply> replyList;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"password", "boardList"})
     private User user;
 
     @Builder
-    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, List<BoardFile> boardFileList, User user){
+    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, boolean sellcheck, List<BoardFile> boardFileList, User user){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
@@ -59,6 +62,7 @@ public class Board extends DateAudit {
         this.price = price;
         this.viewCnt = viewCnt;
         this.replyCnt = replyCnt;
+        this.sellcheck = sellcheck;
         this.boardFileList = boardFileList;
         this.user = user;
     }
