@@ -121,7 +121,7 @@ public class BoardController {
         model.addAttribute("boardDto", boardDto);
     }
 
-//    @PreAuthorize("principal.user.nickname == #dto.writer")
+    @PreAuthorize("principal.user.nickname == #dto.writer")
     @PostMapping("/modify")
     public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----board modifyPOST-----");
@@ -131,14 +131,22 @@ public class BoardController {
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
-    @PreAuthorize("principal.username == #writer")
+    @PreAuthorize("principal.user.nickname == #writer")
     @PostMapping("/remove")
     public String removePOST(@ModelAttribute SearchCriteria searchCri, @RequestParam("bid") Long bid, String writer){
         logger.info("-----board removePOST-----");
-        logger.info("########WRITER : " + writer);
+
         boardService.delete(bid);
 
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
+    }
+
+    @PreAuthorize("principal.user.nickname == #writer")
+    @PostMapping("sell")
+    public String sellPOST(@RequestParam("bid") Long bid, String writer){
+        logger.info("-----board sellPOST-----");
+        boardService.sell(bid);
+        return "redirect:/board";
     }
 
     @GetMapping(value = "/getFileList", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -20,12 +20,9 @@
             <div class="col">
                 <form action="/board/modify" method="post">
                     <input type="hidden" name="bid" value="${boardDto.bid}"/>
-                    <input type="hidden" name="viewCnt" value="${boardDto.viewCnt}"/>
-                    <input type="hidden" name="replyCnt" value="${boardDto.replyCnt}"/>
+<%--                    <input type="hidden" name="viewCnt" value="${boardDto.viewCnt}"/>--%>
+<%--                    <input type="hidden" name="replyCnt" value="${boardDto.replyCnt}"/>--%>
                     <input type="hidden" name="writer" value="${boardDto.writer}"/>
-<%--                    <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">--%>
-<%--                    <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">--%>
-<%--                    <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">--%>
 
                     <div class="form-group">
                         <select class="custom-select col-4" name="btype">
@@ -144,7 +141,7 @@
                 $(".uploadResult ul").html(str);
             });
 
-            $(".uploadResult").on("click", "button", function (e) {
+            $(".uploadResult").on("click", ".del-image", function (e) {
                 if (confirm("사진을 삭제하시겠습니까?")){
                     var targetLi = $(this).closest("li");
                     targetLi.remove();

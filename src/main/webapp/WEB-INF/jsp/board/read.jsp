@@ -28,7 +28,10 @@
             <sec:authentication property="principal" var="userinfo"/>
             <sec:authorize access="isAuthenticated()">
                 <c:if test="${userinfo.user.nickname eq boardDto.user.nickname}">
-                    <button class="btn btn-primary btn-sm" data-oper="modify">수정</button>
+                    <c:if test="${boardDto.sellcheck eq false}">
+                        <button class="btn btn-success btn-sm" data-oper="sell">판매완료</button>
+                        <button class="btn btn-primary btn-sm" data-oper="modify">수정</button>
+                    </c:if>
                     <button class="btn btn-danger btn-sm" data-oper="remove">삭제</button>
                 </c:if>
             </sec:authorize>
@@ -170,7 +173,7 @@
         // 삭제, 수정, 목록 버튼 이벤트
         $("button[data-oper='remove']").on("click", function (e) {
             operForm.attr("action", "/board/remove").attr("method", "post").submit();
-        })
+        });
         $("button[data-oper='modify']").on("click", function (e) {
             operForm.attr("action", "/board/modify").submit();
         });
@@ -186,6 +189,11 @@
             }
 
             operForm.submit();
+        });
+        $("button[data-oper='sell']").on("click", function (e) {
+            if(confirm("판매 완료하면 수정이 불가합니다.")){
+                operForm.attr("action", "/board/sell").attr("method", "post").submit();
+            }
         });
 
         // 첨부 파일 가져오기
@@ -412,7 +420,7 @@
     // 수정 취소
     $(document).on("click", "#modifycancel", function () {
         showList(pageNum);
-    })
+    });
 
     // 댓글 삭제
     $(document).on("click", "#removeReplyBtn", function(){

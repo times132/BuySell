@@ -80,8 +80,14 @@ public class BoardService {
     // 게시물 업데이트
     @Transactional
     public void update(BoardDTO dto, CustomUserDetails userDetails){
-        dto.setUser(userDetails.getUser());
-        Board board = boardRepository.save(boardMapper.toEntity(dto));
+        Board board = boardRepository.findById(dto.getBid()).get();
+        BoardDTO boardDTO = boardMapper.toDTO(board);
+        boardDTO.setBtype(dto.getBtype());
+        boardDTO.setTitle(dto.getTitle());
+        boardDTO.setContent(dto.getContent());
+        boardDTO.setPrice(dto.getPrice());
+
+        board = boardRepository.save(boardMapper.toEntity(boardDTO));
 
         // 기존 게시물에 있던 사진 uuid 저장
         Set<String> uuidList = boardFileRepository.findAllByBoardBid(dto.getBid())
@@ -103,6 +109,13 @@ public class BoardService {
     // 게시물 삭제
     public void delete(Long bid){
         boardRepository.deleteById(bid);
+    }
+
+    public void sell(Long bid){
+        Board board = boardRepository.findById(bid).get();
+        BoardDTO boardDTO = boardMapper.toDTO(board);
+        boardDTO.setSellcheck(true);
+        boardRepository.save(boardMapper.toEntity(boardDTO));
     }
 
     public List<BoardFileDTO> readFile(Long bid){
