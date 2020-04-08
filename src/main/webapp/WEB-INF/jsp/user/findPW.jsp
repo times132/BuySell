@@ -61,18 +61,18 @@
                                         <h3><i class="fa fa-user fa-4x"></i></h3>
                                         <h3 class="text-center">아이디를 잊어버리셨습니까?</h3>
                                         <br>
-                                        <p>이메일을 입력해주세요</p>
+                                        <p>이메일과 이름을 입력해주세요</p>
                                         <form id="actionForm" action="/user/findID" method="get">
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="email" name="email" placeholder="이메일" required/>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="name" name="name" placeholder="이름" required/>
+                                                </div>
                                             </div>
-                                        </div>
                                         <div class="form-group">
                                             <input id="findId" class="btn btn-lg btn-primary btn-block btnForget" value="아이디찾기" type="submit">
                                         </div>

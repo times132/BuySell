@@ -247,5 +247,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-
+    public List<User> findId(String email, String name) {
+    return  userRepository.findByEmailAndName(email, name);
+    }
 }

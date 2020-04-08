@@ -134,13 +134,10 @@ public class UserController {
 
     //아이디 찾기
     @GetMapping("/user/findID")
-    public String findID(SearchCriteria searchCri, Model model, @RequestParam String email)
+    public String findID(Model model, @RequestParam String email, @RequestParam String name)
     {
-        System.out.println("EMAIL_______________"+email);
-        searchCri.setType("E");
-        searchCri.setKeyword(email);
-        Page<User> userPage = adminService.getList(searchCri);
-        model.addAttribute("userList", userPage.getContent());
+        List<User> userList = userService.findId(email, name);
+        model.addAttribute("userList", userList);
         return "/user/findPW";
     }
 
