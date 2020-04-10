@@ -38,6 +38,6 @@ public class GoogleDTO implements OAuth2User {
 
     @Override
     public String getName() {
-        return this.sub;
+        return "GO_" + this.sub;
     }
 }

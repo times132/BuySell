@@ -16,7 +16,7 @@ import java.util.Properties;
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(465);
         mailSender.setUsername("yoo4380");
-        mailSender.setPassword("sasa4380!");
+        mailSender.setPassword("sa2015250034");
         mailSender.setDefaultEncoding("utf-8");
         Properties prop = new Properties();
 

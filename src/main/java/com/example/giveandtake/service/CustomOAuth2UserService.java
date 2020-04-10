@@ -4,7 +4,6 @@ import com.example.giveandtake.DTO.GoogleDTO;
 import com.example.giveandtake.DTO.KakaoDTO;
 import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.DTO.UserRolesDTO;
-import com.example.giveandtake.controller.OAuth2Controller;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -68,7 +67,7 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
     }
 
     private void kakaoOauth(KakaoDTO kakao) {
-        String username = kakao.getId();
+        String username = kakao.getName();
         System.out.println(username);
         if (!userService.usernameCheck(username)) { // 가입 안됬을 때
             UserRolesDTO userRole = new UserRolesDTO();
@@ -84,7 +83,7 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
 
     private void googleOauth(GoogleDTO google){
         logger.info("######GOOGLE : " + google);
-        String username = google.getSub();
+        String username = google.getName();
         UserDTO userDTO = new UserDTO();
         Authentication authentication;
         if (!userService.usernameCheck(username)) {

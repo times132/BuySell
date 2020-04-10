@@ -39,6 +39,6 @@ public class KakaoDTO implements OAuth2User {
 
     @Override
     public String getName() {
-        return this.id;
+        return "KA_" + this.id;
     }
 }
