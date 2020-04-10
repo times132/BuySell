@@ -53,6 +53,7 @@ public class OAuth2Controller{
         OAuth2AuthorizedClient oAuth2AuthorizedClient = authorizedClientService.loadAuthorizedClient(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId(), oAuth2AuthenticationToken.getName());
         OAuth2AccessToken accessToken = oAuth2AuthorizedClient.getAccessToken();
         OAuth2RefreshToken refreshToken = oAuth2AuthorizedClient.getRefreshToken();
+
 //        KakaoDTO kakao = (KakaoDTO) oAuth2AuthenticationToken.getPrincipal();
         logger.info("#######PRINCIPAL : " + principal);
 //        logger.info("#######kakao : " + kakao);

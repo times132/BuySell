@@ -2,27 +2,45 @@ package com.example.giveandtake.config;
 
 import com.example.giveandtake.DTO.GoogleDTO;
 import com.example.giveandtake.DTO.KakaoDTO;
+import com.example.giveandtake.common.CustomAuthenticationEntryPoint;
 import com.example.giveandtake.common.CustomOAuth2Provider;
+import com.example.giveandtake.common.MyOAuth2SuccessHandler;
+import com.example.giveandtake.service.CustomOAuth2UserService;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,6 +51,9 @@ import java.util.stream.Collectors;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
+    private CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+    private MyOAuth2SuccessHandler successhandler;
 
     @Override
     public void configure(WebSecurity web) throws Exception
@@ -51,6 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 페이지 권한 설정
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/chat/room").hasRole("USER")
+                .antMatchers("/user/info", "/board/write").authenticated()
                 .antMatchers("/**").permitAll()
                 .and()
                 .formLogin()
@@ -64,7 +86,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .customUserType(KakaoDTO.class, "kakao")
                 .customUserType(GoogleDTO.class, "google")
                 .and()
-                .defaultSuccessUrl("/oauth/login")
+                .successHandler(successhandler)
+
 
                 .and() // 로그아웃 설정
                 .logout()
@@ -75,7 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                 // 403 예외처리 핸들링
-                .exceptionHandling().accessDeniedPage("/user/denied");
+                .exceptionHandling().accessDeniedPage("/user/denied")
+                .authenticationEntryPoint(authenticationEntryPoint); // Here;
 
     }
 
@@ -89,6 +113,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.eraseCredentials(false).userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
+    @Override
+    public void setAuthenticationConfiguration(AuthenticationConfiguration authenticationConfiguration) {
+        super.setAuthenticationConfiguration(authenticationConfiguration);
+    }
+
+
+
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository(
             OAuth2ClientProperties oAuth2ClientProperties,
@@ -99,7 +130,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .map(client -> getRegistration(oAuth2ClientProperties, client))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-
         registrations.add(CustomOAuth2Provider.KAKAO.getBuilder("kakao")
                 .clientId(kakaoClientId)
                 .clientSecret(kakaoClientSecret)
@@ -122,6 +152,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         return null;
     }
+
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService() {
+        return new CustomOAuth2UserService();
+    }
+
+
+
+
 }
 
 

@@ -28,6 +28,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.security.Principal;
 import java.security.acl.LastOwnerException;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,6 @@ public class BoardController {
 
         searchCri.setPageSize(10); // 한 화면에 게시물 10개씩 표시
         Page<Board> boardPage =  boardService.getList(searchCri);
-
         model.addAttribute("boardList", boardPage.getContent());
         model.addAttribute("pageMaker", Pagination.builder()
                             .cri(searchCri)

@@ -22,11 +22,10 @@ public class CustomUserDetails implements UserDetails {
 
     public static CustomUserDetails create(User user){
         Set<UserRoles> authList = user.getRoles();
-        System.out.println("2 CUSTOM" + authList);
         Set<GrantedAuthority> authorities = new HashSet<>();
         for (UserRoles role: authList) {
             authorities.add(new SimpleGrantedAuthority(role.getRole().getName().name()));
-            System.out.println("3" +role.getRole().getName().name());
+            System.out.println(role.getRole().getName().name());
         }
         return new CustomUserDetails(user, authorities);
     }
