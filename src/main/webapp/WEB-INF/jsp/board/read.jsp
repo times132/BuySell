@@ -274,14 +274,14 @@
         <sec:authentication property="principal" var="userinfo"/>;
         curUser = '${userinfo.user.nickname}';
 //관심유저 관련
-    var bid = {bid: bidValue}
+    var bidjson = {bid: bidValue}
     showLike();
     function showLike(){
-        boardService.checkLike(bid, function (data) {
+        boardService.checkLike(bidjson, function (data) {
             var str = "<h6>관심 유저 수" + <c:out value="${boardDto.likeCnt}"/> + "</h6>";
             //date가 있는 경우 (like인 경우)
             if (data){
-                str += "<button id='deleteLike'><img src='/resources/image/like.png'>싫어요</button>"
+                str += "<button id='deleteLike'><img src='/resources/image/like.png'></button>"
             }
             //date가 없는 경우(like 안한 상태)
             else {
@@ -292,17 +292,19 @@
     }
 
     $(document).on("click", "#addLike", function () {
-        boardService.addLike(bid, function (data) {showLike();return;});
+        boardService.addLike(bidjson, function (data) {showLike();return;});
         return;
     });
 
     $(document).on("click", "#deleteLike", function () {
-        boardService.deleteLike(bid, function (data) {showLike();return;});
+        boardService.deleteLike(bidjson, function (data) {showLike();return;});
 
         return;
     });
     </sec:authorize>
+
     // 댓글 목록 출력
+    showList(1);
     function showList(page) {
         replyService.getList({bid: bidValue, page: page || 1}, function (data) {
             var replyCntText = "댓글 " + data.totalElements;
