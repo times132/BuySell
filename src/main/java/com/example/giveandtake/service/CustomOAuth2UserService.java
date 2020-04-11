@@ -78,11 +78,10 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
             String email = String.valueOf(kakao.getKakaoAccount().get("email"));
             if ("null".equals(email)){
                 userDTO.setEmail(null);
-            }
-            else if (userService.emailCheck(email)){
+                userDTO.setActivation(false);
+            }else if (userService.emailCheck(email)){
                 return true;
-            }
-            else {
+            }else {
                 userDTO.setEmail(email);
             }
             userDTO.setUsername(username);

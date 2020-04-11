@@ -103,12 +103,8 @@ var userService = (function () {
     return {
         checkNickname : checkNickname,
         checkUsername : checkUsername,
+        checkEmail: checkEmail,
         changePW : changePW,
         findPW : findPW,
     };
-
-
-
-
-
 })();
