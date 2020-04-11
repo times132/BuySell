@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
+import java.security.Principal;
 import java.util.*;
 
 @Service
@@ -44,8 +45,12 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Autowired
     private UserMapper userMapper;
+    @Autowired
     private UserRolesRepository userRolesRepository;
+    private ChatService chatService;
+
     //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
     @Transactional
     public void joinUser(UserDTO userDto) {
@@ -127,9 +132,14 @@ public class UserService implements UserDetailsService {
 
     //회원정보 삭제
     @Transactional
-    public void delete(String username) {
-        User user = userRepository.findByUsername(username);
-        userRepository.deleteById(user.getId());
+    public void delete(Long userId) {
+        User user = userRepository.findById(userId).get();
+        List<ChatUsers> chatUsers = user.getChats();
+        userRepository.deleteById(userId);
+        for (ChatUsers chatUser : chatUsers){
+            chatService.deleteChatRoom(chatUser.getChatRoom().getRoomId(), user.getNickname());
+        }
+
         return;
     }
 
@@ -250,7 +260,7 @@ public class UserService implements UserDetailsService {
         return  user.getEmail();
     }
 
-
+    //아이디 찾기
     public List<User> findId(String email, String name) {
     return  userRepository.findByEmailAndName(email, name);
     }

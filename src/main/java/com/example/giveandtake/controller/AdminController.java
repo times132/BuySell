@@ -72,9 +72,9 @@ public class AdminController {
 
     //회원 탈퇴
     @GetMapping("/userinfo/delete")
-    public String delete(@RequestParam("username") String username, @ModelAttribute("cri") SearchCriteria cri) {
-        System.out.println("**delete**" + username);
-        userService.delete(username);
+    public String delete(@RequestParam("id") Long id, @ModelAttribute("cri") SearchCriteria cri) {
+        System.out.println("**delete**" + id);
+        userService.delete(id);
         return "redirect:/admin";
     }
 

@@ -41,7 +41,8 @@ public class MyOAuth2SuccessHandler implements AuthenticationSuccessHandler {
             PrintWriter out = response.getWriter();
             out.println("<script>alert('로그인이 완료되었습니다.'); location.href='/';</script>");
             out.flush();
-        }else{
+        }
+        else{
             response.setContentType("text/html; charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             PrintWriter out = response.getWriter();
