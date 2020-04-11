@@ -39,7 +39,7 @@
 
                 <a href="/board">전체보기</a>
 
-                <table class="table table-responsive table-sm table-hover">
+                <table class="table table-sm table-hover">
                     <thead>
                         <tr>
                             <th style="width: 6%" scope="col">#</th>
