@@ -200,7 +200,6 @@ public class UserController {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        System.out.println("정보-----------------"+user);
 
         if(!user.getProvider().equals("giveandtake")){
             userService.modify(user);

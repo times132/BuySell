@@ -155,4 +155,27 @@ public class BoardController {
 
         return new ResponseEntity<>(boardService.readFile(bid), HttpStatus.OK);
     }
+
+
+
+
+    //좋아요 여부 검사
+    @RequestMapping(value = "/like/checkLike", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean likeCheck(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        System.out.println("########BID"+ bid);
+        return boardService.likeCheck(bid, userDetails);
+    }
+
+    @RequestMapping(value = "/like/addLike", method = RequestMethod.POST)
+    @ResponseBody
+    public void addlike(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        boardService.addlike(bid, userDetails);
+    }
+
+    @RequestMapping(value = "/like/deleteLike", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deletelike(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        boardService.deletelike(bid, userDetails);
+    }
 }
