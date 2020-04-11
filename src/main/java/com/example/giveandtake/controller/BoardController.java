@@ -169,13 +169,13 @@ public class BoardController {
 
     @RequestMapping(value = "/like/addLike", method = RequestMethod.POST)
     @ResponseBody
-    public void addlike(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        boardService.addlike(bid, userDetails);
+    public int addlike(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return  boardService.addlike(bid, userDetails);
     }
 
     @RequestMapping(value = "/like/deleteLike", method = RequestMethod.DELETE)
     @ResponseBody
-    public void deletelike(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        boardService.deletelike(bid, userDetails);
+    public int deletelike(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return boardService.deletelike(bid, userDetails);
     }
 }

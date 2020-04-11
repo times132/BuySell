@@ -21,7 +21,7 @@ var boardService = (function () {
 
 
 
-    function addLike(bid, replyer, callback, error) {
+    function addLike(bid, callback, error) {
         $.ajax({
             type:'post',
             url: "/board/like/addLike",
@@ -41,7 +41,6 @@ var boardService = (function () {
 
     function deleteLike(bid, callback, error) {
         console.log(bid);
-
         $.ajax({
             type: 'delete',
             url: "/board/like/deleteLike",
@@ -60,8 +59,8 @@ var boardService = (function () {
     }
 
     return {
-        checkLike: checkLike,
-        addLike: addLike,
-        deleteLike:deleteLike
+        checkLike : checkLike,
+        addLike : addLike,
+        deleteLike :deleteLike
     };
 })();

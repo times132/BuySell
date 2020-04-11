@@ -67,17 +67,18 @@
 }
 .writer-dropdown{
     -ms-flex: 1 1 auto;
-    left: 0;
+    right: 0;
     bottom: 0;
     position: absolute;
 }
 
 .like{
-    -ms-flex: 1 1 auto;
-    right: 0;
     bottom: 0;
     position: absolute;
+    cursor: pointer;
 }
+
+
 @media (max-width: 768px) {
     .writer-dropdown{
         text-align: right;

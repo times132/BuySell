@@ -147,13 +147,14 @@ public class BoardService {
     public boolean likeCheck(Long bid, CustomUserDetails userDetails) {
         System.out.println("CHECK");
         Optional<Like> like = Optional.ofNullable(likeRepository.findByUserIdAndBoardBid(userDetails.getUser().getId(),bid));
+
         if(like.isPresent()){
             return true;
         }
         return false;
     }
     @Transactional
-    public void addlike(Long bid, CustomUserDetails userDetails) {
+    public int addlike(Long bid, CustomUserDetails userDetails) {
         System.out.println("좋아요");
         Optional<Board> boardWrapper = boardRepository.findById(bid);
         Board board = boardWrapper.get();
@@ -165,11 +166,10 @@ public class BoardService {
 
         BoardDTO boardDTO = boardMapper.toDTO(board);
         boardDTO.setLikeCnt(boardDTO.getLikeCnt()+1);
-        boardRepository.save(boardMapper.toEntity(boardDTO));
-        return;
+        return boardRepository.save(boardMapper.toEntity(boardDTO)).getLikeCnt();
     }
 
-    public void deletelike(Long bid, CustomUserDetails userDetails) {
+    public int deletelike(Long bid, CustomUserDetails userDetails) {
 
         Long id = likeRepository.findByUserIdAndBoardBid(userDetails.getUser().getId(),bid).getId();
         likeRepository.deleteById(id);
@@ -178,7 +178,7 @@ public class BoardService {
         Board board = boardWrapper.get();
         BoardDTO boardDTO = boardMapper.toDTO(board);
         boardDTO.setLikeCnt(boardDTO.getLikeCnt()-1);
-        boardRepository.save(boardMapper.toEntity(boardDTO));
-        return;
+
+        return  boardRepository.save(boardMapper.toEntity(boardDTO)).getLikeCnt();
     }
 }

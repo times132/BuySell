@@ -88,7 +88,9 @@
                             </div>
                             <div class="like">
                                 <div class="likeBtn">
-
+                                    <sec:authorize access="isAnonymous()">
+                                        <h6>관심유저수<c:out value="${boardDto.likeCnt}"></c:out></h6>
+                                    </sec:authorize>
                                 </div>
                             </div>
                         </div>
@@ -268,37 +270,41 @@
 <script>
     var bidValue = "<c:out value="${boardDto.bid}"/>";
     var replyUL = $(".replyList");
-    var likeUL = $(".likeBtn");
+    var likeUL = $(".like");
     var curUser = null;
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
         curUser = '${userinfo.user.nickname}';
+
+
 //관심유저 관련
     var bidjson = {bid: bidValue}
-    showLike();
-    function showLike(){
+    var likeCnt = <c:out value="${boardDto.likeCnt}"/>
+
+    showLike(likeCnt);
+    function showLike(likeCnt){
         boardService.checkLike(bidjson, function (data) {
-            var str = "<h6>관심 유저 수" + <c:out value="${boardDto.likeCnt}"/> + "</h6>";
+            var str = "<div>"+likeCnt+"<div>"
             //date가 있는 경우 (like인 경우)
             if (data){
-                str += "<button id='deleteLike'><img src='/resources/image/like.png'></button>"
+                str += "<img id = 'deleteLike' src='/resources/image/like.png'>"
             }
             //date가 없는 경우(like 안한 상태)
             else {
-                str += "<button id='addLike'><img src='/resources/image/dislike.png'></button>"
+                str += "<img id='addLike' src='/resources/image/dislike.png'>"
             }
             likeUL.html(str);
         });
     }
 
     $(document).on("click", "#addLike", function () {
-        boardService.addLike(bidjson, function (data) {showLike();return;});
+        boardService.addLike(bidjson, function (data) {// data : 관심유저개수
+            showLike(data); return;});
         return;
     });
 
     $(document).on("click", "#deleteLike", function () {
-        boardService.deleteLike(bidjson, function (data) {showLike();return;});
-
+        boardService.deleteLike(bidjson, function (data) {showLike(data); return;});
         return;
     });
     </sec:authorize>

@@ -36,7 +36,6 @@
 <script>
     $("#logout").click(function() {
         location.href="/user/logout";
-        alert("로그아웃이 완료되었습니다.")
     });
 
     var search = $("#search");
