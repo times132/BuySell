@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
         }
         else {
             user = userRepository.save(userMapper.toEntity(userDto));
-            role = roleRepository.findByName(RoleName.ROLE_GUEST)
+            role = roleRepository.findByName(RoleName.ROLE_SOCIAL)
                     .orElseThrow(() -> new AppException("User Role not set"));
             if (user.getEmail() != null){
                 role = roleRepository.findByName(RoleName.ROLE_USER)

@@ -128,23 +128,25 @@
                             </div>
                             <br>
                             <div class="row">
-                                        <c:set var="mail" value="${userinfo.email}"/>
-                                <c:if test = "${mail eq 'null'}">
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" id="e_mail" name="email" placeholder="이메일을 입력해주세요" >
-
-                                    </div>
-                                </c:if>
-
-                                <c:if test = "${mail ne 'null'}">
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" id="e_mail" name="email" value="${userinfo.email}" readonly="readonly" >
-                                    </div>
-                                </c:if>
-                                    <div class="col-sm-4">
-                                    <button class="btn btn-danger btn-sm" id="auth" type="submit">이메일 전송</button>
-                                    </div>
+                                <c:set var="mail" value="${userinfo.email}"/>
+                                <div class="col-sm-5">
+                                        <c:if test = "${mail eq null}">
+                                            <input type="text" class="form-control" id="e_mail" name="email" placeholder="이메일을 입력해주세요" >
+                                        </c:if>
+                                        <c:if test = "${mail ne null}">
+                                            <input type="text" class="form-control" id="e_mail" name="email" value="${userinfo.email}" readonly="readonly" >
+                                        </c:if>
                                 </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-danger btn-sm" id="checkbtn" type="submit">중복 확인</button>
+                                    <button class="btn btn-danger btn-sm" id="auth" type="submit" disabled="disabled">이메일 전송</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="alert" id="email_check"></div><br>
+                                </div>
+                            </div>
 
                             <br><br>
                             <div class="row" id="codex">
@@ -223,8 +225,6 @@
 <script>
     $(document).ready(function() {
         var profileImage = "<c:out value="${userinfo.profileImage}"/>";
-
-
         var profile = $(".profile-image");
         if (profileImage === ""){
             profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
@@ -233,6 +233,26 @@
             profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
         }
     });
+    $("#auth").attr("disabled", true);
+
+
+    $("#checkbtn").on("click", function () {
+        var email = $("#e_mail").val();
+        userService.checkEmail(email, function (data) {
+            if (data) {
+                $("#email_check").attr("class", "alert alert-danger");
+                $("#email_check").html("중복된 이메일 입니다.");
+                $("#auth").attr("disabled", "disabled");
+                $("#email_check").show();
+            }
+            else {
+                $("#email_check").attr("class", "alert alert-success");
+                $("#email_check").html("사용 가능한 이메일 입니다.");
+                $("#auth").removeAttr("disabled");
+            }
+        });
+    });
+
     $("#codex").hide();
     $('#auth').click(function(){
         var email = $('#e_mail').val();

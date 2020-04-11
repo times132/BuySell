@@ -15,7 +15,6 @@
 
 </head>
 <body>
-<%@include file="../include/header.jsp"%>
 <br>
 <div class="container">
     <div class="card bg-light">
