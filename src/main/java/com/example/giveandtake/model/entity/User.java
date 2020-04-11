@@ -48,7 +48,6 @@ public class User extends DateAudit {
     @JsonIgnoreProperties({"user"})
     private List<Reply> replyList;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"user"})
     private List<ChatUsers> chats;

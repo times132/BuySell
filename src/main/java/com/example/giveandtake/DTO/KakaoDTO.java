@@ -26,8 +26,11 @@ public class KakaoDTO implements OAuth2User {
     @Override
     public Map<String, Object> getAttributes() {
         Map<String, Object> attributes = new HashMap<>();
-        attributes.putAll(kakaoAccount);
-        attributes.putAll(properties);
+        if (kakaoAccount.get("email_needs_agreement").equals(false)){
+            attributes.put("email", kakaoAccount.get("email"));
+        }
+        attributes.put("id", "KA_" + this.id);
+        attributes.put("name", properties.get("nickname"));
 
         return attributes;
     }

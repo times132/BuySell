@@ -28,18 +28,25 @@ public class MyOAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private static final Logger logger = LoggerFactory.getLogger(MyOAuth2SuccessHandler.class);
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.Authentication authentication) throws IOException, ServletException {
+        if (authentication.isAuthenticated()){
+            String id = authentication.getName();
+            UserDetails userDetails = userService.loadUserByUsername(id);
+            logger.info("#######id : " + id);
+            authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+            SecurityContext securityContext = SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authentication);
 
-        String id = authentication.getName();
-        UserDetails userDetails = userService.loadUserByUsername(id);
-        logger.info("#######id : " + id);
-        authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.setAuthentication(authentication);
-
-        response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println("<script>alert('로그인이 완료되었습니다.'); location.href='/';</script>");
-        out.flush();
+            response.setContentType("text/html; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('로그인이 완료되었습니다.'); location.href='/';</script>");
+            out.flush();
+        }else{
+            response.setContentType("text/html; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('이미 가입된 이메일입니다.'); location.href='/';</script>");
+            out.flush();
+        }
     }
 }

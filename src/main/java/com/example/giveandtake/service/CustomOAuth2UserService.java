@@ -61,24 +61,36 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
             logger.info("#######kakao properties : " + kakao.getProperties());
             logger.info("#######kakao properties : " + kakao.getProperties());
             logger.info("#######kakao : " + kakao);
-            kakaoOauth(kakao);
+            boolean a = kakaoOauth(kakao);
+            if (a){
+                authentication.setAuthenticated(false);
+            }
         }
 
     }
 
-    private void kakaoOauth(KakaoDTO kakao) {
+    private Boolean kakaoOauth(KakaoDTO kakao) {
         String username = kakao.getName();
         System.out.println(username);
+        Boolean isexist = false;
         if (!userService.usernameCheck(username)) { // 가입 안됬을 때
             UserRolesDTO userRole = new UserRolesDTO();
             UserDTO userDTO = new UserDTO();
+            String email = String.valueOf(kakao.getKakaoAccount().get("email"));
+            if ("null".equals(email)){
+                userDTO.setEmail(null);
+            }else if (userService.emailCheck(email)){
+                return true;
+            }else {
+                userDTO.setEmail(email);
+            }
             userDTO.setUsername(username);
-            userDTO.setEmail(String.valueOf(kakao.getKakaoAccount().get("email")));
-            userDTO.setName(String.valueOf(kakao.getAttributes().get("nickname")));
-            userDTO.setNickname(String.valueOf(kakao.getAttributes().get("nickname")));
+            userDTO.setName(String.valueOf(kakao.getAttributes().get("name")));
+            userDTO.setNickname(String.valueOf(kakao.getAttributes().get("name")));
             userDTO.setProvider("kakao");
             userService.joinUser(userDTO);
         }
+        return isexist;
     }
 
     private void googleOauth(GoogleDTO google){

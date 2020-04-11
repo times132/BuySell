@@ -17,6 +17,7 @@ import com.example.giveandtake.repository.UserRolesRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -65,10 +66,13 @@ public class UserService implements UserDetailsService {
             user = userRepository.save(userMapper.toEntity(userDto));
             role = roleRepository.findByName(RoleName.ROLE_GUEST)
                     .orElseThrow(() -> new AppException("User Role not set"));
-            if(!user.getEmail().equals("null")){
+            if (user.getEmail() != null){
                 role = roleRepository.findByName(RoleName.ROLE_USER)
                         .orElseThrow(() -> new AppException("User Role not set"));
             }
+//            if(!user.getEmail().equals("null")){
+//
+//            }
         }
         UserRolesDTO userRole = new UserRolesDTO();
         userRole.setUser(user);

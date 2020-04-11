@@ -86,6 +86,7 @@
                 return;
             }
             for (var i = 0, len = data.length || 0; i < len; i++) {
+                console.log(data[i])
                 str += "<div class='chat'><ul>"
                 str += "<li class='chat_li' data-rid='" + data[i].roomId + "'>";
                 str += "<div class='chat_people'>"
