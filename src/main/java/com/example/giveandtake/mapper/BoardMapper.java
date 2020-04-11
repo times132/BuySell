@@ -2,8 +2,10 @@ package com.example.giveandtake.mapper;
 
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
+import com.example.giveandtake.DTO.LikeDTO;
 import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.BoardFile;
+import com.example.giveandtake.model.entity.Like;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -27,4 +29,5 @@ public interface BoardMapper {
     BoardFileDTO fileToDTO(BoardFile entity);
     List<BoardFileDTO> fileToDTOList(List<BoardFile> list);
 
+    Like likeToEntity(LikeDTO likeDTO);
 }

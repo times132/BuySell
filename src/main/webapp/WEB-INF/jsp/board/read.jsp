@@ -15,6 +15,7 @@
     <script type="text/javascript" src="/resources/js/chat.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/reply.js"></script>
+    <script type="text/javascript" src="/resources/js/board.js"></script>
     <script type="text/javascript" src="/resources/js/common.js"></script>
 
 
@@ -82,6 +83,12 @@
                                         <a class="dropdown-item" href="/user/${boardDto.user.id}" id="board">게시글 보기</a>
                                         <a class="dropdown-item" href="#" id="chatting">1:1채팅</a>
                                     </div>
+                                </div>
+
+                            </div>
+                            <div class="like">
+                                <div class="likeBtn">
+
                                 </div>
                             </div>
                         </div>
@@ -261,16 +268,43 @@
 <script>
     var bidValue = "<c:out value="${boardDto.bid}"/>";
     var replyUL = $(".replyList");
-
+    var likeUL = $(".likeBtn");
     var curUser = null;
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
         curUser = '${userinfo.user.nickname}';
+//관심유저 관련
+    var bidjson = {bid: bidValue}
+    showLike();
+    function showLike(){
+        boardService.checkLike(bidjson, function (data) {
+            var str = "<h6>관심 유저 수" + <c:out value="${boardDto.likeCnt}"/> + "</h6>";
+            //date가 있는 경우 (like인 경우)
+            if (data){
+                str += "<button id='deleteLike'><img src='/resources/image/like.png'></button>"
+            }
+            //date가 없는 경우(like 안한 상태)
+            else {
+                str += "<button id='addLike'><img src='/resources/image/dislike.png'></button>"
+            }
+            likeUL.html(str);
+        });
+    }
+
+    $(document).on("click", "#addLike", function () {
+        boardService.addLike(bidjson, function (data) {showLike();return;});
+        return;
+    });
+
+    $(document).on("click", "#deleteLike", function () {
+        boardService.deleteLike(bidjson, function (data) {showLike();return;});
+
+        return;
+    });
     </sec:authorize>
 
-    showList(1);
-
     // 댓글 목록 출력
+    showList(1);
     function showList(page) {
         replyService.getList({bid: bidValue, page: page || 1}, function (data) {
             var replyCntText = "댓글 " + data.totalElements;

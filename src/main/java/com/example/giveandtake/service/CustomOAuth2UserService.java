@@ -43,7 +43,6 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
         String oauthclient = authorizedClient.getClientRegistration().getRegistrationId();
         OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
         OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
-        logger.info("#######ㅇㅣ거이거 : " + oAuth2AuthenticationToken.getPrincipal());
         logger.info("#######PRINCIPAL : " + oAuth2AuthenticationToken.getPrincipal().getAttributes());
         logger.info("#######oauthclient : " + oauthclient);
         String username = "";

@@ -30,6 +30,7 @@ public class Board extends DateAudit {
 
     private Integer viewCnt;
     private Integer replyCnt;
+    private Integer likeCnt;
     @ColumnDefault("0")
     private boolean sellcheck;
 
@@ -37,6 +38,7 @@ public class Board extends DateAudit {
     protected void prePersist(){
         if (this.viewCnt == null) this.viewCnt = 0;
         if (this.replyCnt == null) this.replyCnt = 0;
+        if (this.likeCnt == null) this.likeCnt = 0;
     }
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
@@ -47,13 +49,18 @@ public class Board extends DateAudit {
     @JsonIgnore
     private List<Reply> replyList;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Like> likeList;
+
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"password", "boardList"})
     private User user;
 
     @Builder
-    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, boolean sellcheck, List<BoardFile> boardFileList, User user){
+    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, Integer likeCnt, boolean sellcheck, List<BoardFile> boardFileList, User user, List<Like> likeList){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
@@ -62,8 +69,10 @@ public class Board extends DateAudit {
         this.price = price;
         this.viewCnt = viewCnt;
         this.replyCnt = replyCnt;
+        this.likeCnt = likeCnt;
         this.sellcheck = sellcheck;
         this.boardFileList = boardFileList;
+        this.likeList = likeList;
         this.user = user;
     }
 }

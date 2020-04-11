@@ -52,9 +52,12 @@ public class User extends DateAudit {
     @JsonIgnoreProperties({"user"})
     private List<ChatUsers> chats;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"user"})
+    private List<Like> likeList;
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String username, String nickname, String name, String password, String phone, String email,Long id, String profileImage, String provider, Boolean activation, Set<UserRoles> roles){
+    public User(String username, String nickname, String name, String password, String phone, String email,Long id, String profileImage, String provider, Boolean activation, Set<UserRoles> roles, List<Like> likeList){
         this.username = username;
         this.nickname = nickname;
         this.name = name;
@@ -65,6 +68,7 @@ public class User extends DateAudit {
         this.profileImage = profileImage;
         this.provider = provider;
         this.activation = activation;
+        this.likeList = likeList;
         this.roles = roles;
     }
 

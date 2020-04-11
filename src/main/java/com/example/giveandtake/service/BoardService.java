@@ -2,13 +2,17 @@ package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
+import com.example.giveandtake.DTO.LikeDTO;
 import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.mapper.BoardMapper;
 import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.BoardFile;
+import com.example.giveandtake.model.entity.Like;
+import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.repository.BoardFileRepository;
 import com.example.giveandtake.repository.BoardRepository;
+import com.example.giveandtake.repository.LikeRepository;
 import javassist.compiler.Parser;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -17,8 +21,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +45,7 @@ public class BoardService {
     private BoardRepository boardRepository;
     private BoardFileRepository boardFileRepository;
     private BoardMapper boardMapper;
+    private LikeRepository likeRepository;
 
     // 게시물 등록
     @Transactional
@@ -130,5 +141,44 @@ public class BoardService {
         boardDTO.setViewCnt(boardDTO.getViewCnt()+1);
 
         boardRepository.save(boardMapper.toEntity(boardDTO));
+    }
+
+
+    public boolean likeCheck(Long bid, CustomUserDetails userDetails) {
+        System.out.println("CHECK");
+        Optional<Like> like = Optional.ofNullable(likeRepository.findByUserIdAndBoardBid(userDetails.getUser().getId(),bid));
+        if(like.isPresent()){
+            return true;
+        }
+        return false;
+    }
+    @Transactional
+    public void addlike(Long bid, CustomUserDetails userDetails) {
+        System.out.println("좋아요");
+        Optional<Board> boardWrapper = boardRepository.findById(bid);
+        Board board = boardWrapper.get();
+
+        LikeDTO likeDTO = new LikeDTO();
+        likeDTO.setBoard(board);
+        likeDTO.setUser(userDetails.getUser());
+        Like like = likeRepository.save(boardMapper.likeToEntity(likeDTO));
+
+        BoardDTO boardDTO = boardMapper.toDTO(board);
+        boardDTO.setLikeCnt(boardDTO.getLikeCnt()+1);
+        boardRepository.save(boardMapper.toEntity(boardDTO));
+        return;
+    }
+
+    public void deletelike(Long bid, CustomUserDetails userDetails) {
+
+        Long id = likeRepository.findByUserIdAndBoardBid(userDetails.getUser().getId(),bid).getId();
+        likeRepository.deleteById(id);
+
+        Optional<Board> boardWrapper = boardRepository.findById(bid);
+        Board board = boardWrapper.get();
+        BoardDTO boardDTO = boardMapper.toDTO(board);
+        boardDTO.setLikeCnt(boardDTO.getLikeCnt()-1);
+        boardRepository.save(boardMapper.toEntity(boardDTO));
+        return;
     }
 }
