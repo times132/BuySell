@@ -8,6 +8,7 @@ import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
 import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.service.ChatService;
+import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.Dump;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,10 @@ import java.util.List;
 public class ChatController {
 
     private ChatService chatService;
+    private UserService userService;
 
 
-//     모든 채팅방 목록
+    //     모든 채팅방 목록
     @GetMapping(value = "/rooms", produces = "application/json")
     public ResponseEntity<List<ChatRoom>> room() {
         List<ChatRoom> chatRooms = chatService.findAllRoom();
@@ -61,7 +63,11 @@ public class ChatController {
     @RequestMapping( value = "/room" , method=RequestMethod.POST)
     @ResponseBody
     public  ResponseEntity<String> createRoom(@RequestParam(value = "nickname") String nickname, Principal principal){
-        System.out.println("################# CREATE #########"+nickname);
+        //닉네임 존재여부 확인
+        boolean result = userService.nicknameCheck(nickname);
+        if(result == false){
+            return new ResponseEntity<>("존재하지 않는 닉네임입니다.", HttpStatus.OK);
+        }
         String status = chatService.createChatRoom(nickname, principal);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
@@ -71,13 +77,14 @@ public class ChatController {
     @GetMapping("/room/stop/{roomId}")
     public String remove(Principal principal,@PathVariable String roomId){
         System.out.println("DELETE ROOM");
-        chatService.deleteChatRoom(roomId, principal);
+        chatService.deleteChatRoom(roomId, principal.getName());
         return "redirect:/chat/room";
     }
     // 채팅방 입장 화면
     @GetMapping("/room/enter/{roomId}")
     public String roomDetail(Model model, @PathVariable String roomId, HttpServletResponse response)throws IOException
     {
+
         if(chatService.checkAccess(roomId)) {
             model.addAttribute("roomId", roomId);
             System.out.println("true");

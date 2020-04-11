@@ -190,16 +190,6 @@
 </div>
 <!-- page-wrapper -->
 <script>
-    $(document).ready(function () {
-        $(".delete").on("click", function (e) {
-            e.preventDefault();
-            var check = confirm("선택한 회원의 탈퇴를 진행하시겠습니까?");
-            if(check) {
-                actionForm.append("<input type='hidden' name='username' value='" + $(this).attr("href") + "'>");
-                actionForm.attr("action", "/admin/delete");
-                actionForm.submit();
-            }
-        });
 
         var actionForm = $("#actionForm");
         $(".page-item a").on("click", function (e){

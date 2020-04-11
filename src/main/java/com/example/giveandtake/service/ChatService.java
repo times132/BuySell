@@ -29,9 +29,7 @@ import java.util.*;
 public class ChatService{
     private final SimpMessageSendingOperations messagingTemplate;
 
-    private UserService userService;
     private ChatMapper chatMapper;
-
     private ChatRoomRepository chatRoomRepository;
     private ChatMessageRepository chatMessageRepository;
     private UserRepository userRepository;
@@ -41,12 +39,7 @@ public class ChatService{
     @Transactional
     public String createChatRoom(String nickname, Principal principal){
             String status = "ok";
-            //닉네임 존재여부 확인
-            boolean result = userService.nicknameCheck(nickname);
-            if(result == false){
-                status = "존재하지 않는 닉네임입니다.";
-                return status;
-            }
+
             User me = userRepository.findByNickname(principal.getName());
             System.out.println(me);
             User receiver = userRepository.findByNickname(nickname);
@@ -57,8 +50,6 @@ public class ChatService{
             for (ChatUsers chatUsers : chatList){
                 ChatRoom chatRoom = chatUsers.getChatRoom();
 
-                System.out.println("ChatRoom"+chatRoom);
-                System.out.println(chatRoom.getUsers());
                 List<ChatUsers> users = chatRoom.getUsers();
                 //해당 채팅방 userList 검색
                 for (ChatUsers user : users){
@@ -156,7 +147,7 @@ public class ChatService{
         messagingTemplate.convertAndSendToUser(to,"/queue/chat/room", chatMessage);
     }
 //채팅방 삭제
-    public void deleteChatRoom(String roomId, Principal principal) {
+    public void deleteChatRoom(String roomId, String nickName) {
         System.out.println("DELETE USER");
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         List<ChatUsers> users = chatRoom.getUsers();
@@ -164,11 +155,11 @@ public class ChatService{
             chatRoomRepository.deleteById(roomId);
             return;
         }
-            for (ChatUsers user : users){
-                if (user.getUser().getNickname().equals(principal.getName())){
-                    chatUsersRepository.deleteUserById(user.getCid());
-                }
+        for (ChatUsers user : users){
+            if (user.getUser().getNickname().equals(nickName)){
+                chatUsersRepository.deleteUserById(user.getCid());
             }
+        }
 
     }
 

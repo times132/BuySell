@@ -2,6 +2,7 @@ package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.common.Criteria;
+import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -233,13 +235,14 @@ public class UserController {
     }
     //비밀번호 확인 후 탈퇴
     @PostMapping ("/user/delete")
-    public void disdeleteuser(String password,Principal principal, HttpSession httpSession, HttpServletResponse response) throws IOException{
+    public void disdeleteuser(String password, @AuthenticationPrincipal CustomUserDetails userDetails, HttpSession httpSession, HttpServletResponse response) throws IOException{
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         if(userService.checkPassword(password))
         {
-            userService.delete(principal.getName());
+
+            userService.delete(userDetails.getUser().getId());
             httpSession.invalidate();
             out.println("<script>alert('탈퇴가 완료되었습니다.'); location.href='/user/logout';</script>");
         }

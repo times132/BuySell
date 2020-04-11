@@ -236,7 +236,7 @@
                                         </td>
                                         <td class="deleting">
                                             <button class='btn float-right'>
-                                                <a class="delete" href='<c:out value="${user.username}"/>'>
+                                                <a class="delete" href='<c:out value="${user.id}"/>'>
                                                     <img class='btn-img' src='/resources/image/delete.png'>
                                                 </a>
                                             </button>
@@ -287,7 +287,7 @@
             e.preventDefault();
             var check = confirm("선택한 회원의 탈퇴를 진행하시겠습니까?");
             if(check) {
-                actionForm.append("<input type='hidden' name='username' value='" + $(this).attr("href") + "'>");
+                actionForm.append("<input type='hidden' name='id' value='" + $(this).attr("href") + "'>");
                 actionForm.attr("action", "/admin/userinfo/delete");
                 actionForm.submit();
             }
