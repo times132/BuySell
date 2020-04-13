@@ -59,7 +59,6 @@ var replyService = (function () {
     }
 
     function getList(param, callback, error) {
-        console.log("GET LIST"+param);
         var bid = param.bid;
         var page = param.page || 1;
 

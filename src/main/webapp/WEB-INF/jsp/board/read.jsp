@@ -18,7 +18,25 @@
     <script type="text/javascript" src="/resources/js/board.js"></script>
     <script type="text/javascript" src="/resources/js/common.js"></script>
 
+    <style>
+        .card-header{
+            display: flex;
+        }
+        .like{
+            display: flex;
+        }
+        #likeimg, #addLike, #deleteLike {
+            width: 20px;
+            height: 20px;
+        }
+        .likebtn{
+            display: flex;
+            align-items: center;
+            border: 0.01rem solid #c2c9d8;
+            padding: 0 .5rem;
 
+        }
+    </style>
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
@@ -86,13 +104,6 @@
                                 </div>
 
                             </div>
-                            <div class="like">
-                                <div class="likeBtn">
-                                    <sec:authorize access="isAnonymous()">
-                                        <h6>관심유저수<c:out value="${boardDto.likeCnt}"></c:out></h6>
-                                    </sec:authorize>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -108,6 +119,15 @@
                 <div class="card">
                     <div class="card-header">
                         <p class="mb-0"><strong class="replycnt"></strong></p>
+                        <p class="mb-0">&nbsp|&nbsp</p>
+                        <p class="mb-0"><strong class="like">
+                            <sec:authorize access="isAnonymous()">
+                                <div>좋아요&nbsp</div>
+                                <div class='likebtn'>
+                                    <img id='likeimg' src='/resources/image/dislike.png'>&nbsp${boardDto.likeCnt}
+                                </div>
+                            </sec:authorize>
+                        </strong></p>
                     </div>
                     <div class="card-body">
 
@@ -272,42 +292,44 @@
     var replyUL = $(".replyList");
     var likeUL = $(".like");
     var curUser = null;
+    var likeCnt = "<c:out value="${boardDto.likeCnt}"/>";
     <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
         curUser = '${userinfo.user.nickname}';
 
+        showLike(likeCnt);
+    </sec:authorize>
 
-//관심유저 관련
-    var bidjson = {bid: bidValue}
-    var likeCnt = <c:out value="${boardDto.likeCnt}"/>
-
-    showLike(likeCnt);
+    //관심유저 관련
     function showLike(likeCnt){
-        boardService.checkLike(bidjson, function (data) {
-            var str = "<div>"+likeCnt+"<div>"
+        boardService.checkLike(bidValue, function (data) {
+            console.log(data)
+            var str = "<div>좋아요&nbsp</div><div class='likebtn'>";
             //date가 있는 경우 (like인 경우)
             if (data){
-                str += "<img id = 'deleteLike' src='/resources/image/like.png'>"
+                str += "<img id = 'deleteLike' src='/resources/image/like.png'>";
             }
             //date가 없는 경우(like 안한 상태)
             else {
-                str += "<img id='addLike' src='/resources/image/dislike.png'>"
+                str += "<img id='addLike' src='/resources/image/dislike.png'>";
             }
+            str += "&nbsp" + likeCnt + "</div>";
             likeUL.html(str);
         });
     }
 
     $(document).on("click", "#addLike", function () {
-        boardService.addLike(bidjson, function (data) {// data : 관심유저개수
-            showLike(data); return;});
-        return;
+        boardService.addLike(bidValue, function (data) {// data : 관심유저개수
+            showLike(data);
+        });
     });
 
     $(document).on("click", "#deleteLike", function () {
-        boardService.deleteLike(bidjson, function (data) {showLike(data); return;});
-        return;
+        boardService.deleteLike(bidValue, function (data) {
+            showLike(data);
+        });
     });
-    </sec:authorize>
+
 
     // 댓글 목록 출력
     showList(1);

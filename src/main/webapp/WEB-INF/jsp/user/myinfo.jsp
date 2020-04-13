@@ -129,18 +129,25 @@
                             <br>
                             <div class="row">
                                 <c:set var="mail" value="${userinfo.email}"/>
-                                <div class="col-sm-5">
+
                                         <c:if test = "${mail eq null}">
-                                            <input type="text" class="form-control" id="e_mail" name="email" placeholder="이메일을 입력해주세요" >
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="e_mail" name="email" placeholder="이메일을 입력해주세요" >
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-danger btn-sm" id="checkbtn" type="submit">중복 확인</button>
+                                                <button class="btn btn-danger btn-sm" id="auth" type="submit" disabled="disabled">이메일 전송</button>
+                                            </div>
                                         </c:if>
                                         <c:if test = "${mail ne null}">
-                                            <input type="text" class="form-control" id="e_mail" name="email" value="${userinfo.email}" readonly="readonly" >
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="e_mail" name="email" value="${userinfo.email}" readonly="readonly" >
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-danger btn-sm" id="auth" type="submit">이메일 전송</button>
+                                            </div>
                                         </c:if>
-                                </div>
-                                <div class="col-sm-4">
-                                    <button class="btn btn-danger btn-sm" id="checkbtn" type="submit">중복 확인</button>
-                                    <button class="btn btn-danger btn-sm" id="auth" type="submit" disabled="disabled">이메일 전송</button>
-                                </div>
+
                             </div>
                             <div class="row">
                                 <div class="col-sm-5">
@@ -233,8 +240,6 @@
             profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
         }
     });
-    $("#auth").attr("disabled", true);
-
 
     $("#checkbtn").on("click", function () {
         var email = $("#e_mail").val();

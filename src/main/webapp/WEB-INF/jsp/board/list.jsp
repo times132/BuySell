@@ -69,7 +69,7 @@
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
-                                    <span class="replycnt">
+                                    <span class="sold-replycnt">
                                         [<c:out value="${board.replyCnt}"/>]
                                     </span>
                                     <span class="sold">

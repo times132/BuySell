@@ -160,22 +160,23 @@ public class BoardController {
 
 
     //좋아요 여부 검사
-    @RequestMapping(value = "/like/checkLike", method = RequestMethod.GET)
+    @GetMapping(value = "/like/{bid}")
     @ResponseBody
-    public boolean likeCheck(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<Boolean> checkLike(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
         System.out.println("########BID"+ bid);
-        return boardService.likeCheck(bid, userDetails);
+        boolean a = boardService.likeCheck(bid, userDetails);
+        return new ResponseEntity<>(a, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/like/addLike", method = RequestMethod.POST)
+    @PostMapping(value = "/like/{bid}")
     @ResponseBody
-    public int addlike(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public int addLike(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return  boardService.addlike(bid, userDetails);
     }
 
-    @RequestMapping(value = "/like/deleteLike", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/like/{bid}")
     @ResponseBody
-    public int deletelike(@RequestParam("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public int deleteLike(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return boardService.deletelike(bid, userDetails);
     }
 }

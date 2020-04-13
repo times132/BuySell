@@ -5,7 +5,7 @@
 .title-sell a{
     color: #b8bfce;
 }
-.replycnt{
+.sold-replycnt{
     color: #b8bfce;
 }
 .sold{
@@ -71,13 +71,6 @@
     bottom: 0;
     position: absolute;
 }
-
-.like{
-    bottom: 0;
-    position: absolute;
-    cursor: pointer;
-}
-
 
 @media (max-width: 768px) {
     .writer-dropdown{
