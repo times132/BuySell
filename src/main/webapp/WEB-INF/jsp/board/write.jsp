@@ -17,6 +17,8 @@
         <div class="row">
             <div class="col">
                 <form id="writeForm" action="/board/write" method="post">
+                    <input type="hidden" name="writer" value="${userinfo.nickname}"> <br>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <sec:authentication property="principal.user" var="userinfo"/>
                     <div class="form-group">
                         <select class="custom-select col-4" name="btype">
@@ -29,7 +31,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-9">
-                            <input type="text" class="form-control" name="title" placeholder="제목">
+                            <input type="text" class="form-control" name="title" placeholder="제목 (최대 100자)" maxlength="100">
                         </div>
                         <div class="form-group input-group col-3">
                             <div class="input-group-prepend">
@@ -39,9 +41,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" name="content" rows="10" placeholder="본문"></textarea>
+                        <textarea class="form-control" name="content" rows="10" placeholder="본문 (최대 500자)" maxlength="500"></textarea>
                     </div>
-                    <input type="hidden" name="writer" value="${userinfo.nickname}"> <br>
                 </form>
             </div>
 
@@ -72,9 +73,9 @@
             </div>
         </div>
 
-        <div>
-            <span><a href="#" class="btn btn-outline-dark btn-submit"><i></i>작성하기</a></span>
-            <a href="/board"><button class="btn btn-dark float-right" type="submit">목록</button></a>
+        <div class="row">
+            <span class="col"><a href="#" class="btn btn-outline-dark btn-submit"><i></i>작성하기</a></span>
+            <a class="col" href="/board"><button class="btn btn-dark float-right" type="submit">목록</button></a>
         </div>
 
     </div>

@@ -60,6 +60,7 @@ public class BoardController {
         return "/board/list";
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/write")
     public String writeGET(){
         logger.info("-----board registerGET-----");

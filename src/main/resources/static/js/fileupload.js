@@ -16,6 +16,7 @@ function checkExtension(fileName, fileSize) {
     return true;
 }
 
+// 게시물 사진 첨부
 $("input[name='uploadFile']").change(function (e) {
     var formData = new FormData();
     var inputFile = $("input[name='uploadFile']");
@@ -49,6 +50,7 @@ $("input[name='uploadFile']").change(function (e) {
     });
 });
 
+// 프로필 사진 첨부
 $("input[name='uploadProfile']").on('change', function(){
     var formData = new FormData();
     var inputFile = $("input[name='uploadProfile']");
@@ -80,25 +82,21 @@ function showUploadProfile(uploadResult) {
     if (!uploadResult || uploadResult.length == 0) {
         return;
     }
-    console.log(uploadResult)
+
     if (uploadResult.image){
         var fileCallPath = encodeURIComponent(uploadResult.uploadPath + "/" + uploadResult.fileName);
-
         var str = "<img class='img-thumbnail' src='/display?fileName=" + fileCallPath + "'>";
-        // var str2 = "<input type='hidden' name='profileImage' value='" + uploadResult.fileName +"'/>"
+
         $("#profileImage").val(uploadResult.fileName);
         $(".profile-image").html(str);
     }
-
 }
 
 function showUploadResult(uploadResultArr) {
     if (!uploadResultArr || uploadResultArr.length == 0) {
         return;
     }
-
     var uploadUL = $(".uploadResult ul");
-
     var str = "";
 
     $(uploadResultArr).each(function (i, obj) {
@@ -118,6 +116,5 @@ function showUploadResult(uploadResultArr) {
             return;
         }
     });
-
     uploadUL.append(str);
 }
