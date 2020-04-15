@@ -5,12 +5,11 @@ import com.example.giveandtake.DTO.UserDTO;
 import com.example.giveandtake.DTO.UserRolesDTO;
 import com.example.giveandtake.common.AppException;
 import com.example.giveandtake.common.CustomUserDetails;
+import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.domain.RoleName;
 import com.example.giveandtake.mapper.UserMapper;
-import com.example.giveandtake.model.entity.ChatUsers;
-import com.example.giveandtake.model.entity.Role;
-import com.example.giveandtake.model.entity.User;
-import com.example.giveandtake.model.entity.UserRoles;
+import com.example.giveandtake.model.entity.*;
+import com.example.giveandtake.repository.LikeRepository;
 import com.example.giveandtake.repository.RoleRepository;
 import com.example.giveandtake.repository.UserRepository;
 import com.example.giveandtake.repository.UserRolesRepository;
@@ -19,7 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,6 +51,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRolesRepository userRolesRepository;
     private ChatService chatService;
+    private LikeRepository likeRepository;
 
     //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
     @Transactional
@@ -263,5 +265,14 @@ public class UserService implements UserDetailsService {
     //아이디 찾기
     public List<User> findId(String email, String name) {
     return  userRepository.findByEmailAndName(email, name);
+    }
+
+
+
+    public Page<Like> getLikeList(Long id, SearchCriteria searchCri){
+        Pageable pageable = PageRequest.of(searchCri.getPage()-1, searchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Like> likes = likeRepository.findAllByUserId(id,pageable);
+       return likes;
     }
 }
