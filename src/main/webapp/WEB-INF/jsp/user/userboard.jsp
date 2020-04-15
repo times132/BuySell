@@ -133,8 +133,8 @@
                     </ul>
                 </div>
 
-                <form id="actionForm" action="/user/${user.id}" method="get">
-                    <input type="hidden" name="id" value="${user.id}">
+                <form id="actionForm" action="/user/${user.id}/boards" method="get">
+                    <input type="hidden" name="id" value="${user.id}/boards">
                     <input type="hidden" name="page" value="${pageMaker.cri.page}">
                 </form>
             </div><!--/col-9-->

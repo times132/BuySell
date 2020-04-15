@@ -34,7 +34,8 @@
                         <li class="upper-links dropdown"><a class="links" href="#"><c:out value="${userinfo.nickname}"/>님.</a>
                             <ul class="dropdown-menu">
                                 <li class="profile-li"><a class="profile-links" href="/user/info">내정보</a></li>
-                                <li class="profile-li"><a class="profile-links" href="/#">찜한 목록</a></li>
+                                <li class="profile-li"><a class="profile-links" href="/user/${userinfo.id}/boards">내 게시물</a></li>
+                                <li class="profile-li"><a class="profile-links" href="/user/${userinfo.id}/likes">내 관심 목록</a></li>
                                 <li class="profile-li"><a class="profile-links" href="/admin">어드민</a></li>
                             </ul>
                         </li>

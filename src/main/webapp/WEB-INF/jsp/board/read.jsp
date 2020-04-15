@@ -211,7 +211,8 @@
                 operForm.find("#bid").remove();
                 operForm.find("#writer").remove();
                 operForm.attr("action", "/board");
-            }else{
+            }
+            else{
                 operForm.find("#bid").remove();
                 operForm.find("#writer").remove();
                 operForm.attr("action", "/user/"+checkUserBoard);

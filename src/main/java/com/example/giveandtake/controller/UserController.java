@@ -7,6 +7,7 @@ import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.ChatRoom;
+import com.example.giveandtake.model.entity.Like;
 import com.example.giveandtake.model.entity.User;
 import com.example.giveandtake.service.AdminService;
 import com.example.giveandtake.service.BoardService;
@@ -252,7 +253,7 @@ public class UserController {
         out.flush();
     }
 
-    @GetMapping(value = "/user/{userid}")
+    @GetMapping(value = "/user/{userid}/boards")
     public String boardUser(@PathVariable("userid") Long id, Model model, SearchCriteria searchCri){
         searchCri.setType("I");
         searchCri.setKeyword(String.valueOf(id));
@@ -269,5 +270,20 @@ public class UserController {
                 .build());
 
         return "/user/userboard";
+    }
+    @GetMapping(value = "/user/{userid}/likes")
+    public String userLikes(@PathVariable("userid") Long id, Model model, SearchCriteria searchCri){
+        searchCri.setType("L");
+        searchCri.setKeyword(String.valueOf(id));
+        Page<Like> likePage =  userService.getLikeList(id,searchCri);
+        model.addAttribute("likeList", likePage.getContent());
+        model.addAttribute("pageMaker", Pagination.builder()
+                .cri(searchCri)
+                .total(likePage.getTotalElements())
+                .realEndPage(likePage.getTotalPages())
+                .listSize(5) // 페이징 5로 설정
+                .build());
+
+        return "/user/likeList";
     }
 }
