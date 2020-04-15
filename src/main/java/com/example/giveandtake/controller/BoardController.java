@@ -124,10 +124,7 @@ public class BoardController {
         logger.info("-----board modifyGET-----");
 
         BoardDTO boardDto = boardService.getBoard(bid);
-        Category myCategory =  categoryService.getCateItems(boardDto.getBtype());
-        List<Category> category =  categoryService.getCategory();
-        model.addAttribute("category", category);
-        model.addAttribute("myCategory", myCategory);
+
         model.addAttribute("boardDto", boardDto);
     }
 

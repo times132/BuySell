@@ -146,6 +146,7 @@
         });
         var categoryDIV = $("#items");
         $("#category").on("change",function(){
+            alert("카테고리")
             var id = $("#category option:selected").val();
             console.log("id"+id);
 

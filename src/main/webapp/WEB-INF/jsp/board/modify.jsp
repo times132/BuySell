@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
-    <script type="text/javascript" src="/resources/js/board.js"></script>
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
@@ -24,21 +24,12 @@
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                     <div class="form-group">
-                        <select id="category" class="custom-select col-4">
-                            <option value="${myCategory.id}"><c:out value="${myCategory.name}"/></option>
-                            <c:forEach items="${category}" var="category">
-                                <c:if test="${myCategory.name ne category.name}">
-                                 <option value="${category.id}"><c:out value="${category.name}"/></option>
-                                </c:if>
-                            </c:forEach>
-                        </select>
-                        <select id="items" class="custom-select col-4" name="btype">
-                            <option value="${boardDto.btype}"><c:out value="${boardDto.btype}"/></option>
-                            <c:forEach items="${myCategory.items}" var="items">
-                                <c:if test="${boardDto.btype ne itmes.itemName}">
-                                    <option value="${items.itemName}"><c:out value="${items.itemName}"/></option>
-                                </c:if>
-                            </c:forEach>
+                        <select class="custom-select col-4" name="btype">
+                            <option value="">카테고리</option>
+                            <option value="기프티콘">기프티콘</option>
+                            <option value="디지털">디지털/가전</option>
+                            <option value="생활">생활</option>
+                            <option value="기타">기타</option>
                         </select>
                     </div>
                     <div class="form-row">
@@ -155,22 +146,7 @@
                     targetLi.remove();
                 }
             });
-            var categoryDIV = $("#items");
-            $("#category").on("change",function(){
-                var id = $("#category option:selected").val();
-                console.log("id"+id);
 
-                boardService.getCategoryItems(id, function (data) {
-                    console.log(data);
-                    var str = "<option value=''>---------------------------------------------------</option>";
-                    for (var i = 0, len = data.length || 0; i < len; i++) {
-                        str += "<option value='"+data[i].itemName+"'>"+ data[i].itemName + "</option>"
-                    }
-                    console.log(str);
-                    categoryDIV.html(str);
-                });
-
-            });
             $("body").on({
                 mouseenter: function () {
                     $(this).closest("li").css("border", "1px solid red");
