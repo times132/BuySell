@@ -1,7 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" isELIgnored="false"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
 <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
@@ -23,6 +23,7 @@
 </head>
 
 <body>
+<%@include file="../include/header.jsp"%>
 <hr>
 <sec:authentication property="principal.user" var="userinfo"/>
 <c:set var="provider" value="${userinfo.provider}"/>
@@ -68,9 +69,8 @@
             <div class="tab-content">
                 <div class="tab-pane active" id="CHANGE">
                     <hr>
-                        <form class="form" action="/user/modifyuser" method="post">
+                    <form class="form" action="/user/modifyuser" method="post">
                         <div class="form-group">
-
                             <div class="col-xs-6">
                                 <label for="username"><H4>ID</H4></label>
                                 <input type="text" class="form-control" id="username" name="username" value="${userinfo.username}" readonly="readonly" required>
@@ -119,6 +119,7 @@
                                 <input type="hidden" name="activation" value="${userinfo.activation}">
                                 <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
                                 <input type="hidden" name="provider" value="${userinfo.provider}">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 <input class="btn btn-sm btn-primary" type="submit" id="modify"  value="수정"/>
                                 <input class="btn btn-sm btn-primary" type="button" value="홈" onClick="self.location='/';">
                             </div>

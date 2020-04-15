@@ -13,13 +13,14 @@
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/common.js"></script>
+
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
     <%@include file="../include/search.jsp"%>
-    <div class="container">
+    <div class="board-body">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="panel-group">
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">Panel Title</h3>
@@ -32,7 +33,7 @@
                    </ul>
                 </div>
             </div>
-            <div class="col-lg-9">
+            <div class="col-lg-10 col-md-9">
                 <sec:authorize access="isAuthenticated()">
                     <a href="/board/write">글쓰기</a>
                 </sec:authorize>
@@ -44,11 +45,12 @@
                         <tr>
                             <th style="width: 6%" scope="col">#</th>
                             <th style="width: 12%" scope="col">분류</th>
-                            <th style="width: 45%" scope="col">글제목</th>
+                            <th style="width: 44%" scope="col">글제목</th>
                             <th style="width: 10%" scope="col">가격</th>
                             <th style="width: 10%" scope="col">작성자</th>
-                            <th style="width: 10%" scope="col">작성일</th>
-                            <th style="width: 10%" scope="col">조회</th>
+                            <th style="width: 8%" scope="col">작성일</th>
+                            <th style="width: 5%" scope="col">조회</th>
+                            <th style="width: 5%" scope="col">추천</th>
                         </tr>
                     </thead>
 
@@ -65,7 +67,7 @@
                             </td>
 
                             <c:if test="${board.sellcheck eq true}">
-                                <td class="title-sell">
+                                <td class="title-sold">
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
@@ -103,6 +105,10 @@
                             <td class="viewCnt">
                                 <c:out value="${board.viewCnt}"/>
                             </td>
+
+                            <td class="likeCnt">
+                                <c:out value="${board.likeCnt}"/>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -130,12 +136,12 @@
                             <div class="input-group-append">
                                 <select name="type" class="form-control form-control-sm" id="exampleFormControlSelect1">
                                     <option value=""<c:out value="${pageMaker.cri.type == null ? 'selected' : ''}"/>>--</option>
-                                    <option value="TC">제목+내용</option>
-                                    <option value="W">작성자</option>
+                                    <option value="TC"<c:out value="${pageMaker.cri.type eq 'TC' ? 'selected' : ''}"/>>제목+내용</option>
+                                    <option value="W"<c:out value="${pageMaker.cri.type eq 'W' ? 'selected' : ''}"/>>작성자</option>
                                 </select>
                             </div>
                             <input hidden="hidden" /> <%--엔터키 방지--%>
-                            <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" value="<c:out value="${pageMaker.cri.keyword}"/>" aria-label="Recipient's username" aria-describedby="button-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
                             </div>
@@ -188,8 +194,6 @@
                 e.preventDefault();
                 searchForm.submit();
             });
-
-
         });
     </script>
 </body>

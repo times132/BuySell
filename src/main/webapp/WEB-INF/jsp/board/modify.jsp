@@ -20,9 +20,8 @@
             <div class="col">
                 <form action="/board/modify" method="post">
                     <input type="hidden" name="bid" value="${boardDto.bid}"/>
-<%--                    <input type="hidden" name="viewCnt" value="${boardDto.viewCnt}"/>--%>
-<%--                    <input type="hidden" name="replyCnt" value="${boardDto.replyCnt}"/>--%>
                     <input type="hidden" name="writer" value="${boardDto.writer}"/>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                     <div class="form-group">
                         <select class="custom-select col-4" name="btype">

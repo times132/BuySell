@@ -2,11 +2,8 @@ var commonService = (function () {
     function displayTime(timeValue) {
 
         var today = new Date();
-
         var dateObj = new Date(timeValue);
-
         var gap = today.getTime() - dateObj.getTime();
-
         var str = "";
 
         if (gap < (1000 * 60 * 60 * 24)){
@@ -22,6 +19,10 @@ var commonService = (function () {
 
             return [yy, '.', (mm > 9 ? '' : '0') + mm, '.', (dd > 9 ? '' : '0') + dd].join('');
         }
+    }
+
+    function checkWordCount() {
+
     }
 
     return{

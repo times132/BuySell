@@ -1,8 +1,21 @@
 /* 게시글 조회 */
+.board-body{
+    width: 90%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.title, .title-sold{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 0;
+}
 .title a{
     color: #000000;
 }
-.title-sell a{
+.title-sold a{
     color: #b8bfce;
 }
 .sold-replycnt{
@@ -14,6 +27,13 @@
     color: #8f96a5;
     font-size: 0.1rem;
     font-weight: bold;
+}
+.panel-group{
+    flex-basis: 0;
+    flex-grow: 1;
+
+    max-width: 15rem;
+    position: relative;
 }
 .pagination {
     text-align: center;
@@ -76,6 +96,15 @@
     .writer-dropdown{
         text-align: right;
         position: relative;
+    }
+    .panel-group{
+        flex-basis: 0;
+        flex-grow: 1;
+        max-width: 15rem;
+        position: relative;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
     }
 }
 .writer{
