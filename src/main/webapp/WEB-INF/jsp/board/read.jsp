@@ -18,25 +18,6 @@
     <script type="text/javascript" src="/resources/js/board.js"></script>
     <script type="text/javascript" src="/resources/js/common.js"></script>
 
-    <style>
-        .card-header{
-            display: flex;
-        }
-        .like{
-            display: flex;
-        }
-        #likeimg, #addLike, #deleteLike {
-            width: 20px;
-            height: 20px;
-        }
-        .likebtn{
-            display: flex;
-            align-items: center;
-            border: 0.01rem solid #c2c9d8;
-            padding: 0 .5rem;
-
-        }
-    </style>
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
@@ -181,7 +162,7 @@
                 results = regex.exec(location.search);
             return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
         }
-        var checkUserBoard = getParameterByName("id");
+        var checkUser = getParameterByName("id");
 
         console.log();
         var operForm = $("#operForm");
@@ -208,7 +189,7 @@
             operForm.attr("action", "/board/modify").submit();
         });
         $("button[data-oper='list']").on("click", function (e) {
-            if (checkUserBoard === ""){
+            if (checkUser === ""){
                 operForm.find("#bid").remove();
                 operForm.find("#writer").remove();
                 operForm.attr("action", "/board");
@@ -216,7 +197,7 @@
             else{
                 operForm.find("#bid").remove();
                 operForm.find("#writer").remove();
-                operForm.attr("action", "/user/"+checkUserBoard);
+                operForm.attr("action", "/user/"+checkUser);
             }
 
             operForm.submit();

@@ -1,3 +1,6 @@
+.upper-links a{
+    color: black;
+}
 #navbar {
     background-color: #2874f0;
     color: #FFFFFF;
@@ -74,16 +77,6 @@
     box-shadow: 0 4px 8px -3px #555454;
     margin: 0;
     padding: 0px;
-}
-
-.links {
-    color: #fff;
-    text-decoration: none;
-}
-
-.links:hover {
-    color: #fff;
-    text-decoration: none;
 }
 
 .profile-links {
