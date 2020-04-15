@@ -55,9 +55,28 @@ var boardService = (function () {
         })
     }
 
+
+    function getCategoryItems(id, callback, error) {
+        $.ajax({
+            type:'get',
+            url: "/board/category/"+id,
+            data: id,
+            success: function (deleteResult, status, xhr) {
+                if (callback){
+                    callback(deleteResult);
+                }
+            },
+            error: function (xhr, status, er) {
+                if (error){
+                    error(er);
+                }
+            }
+        });
+    }
     return {
         checkLike : checkLike,
         addLike : addLike,
-        deleteLike :deleteLike
+        deleteLike :deleteLike,
+        getCategoryItems : getCategoryItems
     };
 })();

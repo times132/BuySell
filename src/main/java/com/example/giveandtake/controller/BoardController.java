@@ -5,10 +5,13 @@ import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
 
 import com.example.giveandtake.common.CustomUserDetails;
+import com.example.giveandtake.model.entity.Category;
+import com.example.giveandtake.model.entity.CategoryItem;
 import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.common.Pagination;
 import com.example.giveandtake.common.SearchCriteria;
 import com.example.giveandtake.model.entity.Board;
+import com.example.giveandtake.service.CategoryService;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.Attribute;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +46,7 @@ public class BoardController {
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     private BoardService boardService;
+    private CategoryService categoryService;
 
     @GetMapping
     public String list(SearchCriteria searchCri, Model model){
@@ -62,9 +67,10 @@ public class BoardController {
 
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/write")
-    public String writeGET(){
+    public String writeGET(Model model){
         logger.info("-----board registerGET-----");
-
+        List<Category> category =  categoryService.getCategory();
+        model.addAttribute("category", category);
         return "/board/write";
     }
 
@@ -122,6 +128,10 @@ public class BoardController {
         model.addAttribute("boardDto", boardDto);
     }
 
+
+
+
+
     @PreAuthorize("principal.user.nickname == #dto.writer")
     @PostMapping("/modify")
     public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails){
@@ -150,6 +160,7 @@ public class BoardController {
         return "redirect:/board";
     }
 
+
     @GetMapping(value = "/getFileList", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<BoardFileDTO>> fileListGET(Long bid){
@@ -165,8 +176,8 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<Boolean> checkLike(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
         System.out.println("########BID"+ bid);
-        boolean a = boardService.likeCheck(bid, userDetails);
-        return new ResponseEntity<>(a, HttpStatus.OK);
+        boolean check = boardService.likeCheck(bid, userDetails);
+        return new ResponseEntity<>(check, HttpStatus.OK);
     }
 
     @PostMapping(value = "/like/{bid}")
@@ -179,5 +190,15 @@ public class BoardController {
     @ResponseBody
     public int deleteLike(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return boardService.deletelike(bid, userDetails);
+    }
+
+
+    //카테고리
+    @GetMapping(value = "/category/{id}")
+    @ResponseBody
+    public ResponseEntity<List> getCategoryItems(@PathVariable("id") Long id) {
+        System.out.println("########Category ID"+ id);
+        List<CategoryItem> categoryItems = categoryService.getCategoryItems(id);
+        return new ResponseEntity<>(categoryItems, HttpStatus.OK);
     }
 }
