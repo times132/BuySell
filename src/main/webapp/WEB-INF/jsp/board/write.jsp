@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -9,6 +10,7 @@
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="/resources/js/board.js"></script>
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
@@ -21,12 +23,14 @@
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <sec:authentication property="principal.user" var="userinfo"/>
                     <div class="form-group">
-                        <select class="custom-select col-4" name="btype">
-                            <option value="">카테고리</option>
-                            <option value="기프티콘">기프티콘</option>
-                            <option value="디지털">디지털/가전</option>
-                            <option value="생활">생활</option>
-                            <option value="기타">기타</option>
+                        <select id="category" class="custom-select col-4">
+                            <option value="">대분류</option>
+                            <c:forEach items="${category}" var="category">
+                                <option value="${category.id}"><c:out value="${category.name}"/></option>
+                            </c:forEach>
+                        </select>
+                        <select id="items" class="custom-select col-4" name="btype">
+                            <option value="">소분류</option>
                         </select>
                     </div>
                     <div class="form-row">
@@ -88,7 +92,7 @@
                 e.preventDefault();
                 var str = "";
 
-                if (!writeForm.find("option:selected").val()){
+                if (!writeForm.find("#items option:selected").val()){
                     alert("분류를 선택하세요.");
                     return false;
                 }
@@ -135,6 +139,27 @@
                     }
                 });
             });
+
+
+
+
+        });
+        var categoryDIV = $("#items");
+        $("#category").on("change",function(){
+            alert("카테고리")
+            var id = $("#category option:selected").val();
+            console.log("id"+id);
+
+            boardService.getCategoryItems(id, function (data) {
+                console.log(data);
+                var str = "<option value=''>---------------------------------------------------</option>";
+                for (var i = 0, len = data.length || 0; i < len; i++) {
+                    str += "<option value='"+data[i].itemName+"'>"+ data[i].itemName + "</option>"
+                }
+                console.log(str);
+                categoryDIV.html(str);
+            });
+
         });
 
         $("body").on({
