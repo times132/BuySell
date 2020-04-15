@@ -35,7 +35,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-9">
-                            <input type="text" class="form-control" name="title" placeholder="제목 (최대 100자)" maxlength="100">
+                            <input type="text" class="form-control" name="title" placeholder="제목 (최대 30자)" maxlength="30">
                         </div>
                         <div class="form-group input-group col-3">
                             <div class="input-group-prepend">
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" name="content" rows="10" placeholder="본문 (최대 500자)" maxlength="500"></textarea>
+                        <textarea class="form-control" name="content" rows="10" placeholder="본문 (최대 250자)" maxlength="250"></textarea>
                     </div>
                 </form>
             </div>

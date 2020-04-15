@@ -26,6 +26,7 @@
                 <span class="bg-light">OR</span>
             </p>
             <form action="/user/signup" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-address-card"></i> </span>
