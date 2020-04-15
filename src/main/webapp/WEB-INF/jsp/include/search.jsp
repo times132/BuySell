@@ -19,7 +19,7 @@
 <div id="search-bar">
         <div class="row row1">
             <div class="cart col-lg-3">
-                <h1><a href="/">GIVEANDTAKE</a></h1>
+                <h1><a href="/">BUYSELL</a></h1>
             </div>
             <div class="navbar-search col-lg-7">
                     <form id="search" action="/board" method="get">
