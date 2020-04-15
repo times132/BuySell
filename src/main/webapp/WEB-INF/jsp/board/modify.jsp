@@ -35,7 +35,8 @@
                         <select id="items" class="custom-select col-4" name="btype">
                             <option value="${boardDto.btype}"><c:out value="${boardDto.btype}"/></option>
                             <c:forEach items="${myCategory.items}" var="items">
-                                <c:if test="${boardDto.btype ne itmes.itemName}">
+                                <c:set var="boardType" value="${items.itemName}"/>
+                                <c:if test="${boardType ne '문화'}">
                                     <option value="${items.itemName}"><c:out value="${items.itemName}"/></option>
                                 </c:if>
                             </c:forEach>
