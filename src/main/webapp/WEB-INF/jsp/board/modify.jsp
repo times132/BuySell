@@ -25,20 +25,13 @@
 
                     <div class="form-group">
                         <select id="category" class="custom-select col-4">
-                            <option value="${myCategory.id}"><c:out value="${myCategory.name}"/></option>
                             <c:forEach items="${category}" var="category">
-                                <c:if test="${myCategory.name ne category.name}">
-                                 <option value="${category.id}"><c:out value="${category.name}"/></option>
-                                </c:if>
+                                <option value="${category.id}"><c:out value="${category.name}"/></option>
                             </c:forEach>
                         </select>
                         <select id="items" class="custom-select col-4" name="btype">
-                            <option value="${boardDto.btype}"><c:out value="${boardDto.btype}"/></option>
                             <c:forEach items="${myCategory.items}" var="items">
-                                <c:set var="boardType" value="${items.itemName}"/>
-                                <c:if test="${boardType ne '문화'}">
-                                    <option value="${items.itemName}"><c:out value="${items.itemName}"/></option>
-                                </c:if>
+                                <option value="${items.itemName}"><c:out value="${items.itemName}"/></option>
                             </c:forEach>
                         </select>
                     </div>
@@ -92,13 +85,16 @@
         </div>
     </div>
 
+    <!-- js -->
     <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script>
         $(document).ready(function(){
             var formObj = $("form");
+            var caregoryId = "<c:out value="${myCategory.id}"/>";
             var btype = "<c:out value="${boardDto.btype}"/>";
 
-            $(".custom-select option[value='" + btype + "']").attr('selected', 'selected')
+            $("#category option[value='" + caregoryId + "']").attr('selected', 'selected');
+            $("#items option[value='" + btype + "']").attr('selected', 'selected');
 
             $("button").on("click", function(e){
                 e.preventDefault();

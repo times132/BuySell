@@ -2,13 +2,25 @@ package com.example.giveandtake.service;
 
 import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.BoardFileDTO;
+import com.example.giveandtake.common.CustomUserDetails;
+import com.example.giveandtake.mapper.BoardMapper;
+import com.example.giveandtake.model.entity.Board;
 import com.example.giveandtake.model.entity.BoardFile;
+import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.repository.BoardRepository;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,29 +32,38 @@ public class BoardServiceTest {
     private static final Logger logger = LoggerFactory.getLogger(BoardServiceTest.class);
 
     @Autowired
+    BoardRepository boardRepository;
+
+    @Autowired
     BoardService boardService;
 
+    @Autowired
+    UserService userService;
+
     @Test
+    @WithUserDetails(value = "dlwlrma")
     public void registerTest(){
-//        BoardDTO dto = new BoardDTO();
-//        BoardFileDTO fileDTO = new BoardFileDTO();
-//        List<BoardFileDTO> fileDTOList = new ArrayList<>();
-//        fileDTO.setFileName("사진1");
-//        fileDTO.setFileType(true);
-//        fileDTO.setUploadPath("2020/03/01");
-//        fileDTO.setUuid("30178876-1482-4b23-9e11-a96dcacd4d");
-//        fileDTO.setBoardDTO(dto);
-//        fileDTOList.add(fileDTO);
+        User user = ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+
+        for (int i=1; i<8; i++){
+            Board board = Board.builder()
+                    .btype("가전")
+                    .title("가전"+i)
+                    .content("가전"+i)
+                    .price(4763+i*578)
+                    .replyCnt(0)
+                    .viewCnt(0)
+                    .writer(user.getNickname())
+                    .user(user)
+                    .build();
+
+            boardRepository.save(board);
+        }
 //
-//        dto.setBtype("외식");
-//        dto.setTitle("빕스");
-//        dto.setContent("빕스 50000원");
-//        dto.setWriter("dlwlrma");
-//        dto.setPrice(45000);
-//        dto.setBoardFileList(fileDTOList);
-//        dto.toEntity();
-
-
+//
+//
+//
+//
 //        boardService.register(dto);
 
 

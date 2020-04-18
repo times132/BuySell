@@ -119,6 +119,7 @@ public class BoardController {
         return "/board/read";
     }
 
+
     @GetMapping("/modify")
     public void modifyGET(@RequestParam("bid") Long bid, @ModelAttribute("cri") SearchCriteria cri, Model model){
         logger.info("-----board modifyGET-----");
@@ -128,12 +129,9 @@ public class BoardController {
         List<Category> category =  categoryService.getCategory();
         model.addAttribute("category", category);
         model.addAttribute("myCategory", myCategory);
+        logger.info("########mycategory : " + myCategory);
         model.addAttribute("boardDto", boardDto);
     }
-
-
-
-
 
     @PreAuthorize("principal.user.nickname == #dto.writer")
     @PostMapping("/modify")

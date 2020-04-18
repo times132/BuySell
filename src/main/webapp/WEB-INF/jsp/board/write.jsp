@@ -84,6 +84,7 @@
 
     </div>
 
+    <!-- js -->
     <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script>
         $(document).ready(function () {
@@ -139,11 +140,8 @@
                     }
                 });
             });
-
-
-
-
         });
+
         var categoryDIV = $("#items");
         $("#category").on("change",function(){
             var id = $("#category option:selected").val();
