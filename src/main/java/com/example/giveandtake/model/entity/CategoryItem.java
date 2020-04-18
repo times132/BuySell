@@ -17,7 +17,6 @@ public class CategoryItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
 
-
     @Column
     private String itemName;
 

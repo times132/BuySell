@@ -81,12 +81,20 @@
         .cartList li{
             display: inline-block;
             list-style: none;
-            border: black 1px solid;
+            border: black 2px solid;
             max-width: 104px;
             min-width: 96px;
             max-height: 104px;
             min-height: 96px;
             margin: 0 0;
+
+        }
+        .cartList li img{
+            margin: 5px 0;
+        }
+        .cartList li p{
+            font-size: .7rem;
+            margin-bottom: 0;
         }
         @media screen and (min-width: 1000px) {
             .col-lg-6 {
@@ -132,17 +140,17 @@
 
                 <div class="carousel-inner" role="listbox">
                     <div class="carousel-item active">
-                        <img class="d-block w-100" src="/resources/image/1.jpg"
+                        <img class="d-block w-100" src="/resources/image/home/main1.jpg"
                              alt="First slide">
                     </div>
 
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="/resources/image/2.jpg"
+                        <img class="d-block w-100" src="/resources/image/home/main2.jpg"
                              alt="Second slide">
                     </div>
 
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="/resources/image/3.jpg"
+                        <img class="d-block w-100" src="/resources/image/home/main3.jpg"
                              alt="Third slide">
                     </div>
                 </div>
@@ -166,68 +174,23 @@
                     <div class="col-12">
                         <div class="row justify-content-center pl-0">
                             <div class="cart-row col-12 col-md-10 col-lg-6">
-                                <li class="cartItem1">
+                                <li class="cartItem0">
                                     <a>
-                                        <img src="/resources/image/li0.png"/>
-                                        <p>1번</p>
+                                        <img src="/resources/image/home/whole.png"/>
+                                        <p>전체보기</p>
                                     </a>
                                 </li>
-                                <li class="cartItem2">
-                                    <a>
-                                        <img src="/resources/image/li1.png"/>
-                                        <p>2번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem3">
-                                    <a>
-                                        <img src="/resources/image/li2.png"/>
-                                        <p>3번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem4">
-                                    <a>
-                                        <img src="/resources/image/li3.png"/>
-                                        <p>4번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem5">
-                                    <a>
-                                        <img src="/resources/image/li4.png"/>
-                                        <p>5번</p>
-                                    </a>
-                                </li>
+                                <li class="cartItem1"></li>
+                                <li class="cartItem2"></li>
+                                <li class="cartItem3"></li>
+                                <li class="cartItem4"></li>
                             </div>
                             <div class="cart-row col-12 col-md-10 col-lg-6">
-                                <li class="cartItem6">
-                                    <a>
-                                        <img src="/resources/image/li0.png"/>
-                                        <p>6번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem7">
-                                    <a>
-                                        <img src="/resources/image/li1.png"/>
-                                        <p>7번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem8">
-                                    <a>
-                                        <img src="/resources/image/li2.png"/>
-                                        <p>1번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem9">
-                                    <a>
-                                        <img src="/resources/image/li3.png"/>
-                                        <p>1번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem10">
-                                    <a>
-                                        <img src="/resources/image/li4.png"/>
-                                        <p>1번</p>
-                                    </a>
-                                </li>
+                                <li class="cartItem5"></li>
+                                <li class="cartItem6"></li>
+                                <li class="cartItem7"></li>
+                                <li class="cartItem8"></li>
+                                <li class="cartItem9"></li>
                             </div>
                         </div>
                     </div>
@@ -235,68 +198,18 @@
                     <div class="col-12">
                         <div class="row justify-content-center pl-0">
                             <div class="cart-row col-12 col-md-10 col-lg-6 pr-0 pl-0">
-                                <li class="cartItem1">
-                                    <a>
-                                        <img src="/resources/image/li0.png"/>
-                                        <p>1번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem2">
-                                    <a>
-                                        <img src="/resources/image/li1.png"/>
-                                        <p>2번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem3">
-                                    <a>
-                                        <img src="/resources/image/li2.png"/>
-                                        <p>3번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem4">
-                                    <a>
-                                        <img src="/resources/image/li3.png"/>
-                                        <p>4번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem5">
-                                    <a>
-                                        <img src="/resources/image/li4.png"/>
-                                        <p>5번</p>
-                                    </a>
-                                </li>
+                                <li class="cartItem10"></li>
+                                <li class="cartItem11"></li>
+                                <li class="cartItem12"></li>
+                                <li class="cartItem13"></li>
+                                <li class="cartItem14"></li>
                             </div>
                             <div class="cart-row col-12 col-md-10 col-lg-6 pr-0 pl-0">
-                                <li class="cartItem6">
-                                    <a>
-                                        <img src="/resources/image/li0.png"/>
-                                        <p>6번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem7">
-                                    <a>
-                                        <img src="/resources/image/li1.png"/>
-                                        <p>7번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem8">
-                                    <a>
-                                        <img src="/resources/image/li2.png"/>
-                                        <p>1번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem9">
-                                    <a>
-                                        <img src="/resources/image/li3.png"/>
-                                        <p>1번</p>
-                                    </a>
-                                </li>
-                                <li class="cartItem10">
-                                    <a>
-                                        <img src="/resources/image/li4.png"/>
-                                        <p>1번</p>
-                                    </a>
-                                </li>
+                                <li class="cartItem15"></li>
+                                <li class="cartItem16"></li>
+                                <li class="cartItem17"></li>
+                                <li class="cartItem18"></li>
+                                <li class="cartItem19"></li>
                             </div>
                         </div>
                     </div>
@@ -322,5 +235,4 @@
         });
     </script>
 </body>
-
 </html>

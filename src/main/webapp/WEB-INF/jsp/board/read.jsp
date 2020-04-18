@@ -72,6 +72,7 @@
                             <h1 class="title"><c:out value="${boardDto.title}"/></h1>
                             <h4 class="price"><fmt:formatNumber value="${boardDto.price}"/>원</h4>
 
+                            <!-- 작성자 드랍다운 -->
                             <div class="writer-dropdown">
                                 <div class='profile'>
                                     <img src='/display?fileName=${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
@@ -79,7 +80,7 @@
                                         <span class="writer h6"><c:out value="${boardDto.writer}"></c:out></span>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu">
-                                        <a class="dropdown-item" href="/user/${boardDto.user.id}" id="board">게시글 보기</a>
+                                        <a class="dropdown-item" href="/user/${boardDto.user.id}/boards" id="board">게시글 보기</a>
                                         <a class="dropdown-item" href="#" id="chatting">1:1채팅</a>
                                     </div>
                                 </div>
@@ -153,334 +154,335 @@
         </form>
     </div>
 
-</body>
-<script>
-    $(document).ready(function () {
-        function getParameterByName(name) {
-            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                results = regex.exec(location.search);
-            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-        }
-        var checkUser = getParameterByName("id");
-
-        console.log();
-        var operForm = $("#operForm");
-        var nickName = "<c:out value="${boardDto.user.nickname}"/>";
-        var path = "<c:out value="${boardDto.user.profileImage}"/>";
-
-        // 닉네임 클릭 후 채팅 클릭 이벤트
-        $("#chatting").on("click", function (e) {
-            var nickname = {
-                nickname : nickName
-            };
-
-            chatService.createRoom(nickname, function (result) {
-                alert(result);
-            });
-            location.href="/chat/room";
-        });
-
-        // 삭제, 수정, 목록 버튼 이벤트
-        $("button[data-oper='remove']").on("click", function (e) {
-            operForm.attr("action", "/board/remove").attr("method", "post").submit();
-        });
-        $("button[data-oper='modify']").on("click", function (e) {
-            operForm.attr("action", "/board/modify").submit();
-        });
-        $("button[data-oper='list']").on("click", function (e) {
-            if (checkUser === ""){
-                operForm.find("#bid").remove();
-                operForm.find("#writer").remove();
-                operForm.attr("action", "/board");
+    <!-- js -->
+    <script>
+        $(document).ready(function () {
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
             }
-            else{
-                operForm.find("#bid").remove();
-                operForm.find("#writer").remove();
-                operForm.attr("action", "/user/"+checkUser);
-            }
+            var checkUser = getParameterByName("id");
 
-            operForm.submit();
-        });
-        $("button[data-oper='sell']").on("click", function (e) {
-            if(confirm("판매 완료하면 수정이 불가합니다.")){
-                operForm.attr("action", "/board/sell").attr("method", "post").submit();
-            }
-        });
+            console.log();
+            var operForm = $("#operForm");
+            var nickName = "<c:out value="${boardDto.user.nickname}"/>";
+            var path = "<c:out value="${boardDto.user.profileImage}"/>";
 
-        // 첨부 파일 가져오기
-        $.getJSON("/board/getFileList", {bid: bidValue}, function (arr) {
-            var str = "";
-            var first = "";
+            // 닉네임 클릭 후 채팅 클릭 이벤트
+            $("#chatting").on("click", function (e) {
+                var nickname = {
+                    nickname : nickName
+                };
 
-            if (arr.length === 0){
-                str += "<img class='d-block img-fluid' src='/resources/image/no-image.jpg'>";
-                $(".carousel-control-prev").hide();
-                $(".carousel-control-next").hide();
-
-            }
-            else{
-                $(arr).each(function (i, file) {
-                    if (file.image){
-
-                        var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
-                        if (i === 0){ // 첫번째 요소에 active 부여
-                            first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
-                            str += "<div class='carousel-item active' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
-                        }
-                        else{
-                            first += "<li data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
-                            str += "<div class='carousel-item' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
-                        }
-
-                        str += "<img class='d-block img-fluid' src='/display?fileName=" + fileCallPath + "'>";
-                        str += "</div>";
-                    }
+                chatService.createRoom(nickname, function (result) {
+                    alert(result);
                 });
+                location.href="/chat/room";
+            });
+
+            // 삭제, 수정, 목록 버튼 이벤트
+            $("button[data-oper='remove']").on("click", function (e) {
+                operForm.attr("action", "/board/remove").attr("method", "post").submit();
+            });
+            $("button[data-oper='modify']").on("click", function (e) {
+                operForm.attr("action", "/board/modify").submit();
+            });
+            $("button[data-oper='list']").on("click", function (e) {
+                if (checkUser === ""){
+                    operForm.find("#bid").remove();
+                    operForm.find("#writer").remove();
+                    operForm.attr("action", "/board");
+                }
+                else{
+                    operForm.find("#bid").remove();
+                    operForm.find("#writer").remove();
+                    operForm.attr("action", "/user/"+checkUser);
+                }
+
+                operForm.submit();
+            });
+            $("button[data-oper='sell']").on("click", function (e) {
+                if(confirm("판매 완료하면 수정이 불가합니다.")){
+                    operForm.attr("action", "/board/sell").attr("method", "post").submit();
+                }
+            });
+
+            // 첨부 파일 가져오기
+            $.getJSON("/board/getFileList", {bid: bidValue}, function (arr) {
+                var str = "";
+                var first = "";
+
+                if (arr.length === 0){
+                    str += "<img class='d-block img-fluid' src='/resources/image/no-image.jpg'>";
+                    $(".carousel-control-prev").hide();
+                    $(".carousel-control-next").hide();
+
+                }
+                else{
+                    $(arr).each(function (i, file) {
+                        if (file.image){
+
+                            var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
+                            if (i === 0){ // 첫번째 요소에 active 부여
+                                first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
+                                str += "<div class='carousel-item active' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
+                            }
+                            else{
+                                first += "<li data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
+                                str += "<div class='carousel-item' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
+                            }
+
+                            str += "<img class='d-block img-fluid' src='/display?fileName=" + fileCallPath + "'>";
+                            str += "</div>";
+                        }
+                    });
+                }
+
+                $(".carousel-indicators").html(first);
+                $(".carousel-inner").html(str);
+            });
+
+            // 썸네일 사진 클릭시 이벤트
+            $(".carousel-inner").on("click", "div", function (e) {
+                var liobj = $(this);
+
+                var path = encodeURIComponent(liobj.data("path") + "/" + liobj.data("uuid") + "_" + liobj.data("filename"));
+
+                showImage(path.replace(new RegExp(/\\/g),"/"));
+            });
+
+            // 원본 파일 화면에 표시
+            function showImage(fileCallPath) {
+                $(".imageWrapper").css("display", "flex").show();
+
+                $(".originPicture")
+                    .html("<img src='/display?fileName=" + fileCallPath +"'>")
+                    .animate({width: "10%", height: "10%"}, 100);
             }
 
-            $(".carousel-indicators").html(first);
-            $(".carousel-inner").html(str);
+            // 원본 파일 클릭시 닫기
+            $(".originPicture").on("click", function (e) {
+                $(".originPicture").animate({width: "0%", height: "0%"});
+                setTimeout(function () {
+                    $(".imageWrapper").hide();
+                }, 100);
+            });
         });
-
-        // 썸네일 사진 클릭시 이벤트
-        $(".carousel-inner").on("click", "div", function (e) {
-            var liobj = $(this);
-
-            var path = encodeURIComponent(liobj.data("path") + "/" + liobj.data("uuid") + "_" + liobj.data("filename"));
-
-            showImage(path.replace(new RegExp(/\\/g),"/"));
-        });
-
-        // 원본 파일 화면에 표시
-        function showImage(fileCallPath) {
-            $(".imageWrapper").css("display", "flex").show();
-
-            $(".originPicture")
-                .html("<img src='/display?fileName=" + fileCallPath +"'>")
-                .animate({width: "10%", height: "10%"}, 100);
-        }
-
-        // 원본 파일 클릭시 닫기
-        $(".originPicture").on("click", function (e) {
-            $(".originPicture").animate({width: "0%", height: "0%"});
-            setTimeout(function () {
-                $(".imageWrapper").hide();
-            }, 100);
-        });
-    });
-</script>
-<script>
-    var bidValue = "<c:out value="${boardDto.bid}"/>";
-    var replyUL = $(".replyList");
-    var likeUL = $(".like");
-    var curUser = null;
-    var likeCnt = "<c:out value="${boardDto.likeCnt}"/>";
-    <sec:authorize access="isAuthenticated()">
+    </script>
+    <script>
+        var bidValue = "<c:out value="${boardDto.bid}"/>";
+        var replyUL = $(".replyList");
+        var likeUL = $(".like");
+        var curUser = null;
+        var likeCnt = "<c:out value="${boardDto.likeCnt}"/>";
+        <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
         curUser = '${userinfo.user.nickname}';
 
         showLike(likeCnt);
-    </sec:authorize>
+        </sec:authorize>
 
-    //관심유저 관련
-    function showLike(likeCnt){
-        boardService.checkLike(bidValue, function (data) {
-            console.log(data)
-            var str = "<div>좋아요&nbsp</div><div class='likebtn'>";
-            //date가 있는 경우 (like인 경우)
-            if (data){
-                str += "<img id = 'deleteLike' src='/resources/image/like.png'>";
-            }
-            //date가 없는 경우(like 안한 상태)
-            else {
-                str += "<img id='addLike' src='/resources/image/dislike.png'>";
-            }
-            str += "&nbsp" + likeCnt + "</div>";
-            likeUL.html(str);
+        //관심유저 관련
+        function showLike(likeCnt){
+            boardService.checkLike(bidValue, function (data) {
+                console.log(data)
+                var str = "<div>좋아요&nbsp</div><div class='likebtn'>";
+                //date가 있는 경우 (like인 경우)
+                if (data){
+                    str += "<img id = 'deleteLike' src='/resources/image/like.png'>";
+                }
+                //date가 없는 경우(like 안한 상태)
+                else {
+                    str += "<img id='addLike' src='/resources/image/dislike.png'>";
+                }
+                str += "&nbsp" + likeCnt + "</div>";
+                likeUL.html(str);
+            });
+        }
+
+        $(document).on("click", "#addLike", function () {
+            boardService.addLike(bidValue, function (data) {// data : 관심유저개수
+                showLike(data);
+            });
         });
-    }
 
-    $(document).on("click", "#addLike", function () {
-        boardService.addLike(bidValue, function (data) {// data : 관심유저개수
-            showLike(data);
+        $(document).on("click", "#deleteLike", function () {
+            boardService.deleteLike(bidValue, function (data) {
+                showLike(data);
+            });
         });
-    });
-
-    $(document).on("click", "#deleteLike", function () {
-        boardService.deleteLike(bidValue, function (data) {
-            showLike(data);
-        });
-    });
 
 
-    // 댓글 목록 출력
-    showList(1);
-    function showList(page) {
-        replyService.getList({bid: bidValue, page: page || 1}, function (data) {
-            var replyCntText = "댓글 " + data.totalElements;
-            $(".replycnt").text(replyCntText);
-            if (page == -1){
-                pageNum = 1;
-                showList(1);
-                return;
+        // 댓글 목록 출력
+        showList(1);
+        function showList(page) {
+            replyService.getList({bid: bidValue, page: page || 1}, function (data) {
+                var replyCntText = "댓글 " + data.totalElements;
+                $(".replycnt").text(replyCntText);
+                if (page == -1){
+                    pageNum = 1;
+                    showList(1);
+                    return;
+                }
+
+                var str = "";
+
+                if (data == null || data.length == 0){
+                    return;
+                }
+                for (var i = 0, len = data.content.length || 0; i < len; i++){
+                    console.log(data.content[i]);
+                    str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
+                    str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id
+                        + "/profile/s_" + data.content[i].user.profileImage
+                        + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
+                    str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickname + "</strong>";
+                    str += " <small class='text-muted'>" + commonService.displayTime(data.content[i].createdDate) + "</small>";
+
+                    str += "</div>";
+                    str += (curUser === data.content[i].user.nickname ?
+                        "<div class='reply-header-btn'><button id='modReplyBtn' class='btn btn-sm btn-link text-muted'>수정</button>" + "\|" +
+                        "<button id='removeReplyBtn' class='btn btn-sm btn-link text-muted'>삭제</button></div>" :
+                        '');
+                    str += "<p id='reply_" + data.content[i].rid + "'>" + data.content[i].reply + "</p>";
+                    str += "</li>";
+                }
+
+                replyUL.html(str);
+
+                showReplyPage(data.totalElements, data.size); //21, 5
+            });
+        }
+
+        var pageNum = 1;
+        var replyPageFooter = $(".reply-footer");
+
+        // 댓글 페이징 처리
+        function showReplyPage(replyCnt, size) { // size = 한 페이지에 보이는 댓글 수
+
+            var endPage = Math.ceil(pageNum / 3.0) * 3; //현재 블럭 끝 번호
+            var startPage = endPage - 2; // 현재 블럭 시작 번호
+
+            var prev = startPage > 1;
+            var next = false;
+
+            if (endPage * size >= replyCnt){ // 현재 블럭 끝 번호 * 한 페이지에 보이는 댓글 수가 전체 댓글 수 보다 많을시
+                endPage = Math.ceil(replyCnt / size); // 블럭 끝 번호를 재설정 21/5 = 5
             }
 
+            if (endPage * size < replyCnt){
+                next = true;
+            }
+
+            var str = "<ul class='pagination pagination-sm justify-content-center'>";
+
+            if (prev){
+                str += "<li class='page-item'><a class='page' href='" + (startPage - 1) + "'>이전</a></li>";
+            }
+
+            for (var i = startPage; i <= endPage; i++){
+                var active = pageNum == i ? "active" : "";
+                str += "<li class='page-item " + active + "'><a class='page' href='" + i + "'>" + i + "</a></li>";
+            }
+
+            if (next){
+                str += "<li class='page-item'><a class='page' href='" + (endPage + 1) + "'>다음</a></li>";
+            }
+
+            str += "</ul></div>";
+
+            replyPageFooter.html(str);
+        }
+
+        // 댓글 페이징 번호 클릭시
+        replyPageFooter.on("click", "li a", function (e) {
+            e.preventDefault();
+
+            var targetPageNum = $(this).attr("href");
+
+            pageNum = targetPageNum;
+            showList(pageNum);
+        });
+
+        var replyadd = $(".reply-add");
+        var inputReply = replyadd.find("textarea[name='reply']");
+        var replyCopy = "";
+        var replyerCopy = "";
+
+        // 댓글 등록
+        $("#addReplyBtn").on("click", function (e) {
+            var reply = {
+                reply: inputReply.val(),
+                bid: bidValue
+            };
+            replyService.add(reply, function (result) {
+                alert(result);
+                inputReply.val('');
+                showList(-1);
+            });
+        });
+
+        // 댓글창 수정 버튼 클릭하면 정보를 읽어옴
+        replyUL.on("click", "button", function () {
+            var rid = $(this).closest("li").data("rid");
+
+            replyService.get(rid, function (reply) {
+                replyCopy = reply.reply;
+                replyerCopy = reply.user.nickname;
+            });
+        });
+
+        // 댓글 수정 클릭
+        $(document).on("click", "#modReplyBtn", function(){
+            var rid = $(this).closest("li").data("rid");
+            $(this).parent(".reply-header-btn").html("<button id='modifycancel' class='btn btn-sm btn-link text-muted'>수정취소</button></div>");
             var str = "";
 
-            if (data == null || data.length == 0){
+            str += "<div class='reply-modify form-group'><textarea class='form-control rounded-0' name='mod_reply'>"+replyCopy+"</textarea>";
+            str += "<button id='modifyconfirm' class='btn btn-lg btn-light'>수정</button></div>"
+
+            $("#reply_"+rid).html(str);
+        });
+
+        // 수정한 댓글 전송
+        $(document).on("click", "#modifyconfirm", function () {
+            var rid = $(this).closest("li").data("rid");
+            var modReply = $("#reply_"+rid).find("textarea[name='mod_reply']");
+
+            var reply = {
+                reply: modReply.val(),
+                rid: rid,
+            };
+
+            replyService.update(reply, function (result) {
+                alert(result);
+
+                showList(pageNum);
+            });
+        });
+
+        // 수정 취소
+        $(document).on("click", "#modifycancel", function () {
+            showList(pageNum);
+        });
+
+        // 댓글 삭제
+        $(document).on("click", "#removeReplyBtn", function(){
+            var rid = $(this).closest("li").data("rid");
+            var originalReplyer = replyerCopy;
+
+            if (curUser != originalReplyer){
+                alert("자신의 댓글만 삭제가 가능합니다");
                 return;
             }
-            for (var i = 0, len = data.content.length || 0; i < len; i++){
-                console.log(data.content[i]);
-                str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
-                str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id
-                    + "/profile/s_" + data.content[i].user.profileImage
-                    + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
-                str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickname + "</strong>";
-                str += " <small class='text-muted'>" + commonService.displayTime(data.content[i].createdDate) + "</small>";
 
-                str += "</div>";
-                str += (curUser === data.content[i].user.nickname ?
-                    "<div class='reply-header-btn'><button id='modReplyBtn' class='btn btn-sm btn-link text-muted'>수정</button>" + "\|" +
-                    "<button id='removeReplyBtn' class='btn btn-sm btn-link text-muted'>삭제</button></div>" :
-                    '');
-                str += "<p id='reply_" + data.content[i].rid + "'>" + data.content[i].reply + "</p>";
-                str += "</li>";
-            }
-
-            replyUL.html(str);
-
-            showReplyPage(data.totalElements, data.size); //21, 5
+            replyService.remove(rid, originalReplyer, function (result) {
+                alert(result);
+                showList(pageNum);
+            });
         });
-    }
-
-    var pageNum = 1;
-    var replyPageFooter = $(".reply-footer");
-
-    // 댓글 페이징 처리
-    function showReplyPage(replyCnt, size) { // size = 한 페이지에 보이는 댓글 수
-
-        var endPage = Math.ceil(pageNum / 3.0) * 3; //현재 블럭 끝 번호
-        var startPage = endPage - 2; // 현재 블럭 시작 번호
-
-        var prev = startPage > 1;
-        var next = false;
-
-        if (endPage * size >= replyCnt){ // 현재 블럭 끝 번호 * 한 페이지에 보이는 댓글 수가 전체 댓글 수 보다 많을시
-            endPage = Math.ceil(replyCnt / size); // 블럭 끝 번호를 재설정 21/5 = 5
-        }
-        
-        if (endPage * size < replyCnt){
-            next = true;
-        }
-
-        var str = "<ul class='pagination pagination-sm justify-content-center'>";
-
-        if (prev){
-            str += "<li class='page-item'><a class='page' href='" + (startPage - 1) + "'>이전</a></li>";
-        }
-
-        for (var i = startPage; i <= endPage; i++){
-            var active = pageNum == i ? "active" : "";
-            str += "<li class='page-item " + active + "'><a class='page' href='" + i + "'>" + i + "</a></li>";
-        }
-
-        if (next){
-            str += "<li class='page-item'><a class='page' href='" + (endPage + 1) + "'>다음</a></li>";
-        }
-
-        str += "</ul></div>";
-
-        replyPageFooter.html(str);
-    }
-
-    // 댓글 페이징 번호 클릭시
-    replyPageFooter.on("click", "li a", function (e) {
-        e.preventDefault();
-
-        var targetPageNum = $(this).attr("href");
-
-        pageNum = targetPageNum;
-        showList(pageNum);
-    });
-
-    var replyadd = $(".reply-add");
-    var inputReply = replyadd.find("textarea[name='reply']");
-    var replyCopy = "";
-    var replyerCopy = "";
-
-    // 댓글 등록
-    $("#addReplyBtn").on("click", function (e) {
-        var reply = {
-            reply: inputReply.val(),
-            bid: bidValue
-        };
-        replyService.add(reply, function (result) {
-            alert(result);
-            inputReply.val('');
-            showList(-1);
-        });
-    });
-
-    // 댓글창 수정 버튼 클릭하면 정보를 읽어옴
-    replyUL.on("click", "button", function () {
-        var rid = $(this).closest("li").data("rid");
-
-        replyService.get(rid, function (reply) {
-            replyCopy = reply.reply;
-            replyerCopy = reply.user.nickname;
-        });
-    });
-
-    // 댓글 수정 클릭
-    $(document).on("click", "#modReplyBtn", function(){
-        var rid = $(this).closest("li").data("rid");
-        $(this).parent(".reply-header-btn").html("<button id='modifycancel' class='btn btn-sm btn-link text-muted'>수정취소</button></div>");
-        var str = "";
-
-        str += "<div class='reply-modify form-group'><textarea class='form-control rounded-0' name='mod_reply'>"+replyCopy+"</textarea>";
-        str += "<button id='modifyconfirm' class='btn btn-lg btn-light'>수정</button></div>"
-
-        $("#reply_"+rid).html(str);
-    });
-
-    // 수정한 댓글 전송
-    $(document).on("click", "#modifyconfirm", function () {
-        var rid = $(this).closest("li").data("rid");
-        var modReply = $("#reply_"+rid).find("textarea[name='mod_reply']");
-
-        var reply = {
-            reply: modReply.val(),
-            rid: rid,
-        };
-
-        replyService.update(reply, function (result) {
-            alert(result);
-
-            showList(pageNum);
-        });
-    });
-
-    // 수정 취소
-    $(document).on("click", "#modifycancel", function () {
-        showList(pageNum);
-    });
-
-    // 댓글 삭제
-    $(document).on("click", "#removeReplyBtn", function(){
-        var rid = $(this).closest("li").data("rid");
-        var originalReplyer = replyerCopy;
-
-        if (curUser != originalReplyer){
-            alert("자신의 댓글만 삭제가 가능합니다");
-            return;
-        }
-
-        replyService.remove(rid, originalReplyer, function (result) {
-            alert(result);
-            showList(pageNum);
-        });
-    });
-</script>
+    </script>
+</body>
 </html>

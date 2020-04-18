@@ -53,7 +53,6 @@ public class Board extends DateAudit {
     @JsonIgnore
     private List<Like> likeList;
 
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"password", "boardList"})

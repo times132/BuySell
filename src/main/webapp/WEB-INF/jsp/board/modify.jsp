@@ -24,12 +24,15 @@
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                     <div class="form-group">
-                        <select class="custom-select col-4" name="btype">
-                            <option value="">카테고리</option>
-                            <option value="기프티콘">기프티콘</option>
-                            <option value="디지털">디지털/가전</option>
-                            <option value="생활">생활</option>
-                            <option value="기타">기타</option>
+                        <select id="category" class="custom-select col-4">
+                            <c:forEach items="${category}" var="category">
+                                <option value="${category.id}"><c:out value="${category.name}"/></option>
+                            </c:forEach>
+                        </select>
+                        <select id="items" class="custom-select col-4" name="btype">
+                            <c:forEach items="${myCategory.items}" var="items">
+                                <option value="${items.itemName}"><c:out value="${items.itemName}"/></option>
+                            </c:forEach>
                         </select>
                     </div>
                     <div class="form-row">
@@ -87,8 +90,10 @@
         $(document).ready(function(){
             var formObj = $("form");
             var btype = "<c:out value="${boardDto.btype}"/>";
+            var caregoryId = "<c:out value="${myCategory.id}"/>";
 
-            $(".custom-select option[value='" + btype + "']").attr('selected', 'selected')
+            $("#category option[value='" + caregoryId + "']").attr('selected', 'selected');
+            $("#items option[value='" + btype + "']").attr('selected', 'selected');
 
             $("button").on("click", function(e){
                 e.preventDefault();
