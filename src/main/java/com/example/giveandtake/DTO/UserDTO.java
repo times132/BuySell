@@ -17,10 +17,10 @@ public class UserDTO {
     private Long id;
 
     @NotBlank(message = "ID 필수 입력 값입니다.")
-    private String username;
+    private String userName;
 
     @NotBlank(message = "ID 필수 입력 값입니다.")
-    private String nickname;
+    private String nickName;
 
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
     @Email(message = "이메일 형식에 맞지 않습니다. 이메일 형식으로 입력해주세요.")  //이메일 양식이어야 함
@@ -44,10 +44,10 @@ public class UserDTO {
     private Set<UserRoles> roles = new HashSet<>();
 
     @Builder
-    public UserDTO(Long id, String username, String nickname, String email, String password, String name, String phone, String profileImage, String provider, Boolean activation, Set<UserRoles> roles) {
+    public UserDTO(Long id, String userName, String nickName, String email, String password, String name, String phone, String profileImage, String provider, Boolean activation, Set<UserRoles> roles) {
         this.id = id;
-        this.username = username;
-        this.nickname = nickname;
+        this.userName = userName;
+        this.nickName = nickName;
         this.email = email;
         this.password = password;
         this.name = name;

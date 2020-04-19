@@ -5,6 +5,7 @@ import com.example.giveandtake.model.entity.CategoryItem;
 import com.example.giveandtake.repository.CategoryItemsRepository;
 import com.example.giveandtake.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class CategoryService {
     public List<Category> getCategory() {
         return categoryRepository.findAll();
     }
+
     public List<CategoryItem> getItems(){
         return categoryItemsRepository.findAll();
     }

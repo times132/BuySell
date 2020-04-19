@@ -86,7 +86,7 @@ public class AdminController {
         return "redirect:/admin/userrole";
     }
     //롤 추가
-    @GetMapping("/userrole/add")
+    @GetMapping("/userole/add")
     public String addUserRole(@RequestParam("username") String username, @RequestParam("roleName") String roleName, @ModelAttribute("cri") SearchCriteria cri) {
         System.out.println("**delete**" + username);
         adminService.addUserRole(username, roleName);

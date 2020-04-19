@@ -26,14 +26,14 @@ public class BoardDTO {
     private Integer viewCnt;
     private Integer replyCnt;
     private Integer likeCnt;
-    private boolean sellcheck;
+    private boolean sellCheck;
     private LocalDateTime createdDate;
     private List<BoardFileDTO> boardFileList = new ArrayList<>();
     @JsonIgnore
     private User user;
 
     @Builder
-    public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, Integer likeCnt, boolean sellcheck, LocalDateTime createdDate, List<BoardFileDTO> boardFileList, User user){
+    public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, Integer likeCnt, boolean sellCheck, LocalDateTime createdDate, List<BoardFileDTO> boardFileList, User user){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
@@ -43,7 +43,7 @@ public class BoardDTO {
         this.viewCnt = viewCnt;
         this.replyCnt = replyCnt;
         this.likeCnt = likeCnt;
-        this.sellcheck = sellcheck;
+        this.sellCheck = sellCheck;
         this.createdDate = createdDate;
         this.boardFileList = boardFileList;
         this.user = user;

@@ -72,21 +72,21 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
         String username = kakao.getName();
         System.out.println(username);
         Boolean isexist = false;
-        if (!userService.usernameCheck(username)) { // 가입 안됬을 때
+        if (!userService.checkUserName(username)) { // 가입 안됬을 때
             UserRolesDTO userRole = new UserRolesDTO();
             UserDTO userDTO = new UserDTO();
             String email = String.valueOf(kakao.getKakaoAccount().get("email"));
             if ("null".equals(email)){
                 userDTO.setEmail(null);
                 userDTO.setActivation(false);
-            }else if (userService.emailCheck(email)){
+            }else if (userService.checkEmail(email)){
                 return true;
             }else {
                 userDTO.setEmail(email);
             }
-            userDTO.setUsername(username);
+            userDTO.setUserName(username);
             userDTO.setName(String.valueOf(kakao.getAttributes().get("name")));
-            userDTO.setNickname(String.valueOf(kakao.getAttributes().get("name")));
+            userDTO.setNickName(String.valueOf(kakao.getAttributes().get("name")));
             userDTO.setProvider("kakao");
             userService.joinUser(userDTO);
         }
@@ -98,10 +98,10 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
         String username = google.getName();
         UserDTO userDTO = new UserDTO();
         Authentication authentication;
-        if (!userService.usernameCheck(username)) {
-            userDTO.setUsername(username);
+        if (!userService.checkUserName(username)) {
+            userDTO.setUserName(username);
             userDTO.setEmail(google.getEmail());
-            userDTO.setNickname(String.valueOf(google.getAttributes().get("name")));
+            userDTO.setNickName(String.valueOf(google.getAttributes().get("name")));
             userDTO.setProvider("google");
             userService.joinUser(userDTO);
         }

@@ -49,11 +49,12 @@ public class BoardController {
     private CategoryService categoryService;
 
     @GetMapping
-    public String list(SearchCriteria searchCri, Model model){
-        logger.info("-----board list-----");
+    public String boardListGET(SearchCriteria searchCri, Model model){
+
 
         searchCri.setPageSize(10); // 한 화면에 게시물 10개씩 표시
         Page<Board> boardPage =  boardService.getList(searchCri);
+        logger.info("-----board list-----"+boardPage.getContent() );
         model.addAttribute("boardList", boardPage.getContent());
         model.addAttribute("pageMaker", Pagination.builder()
                             .cri(searchCri)
@@ -78,7 +79,7 @@ public class BoardController {
     public String writePOST(BoardDTO boardDTO, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----board registerPOST-----");
 
-        boardService.register(boardDTO, userDetails);
+        boardService.write(boardDTO, userDetails);
 
         return "redirect:/board";
     }
@@ -87,7 +88,7 @@ public class BoardController {
     public String readGET(HttpServletRequest request, HttpServletResponse response, @RequestParam("bid") Long bid, @ModelAttribute("cri") SearchCriteria cri, Model model){
         logger.info("-----board readGET-----");
 
-        BoardDTO boardDto = boardService.getBoard(bid);
+        BoardDTO boardDto = boardService.getBoardDetail(bid);
         model.addAttribute("boardDto", boardDto);
 
         // 쿠키로 조회수 조작 방지
@@ -123,7 +124,7 @@ public class BoardController {
     public void modifyGET(@RequestParam("bid") Long bid, @ModelAttribute("cri") SearchCriteria cri, Model model){
         logger.info("-----board modifyGET-----");
 
-        BoardDTO boardDto = boardService.getBoard(bid);
+        BoardDTO boardDto = boardService.getBoardDetail(bid);
         Category myCategory =  categoryService.getCateItems(boardDto.getBtype());
         List<Category> category =  categoryService.getCategory();
         model.addAttribute("category", category);
@@ -179,19 +180,19 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<Boolean> checkLike(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
         System.out.println("########BID"+ bid);
-        boolean check = boardService.likeCheck(bid, userDetails);
+        boolean check = boardService.checkLike(bid, userDetails);
         return new ResponseEntity<>(check, HttpStatus.OK);
     }
 
     @PostMapping(value = "/like/{bid}")
     @ResponseBody
-    public int addLike(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public int likePOST(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return  boardService.addlike(bid, userDetails);
     }
 
     @DeleteMapping(value = "/like/{bid}")
     @ResponseBody
-    public int deleteLike(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public int likeDELETE(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
         return boardService.deletelike(bid, userDetails);
     }
 
@@ -199,7 +200,7 @@ public class BoardController {
     //카테고리
     @GetMapping(value = "/category/{id}")
     @ResponseBody
-    public ResponseEntity<List> getCategoryItems(@PathVariable("id") Long id) {
+    public ResponseEntity<List> categoryItemsGET(@PathVariable("id") Long id) {
         System.out.println("########Category ID"+ id);
         List<CategoryItem> categoryItems = categoryService.getCategoryItems(id);
         return new ResponseEntity<>(categoryItems, HttpStatus.OK);

@@ -2,6 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <head>
@@ -234,7 +235,7 @@
         </div>
 
         <div class="itemList">
-            <table>
+            <table class="table table-sm table-hover">
                 <tbody class="item-body">
 
                 </tbody>
@@ -242,6 +243,7 @@
         </div>
     </div>
     <script type="text/javascript" src="/resources/js/board.js"></script>
+    <script type="text/javascript" src="/resources/js/common.js"></script>
     <script>
         $("#logout").click(function() {
             location.href="/user/logout";
@@ -260,14 +262,15 @@
         $(".item").on("click", function () {
             var itemName = $(this).children("img").attr("alt");
             console.log(itemName);
+            str = "";
             boardService.getItemList(itemName, function (data) {
                 for (var i = 0, len = data.length || 0; i < len; i++){
-                    console.log(data[i])
-                    str = "";
+                    console.log(str)
 
-                    str += "<tr><th scope='row'>" + data[i].bid + "</th><td scope='btype'>" + data[i].btype + "</td><td scope='title'>" + data[i].title;
-                    str += "</td><td scope='price'>" + data[i].price + "</td><td scope='writer'>" + data[i].writer + "</td><td scope='time'>" + data[i].createDate;
-                    str += "</td><td scope='viewCnt'>" + data[i].viewCnt + "</td><td scope='likeCnt'>" + data[i].likeCnt + "</td></tr>"
+
+                    str += "<tr><th scope='row'>" + data[i].bid + "</th><td scope='title'>" + data[i].title +"</td><td scope='price'>"+ "<fmt"+":formatNumber value='" + data[i].price + "'/>";
+                    str +=  "</td><td scope='writer'>" + data[i].writer + "</td><td scope='time'>" + commonService.displayTime(data[i].createdDate);
+                    str += "</td><td scope='viewCnt'>" + data[i].viewCnt + "</td><td scope='likeCnt'>" + data[i].likeCnt + "</td></tr>";
                 }
 
                 itemtable.html(str);

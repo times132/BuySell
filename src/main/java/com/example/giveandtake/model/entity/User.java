@@ -22,9 +22,9 @@ public class User extends DateAudit {
     private Long id;
 
     @Column
-    private String nickname;
+    private String nickName;
     private String name;
-    private String username;
+    private String userName;
     private String password;
     private String phone;
     private String email;
@@ -57,9 +57,9 @@ public class User extends DateAudit {
     private List<Like> likeList;
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String username, String nickname, String name, String password, String phone, String email,Long id, String profileImage, String provider, Boolean activation, Set<UserRoles> roles, List<Like> likeList){
-        this.username = username;
-        this.nickname = nickname;
+    public User(String userName, String nickName, String name, String password, String phone, String email,Long id, String profileImage, String provider, Boolean activation, Set<UserRoles> roles, List<Like> likeList){
+        this.userName = userName;
+        this.nickName = nickName;
         this.name = name;
         this.password = password;
         this.phone = phone;
