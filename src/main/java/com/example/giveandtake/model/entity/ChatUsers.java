@@ -30,7 +30,7 @@ public class ChatUsers{
 
 
     @Column
-    private Integer msgCount;
+    private Integer msgCount;  //상대방에게 보낸 메시지 개수
 
 
 

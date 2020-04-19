@@ -32,7 +32,7 @@ public class Board extends DateAudit {
     private Integer replyCnt;
     private Integer likeCnt;
     @ColumnDefault("0")
-    private boolean sellcheck;
+    private boolean sellCheck;
 
     @PrePersist
     protected void prePersist(){
@@ -59,7 +59,7 @@ public class Board extends DateAudit {
     private User user;
 
     @Builder
-    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, Integer likeCnt, boolean sellcheck, List<BoardFile> boardFileList, User user, List<Like> likeList){
+    public Board(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, Integer likeCnt, boolean sellCheck, List<BoardFile> boardFileList, User user, List<Like> likeList){
         this.bid = bid;
         this.btype = btype;
         this.title = title;
@@ -69,7 +69,7 @@ public class Board extends DateAudit {
         this.viewCnt = viewCnt;
         this.replyCnt = replyCnt;
         this.likeCnt = likeCnt;
-        this.sellcheck = sellcheck;
+        this.sellCheck = sellCheck;
         this.boardFileList = boardFileList;
         this.likeList = likeList;
         this.user = user;

@@ -56,8 +56,8 @@ public class UserService implements UserDetailsService {
     //회원가입을 처리하는 메서드이며, 비밀번호를 암호화하여 저장
     @Transactional
     public void joinUser(UserDTO userDto) {
-        User user = new User();
-        Role role = new Role();
+        User user;
+        Role role;
         if (userDto.getProvider() == null){
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -91,8 +91,9 @@ public class UserService implements UserDetailsService {
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(name);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(""+username);
+        User user = userRepository.findByUserName(username);
         return CustomUserDetails.create(user);
     }
 
@@ -115,7 +116,7 @@ public class UserService implements UserDetailsService {
             user = userRepository.findByEmail(username);
         }
         else {
-            user = userRepository.findByUsername(username);
+            user = userRepository.findByUserName(username);
         }
 
         return userMapper.convertEntityToDto(user);
@@ -126,7 +127,7 @@ public class UserService implements UserDetailsService {
 
         return UserDTO.builder()
                 .id(user.getId())
-                .nickname(user.getNickname())
+                .nickName(user.getNickName())
                 .profileImage(user.getProfileImage())
                 .build();
     }
@@ -139,9 +140,8 @@ public class UserService implements UserDetailsService {
         List<ChatUsers> chatUsers = user.getChats();
         userRepository.deleteById(userId);
         for (ChatUsers chatUser : chatUsers){
-            chatService.deleteChatRoom(chatUser.getChatRoom().getRoomId(), user.getNickname());
+            chatService.deleteChatRoom(chatUser.getChatRoom().getRoomId(), user.getNickName());
         }
-
         return;
     }
 
@@ -152,7 +152,7 @@ public class UserService implements UserDetailsService {
         userList.setPassword(((CustomUserDetails) authentication.getPrincipal()).getPassword());
         userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getUser().getRoles());
         userRepository.save(userMapper.toEntity(userList)).getId();
-        updateSecurityContext(authentication , userList.getUsername());
+        updateSecurityContext(authentication , userList.getUserName());
     }
 
     //시큐리티컨텍스트 업데이트
@@ -190,10 +190,8 @@ public class UserService implements UserDetailsService {
 
     //아이디 중복확인
     @Transactional
-    public boolean usernameCheck(String username)  {
-        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
-        System.out.println(username);
-        System.out.println("아이디 중복확인" + user.isPresent());
+    public boolean checkUserName(String username)  {
+        Optional<User> user = Optional.ofNullable(userRepository.findByUserName(username));
         if(user.isPresent()){
             return true;
         }
@@ -202,7 +200,7 @@ public class UserService implements UserDetailsService {
 
     //이메일검사
     @Transactional
-    public boolean emailCheck(String email)
+    public boolean checkEmail(String email)
     {
 
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
@@ -214,9 +212,9 @@ public class UserService implements UserDetailsService {
     }
     //닉네임 중복검사
     @Transactional
-    public boolean nicknameCheck(String nickname)
+    public boolean checkNickName(String nickName)
     {
-        Optional<User> user = Optional.ofNullable(userRepository.findByNickname(nickname));
+        Optional<User> user = Optional.ofNullable(userRepository.findByNickName(nickName));
         System.out.println("값 "+user);
         if(user.isPresent()){
             return true;
@@ -225,9 +223,8 @@ public class UserService implements UserDetailsService {
     }
     //비밀번호 변경
     @Transactional
-    public void changePW(String username, String newPW){
-        User user = userRepository.findByUsername(username);
-
+    public void changePW(String userName, String newPW){
+        User user = userRepository.findByUserName(userName);
         UserDTO userDTO = userMapper.convertEntityToDto(user);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDTO.setPassword(passwordEncoder.encode(newPW));
@@ -238,7 +235,7 @@ public class UserService implements UserDetailsService {
     public void changeAct(String email) {
         System.out.println("EMAIL"+email);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByNickname(authentication.getName());
+        User user = userRepository.findByNickName(authentication.getName());
         Set<UserRoles> userRoles = user.getRoles();
 
         userRoles.clear(); //Role 모두 지우기
@@ -253,7 +250,7 @@ public class UserService implements UserDetailsService {
         userDTO.setRoles(userRoles);
 
         userRepository.save(userMapper.toEntity(userDTO));
-        updateSecurityContext(authentication , userDTO.getUsername());
+        updateSecurityContext(authentication , userDTO.getUserName());
     }
 
     //이메일 반환

@@ -40,9 +40,9 @@ public class ChatService{
     public String createChatRoom(String nickname, Principal principal){
             String status = "ok";
 
-            User me = userRepository.findByNickname(principal.getName());
+            User me = userRepository.findByNickName(principal.getName());
             System.out.println(me);
-            User receiver = userRepository.findByNickname(nickname);
+            User receiver = userRepository.findByNickName(nickname);
 
             //채팅방 중복검사
             List<ChatUsers> chatList = chatUsersRepository.findAllByUser(me); //본인이 속해있는 모든 채팅방 정보 SELECT
@@ -53,7 +53,7 @@ public class ChatService{
                 List<ChatUsers> users = chatRoom.getUsers();
                 //해당 채팅방 userList 검색
                 for (ChatUsers user : users){
-                    if (user.getUser().getNickname().equals(nickname)){
+                    if (user.getUser().getNickName().equals(nickname)){
                         status = "채팅방이 이미 존재합니다.";
                     }
                 }
@@ -133,13 +133,13 @@ public class ChatService{
         String to = null;
         //메시지 개수 설정
         for (ChatUsers user : users){
-            if (user.getUser().getNickname().equals(nickname)){
+            if (user.getUser().getNickName().equals(nickname)){
                 ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
                 chatUsersDTO.setMsgCount(user.getMsgCount()+1);  ////내가보낸 메시지 수 +1
                 chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));
             }
             else {
-                to= user.getUser().getNickname();
+                to= user.getUser().getNickName();
             }
         }
         chatRoomRepository.save(chatRoomDTO.toEntity());
@@ -156,7 +156,7 @@ public class ChatService{
             return;
         }
         for (ChatUsers user : users){
-            if (user.getUser().getNickname().equals(nickName)){
+            if (user.getUser().getNickName().equals(nickName)){
                 chatUsersRepository.deleteUserById(user.getCid());
             }
         }
@@ -172,7 +172,7 @@ public class ChatService{
         List<ChatUsers> users = chatRoom.getUsers();
         //메세지수 0
         for (ChatUsers user : users){
-            if (!user.getUser().getNickname().equals(me.getNickname())){
+            if (!user.getUser().getNickName().equals(me.getNickName())){
                 ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
                 chatUsersDTO.setMsgCount(0);  //상대방이 보낸 메세지 개수 0 으로 설정
                 chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));

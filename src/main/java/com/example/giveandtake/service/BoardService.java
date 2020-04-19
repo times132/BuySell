@@ -40,7 +40,7 @@ public class BoardService {
 
     // 게시물 등록
     @Transactional
-    public void register(BoardDTO dto, CustomUserDetails userDetails){
+    public void write(BoardDTO dto, CustomUserDetails userDetails){
         dto.setUser(userDetails.getUser());
         Board board = boardRepository.save(boardMapper.toEntity(dto));
         // 첨부 파일 저장
@@ -71,7 +71,7 @@ public class BoardService {
 
     // 게시물 상세 페이지 정보
     @Transactional
-    public BoardDTO getBoard(Long bid){
+    public BoardDTO getBoardDetail(Long bid){
         logger.info("######get board#######");
         Optional<Board> boardWrapper = boardRepository.findById(bid);
         Board board = boardWrapper.get();
@@ -116,7 +116,7 @@ public class BoardService {
     public void sell(Long bid){
         Board board = boardRepository.findById(bid).get();
         BoardDTO boardDTO = boardMapper.toDTO(board);
-        boardDTO.setSellcheck(true);
+        boardDTO.setSellCheck(true);
         boardRepository.save(boardMapper.toEntity(boardDTO));
     }
 
@@ -135,7 +135,7 @@ public class BoardService {
     }
 
 
-    public boolean likeCheck(Long bid, CustomUserDetails userDetails) {
+    public boolean checkLike(Long bid, CustomUserDetails userDetails) {
         System.out.println("CHECK");
         Optional<Like> like = Optional.ofNullable(likeRepository.findByUserIdAndBoardBid(userDetails.getUser().getId(),bid));
 

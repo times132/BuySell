@@ -27,8 +27,8 @@ public class CategoryService {
         return items;
     }
     //소분류 name 으로 대분류 category 가져오기
-    public Category getCateItems(String btype) {
-        CategoryItem items = itemRepository.findByItemName(btype);
+    public Category getCateItems(String bType) {
+        CategoryItem items = itemRepository.findByItemName(bType);
         Category category = items.getCategory();
         return category;
     }

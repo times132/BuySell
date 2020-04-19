@@ -22,7 +22,7 @@
     <hr>
     <div class="container">
         <div class="row">
-            <div class="col-sm-10"><h1>${user.nickname}</h1></div>
+            <div class="col-sm-10"><h1>${user.nickName}</h1></div>
         </div>
         <div class="row">
             <div class="col-3"><!--left col-->
@@ -74,7 +74,7 @@
                                 <c:out value="${board.btype}"/>
                             </td>
 
-                            <c:if test="${board.sellcheck eq true}">
+                            <c:if test="${board.sellCheck eq true}">
                                 <td class="ta-title-sold">
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
@@ -87,7 +87,7 @@
                                     </span>
                                 </td>
                             </c:if>
-                            <c:if test="${board.sellcheck eq false}">
+                            <c:if test="${board.sellCheck eq false}">
                                 <td class="ta-title">
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
