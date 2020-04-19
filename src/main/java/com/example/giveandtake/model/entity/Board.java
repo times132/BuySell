@@ -55,7 +55,7 @@ public class Board extends DateAudit {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"password", "boardList"})
+    @JsonIgnoreProperties({"password", "boardList", "phone"})
     private User user;
 
     @Builder

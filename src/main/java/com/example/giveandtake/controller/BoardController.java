@@ -204,4 +204,16 @@ public class BoardController {
         List<CategoryItem> categoryItems = categoryService.getCategoryItems(id);
         return new ResponseEntity<>(categoryItems, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/item/{itemname}")
+    @ResponseBody
+    public ResponseEntity<List<Board>> getItemList(@PathVariable("itemname") String itemName){
+        SearchCriteria searchCriteria = new SearchCriteria();
+        searchCriteria.setPageSize(10);
+        searchCriteria.setType("I");
+        searchCriteria.setKeyword(itemName);
+        List<Board> itemList = boardService.getList(searchCriteria).getContent();
+
+        return new ResponseEntity<>(itemList, HttpStatus.OK);
+    }
 }

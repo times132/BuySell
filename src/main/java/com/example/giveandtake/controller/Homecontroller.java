@@ -14,7 +14,7 @@ public class Homecontroller {
 
     @GetMapping("/")// 메인 페이지
     public String home(Model model) {
-        model.addAttribute("category", categoryService.getCategory());
+        model.addAttribute("items", categoryService.getItems());
 
         return "/home";
     }

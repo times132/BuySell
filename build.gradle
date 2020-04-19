@@ -29,6 +29,8 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-taglibs'
 	implementation 'org.springframework.security:spring-security-oauth2-client'
 	implementation 'org.springframework.security:spring-security-oauth2-jose'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+
 
 
 	//메일

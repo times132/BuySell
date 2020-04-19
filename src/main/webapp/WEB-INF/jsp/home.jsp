@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <!DOCTYPE html>
 <head>
@@ -86,14 +87,18 @@
             min-width: 96px;
             max-height: 104px;
             min-height: 96px;
-            margin: 0 0;
+            margin: 1px 0;
+            font-size: .7rem;
 
         }
         .cartList li img{
             margin: 5px 0;
         }
+        .cartList li img:hover{
+            cursor: pointer;
+        }
         .cartList li p{
-            font-size: .7rem;
+            /*font-size: .7rem;*/
             margin-bottom: 0;
         }
         @media screen and (min-width: 1000px) {
@@ -105,6 +110,9 @@
         }
         .cart-row{
             padding: 0 2px!important;
+        }
+        .blank{
+            margin-top: 74px;
         }
     </style>
 </head>
@@ -174,51 +182,66 @@
                     <div class="col-12">
                         <div class="row justify-content-center pl-0">
                             <div class="cart-row col-12 col-md-10 col-lg-6">
-                                <li class="cartItem0">
-                                    <a>
-                                        <img src="/resources/image/home/whole.png"/>
-                                        <p>전체보기</p>
-                                    </a>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/whole.png" alt=""/>
+                                    <p>전체보기</p>
                                 </li>
-                                <li class="cartItem1"></li>
-                                <li class="cartItem2"></li>
-                                <li class="cartItem3"></li>
-                                <li class="cartItem4"></li>
+                                <c:forEach var="i" begin="0" end="3">
+                                    <li class="item cartItem${i+1}">
+                                        <img src="/resources/image/home/${items[i].itemId}.png" alt="${items[i].itemName}"/>
+                                        <p>${items[i].itemName}</p>
+                                    </li>
+                                </c:forEach>
                             </div>
                             <div class="cart-row col-12 col-md-10 col-lg-6">
-                                <li class="cartItem5"></li>
-                                <li class="cartItem6"></li>
-                                <li class="cartItem7"></li>
-                                <li class="cartItem8"></li>
-                                <li class="cartItem9"></li>
+                                <c:forEach var="i" begin="4" end="8">
+                                    <li class="item cartItem${i+1}">
+                                        <img src="/resources/image/home/${items[i].itemId}.png" alt="${items[i].itemName}"/>
+                                        <p>${items[i].itemName}</p>
+                                    </li>
+                                </c:forEach>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-12">
                         <div class="row justify-content-center pl-0">
-                            <div class="cart-row col-12 col-md-10 col-lg-6 pr-0 pl-0">
-                                <li class="cartItem10"></li>
-                                <li class="cartItem11"></li>
-                                <li class="cartItem12"></li>
-                                <li class="cartItem13"></li>
-                                <li class="cartItem14"></li>
+                            <div class="cart-row col-12 col-md-10 col-lg-6">
+                                <c:forEach var="i" begin="9" end="13">
+                                    <li class="item cartItem${i+1}">
+                                        <img src="/resources/image/home/${items[i].itemId}.png" alt="${items[i].itemName}"/>
+                                        <p>${items[i].itemName}</p>
+                                    </li>
+                                </c:forEach>
                             </div>
-                            <div class="cart-row col-12 col-md-10 col-lg-6 pr-0 pl-0">
-                                <li class="cartItem15"></li>
-                                <li class="cartItem16"></li>
-                                <li class="cartItem17"></li>
-                                <li class="cartItem18"></li>
-                                <li class="cartItem19"></li>
+                            <div class="cart-row col-12 col-md-10 col-lg-6">
+                                <c:forEach var="i" begin="14" end="${fn:length(items)-1}">
+                                    <li class="item cartItem${i+1}" >
+                                        <img src="/resources/image/home/${items[i].itemId}.png" alt="${items[i].itemName}"/>
+                                        <p>${items[i].itemName}</p>
+                                    </li>
+                                </c:forEach>
+                                <c:forEach var="i" begin="${fn:length(items)+1}" end="19">
+                                    <li class="cartItem${i}">
+                                        <p class="blank">&nbsp;</p>
+                                    </li>
+                                </c:forEach>
                             </div>
                         </div>
                     </div>
-
                 </ul>
             </div>
         </div>
-    </div>
 
+        <div class="itemList">
+            <table>
+                <tbody class="item-body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script type="text/javascript" src="/resources/js/board.js"></script>
     <script>
         $("#logout").click(function() {
             location.href="/user/logout";
@@ -233,6 +256,23 @@
             e.preventDefault();
             search.submit();
         });
+        var itemtable = $(".item-body");
+        $(".item").on("click", function () {
+            var itemName = $(this).children("img").attr("alt");
+            console.log(itemName);
+            boardService.getItemList(itemName, function (data) {
+                for (var i = 0, len = data.length || 0; i < len; i++){
+                    console.log(data[i])
+                    str = "";
+
+                    str += "<tr><th scope='row'>" + data[i].bid + "</th><td scope='btype'>" + data[i].btype + "</td><td scope='title'>" + data[i].title;
+                    str += "</td><td scope='price'>" + data[i].price + "</td><td scope='writer'>" + data[i].writer + "</td><td scope='time'>" + data[i].createDate;
+                    str += "</td><td scope='viewCnt'>" + data[i].viewCnt + "</td><td scope='likeCnt'>" + data[i].likeCnt + "</td></tr>"
+                }
+
+                itemtable.html(str);
+            });
+        })
     </script>
 </body>
 </html>

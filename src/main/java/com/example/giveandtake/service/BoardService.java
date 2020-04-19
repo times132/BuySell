@@ -15,6 +15,7 @@ import com.example.giveandtake.repository.LikeRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,6 +52,7 @@ public class BoardService {
     }
 
     // 게시물 목록, 페이징, 검색
+    @Cacheable(value = "test")
     public Page<Board> getList(SearchCriteria SearchCri){
         Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
 
@@ -62,7 +64,11 @@ public class BoardService {
             page = boardRepository.findAllByTitleContainingOrContentContaining(SearchCri.getKeyword(), SearchCri.getKeyword(), pageable);
         }else if (SearchCri.getType().equals("W")){ // 작성자로 검색
             page = boardRepository.findAllByWriter(SearchCri.getKeyword(), pageable);
-        }else{ // id로 검색
+        } else if (SearchCri.getType().equals("C")) { // 대분류로 검색
+            page = null;
+        } else if (SearchCri.getType().equals("I")) { // 소분류로 검색
+            page = boardRepository.findAllByBtype(SearchCri.getKeyword(), pageable);
+        } else { // id로 검색
             page = boardRepository.findAllByUserId(Long.parseLong(SearchCri.getKeyword()), pageable);
         }
 

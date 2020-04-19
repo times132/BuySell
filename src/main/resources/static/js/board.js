@@ -17,8 +17,6 @@ var boardService = (function () {
         })
     }
 
-
-
     function addLike(bid, callback, error) {
         $.ajax({
             type:'post',
@@ -73,10 +71,25 @@ var boardService = (function () {
             }
         });
     }
+
+    function getItemList(itemName, callback, error) {
+        $.getJSON("/board/item/"+itemName, function (data) {
+            if (callback){
+                callback(data);
+            }
+        }).fail(function (xhr, status, err) {
+            if (error){
+                error(err);
+            }
+        });
+    }
+
+
     return {
         checkLike : checkLike,
         addLike : addLike,
         deleteLike :deleteLike,
-        getCategoryItems : getCategoryItems
+        getCategoryItems : getCategoryItems,
+        getItemList: getItemList
     };
 })();
