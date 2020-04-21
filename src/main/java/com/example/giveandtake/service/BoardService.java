@@ -67,7 +67,7 @@ public class BoardService {
         } else if (SearchCri.getType().equals("C")) { // 대분류로 검색
             page = null;
         } else if (SearchCri.getType().equals("I")) { // 소분류로 검색
-            page = boardRepository.findAllByBtype(SearchCri.getKeyword(), pageable);
+            page = boardRepository.findAllByCategory(SearchCri.getKeyword(), pageable);
         } else { // id로 검색
             page = boardRepository.findAllByUserId(Long.parseLong(SearchCri.getKeyword()), pageable);
         }
@@ -90,7 +90,7 @@ public class BoardService {
     public void update(BoardDTO dto, CustomUserDetails userDetails){
         Board board = boardRepository.findById(dto.getBid()).get();
         BoardDTO boardDTO = boardMapper.toDTO(board);
-        boardDTO.setBtype(dto.getBtype());
+        boardDTO.setCategory(dto.getCategory());
         boardDTO.setTitle(dto.getTitle());
         boardDTO.setContent(dto.getContent());
         boardDTO.setPrice(dto.getPrice());

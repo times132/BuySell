@@ -29,7 +29,7 @@
                                 <option value="${category.id}"><c:out value="${category.name}"/></option>
                             </c:forEach>
                         </select>
-                        <select id="items" class="custom-select col-4" name="btype">
+                        <select id="items" class="custom-select col-4" name="category">
                             <option value="">소분류</option>
                         </select>
                     </div>
@@ -144,7 +144,7 @@
 
         var categoryDIV = $("#items");
         $("#category").on("change",function(){
-            alert("카테고리")
+            alert("소분류를 선택해주세요")
             var id = $("#category option:selected").val();
             console.log("id"+id);
 

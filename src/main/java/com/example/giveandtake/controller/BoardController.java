@@ -125,7 +125,7 @@ public class BoardController {
         logger.info("-----board modifyGET-----");
 
         BoardDTO boardDto = boardService.getBoardDetail(bid);
-        Category myCategory =  categoryService.getCateItems(boardDto.getBtype());
+        Category myCategory =  categoryService.getCateItems(boardDto.getCategory());
         List<Category> category =  categoryService.getCategory();
         model.addAttribute("category", category);
         model.addAttribute("myCategory", myCategory);
