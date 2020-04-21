@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface ChatUsersRepository extends JpaRepository<ChatUsers, Long> {
-    List<ChatUsers> findAllByUser(User user);
+    List<ChatUsers> findAllByUserNickname(String nickname);
     @Modifying
     @Transactional
     @Query(value = "delete from chatusers where cid=?1", nativeQuery=true)

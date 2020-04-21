@@ -177,9 +177,9 @@
                 };
 
                 chatService.createRoom(nickname, function (result) {
-                    alert(result);
+                        alert("채팅방으로 이동합니다.");
+                        location.href = "/chat/room/enter/" + result;
                 });
-                location.href="/chat/room";
             });
 
             // 삭제, 수정, 목록 버튼 이벤트

@@ -41,13 +41,13 @@ public class BoardServiceTest {
     UserService userService;
 
     @Test
-    @WithUserDetails(value = "dlwldms")
+    @WithUserDetails(value = "y4380")
     public void registerTest(){
         User user = ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
         for (int i=1; i<5; i++){
             Board board = Board.builder()
-                    .btype("뷰티")
+                    .category("뷰티")
                     .title("뷰티"+i)
                     .content("뷰티"+i)
                     .price(2146+i*578)

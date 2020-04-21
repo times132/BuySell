@@ -16,6 +16,7 @@ public class ChatMessageDTO {
 
     private String roomId;
     private String sender; // 메시지 보낸사람
+    private String senderId; // 메시지 보낸사람
     private ChatMessage.MessageType type; // 메시지 타입
     private String message; // 메시지
 
@@ -27,14 +28,16 @@ public class ChatMessageDTO {
                 .chatRoom(chatRoom)
                 .type(type)
                 .sender(sender)
+                .senderId(senderId)
                 .message(message)
                 .build();
     }
 
     @Builder
-    public ChatMessageDTO(ChatRoom chatRoom, String sender, ChatMessage.MessageType type, String message) {
+    public ChatMessageDTO(ChatRoom chatRoom, String sender, String senderId, ChatMessage.MessageType type, String message) {
         this.chatRoom = chatRoom;
         this.sender = sender;
+        this.senderId =senderId;
         this.type = type;
         this.message = message;
     }

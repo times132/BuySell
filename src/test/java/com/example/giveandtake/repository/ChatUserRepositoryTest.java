@@ -11,8 +11,6 @@ public class ChatUserRepositoryTest {
 
     @Test
     public void deleteChatUser(){
-        System.out.println("**************DELETE USER");
         chatUserRepository.deleteById(10L);
-        System.out.println("**************FINISH DELETE USER");
     }
 }

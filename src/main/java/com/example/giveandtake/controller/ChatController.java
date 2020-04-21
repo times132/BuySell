@@ -35,7 +35,11 @@ public class ChatController {
 
     private ChatService chatService;
     private UserService userService;
-
+    // 채팅 리스트 화면
+    @GetMapping("/room")
+    public String rooms() {
+        return "/chat/room";
+    }
 
     //     모든 채팅방 목록
     @GetMapping(value = "/rooms", produces = "application/json")
@@ -47,26 +51,22 @@ public class ChatController {
     // 특정 채팅방 조회
     @GetMapping("/room/{roomId}")
     @ResponseBody
-    public List<ChatRoom> roomInfo(@PathVariable String roomId) {
+    public List<ChatRoom> roomGET(@PathVariable String roomId) {
         return chatService.findRoomById(roomId);
     }
 
 
-    // 채팅 리스트 화면
-    @GetMapping("/room")
-    public String rooms(Model model) {
-        return "/chat/room";
-    }
+
 
 
     // 채팅방 생성
     @RequestMapping( value = "/room" , method=RequestMethod.POST)
     @ResponseBody
-    public  ResponseEntity<String> createRoom(@RequestParam(value = "nickname") String nickname, Principal principal){
+    public  ResponseEntity<String> roomPOST(@RequestParam(value = "nickname") String nickname, Principal principal){
         //닉네임 존재여부 확인
         boolean result = userService.checkNickName(nickname);
         if(result == false){
-            return new ResponseEntity<>("존재하지 않는 닉네임입니다.", HttpStatus.OK);
+            return new ResponseEntity<>("noNickname", HttpStatus.OK);
         }
         String status = chatService.createChatRoom(nickname, principal);
         return new ResponseEntity<>(status, HttpStatus.OK);
@@ -75,16 +75,15 @@ public class ChatController {
 
     //채팅방 삭제
     @GetMapping("/room/stop/{roomId}")
-    public String remove(Principal principal,@PathVariable String roomId){
+    public String deleteRoomGET(Principal principal,@PathVariable String roomId){
         System.out.println("DELETE ROOM");
         chatService.deleteChatRoom(roomId, principal.getName());
         return "redirect:/chat/room";
     }
     // 채팅방 입장 화면
     @GetMapping("/room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId, HttpServletResponse response)throws IOException
+    public String roomDetailGET(Model model, @PathVariable String roomId, HttpServletResponse response)throws IOException
     {
-
         if(chatService.checkAccess(roomId)) {
             model.addAttribute("roomId", roomId);
             System.out.println("true");
@@ -100,11 +99,11 @@ public class ChatController {
         return "/chat/room";
     }
 
-//
+
 //    //메시지보내기
     @MessageMapping("/message")
     @SendToUser
-    public void message(ChatMessageDTO chatMessageDTO, Principal principal) {
+    public void messageSEND(ChatMessageDTO chatMessageDTO, Principal principal) {
        chatService.createMessage(chatMessageDTO ,principal);
 
     }
@@ -112,7 +111,7 @@ public class ChatController {
     //메시지 조회-입장시
     @GetMapping("/messages/{roomId}")
     @ResponseBody
-    public List<ChatMessage> MessageInfo(@PathVariable String roomId, Principal principal) {
+    public List<ChatMessage> messageInfoGET(@PathVariable String roomId, Principal principal) {
         if(chatService.checkAccess(roomId))
         {
             return chatService.findMessages(roomId);
