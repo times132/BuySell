@@ -338,7 +338,7 @@
                     str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id
                         + "/profile/s_" + data.content[i].user.profileImage
                         + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
-                    str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickName + "</strong>";
+                    str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickname + "</strong>";
                     str += " <small class='text-muted'>" + commonService.displayTime(data.content[i].createdDate) + "</small>";
 
                     str += "</div>";

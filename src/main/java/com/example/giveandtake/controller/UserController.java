@@ -53,21 +53,11 @@ public class UserController {
 
     @GetMapping("/user/signup")
     public String signUpGET(HttpServletRequest request, Model model) {
-        HttpSession session = request.getSession();
-//        Cookie cookie = new Cookie("JSESSIONID", null);
-        String email = (String) session.getAttribute("email");
-        String name = (String) session.getAttribute("name");
-        logger.info("S일 : " + session.getAttribute("email"));
-        logger.info("이름 : " + session.getAttribute("name"));
-        model.addAttribute("name", name);
-        model.addAttribute("email", email);
-//        cookie.setMaxAge(0);
-        session.invalidate();
         return "/user/signup";
     }
     //회원가입, 회원추가
     @PostMapping("/user/signup")
-    public String signUpPOST(@Valid UserDTO userDto, Errors errors, Model model) {
+    public String execSignup(@Valid UserDTO userDto, Errors errors, Model model) {
         if (errors.hasErrors()) {
             // 회원가입 실패시, 입력 데이터를 유지
             model.addAttribute("userDto", userDto);
@@ -84,6 +74,7 @@ public class UserController {
         userService.joinUser(userDto);
         return "redirect:/user/login";
     }
+    //readUserByUsername
     @RequestMapping(value = "/user/userInfo",method = RequestMethod.GET)
     public UserDTO userInfoGET(@RequestParam(value = "nickname") String nickname){
         return userService.readUserByUsername(nickname);
@@ -92,7 +83,7 @@ public class UserController {
     //중복이메일 검사
     @RequestMapping(value = "/user/checkEmail", method = RequestMethod.GET)
     @ResponseBody
-    public boolean checkEmail(@RequestParam("email") String email) {
+    public boolean emailCheck(@RequestParam("email") String email) {
         return userService.checkEmail(email);
     }
 
@@ -102,26 +93,25 @@ public class UserController {
     public boolean checkNickname(@RequestParam("nickname") String nickname) {
         return userService.checkNickName(nickname);
     }
+
     //중복아이디 검사
     @RequestMapping(value = "/user/checkUsername", method = RequestMethod.GET)
     @ResponseBody
     public boolean checkUsername(@RequestParam("username") String username) {
         return userService.checkUserName(username);
+
     }
-
-
-
 
 //<-------------------------------로그인----------------------------------------------------------------------->
     // 로그인 페이지
     @GetMapping("/user/login")
-    public String login() {
+    public String dispLogin() {
         return "/user/login";
     }
 
     // 로그인 실패 페이지
     @GetMapping("/user/login/error")
-    public void failureLogin(HttpServletResponse response)throws IOException {
+    public void dispFailurLogin(HttpServletResponse response)throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
@@ -131,7 +121,7 @@ public class UserController {
 
     // 로그아웃 후 홈으로 이동
     @GetMapping("/user/logout/result")
-    public String logout() {
+    public String dispLogout() {
         return "redirect:/";
     }
 
@@ -182,7 +172,7 @@ public class UserController {
 //<----------------회원정보 --------------------------------------------------------------------------------------------------->
 // 내 정보 페이지
     @GetMapping("/user")
-    public String myInfoGET(Model model) {
+    public String dispMyInfo(Model model) {
         List<String> socialList = new ArrayList<String>(Arrays.asList("kakao", "google"));
         System.out.println(socialList);
         model.addAttribute("socialList", socialList);
@@ -190,16 +180,17 @@ public class UserController {
     }
 
     // 회원 정보 수정
+
     @GetMapping ("/user/{userId}")
     public String userModifyGET() {
-
         return "/user/modifyuser";
     }
 
-    //회원정보수정
-    @PostMapping ("/user/update")
+    //회원 정보 수정
+
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
     @ResponseBody
-    public void userUpdatePOST(UserDTO user, HttpServletResponse response) throws IOException {
+    public void modifyPOST(UserDTO user, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
@@ -218,23 +209,7 @@ public class UserController {
         }
         out.flush();
     }
-    //비밀번호 확인 후 탈퇴
-    @PostMapping ("/user/delete")
-    public void userDELETE(String password, Long id, HttpSession httpSession, HttpServletResponse response) throws IOException{
-        response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        if(userService.checkPassword(password))
-        {
-            userService.delete(id);
-            httpSession.invalidate();
-            out.println("<script>alert('탈퇴가 완료되었습니다.'); location.href='/user/logout';</script>");
-        }
-        else {
-            out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");
-        }
-        out.flush();
-    }
+
     //비밀번호변경
     @PostMapping("/user/changePW")
     @ResponseBody
@@ -251,15 +226,33 @@ public class UserController {
         }
 
     }
+    //비밀번호 확인 후 탈퇴
+    @RequestMapping(value = "/user/{userId}/delete",method = RequestMethod.GET)
+    public void deleteUserGET(@RequestParam(value = "password") String password, @PathVariable ("userId") Long id, HttpSession httpSession, HttpServletResponse response) throws IOException{
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        if(userService.checkPassword(password))
+        {
+            userService.delete(id);
+            httpSession.invalidate();
+            out.println("<script>alert('탈퇴가 완료되었습니다.'); location.href='/user/logout';</script>");
+        }
+        else{
+            out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");
+        }
+        out.flush();
+    }
 
     @GetMapping(value = "/user/{userId}/boards")
-    public String userBoardsGET(@PathVariable("userId") Long userId, Model model, SearchCriteria searchCri){
-        searchCri.setType("I");
-        searchCri.setKeyword(String.valueOf(userId));
+    public String userBoardsGET(@PathVariable("userId") Long id, Model model, SearchCriteria searchCri){
+        System.out.println(id);
+        searchCri.setType("U");
+        searchCri.setKeyword(String.valueOf(id));
 
         Page<Board> boardPage = boardService.getList(searchCri);
 
-        model.addAttribute("user", userService.readUserById(userId));
+        model.addAttribute("user", userService.readUserById(id));
         model.addAttribute("boardList", boardPage.getContent());
         model.addAttribute("pageMaker", Pagination.builder()
                 .cri(searchCri)
