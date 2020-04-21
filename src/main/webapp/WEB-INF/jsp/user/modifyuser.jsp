@@ -220,6 +220,9 @@
         var password = $("#password").val();
         var pwd1 = $("#pwd1").val();
         var userName = "<c:out value="${userinfo.username}"/>";
+
+        console.log("newPW:"+password);
+        console.log("newPW:"+pwd1);
         var info = {
             username : userName,
             password : password,

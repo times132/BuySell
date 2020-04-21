@@ -64,7 +64,7 @@ public class ChatController {
     @ResponseBody
     public  ResponseEntity<String> createRoom(@RequestParam(value = "nickname") String nickname, Principal principal){
         //닉네임 존재여부 확인
-        boolean result = userService.checkEmail(nickname);
+        boolean result = userService.checkNickName(nickname);
         if(result == false){
             return new ResponseEntity<>("존재하지 않는 닉네임입니다.", HttpStatus.OK);
         }

@@ -76,7 +76,7 @@
                             <c:out value="${like.board.btype}"/>
                         </td>
 
-                        <c:if test="${like.board.sellcheck eq true}">
+                        <c:if test="${like.board.sellCheck eq true}">
                             <td class="title-sell">
                                 <a class="move" href='<c:out value="${like.board.bid}"/>'>
                                     <c:out value="${like.board.title}"/>
@@ -89,7 +89,7 @@
                                     </span>
                             </td>
                         </c:if>
-                        <c:if test="${like.board.sellcheck eq false}">
+                        <c:if test="${like.board.sellCheck eq false}">
                             <td class="title">
                                 <a class="move" href='<c:out value="${like.board.bid}"/>'>
                                     <c:out value="${like.board.title}"/>
