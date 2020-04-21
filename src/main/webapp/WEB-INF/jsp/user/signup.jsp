@@ -31,9 +31,9 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-address-card"></i> </span>
                     </div>
-                    <input type="text" class="form-control" id="username" name="userName" placeholder="ID" required/>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="ID" required/>
                 </div> <!-- form-group end.// -->
-                <div class="alert alert-danger" id="username_check">이미 사용중인 ID입니다.</div><p>${valid_userName}</p><br>
+                <div class="alert alert-danger" id="username_check">이미 사용중인 ID입니다.</div><p>${valid_username}</p><br>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
@@ -74,7 +74,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fas fa-address-card"></i> </span>
                     </div>
-                    <input type="text" class="form-control" id="nickname" name="nickName" placeholder="NICKNAME" required/>
+                    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="NICKNAME" required/>
                 </div> <!-- form-group end.// -->
                 <div class="alert alert-danger" id="nickname_check">이미 사용중인 닉네임입니다.</div><p>${valid_nickname}</p><br>
 

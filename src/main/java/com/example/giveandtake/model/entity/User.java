@@ -22,9 +22,9 @@ public class User extends DateAudit {
     private Long id;
 
     @Column
-    private String nickName;
+    private String nickname;
     private String name;
-    private String userName;
+    private String username;
     private String password;
     private String phone;
     private String email;
@@ -48,7 +48,7 @@ public class User extends DateAudit {
     @JsonIgnoreProperties({"user"})
     private List<Reply> replyList;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties({"user"})
     private List<ChatUsers> chats;
 
@@ -57,9 +57,9 @@ public class User extends DateAudit {
     private List<Like> likeList;
 
     @Builder //setter의 역할을 함, 어떤 값에 어느 것을 넣을지 쉽게 확인 가능
-    public User(String userName, String nickName, String name, String password, String phone, String email,Long id, String profileImage, String provider, Boolean activation, Set<UserRoles> roles, List<Like> likeList){
-        this.userName = userName;
-        this.nickName = nickName;
+    public User(String username, String nickname, String name, String password, String phone, String email,Long id, String profileImage, String provider, Boolean activation, Set<UserRoles> roles, List<Like> likeList){
+        this.username = username;
+        this.nickname = nickname;
         this.name = name;
         this.password = password;
         this.phone = phone;

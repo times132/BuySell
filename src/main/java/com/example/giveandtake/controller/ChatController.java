@@ -64,7 +64,7 @@ public class ChatController {
     @ResponseBody
     public  ResponseEntity<String> createRoom(@RequestParam(value = "nickname") String nickname, Principal principal){
         //닉네임 존재여부 확인
-        boolean result = userService.checkNickName(nickname);
+        boolean result = userService.checkEmail(nickname);
         if(result == false){
             return new ResponseEntity<>("존재하지 않는 닉네임입니다.", HttpStatus.OK);
         }
@@ -105,7 +105,6 @@ public class ChatController {
     @MessageMapping("/message")
     @SendToUser
     public void message(ChatMessageDTO chatMessageDTO, Principal principal) {
-        System.out.println("#################################################"+chatMessageDTO);
        chatService.createMessage(chatMessageDTO ,principal);
 
     }

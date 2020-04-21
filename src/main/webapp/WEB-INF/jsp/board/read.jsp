@@ -27,7 +27,7 @@
         <div class="btnlist mb-1">
             <sec:authentication property="principal" var="userinfo"/>
             <sec:authorize access="isAuthenticated()">
-                <c:if test="${userinfo.user.nickName eq boardDto.user.nickName}">
+                <c:if test="${userinfo.user.nickname eq boardDto.user.nickname}">
                     <c:if test="${boardDto.sellCheck eq false}">
                         <button class="btn btn-success btn-sm" data-oper="sell">판매완료</button>
                         <button class="btn btn-primary btn-sm" data-oper="modify">수정</button>
@@ -146,7 +146,7 @@
 
         <form id="operForm" action="/board/modify" method="get">
             <input type="hidden" id="bid" name="bid" value="<c:out value="${boardDto.bid}"/>">
-            <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.user.nickName}"/>">
+            <input type="hidden" id="writer" name="writer" value="<c:out value="${boardDto.user.nickname}"/>">
             <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">
             <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">
             <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
@@ -167,7 +167,7 @@
 
             console.log();
             var operForm = $("#operForm");
-            var nickName = "<c:out value="${boardDto.user.nickName}"/>";
+            var nickName = "<c:out value="${boardDto.user.nickname}"/>";
             var path = "<c:out value="${boardDto.user.profileImage}"/>";
 
             // 닉네임 클릭 후 채팅 클릭 이벤트
@@ -279,7 +279,7 @@
         var likeCnt = "<c:out value="${boardDto.likeCnt}"/>";
         <sec:authorize access="isAuthenticated()">
         <sec:authentication property="principal" var="userinfo"/>;
-        curUser = '${userinfo.user.nickName}';
+        curUser = '${userinfo.user.nickname}';
 
         showLike(likeCnt);
         </sec:authorize>

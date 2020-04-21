@@ -93,7 +93,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println(""+username);
-        User user = userRepository.findByUserName(username);
+        User user = userRepository.findByUsername(username);
         return CustomUserDetails.create(user);
     }
 
@@ -116,7 +116,7 @@ public class UserService implements UserDetailsService {
             user = userRepository.findByEmail(username);
         }
         else {
-            user = userRepository.findByUserName(username);
+            user = userRepository.findByUsername(username);
         }
 
         return userMapper.convertEntityToDto(user);
@@ -127,7 +127,7 @@ public class UserService implements UserDetailsService {
 
         return UserDTO.builder()
                 .id(user.getId())
-                .nickName(user.getNickName())
+                .nickname(user.getNickname())
                 .profileImage(user.getProfileImage())
                 .build();
     }
@@ -138,21 +138,22 @@ public class UserService implements UserDetailsService {
     public void delete(Long userId) {
         User user = userRepository.findById(userId).get();
         List<ChatUsers> chatUsers = user.getChats();
-        userRepository.deleteById(userId);
         for (ChatUsers chatUser : chatUsers){
-            chatService.deleteChatRoom(chatUser.getChatRoom().getRoomId(), user.getNickName());
+            chatService.deleteChatRoom(chatUser.getChatRoom().getRoomId(), user.getNickname());
         }
+        userRepository.deleteById(userId);
+
         return;
     }
 
     //회원정보 수정
     @Transactional
-    public void modify(UserDTO userList){
+    public void update(UserDTO userList){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         userList.setPassword(((CustomUserDetails) authentication.getPrincipal()).getPassword());
         userList.setRoles(((CustomUserDetails) authentication.getPrincipal()).getUser().getRoles());
         userRepository.save(userMapper.toEntity(userList)).getId();
-        updateSecurityContext(authentication , userList.getUserName());
+        updateSecurityContext(authentication , userList.getUsername());
     }
 
     //시큐리티컨텍스트 업데이트
@@ -191,7 +192,7 @@ public class UserService implements UserDetailsService {
     //아이디 중복확인
     @Transactional
     public boolean checkUserName(String username)  {
-        Optional<User> user = Optional.ofNullable(userRepository.findByUserName(username));
+        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(username));
         if(user.isPresent()){
             return true;
         }
@@ -204,7 +205,6 @@ public class UserService implements UserDetailsService {
     {
 
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
-        System.out.println("값");
         if(user.isPresent()){
             return true;
         }
@@ -214,8 +214,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public boolean checkNickName(String nickName)
     {
-        Optional<User> user = Optional.ofNullable(userRepository.findByNickName(nickName));
-        System.out.println("값 "+user);
+        Optional<User> user = Optional.ofNullable(userRepository.findByNickname(nickName));
         if(user.isPresent()){
             return true;
         }
@@ -224,7 +223,7 @@ public class UserService implements UserDetailsService {
     //비밀번호 변경
     @Transactional
     public void changePW(String userName, String newPW){
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.findByUsername(userName);
         UserDTO userDTO = userMapper.convertEntityToDto(user);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDTO.setPassword(passwordEncoder.encode(newPW));
@@ -232,25 +231,22 @@ public class UserService implements UserDetailsService {
 
     }
     //계정 USER 로 변환
-    public void changeAct(String email) {
-        System.out.println("EMAIL"+email);
+    @Transactional
+    public void changeROLE(String email) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByNickName(authentication.getName());
-        Set<UserRoles> userRoles = user.getRoles();
-
-        userRoles.clear(); //Role 모두 지우기
+        User user = userRepository.findByNickname(authentication.getName());
         Role role = roleRepository.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set"));
+        UserDTO userDTO = userMapper.convertEntityToDto(user);
+        userDTO.setEmail(email);
+        userRepository.save(userMapper.toEntity(userDTO));
+        userRolesRepository.deleteAllByUser(user);
         UserRolesDTO userRole = new UserRolesDTO();
         userRole.setUser(user);
         userRole.setRole(role);
-        userRoles.add(userMapper.userRolestoEntity(userRole));
-        UserDTO userDTO = userMapper.convertEntityToDto(user);
-        userDTO.setEmail(email);
-        userDTO.setRoles(userRoles);
-
-        userRepository.save(userMapper.toEntity(userDTO));
-        updateSecurityContext(authentication , userDTO.getUserName());
+        UserRoles userRoles = userRolesRepository.save(userMapper.userRolestoEntity(userRole));
+        user.getRoles().add(userRoles);
+        updateSecurityContext(authentication , userDTO.getUsername());
     }
 
     //이메일 반환

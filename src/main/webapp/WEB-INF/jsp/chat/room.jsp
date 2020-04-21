@@ -29,7 +29,7 @@
                 <div class="heading_srch">
                     <div class="recent_heading">
                         <span><img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}' onerror="this.src = '/resources/image/profile.png'"/>
-                        <br><h4>ME : ${userinfo.nickName}</h4></span>
+                        <br><h4>ME : ${userinfo.nickname}</h4></span>
                     </div>
                     <div class="srch_bar">
                         <div class="stylish-input-group">
@@ -76,7 +76,7 @@
     var me = null;
     <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="userinfo"/>;
-    sender = '${userinfo.user.nickName}';
+    sender = '${userinfo.user.nickname}';
     </sec:authorize>
     function init() {
         // 채팅룸 출력
@@ -95,14 +95,14 @@
                     str += "<img src='/resources/image/profile.png'>" + "</div>";
                 }
                 else{for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
-                    if (sender != data[i].users[a].user.nickName) {
+                    if (sender != data[i].users[a].user.nickname) {
                             str += "<img src='/display?fileName=" + data[i].users[a].user.id
                             +"/profile/s_" + data[i].users[a].user.profileImage
                             +"' onerror=\"this.src='/resources/image/profile.png'\"/>"
                             + "</div>"
                         str += "<div class='chat_ib'>"
-                        str += (data[i].users[a].msgCount === 0 ? "<h5 id='enterBtn'>" + data[i].users[a].user.nickName+"</h5>"
-                            :"<h5 id='enterBtn'>" + data[i].users[a].user.nickName+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span></h5>");
+                        str += (data[i].users[a].msgCount === 0 ? "<h5 id='enterBtn'>" + data[i].users[a].user.nickname+"</h5>"
+                            :"<h5 id='enterBtn'>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span></h5>");
                     }
                 }}
 
@@ -193,7 +193,7 @@
                            }
                            else {
                                for (var a = 0, length = data[i].chatRoom.users.length || 0; a < length; a++) {
-                                   if (data[i].sender == data[i].chatRoom.users[a].user.nickName) {
+                                   if (data[i].sender == data[i].chatRoom.users[a].user.nickname) {
                                        str += "<img src='/display?fileName=" + data[i].chatRoom.users[a].user.id +
                                            "/profile/s_" + data[i].chatRoom.users[a].user.profileImage +
                                            "' onerror=\"this.src = '/resources/image/profile.png'\"/>";

@@ -5,7 +5,7 @@ var userService = (function () {
     function checkUsername(username, callback, error) {
         console.log("CHECK ID");
         $.ajax({
-            url : '/user/usernameCheck?username='+ username,
+            url : '/user/checkUsername?username='+ username,
             type : 'get',
             async: true,
             success: function (data) {
@@ -24,7 +24,7 @@ var userService = (function () {
     function checkNickname(nickname, callback, error) {
         console.log("CHECK NICKNAME");
         $.ajax({
-            url : '/user/nicknameCheck?nickname='+ nickname,
+            url : '/user/checkNickname?nickname='+ nickname,
             type : 'get',
             async: true,
             success: function (data) {
@@ -40,9 +40,9 @@ var userService = (function () {
         });
     }
     function checkEmail(email, callback, error) {
-        console.log("CHECK NICKNAME");
+        console.log("CHECK EMAIL");
         $.ajax({
-            url : '/user/emailCheck?email='+ email,
+            url : '/user/checkEmail?email='+ email,
             type : 'get',
             async: true,
             success: function (data) {
@@ -63,7 +63,7 @@ var userService = (function () {
         $.ajax({
             url: '/user/changePW',
             data: password,
-            type : 'put',
+            type : 'post',
             async: true,
             success: function (data) {
                 if (callback){

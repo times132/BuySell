@@ -197,7 +197,7 @@ public class BoardController {
     //카테고리
     @GetMapping(value = "/category/{id}")
     @ResponseBody
-    public ResponseEntity<List> categoryItemsGET(@PathVariable("id") Long id) {
+    public ResponseEntity<List> CategoryItemsGET(@PathVariable("id") Long id) {
         System.out.println("########Category ID"+ id);
         List<CategoryItem> categoryItems = categoryService.getCategoryItems(id);
         return new ResponseEntity<>(categoryItems, HttpStatus.OK);
@@ -205,7 +205,7 @@ public class BoardController {
 
     @GetMapping(value = "/item/{itemname}")
     @ResponseBody
-    public ResponseEntity<List<Board>> getItemList(@PathVariable("itemname") String itemName){
+    public ResponseEntity<List<Board>> ItemListGET(@PathVariable("itemname") String itemName){
         SearchCriteria searchCriteria = new SearchCriteria();
         if (!itemName.equals("whole")) searchCriteria.setType("I");
         searchCriteria.setPageSize(10);
