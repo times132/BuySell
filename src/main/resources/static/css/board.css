@@ -6,19 +6,19 @@
     margin-right: auto;
     margin-left: auto;
 }
-.ta-title, .ta-title-sold{
+.title, .titleSold{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 0;
 }
-.ta-title a{
+.title a{
     color: #000000;
 }
-.ta-title-sold a{
+.titleSold a{
     color: #b8bfce;
 }
-.sold-replycnt{
+.soldReplyCnt{
     color: #b8bfce;
 }
 .sold{

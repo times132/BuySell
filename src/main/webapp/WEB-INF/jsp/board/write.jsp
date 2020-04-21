@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col">
                 <form id="writeForm" action="/board/write" method="post">
-                    <input type="hidden" name="writer" value="${userinfo.nickName}"> <br>
+                    <input type="hidden" name="writer" value="${userinfo.nickname}"> <br>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <sec:authentication property="principal.user" var="userinfo"/>
                     <div class="form-group">

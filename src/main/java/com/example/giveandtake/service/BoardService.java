@@ -52,7 +52,7 @@ public class BoardService {
     }
 
     // 게시물 목록, 페이징, 검색
-    @Cacheable(value = "test")
+
     public Page<Board> getList(SearchCriteria SearchCri){
         Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
 

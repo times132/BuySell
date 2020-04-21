@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -203,6 +204,7 @@ public class BoardController {
         return new ResponseEntity<>(categoryItems, HttpStatus.OK);
     }
 
+    @Cacheable(value = "home")
     @GetMapping(value = "/item/{itemname}")
     @ResponseBody
     public ResponseEntity<List<Board>> ItemListGET(@PathVariable("itemname") String itemName){

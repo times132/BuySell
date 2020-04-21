@@ -28,7 +28,7 @@
 </head>
 <body>
 
-<div id="navbar">
+<div id="navbar" class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <ul class="navbar pull-right">

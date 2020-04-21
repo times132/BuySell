@@ -11,136 +11,6 @@
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
 
     <link href="/resources/css/home.css" rel="stylesheet">
-    <style>
-        a:hover{
-            text-decoration: none!important;
-        }
-        .has-search{
-        }
-        .has-search .form-control {
-            padding-left: 2.375rem;
-            border: #999 2px solid;
-
-        }
-
-        .has-search .form-control-feedback {
-            position: absolute;
-            z-index: 2;
-            display: block;
-            width: 2.375rem;
-            height: 2.375rem;
-            line-height: 2.375rem;
-            text-align: center;
-            pointer-events: none;
-            color: #aaa;
-        }
-        .search-bar{
-            justify-content: center!important;
-            display: -ms-flexbox;
-            display: flex;
-            -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-            padding: 20px;
-            align-items: center;
-            border-bottom: #5467c9 3px solid;
-        }
-        .search-bar h1{
-            margin-bottom: 0;
-            font-size: 3rem;
-        }
-        .carousel-indicators li{
-            background-color: black!important;
-        }
-        .carousel-control-next-icon,
-        .carousel-control-prev-icon {
-            filter: invert(1);
-        }
-        .carousel{
-            width:1080px;
-            height :auto;
-            max-height: 480px;
-            margin-right: 1rem;
-            display: flex;
-            background: white;
-        }
-        .carousel-inner{
-            display: flex;
-            align-items: center;
-
-        }
-        .d-block{
-            margin: 0 auto;
-            overflow: hidden;
-        }
-        .carousel-item.active{
-            overflow: hidden;
-        }
-        .cartWrap{
-            list-style: none;
-        }
-        .cartList{
-            text-align: center;
-        }
-        .cartList li{
-            display: inline-block;
-            list-style: none;
-            border: black 2px solid;
-            max-width: 104px;
-            min-width: 96px;
-            max-height: 104px;
-            min-height: 96px;
-            margin: 1px 0;
-            font-size: .7rem;
-
-        }
-        .cartList li img{
-            margin: 5px 0;
-        }
-        .cartList li img:hover{
-            cursor: pointer;
-        }
-        .cartList li p{
-            /*font-size: .7rem;*/
-            margin-bottom: 0;
-        }
-        @media (min-width: 992px) {
-            .itemList{
-                -ms-flex: 0 0 80%;
-                flex: 0 0 80%;
-                min-width: 999px;
-                margin-right: 10px;
-                border: black 2px solid;
-                border-top: none;
-                display: none;
-            }
-        }
-        @media (min-width: 768px) {
-            .itemList{
-                -ms-flex: 0 0 80%;
-                flex: 0 0 80%;
-                max-width: 498px;
-                margin-right: 10px;
-                border: black 2px solid;
-                border-top: none;
-                display: none;
-            }
-        }
-
-        .cart-row{
-            padding: 0 2px!important;
-        }
-        .blank{
-            margin-top: 74px;
-        }
-        /*.b{*/
-        /*    -ms-flex: 0 0 80%;*/
-        /*    flex: 0 0 80%;*/
-        /*    min-width: 999px;*/
-        /*    margin-right: 10px;*/
-        /*    border: black 2px solid;*/
-        /*    border-top: none;*/
-        /*}*/
-    </style>
 </head>
 <body>
     <%@include file="../jsp/include/header.jsp"%>
@@ -163,7 +33,7 @@
         </div>
 
         <!-- 공지사항 인디케이터 -->
-        <div class="row justify-content-center pt-0 mb-5">
+        <div class="row justify-content-center pt-0 mb-5 mr-0 ml-0">
             <div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel">
 
                 <ol class="carousel-indicators">
@@ -202,7 +72,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center cartWrap pl-0">
+        <div class="row justify-content-center cartWrap pl-0 mr-0 ml-0">
             <div class="cartInner">
                 <ul class="cartList pl-0 mb-0">
                     <div class="col-12">
@@ -347,9 +217,15 @@
             str = "";
             boardService.getItemList(itemName, function (data) {
                 for (var i = 0, len = data.length || 0; i < len; i++){
-                    str += "<tr><th style='width: 6%'>" + data[i].bid + "</th><td class='title' style='width: 44%'>" + "<a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>";
-                    str += "<span class='replyCnt'>" + "\[" +data[i].replyCnt + "\]" + "</span></td><td class='price' style='width: 10%'>" + "&#8361;" +data[i].price.toLocaleString();
-                    str +=  "</td><td class='writer' style='width: 10%'>" + data[i].writer + "</td><td class='time' style='width: 8%' '>" + commonService.displayTime(data[i].createdDate);
+                    console.log(data[i])
+                    str += "<tr><th style='width: 6%'>" + data[i].bid + "</th>";
+                    if (data[i].sellCheck){
+                        str += "<td class='titleSold' style='width: 44%'><a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>" + "<span class='soldReplyCnt'>" + "\[" +data[i].replyCnt + "\]" + "</span><span class='sold'>완료</span></td>";
+                    }else{
+                        str += "<td class='title' style='width: 44%'><a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>" + "<span class='replyCnt'>" + "\[" +data[i].replyCnt + "\]" + "</span></td>";
+                    }
+                    str += "<td class='price' style='width: 10%'>" + "&#8361;" +data[i].price.toLocaleString();
+                    str += "</td><td class='writer' style='width: 10%'>" + data[i].writer + "</td><td class='time' style='width: 8%' '>" + commonService.displayTime(data[i].createdDate);
                     str += "</td><td class='viewCnt' style='width: 5%'>" + data[i].viewCnt + "</td><td class='likeCnt' style='width: 5%'>" + data[i].likeCnt + "</td></tr>";
                 }
                 itemtable.html(str);

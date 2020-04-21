@@ -67,11 +67,11 @@
                             </td>
 
                             <c:if test="${board.sellCheck eq true}">
-                                <td class="ta-title-sold">
+                                <td class="titleSold">
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
-                                    <span class="sold-replycnt">
+                                    <span class="soldReplyCnt">
                                         [<c:out value="${board.replyCnt}"/>]
                                     </span>
                                     <span class="sold">
@@ -80,7 +80,7 @@
                                 </td>
                             </c:if>
                             <c:if test="${board.sellCheck eq false}">
-                                <td class="ta-title">
+                                <td class="title">
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
