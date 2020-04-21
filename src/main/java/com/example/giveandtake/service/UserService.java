@@ -240,11 +240,15 @@ public class UserService implements UserDetailsService {
         UserDTO userDTO = userMapper.convertEntityToDto(user);
         userDTO.setEmail(email);
         userRepository.save(userMapper.toEntity(userDTO));
-        userRolesRepository.deleteAllByUser(user);
+        System.out.println("DELETE" + userDTO.getId());
+        userRolesRepository.deleteAllByUserId(userDTO.getId());
+        System.out.println("DELETE FINISH" + userDTO.getId());
+
         UserRolesDTO userRole = new UserRolesDTO();
         userRole.setUser(user);
         userRole.setRole(role);
         UserRoles userRoles = userRolesRepository.save(userMapper.userRolestoEntity(userRole));
+        user.getRoles().clear();
         user.getRoles().add(userRoles);
         updateSecurityContext(authentication , userDTO.getUsername());
     }

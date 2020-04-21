@@ -187,13 +187,13 @@ public class BoardController {
     @PostMapping(value = "/like/{bid}")
     @ResponseBody
     public int likePOST(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return  boardService.addlike(bid, userDetails);
+        return  boardService.addLike(bid, userDetails);
     }
 
     @DeleteMapping(value = "/like/{bid}")
     @ResponseBody
     public int likeDELETE(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return boardService.deletelike(bid, userDetails);
+        return boardService.deleteLike(bid, userDetails);
     }
 
 
