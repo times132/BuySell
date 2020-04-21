@@ -138,7 +138,7 @@ public class MailService {
          if(codekey.equals(key)){
              System.out.println("일치#############");
              session.removeAttribute("key");
-             userService.changeAct(email);
+             userService.changeROLE(email);
 
              return true;
         }

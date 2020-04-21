@@ -213,7 +213,7 @@
             e.preventDefault();
             searchForm.submit();
         });
-    })
+
     $(function () {
         $('.navbar-toggle-sidebar').click(function () {
             $('.navbar-nav').toggleClass('slide-in');

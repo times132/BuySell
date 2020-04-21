@@ -22,7 +22,7 @@
     <hr>
     <div class="container">
         <div class="row">
-            <div class="col-sm-10"><h1>${user.nickName}</h1></div>
+            <div class="col-sm-10"><h1>${user.nickname}</h1></div>
         </div>
         <div class="row">
             <div class="col-3"><!--left col-->

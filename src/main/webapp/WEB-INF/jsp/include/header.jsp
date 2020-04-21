@@ -43,7 +43,7 @@
                         <sec:authentication property="principal.user" var="userinfo"/>
                         <li class="upper-links"><a class="links" href="/chat/room">채팅</a></li>
                         <li class="upper-links" id="logout"><a  class="links" href="/user/logout">로그아웃</a></li>
-                        <li class="upper-links dropdown"><a class="links" href="#"><c:out value="${userinfo.nickName}"/>님.</a>
+                        <li class="upper-links dropdown"><a class="links" href="#"><c:out value="${userinfo.nickname}"/>님.</a>
                             <ul class="dropdown-menu">
                                 <li class="profile-li"><a class="profile-links" href="/user">내정보</a></li>
                                 <li class="profile-li"><a class="profile-links" href="/user/${userinfo.id}/boards">내 게시물</a></li>
