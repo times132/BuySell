@@ -133,10 +133,7 @@ public class BoardController {
     }
 
 
-
-
-
-    @PreAuthorize("principal.user.nickname == #dto.writer")
+    @PreAuthorize("principal.user.nickName == #dto.writer")
     @PostMapping("/modify")
     public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----board modifyPOST-----");
@@ -146,7 +143,7 @@ public class BoardController {
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
-    @PreAuthorize("principal.user.nickname == #writer")
+    @PreAuthorize("principal.user.nickName == #writer")
     @PostMapping("/remove")
     public String removePOST(@ModelAttribute SearchCriteria searchCri, @RequestParam("bid") Long bid, String writer){
         logger.info("-----board removePOST-----");
@@ -156,7 +153,7 @@ public class BoardController {
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
-    @PreAuthorize("principal.user.nickname == #writer")
+    @PreAuthorize("principal.user.nickName == #writer")
     @PostMapping("sell")
     public String sellPOST(@RequestParam("bid") Long bid, String writer){
         logger.info("-----board sellPOST-----");
@@ -210,8 +207,8 @@ public class BoardController {
     @ResponseBody
     public ResponseEntity<List<Board>> getItemList(@PathVariable("itemname") String itemName){
         SearchCriteria searchCriteria = new SearchCriteria();
+        if (!itemName.equals("whole")) searchCriteria.setType("I");
         searchCriteria.setPageSize(10);
-        searchCriteria.setType("I");
         searchCriteria.setKeyword(itemName);
         List<Board> itemList = boardService.getList(searchCriteria).getContent();
 

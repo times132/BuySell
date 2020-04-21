@@ -10,7 +10,7 @@
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
-    <script type="text/javascript" src="/resources/js/board.js"></script>
+    <script src="/resources/js/board.js"></script>
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col">
                 <form id="writeForm" action="/board/write" method="post">
-                    <input type="hidden" name="writer" value="${userinfo.nickname}"> <br>
+                    <input type="hidden" name="writer" value="${userinfo.nickName}"> <br>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <sec:authentication property="principal.user" var="userinfo"/>
                     <div class="form-group">
@@ -85,9 +85,12 @@
     </div>
 
     <!-- js -->
+    <script src="/resources/js/jquery.number.min.js"></script>
     <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script>
         $(document).ready(function () {
+            $("input[name='price']").number(true);
+
             var writeForm = $("#writeForm");
             $(".btn-submit").on("click", function (e) {
                 e.preventDefault();

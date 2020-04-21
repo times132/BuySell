@@ -21,10 +21,6 @@ var commonService = (function () {
         }
     }
 
-    function checkWordCount() {
-
-    }
-
     return{
         displayTime: displayTime
     }

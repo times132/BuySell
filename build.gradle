@@ -29,7 +29,6 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-taglibs'
 	implementation 'org.springframework.security:spring-security-oauth2-client'
 	implementation 'org.springframework.security:spring-security-oauth2-jose'
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
 
 
 
@@ -54,7 +53,6 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-websocket")
 	compile("org.webjars:sockjs-client:1.0.2")
 	compile("org.webjars:stomp-websocket:2.3.3")
-	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 	implementation 'org.springframework.boot:spring-boot-devtools'
@@ -66,7 +64,6 @@ dependencies {
 
 
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

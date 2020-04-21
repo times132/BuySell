@@ -58,7 +58,7 @@
                     <!-- CONTENTS !-->
                     <c:forEach items="${boardList}" var="board">
                         <tr>
-                            <th scope="row">
+                            <th>
                                 <c:out value="${board.bid}"/>
                             </th>
 
@@ -84,7 +84,7 @@
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
-                                    <span class="replycnt">
+                                    <span class="replyCnt">
                                         [<c:out value="${board.replyCnt}"/>]
                                     </span>
                                 </td>

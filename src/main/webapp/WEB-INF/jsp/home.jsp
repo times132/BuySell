@@ -9,8 +9,12 @@
     <meta charset="UTF-8">
     <title>메인</title>
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+
     <link href="/resources/css/home.css" rel="stylesheet">
     <style>
+        a:hover{
+            text-decoration: none!important;
+        }
         .has-search{
         }
         .has-search .form-control {
@@ -31,9 +35,6 @@
             color: #aaa;
         }
         .search-bar{
-            /*padding-top: 5px;*/
-            /*padding-left: 10px;*/
-            /*padding-bottom: 0px;*/
             justify-content: center!important;
             display: -ms-flexbox;
             display: flex;
@@ -102,19 +103,43 @@
             /*font-size: .7rem;*/
             margin-bottom: 0;
         }
-        @media screen and (min-width: 1000px) {
-            .col-lg-6 {
-                -ms-flex: 0 0 50%;
-                flex: 0 0 50%;
-                max-width: 50%;
+        @media (min-width: 992px) {
+            .itemList{
+                -ms-flex: 0 0 80%;
+                flex: 0 0 80%;
+                min-width: 999px;
+                margin-right: 10px;
+                border: black 2px solid;
+                border-top: none;
+                display: none;
             }
         }
+        @media (min-width: 768px) {
+            .itemList{
+                -ms-flex: 0 0 80%;
+                flex: 0 0 80%;
+                max-width: 498px;
+                margin-right: 10px;
+                border: black 2px solid;
+                border-top: none;
+                display: none;
+            }
+        }
+
         .cart-row{
             padding: 0 2px!important;
         }
         .blank{
             margin-top: 74px;
         }
+        /*.b{*/
+        /*    -ms-flex: 0 0 80%;*/
+        /*    flex: 0 0 80%;*/
+        /*    min-width: 999px;*/
+        /*    margin-right: 10px;*/
+        /*    border: black 2px solid;*/
+        /*    border-top: none;*/
+        /*}*/
     </style>
 </head>
 <body>
@@ -179,28 +204,52 @@
 
         <div class="row justify-content-center cartWrap pl-0">
             <div class="cartInner">
-                <ul class="cartList pl-0">
+                <ul class="cartList pl-0 mb-0">
                     <div class="col-12">
                         <div class="row justify-content-center pl-0">
                             <div class="cart-row col-12 col-md-10 col-lg-6">
                                 <li class="item cartItem0">
-                                    <img src="/resources/image/home/whole.png" alt=""/>
+                                    <img src="/resources/image/home/whole.png" alt="whole"/>
                                     <p>전체보기</p>
                                 </li>
-                                <c:forEach var="i" begin="0" end="3">
-                                    <li class="item cartItem${i+1}">
-                                        <img src="/resources/image/home/${items[i].itemId}.png" alt="${items[i].itemName}"/>
-                                        <p>${items[i].itemName}</p>
-                                    </li>
-                                </c:forEach>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/eatout.png" alt="외식"/>
+                                    <p>외식</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/cafe.png" alt="카페"/>
+                                    <p>카페</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/convenience.png" alt="편의점"/>
+                                    <p>편의점</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/culture.png" alt="문화"/>
+                                    <p>문화</p>
+                                </li>
                             </div>
                             <div class="cart-row col-12 col-md-10 col-lg-6">
-                                <c:forEach var="i" begin="4" end="8">
-                                    <li class="item cartItem${i+1}">
-                                        <img src="/resources/image/home/${items[i].itemId}.png" alt="${items[i].itemName}"/>
-                                        <p>${items[i].itemName}</p>
-                                    </li>
-                                </c:forEach>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/mobile.png" alt="모바일"/>
+                                    <p>모바일</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/concert.png" alt="콘서트"/>
+                                    <p>콘서트</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/movie.png" alt="영화"/>
+                                    <p>영화</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/musical.png" alt="뮤지컬"/>
+                                    <p>뮤지컬</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/drama.png" alt="연극"/>
+                                    <p>연극</p>
+                                </li>
                             </div>
                         </div>
                     </div>
@@ -208,25 +257,46 @@
                     <div class="col-12">
                         <div class="row justify-content-center pl-0">
                             <div class="cart-row col-12 col-md-10 col-lg-6">
-                                <c:forEach var="i" begin="9" end="13">
-                                    <li class="item cartItem${i+1}">
-                                        <img src="/resources/image/home/${items[i].itemId}.png" alt="${items[i].itemName}"/>
-                                        <p>${items[i].itemName}</p>
-                                    </li>
-                                </c:forEach>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/appliance.png" alt="가전"/>
+                                    <p>가전</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/furniture.png" alt="가구"/>
+                                    <p>가구</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/food.png" alt="식품"/>
+                                    <p>식품</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/cosmetic.png" alt="뷰티"/>
+                                    <p>뷰티</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/clothes.png" alt="의류"/>
+                                    <p>의류</p>
+                                </li>
+
                             </div>
                             <div class="cart-row col-12 col-md-10 col-lg-6">
-                                <c:forEach var="i" begin="14" end="${fn:length(items)-1}">
-                                    <li class="item cartItem${i+1}" >
-                                        <img src="/resources/image/home/${items[i].itemId}.png" alt="${items[i].itemName}"/>
-                                        <p>${items[i].itemName}</p>
-                                    </li>
-                                </c:forEach>
-                                <c:forEach var="i" begin="${fn:length(items)+1}" end="19">
-                                    <li class="cartItem${i}">
-                                        <p class="blank">&nbsp;</p>
-                                    </li>
-                                </c:forEach>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/kids.png" alt="아동"/>
+                                    <p>아동</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <img src="/resources/image/home/pet.png" alt="애견"/>
+                                    <p>애견</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <p class="blank">&nbsp</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <p class="blank">&nbsp</p>
+                                </li>
+                                <li class="item cartItem0">
+                                    <p class="blank">&nbsp</p>
+                                </li>
                             </div>
                         </div>
                     </div>
@@ -234,17 +304,27 @@
             </div>
         </div>
 
-        <div class="itemList">
-            <table class="table table-sm table-hover">
-                <tbody class="item-body">
+        <div class="row justify-content-center pt-0">
+            <div class="itemList">
+                <table class="table table-sm table-hover mb-0">
+                    <tbody class="item-body">
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+
+
         </div>
+
+        <form id="actionForm" action="/board" method="get">
+        </form>
     </div>
     <script type="text/javascript" src="/resources/js/board.js"></script>
     <script type="text/javascript" src="/resources/js/common.js"></script>
+    <script src="/resources/js/jquery.number.min.js"></script>
     <script>
+        var actionForm = $("#actionForm");
+        $(".price").number(true);
         $("#logout").click(function() {
             location.href="/user/logout";
         });
@@ -258,24 +338,31 @@
             e.preventDefault();
             search.submit();
         });
+
+        var itemList = $(".itemList");
         var itemtable = $(".item-body");
         $(".item").on("click", function () {
+            itemList.show();
             var itemName = $(this).children("img").attr("alt");
-            console.log(itemName);
             str = "";
             boardService.getItemList(itemName, function (data) {
                 for (var i = 0, len = data.length || 0; i < len; i++){
-                    console.log(str)
-
-
-                    str += "<tr><th scope='row'>" + data[i].bid + "</th><td scope='title'>" + data[i].title +"</td><td scope='price'>"+ "<fmt"+":formatNumber value='" + data[i].price + "'/>";
-                    str +=  "</td><td scope='writer'>" + data[i].writer + "</td><td scope='time'>" + commonService.displayTime(data[i].createdDate);
-                    str += "</td><td scope='viewCnt'>" + data[i].viewCnt + "</td><td scope='likeCnt'>" + data[i].likeCnt + "</td></tr>";
+                    str += "<tr><th style='width: 6%'>" + data[i].bid + "</th><td class='title' style='width: 44%'>" + "<a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>";
+                    str += "<span class='replyCnt'>" + "\[" +data[i].replyCnt + "\]" + "</span></td><td class='price' style='width: 10%'>" + "&#8361;" +data[i].price.toLocaleString();
+                    str +=  "</td><td class='writer' style='width: 10%'>" + data[i].writer + "</td><td class='time' style='width: 8%' '>" + commonService.displayTime(data[i].createdDate);
+                    str += "</td><td class='viewCnt' style='width: 5%'>" + data[i].viewCnt + "</td><td class='likeCnt' style='width: 5%'>" + data[i].likeCnt + "</td></tr>";
                 }
-
                 itemtable.html(str);
             });
-        })
+        });
+
+        $(document).on("click", ".move" ,function (e) {
+            console.log("실행되냐?");
+            e.preventDefault();
+            actionForm.append("<input type='hidden' name='bid' value='"+$(this).attr("href")+"'>");
+            actionForm.attr("action", "/board/read");
+            actionForm.submit();
+        });
     </script>
 </body>
 </html>

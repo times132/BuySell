@@ -21,6 +21,9 @@
                 <form action="/board/modify" method="post">
                     <input type="hidden" name="bid" value="${boardDto.bid}"/>
                     <input type="hidden" name="writer" value="${boardDto.writer}"/>
+                    <input type="hidden" name="page" value="<c:out value="${cri.page}"/>">
+                    <input type="hidden" name="type" value="<c:out value="${cri.type}"/>">
+                    <input type="hidden" name="keyword" value="<c:out value="${cri.keyword}"/>">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                     <div class="form-group">
@@ -79,9 +82,12 @@
             </div>
         </div>
 
-        <div>
-            <button class="btn btn-outline-dark btn-submit" data-oper="modify" type="submit">수정</button>
-            <button class="btn btn-dark float-right" data-oper="list" type="submit">목록</button>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-outline-dark btn-submit" data-oper="modify" type="submit">수정</button>
+                <button class="btn btn-dark float-right" data-oper="list" type="submit">목록</button>
+            </div>
+
         </div>
     </div>
 
@@ -106,6 +112,8 @@
                     var pageTag = $("input[name='page']").clone();
                     var typeTag = $("input[name='type']").clone();
                     var keywordTag = $("input[name='keyword']").clone();
+
+                    formObj.empty();
 
                     formObj.append(pageTag);
                     formObj.append(typeTag);
