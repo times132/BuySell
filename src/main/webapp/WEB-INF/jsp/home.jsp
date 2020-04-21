@@ -174,7 +174,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center pt-0">
+        <div class="row justify-content-center pt-0 mr-0 ml-0">
             <div class="itemList">
                 <table class="table table-sm table-hover mb-0">
                     <tbody class="item-body">
@@ -217,7 +217,7 @@
             str = "";
             boardService.getItemList(itemName, function (data) {
                 for (var i = 0, len = data.length || 0; i < len; i++){
-                    console.log(data[i])
+
                     str += "<tr><th style='width: 6%'>" + data[i].bid + "</th>";
                     if (data[i].sellCheck){
                         str += "<td class='titleSold' style='width: 44%'><a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>" + "<span class='soldReplyCnt'>" + "\[" +data[i].replyCnt + "\]" + "</span><span class='sold'>완료</span></td>";
@@ -233,7 +233,6 @@
         });
 
         $(document).on("click", ".move" ,function (e) {
-            console.log("실행되냐?");
             e.preventDefault();
             actionForm.append("<input type='hidden' name='bid' value='"+$(this).attr("href")+"'>");
             actionForm.attr("action", "/board/read");
