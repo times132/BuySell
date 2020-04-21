@@ -82,7 +82,7 @@ var userService = (function () {
         console.log("FIND PASSWORD");
         $.ajax({
             type: "POST",
-            url: "/user/findpw",
+            url: "/user/findPW",
             data: username,
             dataType: 'text',//데이타 타입
             async: true,

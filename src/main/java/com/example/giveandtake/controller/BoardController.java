@@ -126,7 +126,7 @@ public class BoardController {
         logger.info("-----board modifyGET-----");
 
         BoardDTO boardDto = boardService.getBoardDetail(bid);
-        Category myCategory =  categoryService.getCateItems(boardDto.getBtype());
+        Category myCategory =  categoryService.getCateItems(boardDto.getCategory());
         List<Category> category =  categoryService.getCategory();
         model.addAttribute("category", category);
         model.addAttribute("myCategory", myCategory);
@@ -185,13 +185,13 @@ public class BoardController {
     @PostMapping(value = "/like/{bid}")
     @ResponseBody
     public int likePOST(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return  boardService.addlike(bid, userDetails);
+        return  boardService.addLike(bid, userDetails);
     }
 
     @DeleteMapping(value = "/like/{bid}")
     @ResponseBody
     public int likeDELETE(@PathVariable("bid") Long bid, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return boardService.deletelike(bid, userDetails);
+        return boardService.deleteLike(bid, userDetails);
     }
 
 

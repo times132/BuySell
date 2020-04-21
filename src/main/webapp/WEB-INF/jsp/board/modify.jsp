@@ -32,7 +32,7 @@
                                 <option value="${category.id}"><c:out value="${category.name}"/></option>
                             </c:forEach>
                         </select>
-                        <select id="items" class="custom-select col-4" name="btype">
+                        <select id="items" class="custom-select col-4" name="category">
                             <c:forEach items="${myCategory.items}" var="items">
                                 <option value="${items.itemName}"><c:out value="${items.itemName}"/></option>
                             </c:forEach>
@@ -92,15 +92,31 @@
     </div>
 
     <script type="text/javascript" src="/resources/js/fileupload.js"></script>
+    <script type="text/javascript" src="/resources/js/board.js"></script>
     <script>
         $(document).ready(function(){
             var formObj = $("form");
-            var btype = "<c:out value="${boardDto.btype}"/>";
-            var caregoryId = "<c:out value="${myCategory.id}"/>";
+            var category = "<c:out value="${boardDto.category}"/>";
+            var categoryId = "<c:out value="${myCategory.id}"/>";
 
-            $("#category option[value='" + caregoryId + "']").attr('selected', 'selected');
-            $("#items option[value='" + btype + "']").attr('selected', 'selected');
+            $("#category option[value='" + categoryId + "']").attr('selected', 'selected');
+            $("#items option[value='" + category + "']").attr('selected', 'selected');
+            var categoryDIV = $("#items");
+            $("#category").on("change",function(){
+                alert("카테고리")
+                var id = $("#category option:selected").val();
+                console.log("id"+id);
 
+                boardService.getCategoryItems(id, function (data) {
+                    console.log(data);
+                    var str = "<option value=''>---------------------------------------------------</option>";
+                    for (var i = 0, len = data.length || 0; i < len; i++) {
+                        str += "<option value='"+data[i].itemName+"'>"+ data[i].itemName + "</option>"
+                    }
+                    console.log(str);
+                    categoryDIV.html(str);
+                });
+            });
             $("button").on("click", function(e){
                 e.preventDefault();
 

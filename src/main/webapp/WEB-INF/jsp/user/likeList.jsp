@@ -73,7 +73,7 @@
                         </th>
 
                         <td class="btype">
-                            <c:out value="${like.board.btype}"/>
+                            <c:out value="${like.board.category}"/>
                         </td>
 
                         <c:if test="${like.board.sellCheck eq true}">

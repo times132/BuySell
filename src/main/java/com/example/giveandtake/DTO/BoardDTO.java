@@ -18,7 +18,7 @@ import java.util.List;
 public class BoardDTO {
 
     private Long bid;
-    private String btype;
+    private String category;
     private String title;
     private String content;
     private String writer;
@@ -33,9 +33,9 @@ public class BoardDTO {
     private User user;
 
     @Builder
-    public BoardDTO(Long bid, String btype, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, Integer likeCnt, boolean sellCheck, LocalDateTime createdDate, List<BoardFileDTO> boardFileList, User user){
+    public BoardDTO(Long bid, String category, String title, String content, String writer, Integer price, Integer viewCnt, Integer replyCnt, Integer likeCnt, boolean sellCheck, LocalDateTime createdDate, List<BoardFileDTO> boardFileList, User user){
         this.bid = bid;
-        this.btype = btype;
+        this.category = category;
         this.title = title;
         this.content = content;
         this.writer = writer;

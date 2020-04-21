@@ -105,13 +105,13 @@ public class UserController {
 //<-------------------------------로그인----------------------------------------------------------------------->
     // 로그인 페이지
     @GetMapping("/user/login")
-    public String dispLogin() {
+    public String login() {
         return "/user/login";
     }
 
     // 로그인 실패 페이지
     @GetMapping("/user/login/error")
-    public void dispFailurLogin(HttpServletResponse response)throws IOException {
+    public void failureLogin(HttpServletResponse response)throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
@@ -121,7 +121,7 @@ public class UserController {
 
     // 로그아웃 후 홈으로 이동
     @GetMapping("/user/logout/result")
-    public String dispLogout() {
+    public String logout() {
         return "redirect:/";
     }
 
@@ -135,7 +135,7 @@ public class UserController {
     }
 
     //비밀번호 찾기
-    @GetMapping("/user/findpw")
+    @GetMapping("/user/findPW")
     public String findPW()
     {
         return "/user/findPW";
@@ -143,7 +143,7 @@ public class UserController {
 
 
     //메일로 비밀번호 보내기
-    @RequestMapping( value = "/user/findpw" , method=RequestMethod.POST)
+    @RequestMapping( value = "/user/findPW" , method=RequestMethod.POST)
     @ResponseBody
     public String passwordMailPOST(HttpServletRequest request, @RequestParam String username){
         String email = userService.getEmailByUsername(username);
@@ -202,7 +202,7 @@ public class UserController {
         else{
             if (userService.checkPassword(user.getPassword())){
                 userService.update(user);
-                out.println("<script>alert('수정이 완료되었습니다.'); location.href='/user/info';</script>");
+                out.println("<script>alert('수정이 완료되었습니다.'); location.href='/user';</script>");
             }
             else
             {out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");}
@@ -210,7 +210,7 @@ public class UserController {
         out.flush();
     }
 
-    //비밀번호변경
+    //비밀번호 변경
     @PostMapping("/user/changePW")
     @ResponseBody
     public ResponseEntity<String> passwordPOST(@RequestParam String newPW, @RequestParam String password,  @RequestParam String username){

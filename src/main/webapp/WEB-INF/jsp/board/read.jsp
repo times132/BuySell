@@ -65,7 +65,7 @@
                         <!-- 제품 기본 정보 -->
                         <div class="product_info col my-lg-2">
                             <div class="muted-info">
-                                <span class="h6 btype text-muted"><small>분류 : <c:out value="${boardDto.btype}"/></small></span>
+                                <span class="h6 btype text-muted"><small>분류 : <c:out value="${boardDto.category}"/></small></span>
                                 <span class="h6 createddate text-muted"><small><javatime:format pattern="yyyy.MM.dd hh:mm" value="${boardDto.createdDate}"/></small></span>
                             </div>
 
