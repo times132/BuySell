@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -32,7 +33,11 @@ public class ChatUsers{
     @Column
     private Integer msgCount;
 
+    @PrePersist
+    protected void prePersist(){
+        if (this.msgCount == null) this.msgCount = 0;
 
+    }
 
     @Builder
     public ChatUsers(Long cid, User user, ChatRoom chatRoom, Integer msgCount){

@@ -22,7 +22,11 @@ public class ChatRoom implements Comparable<ChatRoom>{
 
     @Column
     private String recentMsg;
+    @PrePersist
+    protected void prePersist(){
+        if (this.recentMsg == null) this.recentMsg = "대화내용이 없습니다.";
 
+    }
     @Column
     private LocalDateTime msgDate;
 

@@ -30,6 +30,9 @@ public class ChatMessage extends DateAudit {
     @Column
     private String sender; // 메시지 보낸사람
 
+    @Column
+    private String senderId; // 메시지 보낸사람
+
     @Enumerated(EnumType.STRING)
     private MessageType type; // 메시지 타입
 
@@ -38,9 +41,10 @@ public class ChatMessage extends DateAudit {
 
 
     @Builder
-    public ChatMessage(ChatRoom chatRoom , String sender, MessageType type, String message) {
+    public ChatMessage(ChatRoom chatRoom , String sender, String senderId, MessageType type, String message) {
         this.chatRoom = chatRoom;
         this.sender = sender;
+        this.senderId = senderId;
         this.type = type;
         this.message = message;
 

@@ -41,11 +41,10 @@ public class ChatService{
             String status = "ok";
 
             User me = userRepository.findByNickname(principal.getName());
-            System.out.println(me);
             User receiver = userRepository.findByNickname(nickname);
 
             //채팅방 중복검사
-            List<ChatUsers> chatList = chatUsersRepository.findAllByUser(me); //본인이 속해있는 모든 채팅방 정보 SELECT
+            List<ChatUsers> chatList = chatUsersRepository.findAllByUserNickname(principal.getName()); //본인이 속해 있는 모든 채팅방 정보 SELECT
 
             for (ChatUsers chatUsers : chatList){
                 ChatRoom chatRoom = chatUsers.getChatRoom();
@@ -54,7 +53,7 @@ public class ChatService{
                 //해당 채팅방 userList 검색
                 for (ChatUsers user : users){
                     if (user.getUser().getNickname().equals(nickname)){
-                        status = "채팅방이 이미 존재합니다.";
+                        return user.getChatRoom().getRoomId();
                     }
                 }
             }
@@ -67,10 +66,9 @@ public class ChatService{
 
             if (status.equals("ok")){
                 ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
-                status = "채팅방 개설이 완료되었습니다.";
                 String randomId = UUID.randomUUID().toString();
+                status = randomId;
                 chatRoomDTO.setRoomId(randomId);
-                chatRoomDTO.setRecentMsg("대화내용이 없습니다.");
                 chatRoomDTO.setMsgDate(LocalDateTime.now());
                 ChatRoom chatRoom = chatRoomRepository.save(chatRoomDTO.toEntity());
                 //Chat User
@@ -78,7 +76,6 @@ public class ChatService{
                     ChatUsersDTO dto = new ChatUsersDTO();
                         dto.setChatRoom(chatRoom);
                         dto.setUser(part);
-                        dto.setMsgCount(0);
                     chatUsersRepository.save(chatMapper.userToEntity(dto));
                 }
             }
@@ -91,7 +88,7 @@ public class ChatService{
     public List<ChatRoom> findAllRoom() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User me = ((CustomUserDetails) authentication.getPrincipal()).getUser();
-        List<ChatUsers> chatUsers = chatUsersRepository.findAllByUser(me); //본인이 속해있는 모든 채팅방 정보 SELECT
+        List<ChatUsers> chatUsers = chatUsersRepository.findAllByUserNickname(me.getNickname()); //본인이 속해있는 모든 채팅방 정보 SELECT
         ArrayList chatRooms= new ArrayList<>();
         for (ChatUsers chatUser : chatUsers){
             chatRooms.add(chatUser.getChatRoom());
@@ -131,11 +128,11 @@ public class ChatService{
 
 
         String to = null;
-        //메시지 개수 설정
+        //내가 보낸 메시지 개수 설정
         for (ChatUsers user : users){
             if (user.getUser().getNickname().equals(nickname)){
                 ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
-                chatUsersDTO.setMsgCount(user.getMsgCount()+1);  ////내가보낸 메시지 수 +1
+                chatUsersDTO.setMsgCount(user.getMsgCount()+1);  ////내가 보낸 메시지 수 +1
                 chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));
             }
             else {
@@ -184,7 +181,7 @@ public class ChatService{
     public boolean checkAccess(String roomId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User me = ((CustomUserDetails) authentication.getPrincipal()).getUser();
-        List<ChatUsers> chatUsers = chatUsersRepository.findAllByUser(me); //본인이 속해있는 모든 채팅방 정보 SELECT
+        List<ChatUsers> chatUsers = chatUsersRepository.findAllByUserNickname(me.getNickname()); //본인이 속해있는 모든 채팅방 정보 SELECT
         for (ChatUsers chatUser : chatUsers){
             if (chatUser.getChatRoom().getRoomId().equals(roomId)){return true; }
         }

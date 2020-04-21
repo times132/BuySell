@@ -73,10 +73,10 @@
     init();
     $('.messages').hide();
     var chatUL = $(".chat_list");
-    var me = null;
     <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="userinfo"/>;
-    sender = '${userinfo.user.nickname}';
+    var sender = '${userinfo.user.nickname}';
+    var senderId = '${userinfo.user.id}';
     </sec:authorize>
     function init() {
         // 채팅룸 출력
@@ -127,9 +127,15 @@
                     };
 
                     chatService.createRoom(nickname, function (result) {
-                        alert(result);
-                        document.getElementById("receiver").value="";
-                        init();
+                        if(result == "noNickname") {
+                            alert("존재하는 닉네임이 없습니다.");
+                            document.getElementById("receiver").value = "";
+                            init();
+                        }
+                        else{
+                            alert("채팅방으로 이동합니다.");
+                            location.href = "/chat/room/enter/" + result;
+                        }
                     });
         }
     });
@@ -169,7 +175,7 @@
                 }
 
                 for (var i = 0, len = data.length || 0; i < len; i++) {
-                   if(sender == data[i].sender) {
+                   if(senderId == data[i].senderId) {
                        str += "<div class='outgoing_msg'>\n" +
                        "<div class='sent_msg'>\n" +
                        "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
@@ -222,6 +228,7 @@
                 type: 'TALK',
                 roomId: roomId,
                 sender: sender,
+                senderId : senderId,
                 message: this.message,
 
             }));
