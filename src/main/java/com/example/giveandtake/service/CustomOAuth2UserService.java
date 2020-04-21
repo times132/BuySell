@@ -84,9 +84,9 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
             }else {
                 userDTO.setEmail(email);
             }
-            userDTO.setUserName(username);
+            userDTO.setUsername(username);
             userDTO.setName(String.valueOf(kakao.getAttributes().get("name")));
-            userDTO.setNickName(String.valueOf(kakao.getAttributes().get("name")));
+            userDTO.setNickname(String.valueOf(kakao.getAttributes().get("name")));
             userDTO.setProvider("kakao");
             userService.joinUser(userDTO);
         }
@@ -99,9 +99,9 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
         UserDTO userDTO = new UserDTO();
         Authentication authentication;
         if (!userService.checkUserName(username)) {
-            userDTO.setUserName(username);
+            userDTO.setUsername(username);
             userDTO.setEmail(google.getEmail());
-            userDTO.setNickName(String.valueOf(google.getAttributes().get("name")));
+            userDTO.setNickname(String.valueOf(google.getAttributes().get("name")));
             userDTO.setProvider("google");
             userService.joinUser(userDTO);
         }

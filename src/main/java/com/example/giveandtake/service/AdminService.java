@@ -46,7 +46,7 @@ public class AdminService {
             page = userRepository.findAllByEmailContaining(SearchCri.getKeyword(), pageable);
         }
         else{
-            page = userRepository.findAllByNickNameContaining(SearchCri.getKeyword(), pageable);
+            page = userRepository.findAllByNicknameContaining(SearchCri.getKeyword(), pageable);
         }
         return page;
     }
@@ -78,7 +78,7 @@ public class AdminService {
 
     public void addUserRole(String username, String roleName) {
         System.out.println(username + roleName);
-        User user = userRepository.findByUserName(username);
+        User user = userRepository.findByUsername(username);
         Role role = null;
         if (roleName.equals("ROLE_USER")) {
             role = roleRepository.findByName(RoleName.ROLE_USER)

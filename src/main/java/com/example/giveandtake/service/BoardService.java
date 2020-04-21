@@ -151,7 +151,7 @@ public class BoardService {
         return false;
     }
     @Transactional
-    public int addlike(Long bid, CustomUserDetails userDetails) {
+    public int addLike(Long bid, CustomUserDetails userDetails) {
         System.out.println("좋아요");
         Optional<Board> boardWrapper = boardRepository.findById(bid);
         Board board = boardWrapper.get();
@@ -166,7 +166,7 @@ public class BoardService {
         return boardRepository.save(boardMapper.toEntity(boardDTO)).getLikeCnt();
     }
 
-    public int deletelike(Long bid, CustomUserDetails userDetails) {
+    public int deleteLike(Long bid, CustomUserDetails userDetails) {
 
         Long id = likeRepository.findByUserIdAndBoardBid(userDetails.getUser().getId(),bid).getId();
         likeRepository.deleteById(id);

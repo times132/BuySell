@@ -34,13 +34,13 @@ public class AdminController {
 
     // 어드민 페이지
     @GetMapping
-    public String userlist() {
+    public String adminGET() {
         return "/admin/admin";
     }
 
     //회원정보보기 및 삭제
     @GetMapping("/userinfo")
-    public String userinfo(SearchCriteria searchCri, Model model) {
+    public String userListGET(SearchCriteria searchCri, Model model) {
         searchCri.setPageSize(10); // 한 화면에 유저 10개씩 표시
         Page<User> userPage = adminService.getList(searchCri);
 
@@ -55,7 +55,7 @@ public class AdminController {
     }
     //회원 롤 관리
     @GetMapping("/userrole")
-    public String userrole(SearchCriteria searchCri, Model model) {
+    public String userRoleGET(SearchCriteria searchCri, Model model) {
         searchCri.setPageSize(10); // 한 화면에 유저 10개씩 표시
         Page<UserRoles> userPage = adminService.getRole(searchCri);
         List<Role> roles= adminService.findAllRole();
@@ -72,8 +72,7 @@ public class AdminController {
 
     //회원 탈퇴
     @GetMapping("/userinfo/delete")
-    public String delete(@RequestParam("id") Long id, @ModelAttribute("cri") SearchCriteria cri) {
-        System.out.println("**delete**" + id);
+    public String deleteGET(@RequestParam("id") Long id, @ModelAttribute("cri") SearchCriteria cri) {
         userService.delete(id);
         return "redirect:/admin";
     }
@@ -86,7 +85,7 @@ public class AdminController {
         return "redirect:/admin/userrole";
     }
     //롤 추가
-    @GetMapping("/userole/add")
+    @GetMapping("/userrole/add")
     public String addUserRole(@RequestParam("username") String username, @RequestParam("roleName") String roleName, @ModelAttribute("cri") SearchCriteria cri) {
         System.out.println("**delete**" + username);
         adminService.addUserRole(username, roleName);

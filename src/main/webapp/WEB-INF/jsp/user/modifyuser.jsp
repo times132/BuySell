@@ -29,7 +29,7 @@
 <c:set var="provider" value="${userinfo.provider}"/>
 <div class="container">
     <div class="row">
-        <div class="col-sm-10"><h1>내 정보 수정</h1></div>
+        <div class="col-sm-10"><h1>내정보</h1></div>
     </div>
     <div class="row">
         <div class="col-sm-3"><!--left col-->
@@ -61,7 +61,7 @@
             <ul class="nav nav-tabs">
                 <li class="nav-item"><a  class="nav-link active" data-toggle="tab" href="#CHANGE">CHANGE</a></li>
                 <c:if test = "${provider eq 'giveandtake'}">
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#changePW">비밀번호 변경</a></li>
+                <li class="nav-item"><a  class="nav-link" data-toggle="tab" href="#changePW">비밀번호 변경</a></li>
                 </c:if>
             </ul>
 
@@ -73,8 +73,8 @@
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="username"><H4>ID</H4></label>
-                                <input type="text" class="form-control" id="userame" name="userName" value="${userinfo.userName}" readonly="readonly" required>
-                                <p>${valid_userName}</p>
+                                <input type="text" class="form-control" id="username" name="username" value="${userinfo.username}" readonly="readonly" required>
+                                <p>${valid_username}</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -87,7 +87,7 @@
                             <div class="form-group">
                                 <div class="col-xs-6">
                                     <label for="nickname"><h4>NICKNAME</h4></label>
-                                    <input type="text" class="form-control" id="nickname" name="nickName" value="${userinfo.nickName}"  placeholder="NICKNAME" title="enter your phone number if any.">
+                                    <input type="text" class="form-control" id="nickname" name="nickname" value="${userinfo.nickname}"  placeholder="NICKNAME" title="enter your phone number if any.">
                                 </div>
                             </div>
                             <div class="alert alert-danger" id="nickname_check">사용할 수 없는 닉네임입니다.</div><br>
@@ -101,14 +101,14 @@
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <h4>PHONE NUMBER</h4>
-                                <input type="text" class="form-control" name="phone" value="${userinfo.phone}" placeholder="PHONE NUMBER" >
+                                <input type="text" class="form-control" name="phone" value="${userinfo.phone}"  placeholder="PHONE NUMBER" >
                             </div>
                         </div>
                          <c:if test = "${provider eq 'giveandtake'}">
                                 <div class="form-group">
                                     <div class="col-xs-6">
                                         <h4>PASSWORD</h4>
-                                        <input type="password" class="form-control" name="password" placeholder="PASSWORD">
+                                        <input type="password" class="form-control" name="password"  placeholder="PASSWORD">
                                     </div>
                                 </div>
                          </c:if>
@@ -120,7 +120,7 @@
                                 <input type="hidden" id="profileImage" name="profileImage" value="${userinfo.profileImage}">
                                 <input type="hidden" name="provider" value="${userinfo.provider}">
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                <input class="btn btn-sm btn-primary" type="submit" id="modify" value="수정"/>
+                                <input class="btn btn-sm btn-primary" type="submit" id="modify"  value="수정"/>
                                 <input class="btn btn-sm btn-primary" type="button" value="홈" onClick="self.location='/';">
                             </div>
                         </div>
@@ -219,7 +219,8 @@
     $("#submit").click(function(){
         var password = $("#password").val();
         var pwd1 = $("#pwd1").val();
-        var userName = "<c:out value="${userinfo.userName}"/>";
+        var userName = "<c:out value="${userinfo.username}"/>";
+
         console.log("newPW:"+password);
         console.log("newPW:"+pwd1);
         var info = {

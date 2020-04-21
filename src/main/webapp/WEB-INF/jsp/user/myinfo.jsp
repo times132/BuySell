@@ -69,7 +69,7 @@
 
                                 <div class="col-xs-6">
                                     <h4>ID</h4>
-                                    <input type="text" class="form-control" name="username" value="${userinfo.userName}" readonly="readonly" placeholder="ID">
+                                    <input type="text" class="form-control" name="username" value="${userinfo.username}" readonly="readonly" placeholder="ID">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -83,7 +83,7 @@
 
                                 <div class="col-xs-6">
                                     <h4>NICKNAME</h4>
-                                    <input type="text" class="form-control" name="nickname" value="${userinfo.nickName}" readonly="readonly" placeholder="NICKNAME" title="enter your first name if any.">
+                                    <input type="text" class="form-control" name="nickname" value="${userinfo.nickname}" readonly="readonly" placeholder="NICKNAME" title="enter your first name if any.">
                                 </div>
                             </div>
 
@@ -105,6 +105,7 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <br>
+
                                     <input class="btn btn-primary btn-sm" type="button" value="회원정보수정" onClick="self.location='/user/${userinfo.id}';">
                                     <input class="btn btn-primary btn-sm" type="button" value="홈으로 이동" onClick="self.location='/';">
                                 </div>
@@ -180,8 +181,7 @@
                 <!-------------------------------------- 회원탈퇴 ---------------------------------------------------->
                     <div class="tab-pane" id="withdrawal">
                         <c:if test = "${provider eq 'giveandtake'}">
-                            <form action="/user/${userinfo.id}/delete" method=delete">
-
+                            <form action="/user/${userinfo.id}/delete" method="get">
                                 <div class="form-group">
                                     <br><br><br>
                                     <div class="row">
@@ -205,7 +205,6 @@
                                     <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
                                     <p>${valid_password}</p>
                                 </div>
-
                                 <button class="btn btn-danger btn-sm" id="submit" type="submit">회원탈퇴</button>
                             </form>
                         </c:if>

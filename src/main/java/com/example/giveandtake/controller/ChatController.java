@@ -105,7 +105,6 @@ public class ChatController {
     @MessageMapping("/message")
     @SendToUser
     public void message(ChatMessageDTO chatMessageDTO, Principal principal) {
-        System.out.println("#################################################"+chatMessageDTO);
        chatService.createMessage(chatMessageDTO ,principal);
 
     }

@@ -34,6 +34,7 @@ public class CategoryService {
     //소분류 name 으로 대분류 category 가져오기
     public Category getCateItems(String btype) {
         CategoryItem items = categoryItemsRepository.findByItemName(btype);
+
         Category category = items.getCategory();
         return category;
     }
