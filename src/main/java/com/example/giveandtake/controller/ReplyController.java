@@ -1,11 +1,10 @@
 package com.example.giveandtake.controller;
 
 import com.example.giveandtake.DTO.ReplyDTO;
-import com.example.giveandtake.common.CustomUserDetails;
-import com.example.giveandtake.model.entity.User;
-import com.example.giveandtake.service.ReplyService;
 import com.example.giveandtake.common.Criteria;
+import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.Reply;
+import com.example.giveandtake.service.ReplyService;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -17,9 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("replies")
@@ -69,7 +65,7 @@ public class ReplyController {
     // 댓글 삭제
     @PreAuthorize("principal.user.nickname == #dto.replyer")
     @DeleteMapping(value = "{rid}")
-    public ResponseEntity<String> remove(@RequestBody ReplyDTO dto, @PathVariable("rid") Long rid){
+    public ResponseEntity<String> replyDELETE(@RequestBody ReplyDTO dto, @PathVariable("rid") Long rid){
         logger.info("-----reply removeDELETE-----");
         logger.info("dto : " + dto);
         replyService.deleteReply(rid);

@@ -72,12 +72,12 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li>
-                                    <a href="/admin/userinfo">모든 계정 정보 확인 및 관리
+                                    <a href="/admin/userlist">모든 계정 정보 확인 및 관리
                                         회원 수 <span class="badge badge-pill badge-success">5</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/admin/userrole">계정 권한 삭제 및 추가</a>
+                                    <a href="/admin/role">계정 권한 삭제 및 추가</a>
                                 </li>
                             </ul>
                         </div>
@@ -180,7 +180,18 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
-
+                    <div class="card rounded-0 p-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <h6 class="card-title">ROLE</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <div class="card rounded-0 p-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <h6 class="card-title">BOARD</h6>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -190,30 +201,6 @@
 </div>
 <!-- page-wrapper -->
 <script>
-
-        var actionForm = $("#actionForm");
-        $(".page-item a").on("click", function (e){
-            e.preventDefault();
-            console.log("click");
-            actionForm.find("input[name='page']").val($(this).attr("href"));
-            actionForm.submit();
-        });
-
-        var searchForm = $("#searchForm");
-        $("#searchForm button").on("click", function (e) {
-            if (!searchForm.find("option:selected").val()){
-                alert("검색종류를 선택하세요.");
-                return false;
-            }
-            if (!searchForm.find("input[name='keyword']").val()){
-                alert("키워드를 입력하세요.");
-                return false;
-            }
-            searchForm.find("input[name='page']").val("1");
-            e.preventDefault();
-            searchForm.submit();
-        });
-
     $(function () {
         $('.navbar-toggle-sidebar').click(function () {
             $('.navbar-nav').toggleClass('slide-in');

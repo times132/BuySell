@@ -3,8 +3,8 @@ console.log("mail module****************************");
 var mailService = (function () {
     function sendEmail(email, callback, error) {
         $.ajax({
-            type: "post",
-            url: "/user/auth",
+            type: "get",
+            url: '/user/auth?email='+ email,
             data: email,
             dataType: 'text',//데이타 타입
             async: true,

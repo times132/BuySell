@@ -24,45 +24,45 @@
 <BR>
 <div class="container">
     <div class="chatting">
-        <div class="inbox_all">
-            <div class="inbox_people">
-                <div class="heading_srch">
-                    <div class="recent_heading">
+        <div class="inbox-all">
+            <div class="inbox-people">
+                <div class="heading">
+                    <div class="recent-heading">
                         <span><img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}' onerror="this.src = '/resources/image/profile.png'"/>
                         <br><h4>ME : ${userinfo.nickname}</h4></span>
                     </div>
-                    <div class="srch_bar">
+                    <div class="search-bar">
                         <div class="stylish-input-group">
-                            <input type="text" id="receiver" class="search-bar" placeholder="Search" >
+                            <input type="text" id="receiver"  placeholder="Search" >
                             <span class="input-group-addon">
                                     <button id=creating type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
                             </span>
                         </div>
                     </div>
                 </div>
-                <div class="inbox_chat">
-                        <div class="chat_list">
+                <div class="inbox-chat">
+                        <div class="chat-list">
 
                         </div>
                 </div>
             </div>
             <div class="messages">
-                <div class="row msgheader">
+                <div class="row msgHeader">
                     <div class='col-md-12'>
                     <button id='deleteBtn' class='btn float-right'><img class='btn-img' src='/resources/image/delete.png'></button>
                     <button class='btn float-right' onClick="self.location='/chat/room';"><img class='btn-img' src='/resources/image/enter.png'></button>
                     </div>
                 </div>
 
-                <div class="msg_history">
+                <div class="msg-history">
 
                 </div>
 
 
-                <div class="type_msg">
-                    <div class="input_msg_write">
+                <div class="type-msg">
+                    <div class="input-msg-write">
                         <input type="text" class="write_msg" placeholder="Type a message" id="message" />
-                        <button class="msg_send_btn" type="button" id="sending"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                        <button class="msg-send-btn" type="button" id="sending"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
 <script>
     init();
     $('.messages').hide();
-    var chatUL = $(".chat_list");
+    var chatUL = $(".chat-list");
     <sec:authorize access="isAuthenticated()">
     <sec:authentication property="principal" var="userinfo"/>;
     var sender = '${userinfo.user.nickname}';
@@ -88,9 +88,9 @@
             for (var i = 0, len = data.length || 0; i < len; i++) {
                 console.log(data[i])
                 str += "<div class='chat'><ul>"
-                str += "<li class='chat_li' data-rid='" + data[i].roomId + "'>";
-                str += "<div class='chat_people'>"
-                str += "<div id='enterBtn' class='chat_img'> "
+                str += "<li class='chat-li' data-rid='" + data[i].roomId + "'>";
+                str += "<div class='chat-people'>"
+                str += "<div id='enterBtn' class='chat-img'> "
                 if(data[i].users.length == 1){
                     str += "<img src='/resources/image/profile.png'>" + "</div>";
                 }
@@ -100,14 +100,14 @@
                             +"/profile/s_" + data[i].users[a].user.profileImage
                             +"' onerror=\"this.src='/resources/image/profile.png'\"/>"
                             + "</div>"
-                        str += "<div class='chat_ib'>"
+                        str += "<div class='chat-ib'>"
                         str += (data[i].users[a].msgCount === 0 ? "<h5 id='enterBtn'>" + data[i].users[a].user.nickname+"</h5>"
                             :"<h5 id='enterBtn'>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span></h5>");
                     }
                 }}
 
                 str += "<p>" + data[i].recentMsg+ "</p>";
-                str += "<div class='chat_date'>"+ chatService.displayTime(data[i].msgDate)+"</div></div>"
+                str += "<div class='chat-date'>"+ chatService.displayTime(data[i].msgDate)+"</div></div>"
                 str += "</div></li></ul></div>";
             }
             chatUL.html(str);
@@ -141,9 +141,9 @@
     });
 
     $(document).on("click", "#enterBtn", function(){
-        var room_id = $(this).closest("li").data("rid");
+        var roomId = $(this).closest("li").data("rid");
         if(sender != "") {
-            location.href="/chat/room/enter/"+room_id;
+            location.href="/chat/room/enter/"+roomId;
         }
 
     });
@@ -157,7 +157,7 @@
         var reconnect = 0;
         var message = '';
         //최초시작시 세팅
-        var messageDIV = $(".msg_history");
+        var messageDIV = $(".msg-history");
         init2();
         function init2() {
             // 채팅룸 출력
@@ -176,17 +176,17 @@
 
                 for (var i = 0, len = data.length || 0; i < len; i++) {
                    if(senderId == data[i].senderId) {
-                       str += "<div class='outgoing_msg'>\n" +
-                       "<div class='sent_msg'>\n" +
+                       str += "<div class='outgoing-msg'>\n" +
+                       "<div class='sent-msg'>\n" +
                        "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
                        "<p>" + data[i].message + "</p>\n" +
-                       "<span class='chat_date'>" + chatService.displayTime(data[i].createdDate) + "   " + "</span></h5>" +
+                       "<span class='chat-date'>" + chatService.displayTime(data[i].createdDate) + "   " + "</span></h5>" +
                        "</div></div>"
                    }
                    else{
                        str +=
-                        "<div class='incoming_msg'>\n" +
-                        "<div class='incoming_msg_img'>";
+                        "<div class='incoming-msg'>\n" +
+                        "<div class='incoming-msg-img'>";
 
                        if("[알림]" == data[i].sender){
                            str += "<img src='/resources/image/info2.png'>"
@@ -211,9 +211,9 @@
                         str +=
                         "</div>"+
                         "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
-                        "<div class='received_with_msg'>"+
+                        "<div class='received-with-msg'>"+
                         "<p>"+data[i].message+"</p>\n"+
-                        "<span class='chat_date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
+                        "<span class='chat-date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
                         "</div></div>"
                    }
                 }

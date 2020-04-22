@@ -135,7 +135,7 @@
                                                         <input type="text" class="form-control" id="username" placeholder="ID를 입력해주세요." required/>
                                                     </div>
                                                 </div>
-                                                <div class="alert alert-danger" id="username_check">존재하지 않는 아이디 입니다.</div>
+                                                <div class="alert alert-danger" id="username-check">존재하지 않는 아이디 입니다.</div>
 
 
                                                 <input id="finding" class="btn btn-lg btn-primary btn-block btnForget" value="이메일 발송">
@@ -155,21 +155,21 @@
 </div>
 <script>
     idck = 0;
-    $("#username_check").hide();
+    $("#username-check").hide();
     $("#username").keyup(function() {
         var userName = $("#username").val();
         var username = {
             username :userName
         }
-        $("#username_check").hide();
+        $("#username-check").hide();
         userService.checkUsername(userName, function (data) {
             if (data == false) {
-                $("#username_check").show();
+                $("#username-check").show();
                 $("#finding").attr("disabled", true);
                 idck = 0;
             }
             else {
-                $("#username_check").hide();
+                $("#username-check").hide();
                 idck=1;
             }
             if(idck==1) {
@@ -182,7 +182,8 @@
                                 alert("고객님이 등록하신 계정의 이메일 정보가 부정확합니다.");
                                 return;
                             }
-                            else {
+                            else
+                            {
                                 location.href = "/user/login"
                                 return;
                             }

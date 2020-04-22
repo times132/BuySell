@@ -37,7 +37,7 @@ public class ChatMessage extends DateAudit {
     private MessageType type; // 메시지 타입
 
     @Column
-    private String message; // 메시지
+    private String message; // 메시지 내용
 
 
     @Builder

@@ -111,7 +111,7 @@ public class ChatController {
     //메시지 조회-입장시
     @GetMapping("/messages/{roomId}")
     @ResponseBody
-    public List<ChatMessage> messageInfoGET(@PathVariable String roomId, Principal principal) {
+    public List<ChatMessage> messageInfoGET(@PathVariable String roomId) {
         if(chatService.checkAccess(roomId))
         {
             return chatService.findMessages(roomId);

@@ -23,8 +23,6 @@ public class MailService {
     @Resource(name="mailSender")
     private JavaMailSender sender;
 
-    @Autowired
-    private UserService userService;
 
 
     //이메일 보내기
@@ -36,10 +34,10 @@ public class MailService {
         String content = "";
         HttpSession session = request.getSession();
         if(mailType == "join") {
-            title = "[GIVEANDTAKE] 회원가입 인증 이메일 입니다."; // 제목
+            title = "[BUYSELL] 회원 인증 이메일 입니다."; // 제목
             content = System.getProperty("line.separator") + //한줄씩 줄간격을 두기위해 작성
                     System.getProperty("line.separator") +
-                    "안녕하세요 회원님 GIVEANDTAKE를 찾아주셔서 감사합니다"
+                    "안녕하세요 회원님 BUYSELL을 찾아주셔서 감사합니다"
                     + System.getProperty("line.separator") +
                     System.getProperty("line.separator") +
                     " 인증번호는 " + key + " 입니다. "
@@ -50,13 +48,13 @@ public class MailService {
         }
 
         if(mailType.equals("findpw")){
-            title = "[GIVEANDTAKE] 비밀번호 찾기 임시비밀번호 이메일 입니다.";    //제목
+            title = "[BUYSELL] 비밀번호 찾기 임시비밀번호 이메일 입니다.";    //제목
             content =
                             System.getProperty("line.separator")+
 
                             System.getProperty("line.separator")+
 
-                            "안녕하세요 회원님 GIVEANDTAKE를 찾아주셔서 감사합니다"
+                            "안녕하세요 회원님 BUYSELL를 찾아주셔서 감사합니다"
 
                             +System.getProperty("line.separator")+
 
@@ -130,16 +128,14 @@ public class MailService {
     }
 
 
-    public boolean checkCode(HttpServletRequest request, String codekey, String email){
+    public boolean checkCode(HttpServletRequest request, String codeKey, String email){
      HttpSession session = request.getSession();
      String key = (String) session.getAttribute("key");
         System.out.println(email);
         System.out.println(key);
-         if(codekey.equals(key)){
+         if(codeKey.equals(key)){
              System.out.println("일치#############");
              session.removeAttribute("key");
-             userService.changeROLE(email);
-
              return true;
         }
         System.out.println("불일치#############");
