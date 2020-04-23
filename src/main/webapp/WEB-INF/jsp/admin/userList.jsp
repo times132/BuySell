@@ -72,12 +72,12 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li>
-                                    <a href="/admin/userinfo">모든 계정 정보 확인 및 관리
+                                    <a href="/admin/userlist">모든 계정 정보 확인 및 관리
                                         회원 수 <span class="badge badge-pill badge-success">5</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/admin/userrole">계정 권한 삭제 및 추가</a>
+                                    <a href="/admin/role">계정 권한 삭제 및 추가</a>
                                 </li>
                             </ul>
                         </div>
@@ -232,6 +232,7 @@
                                         <td class="role">
                                             <c:forEach items="${user.roles}" var="role">
                                                 <span class='badge badge-pill badge-primary notification'>${role.role.name}</span>
+                                                <br>
                                             </c:forEach>
                                         </td>
                                         <td class="deleting">
@@ -262,7 +263,7 @@
                             </div>
 
 
-                            <form id="actionForm" action="/admin/userinfo" method="get">
+                            <form id="actionForm" action="/admin/userlist" method="get">
                                 <input type="hidden" name="page" value="${pageMaker.cri.page}">
                                 <input type="hidden" name="type" value="${pageMaker.cri.type}">
                                 <input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
@@ -288,7 +289,7 @@
             var check = confirm("선택한 회원의 탈퇴를 진행하시겠습니까?");
             if(check) {
                 actionForm.append("<input type='hidden' name='id' value='" + $(this).attr("href") + "'>");
-                actionForm.attr("action", "/admin/userinfo/delete");
+                actionForm.attr("action", "/admin/userlist/delete");
                 actionForm.submit();
             }
         });

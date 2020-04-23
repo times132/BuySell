@@ -153,7 +153,7 @@ public class FileController {
 
     @PostMapping(value = "/uploadProfile", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> profileUpload(MultipartFile uploadProfile, @AuthenticationPrincipal CustomUserDetails user){
+    public ResponseEntity<Map<String, Object>> profilePOST(MultipartFile uploadProfile, @AuthenticationPrincipal CustomUserDetails user){
         logger.info("-----User uploadProfile-----");
 
         Long userid = user.getUser().getId();

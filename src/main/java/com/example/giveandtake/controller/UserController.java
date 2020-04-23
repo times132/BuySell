@@ -57,7 +57,7 @@ public class UserController {
     }
     //회원가입, 회원추가
     @PostMapping("/user/signup")
-    public String execSignup(@Valid UserDTO userDto, Errors errors, Model model) {
+    public String signUpPOST(@Valid UserDTO userDto, Errors errors, Model model) {
         if (errors.hasErrors()) {
             // 회원가입 실패시, 입력 데이터를 유지
             model.addAttribute("userDto", userDto);
@@ -83,18 +83,18 @@ public class UserController {
     //중복이메일 검사
     @RequestMapping(value = "/user/checkEmail", method = RequestMethod.GET)
     @ResponseBody
-    public boolean emailCheck(@RequestParam("email") String email) {
+    public boolean checkEmail(@RequestParam("email") String email) {
         return userService.checkEmail(email);
     }
 
-    //중복닉네임 검사
+    //중복 닉네임 검사
     @RequestMapping(value = "/user/checkNickname", method = RequestMethod.GET)
     @ResponseBody
     public boolean checkNickname(@RequestParam("nickname") String nickname) {
         return userService.checkNickName(nickname);
     }
 
-    //중복아이디 검사
+    //중복 아이디 검사
     @RequestMapping(value = "/user/checkUsername", method = RequestMethod.GET)
     @ResponseBody
     public boolean checkUsername(@RequestParam("username") String username) {
@@ -172,7 +172,7 @@ public class UserController {
 //<----------------회원정보 --------------------------------------------------------------------------------------------------->
 // 내 정보 페이지
     @GetMapping("/user")
-    public String dispMyInfo(Model model) {
+    public String myInfoGET(Model model) {
         List<String> socialList = new ArrayList<String>(Arrays.asList("kakao", "google"));
         System.out.println(socialList);
         model.addAttribute("socialList", socialList);

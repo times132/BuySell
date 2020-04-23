@@ -133,16 +133,17 @@
 
                                         <c:if test = "${mail eq null}">
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="e_mail" name="email" placeholder="이메일을 입력해주세요" >
+                                                <input type="text" class="form-control" id="e-mail" name="email" placeholder="이메일을 입력해주세요" >
                                             </div>
+                                            <p>${valid_email}</p>
                                             <div class="col-sm-4">
-                                                <button class="btn btn-danger btn-sm" id="checkbtn" type="submit">중복 확인</button>
+                                                <button class="btn btn-danger btn-sm" id="checkBtn" type="submit">중복 확인</button>
                                                 <button class="btn btn-danger btn-sm" id="auth" type="submit" disabled="disabled">이메일 전송</button>
                                             </div>
                                         </c:if>
                                         <c:if test = "${mail ne null}">
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="e_mail" name="email" value="${userinfo.email}" readonly="readonly" >
+                                                <input type="text" class="form-control" id="e-mail" name="email" value="${userinfo.email}" readonly="readonly" >
                                             </div>
                                             <div class="col-sm-4">
                                                 <button class="btn btn-danger btn-sm" id="auth" type="submit">이메일 전송</button>
@@ -152,7 +153,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <div class="alert" id="email_check"></div><br>
+                                    <div class="alert" id="email-check"></div><br>
                                 </div>
                             </div>
 
@@ -195,10 +196,10 @@
                                     <br>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="password" class="form-control" name="password" id="pwd1" placeholder="비밀번호">
+                                            <input type="password" class="form-control" name="password" id="newPW" placeholder="비밀번호">
                                         </div>
                                         <div class="col-md-6">
-                                            <input type="password" class="form-control" name="password2" id="pwd2" placeholder="비밀번호 확인">
+                                            <input type="password" class="form-control" id="confirmPW" placeholder="비밀번호 확인">
                                         </div>
                                     </div>
                                     <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
@@ -239,57 +240,60 @@
             profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
         }
     });
-
-    $("#checkbtn").on("click", function () {
-        var email = $("#e_mail").val();
+    //이메일 중복확인
+    $("#checkBtn").on("click", function () {
+        var email = $("#e-mail").val();
+        if(email == ""){
+            alert('이메일을 입력해주세요');
+            return;
+        }
         userService.checkEmail(email, function (data) {
             if (data) {
-                $("#email_check").attr("class", "alert alert-danger");
-                $("#email_check").html("중복된 이메일 입니다.");
+                $("#email-check").attr("class", "alert alert-danger");
+                $("#email-check").html("중복된 이메일 입니다.");
                 $("#auth").attr("disabled", "disabled");
-                $("#email_check").show();
+                $("#email-check").show();
             }
             else {
-                $("#email_check").attr("class", "alert alert-success");
-                $("#email_check").html("사용 가능한 이메일 입니다.");
+                $("#email-check").attr("class", "alert alert-success");
+                $("#email-check").html("사용 가능한 이메일 입니다.");
                 $("#auth").removeAttr("disabled");
             }
         });
     });
 
     $("#codex").hide();
+    //이메일 전송
     $('#auth').click(function(){
-        var email = $('#e_mail').val();
+        var email = $('#e-mail').val();
         console.log(email);
-        var e_mail = {
-                email : email
-            };
 
-            $("#codex").show();
-            mailService.sendEmail(e_mail, function (result) {
-                if (result != "true"){
-                    alert(result);
-                }
-                return;
-            });
+        $("#codex").show();
+        mailService.sendEmail(email, function (result) {
+            if (result != "true"){
+                alert(result);
+            }
+            return;
+        });
     });
+    //인증번호 확인
     $('#confirm').click(function(){
 
-        var email = $('#e_mail').val();
+        var email = $('#e-mail').val();
         var code = $('#code').val();
         var checking = {
-            codekey : code,
+            codeKey : code,
             email : email
         };
 
         mailService.checkCode(checking, function (result) {
             if (result){
-                    alert("계정이 활성화 되었습니다.");
-                    location.href = "/user/info";
-                    return;
+                alert("계정이 활성화 되었습니다.");
+                location.href = "/user";
+                return;
             }
-             else {
-                 alert("인증번호가 틀렸습니다. 인증번호를 다시 확인해주세요");
+            else {
+                alert("인증번호가 틀렸습니다. 인증번호를 다시 확인해주세요");
                 return;
             }
 
@@ -297,22 +301,21 @@
 
     });
 
-    $(function(){
-        $("#alert-success").hide();
-        $("#alert-danger").hide();
-        $("input").keyup(function(){
-            var pwd1=$("#pwd1").val(); var pwd2=$("#pwd2").val();
-            if(pwd1 != "" || pwd2 != ""){
-                if(pwd1 == pwd2){
+    $("input").keyup(function(){
+        var password=$("#password").val();
+        var confirmPW=$("#confirmPW").val();
+        if(password != "" || confirmPW != ""){
+            if(password == confirmPW){
                 $("#alert-success").show();
                 $("#alert-danger").hide();
-                $("#submit").removeAttr("disabled"); }
+                $("#submit")
+                    .removeAttr("disabled");
+            }
             else{
                 $("#alert-success").hide(); $("#alert-danger").show();
                 $("#submit").attr("disabled", "disabled");
             }
-            }
-        });
+        }
     });
 
 </script>

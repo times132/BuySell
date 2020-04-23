@@ -12,6 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입 페이지</title>
+    <script type="text/javascript" src="/resources/js/mail.js"></script>
 </head>
 <body>
 <br>
@@ -33,22 +34,22 @@
                     </div>
                     <input type="text" class="form-control" id="username" name="username" placeholder="ID" required/>
                 </div> <!-- form-group end.// -->
-                <div class="alert alert-danger" id="username_check">이미 사용중인 ID입니다.</div><p>${valid_username}</p><br>
+                <div class="alert alert-danger" id="username-check">이미 사용중인 ID입니다.</div><p>${valid_username}</p><br>
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                     </div>
-                    <input type="password" name="password" id="pwd1" class="form-control" placeholder="PASSWORD"required />
+                    <input type="password" name="password" id="password" class="form-control" placeholder="PASSWORD"required />
 
                 </div> <!-- form-group// -->
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                     </div>
-                    <input type="password" name="reuserPwd" id="pwd2" class="form-control" placeholder="CONFIRM PASSWORD" required />​
+                    <input type="password"  id="confirmPW" class="form-control" placeholder="CONFIRM PASSWORD" required />​
                 </div> <!-- form-group// -->
                 <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
-                <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
+                <div class="alert alert-danger" id="alert-danger">비밀번호 확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
                 <p>${valid_password}</p>
 
                 <div class="form-group input-group">
@@ -60,10 +61,24 @@
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
-                    </div>
+                     </div>
                     <input name="email"  class="form-control" id="email" placeholder="EMAIL ADDRESS" value="${email}" type="email" required/>
-                </div> <!-- form-group// -->
-                <p>${valid_email}</p>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="email-check">중복확인</span>
+                        <span class="input-group-text" id="auth">메일 전송</span>
+                    </div>
+                    <p>${valid_email}</p>
+                </div>
+                <div class="form-group input-group authentication">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <input class="form-control" id="code" placeholder="6 CODE NUMBERS" required/>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="confirm">인증</span>
+                    </div>
+                </div>
+
                 <div class="form-group input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
@@ -76,7 +91,7 @@
                     </div>
                     <input type="text" class="form-control" id="nickname" name="nickname" placeholder="NICKNAME" required/>
                 </div> <!-- form-group end.// -->
-                <div class="alert alert-danger" id="nickname_check">이미 사용중인 닉네임입니다.</div><p>${valid_nickname}</p><br>
+                <div class="alert alert-danger" id="nickname-check">이미 사용중인 닉네임입니다.</div><p>${valid_nickname}</p><br>
 
 
             <div class="form-group">
@@ -90,26 +105,46 @@
 </div>
 <!--container end.//-->
 <script>
-    // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
+    //이메일 중복확인
+    $("#auth").hide();
+    $("#email-check").on("click", function () {
+        var email = $("#email").val();
+        if(email == ""){
+            alert('이메일을 입력해주세요');
+            return;
+        }
+        userService.checkEmail(email, function (data) {
+            if (data) {
+                alert("이미 존재하는 이메일 입니다. 다른 이메일을 입력해주세요");
+            }
+            else {
+                $("#auth").show();
+                alert("사용 가능한 이메일 입니다. 메일 인증을 시도해 주세요");
+                $("#email-check").hide();
+                $("#auth").removeAttr("disabled");
+            }
+        });
+    });
+
+    // 닉네임 유효성 검사(0 = 중복 / 1 != 중복)
     $("#submit")
         .attr("disabled", true);
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
-    idck1 = 0;
-    $("#nickname_check").hide();
-    $("#username_check").hide();
+    idck1 = 0;idck = 0;  pwck= 0; mailck =0;
+    $("#nickname-check").hide();
+    $("#username-check").hide();
     $("#nickname").keyup(function() {
         var nickname = $("#nickname").val();
-
         userService.checkNickname(nickname, function (data) {
             if (data) {
-                $("#nickname_check").show();
+                $("#nickname-check").show();
                 $("#submit").attr("disabled", true);
                 idck1=0;
             } else {
-                $("#nickname_check").hide();
+                $("#nickname-check").hide();
                 idck1 = 1;
             }
-            if(idck==1 && idck1==1){
+            if(idck==1 && idck1==1 && pwck == 1 && mailck == 1){
                 $("#submit")
                     .removeAttr("disabled");
             }
@@ -117,42 +152,93 @@
     });
 
     // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
-    idck = 0;
+
     $("#username").keyup(function() {
         var username = $("#username").val();
-        $("#username_check").hide();
+        $("#username-check").hide();
         userService.checkUsername(username, function (data) {
             if (data) {
-                $("#username_check").show();
+                $("#username-check").show();
                 $("#submit").attr("disabled", true);
                 idck=0;
             }
             else {
-                $("#username_check").hide();
+                $("#username-check").hide();
                 idck=1;
             }
-            if(idck==1 && idck1==1){
+            if(idck==1 && idck1==1 && pwck == 1 &&mailck ==1){
                 $("#submit")
                     .removeAttr("disabled");
             }
         });
     });
 
-    $(function(){
+
         $("#alert-success").hide();
         $("#alert-danger").hide();
-        $("input").keyup(function(){ var pwd1=$("#pwd1").val();
-        var pwd2=$("#pwd2").val();
-            if(pwd1 != "" || pwd2 != ""){ if(pwd1 == pwd2){
-                $("#alert-success").show();
-                $("#alert-danger").hide();
-                $("#submit").removeAttr("disabled"); }
-            else{ $("#alert-success").hide(); $("#alert-danger").show();
-                $("#submit").attr("disabled", "disabled");
-            }
+        $("input").keyup(function(){
+            var password=$("#password").val();
+            var confirmPW=$("#confirmPW").val();
+            if(password != "" || confirmPW != ""){
+                if(password == confirmPW){
+                    $("#alert-success").show();
+                    $("#alert-danger").hide();
+                    pwck = 1;
+                }
+                else{
+                    $("#alert-success").hide(); $("#alert-danger").show();
+                    $("#submit").attr("disabled", "disabled");
+                    pwck = 0;
+                }
+                if(idck==1 && idck1==1 && pwck == 1 && mailck ==1){
+                    $("#submit")
+                        .removeAttr("disabled");
+                }
             }
         });
+
+    //이메일 전송.
+    $(".authentication").hide();
+    $('#auth').click(function(){
+        var email = $('#email').val();
+        console.log(email);
+        alert(email+"로 인증번호 6자리가 전송됩니다..인증번호를 확인해주세요");
+        $(".authentication").show();
+        mailService.sendEmail(email, function (result) {
+            if (result != "true"){
+                alert(result);
+            }
+            return;
+        });
     });
+    //인증번호 확인
+    $('#confirm').click(function(){
+
+        var email = $('#email').val();
+        var code = $('#code').val();
+        var checking = {
+            codeKey : code,
+            email : email
+        };
+        mailService.checkCode(checking, function (result) {
+            if (result){
+                alert("인증이 완료되었습니다.");
+                mailck =1;
+                return;
+            }
+            else {
+                alert("인증번호가 틀렸습니다. 인증번호를 다시 확인해주세요");
+                return;
+            }
+            if(idck==1 && idck1==1 && pwck == 1 && mailck ==1){
+                $("#submit")
+                    .removeAttr("disabled");
+            }
+
+        });
+
+    });
+
 
 </script>
 

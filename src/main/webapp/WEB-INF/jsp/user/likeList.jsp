@@ -72,7 +72,7 @@
                             <c:out value="${like.board.bid}"/>
                         </th>
 
-                        <td class="btype">
+                        <td class="category">
                             <c:out value="${like.board.category}"/>
                         </td>
 

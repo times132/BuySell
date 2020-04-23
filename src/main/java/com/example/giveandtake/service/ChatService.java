@@ -145,7 +145,6 @@ public class ChatService{
     }
 //채팅방 삭제
     public void deleteChatRoom(String roomId, String nickName) {
-        System.out.println("DELETE USER");
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         List<ChatUsers> users = chatRoom.getUsers();
         if (users.size() == 1){
@@ -160,14 +159,14 @@ public class ChatService{
 
     }
 
-    //채팅방 대화내용 모두 가져오기
+    //채팅방 대화 내용 모두 가져오기
     public List<ChatMessage> findMessages(String roomId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User me = ((CustomUserDetails) authentication.getPrincipal()).getUser();
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         List<ChatMessage> messages = chatRoom.getMessages();
         List<ChatUsers> users = chatRoom.getUsers();
-        //메세지수 0
+        //메세지 수 0
         for (ChatUsers user : users){
             if (!user.getUser().getNickname().equals(me.getNickname())){
                 ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);

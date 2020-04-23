@@ -41,7 +41,7 @@
 }
 .uploadResult{
     width: 100%;
-    background-color: gray;
+    background-color: yellow;
 }
 .uploadResult ul{
     display: flex;
@@ -61,4 +61,13 @@
     overflow: hidden;
     height: 100%;
     width: 100%;
+}
+#email-check{
+    cursor: pointer;
+}
+#auth{
+    cursor: pointer;
+}
+#confirm{
+    cursor: pointer;
 }

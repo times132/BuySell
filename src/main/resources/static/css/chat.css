@@ -1,21 +1,21 @@
 .container{max-width:500px; margin:auto;}
 img{ max-width:100%;}
-.inbox_people {
+.inbox-people {
     background: #A7CEE2 none repeat scroll 0 0;
     float: left;
     overflow: hidden;
     width: 40%; border-right:1.5px solid #c4c4c4;
 }
-.inbox_all {
+.inbox-all {
     border: 1.5px solid white;
     clear: both;
     overflow: hidden;
 }
-.top_spac{ margin: 20px 0 0;}
+.top-spac{ margin: 20px 0 0;}
 
 
-.recent_heading {float: left; width:50%;}
-.recent_heading img{
+.recent-heading {float: left; width:50%;}
+.recent-heading img{
     float : left;
     object-fit: cover;
     object-position: top;
@@ -24,24 +24,24 @@ img{ max-width:100%;}
     width : 70px;
     padding-bottom: 4px;
 }
-.recent_heading span h4 {
+.recent-heading span h4 {
     float: right;
     color:#626262;
     font-size: 15px;
     font-weight: 600;
     margin: auto;
 }
-.srch_bar {
+.search-bar{
     display: inline-block;
     text-align: right;
     width: 100%;
 }
 /*검색창 밑 줄*/
-.heading_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1.5px solid white;}
+.heading{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1.5px solid white;}
 
 
 /*검색창*/
-.srch_bar input{
+.search-bar input{
     border:3px solid white;
     border-radius: 10px;
     width:80%;
@@ -49,22 +49,22 @@ img{ max-width:100%;}
     background: white;
 }
  /*검색버튼*/
- .srch_bar .input-group-addon button {
+ .search-bar .input-group-addon button {
      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
      border: medium none;
      padding: 0;
      color: #2874f0;
      font-size: 18px;
  }
-.srch_bar .input-group-addon { margin: 0 0 0 -27px;}
+.search-bar .input-group-addon { margin: 0 0 0 -27px;}
 /*닉네임*/
-.chat_ib h5{ font-size:17px; color: #626262; margin:0 0 5px 0; font-weight : 600; cursor: pointer;}
+.chat-ib h5{ font-size:17px; color: #626262; margin:0 0 5px 0; font-weight : 600; cursor: pointer;}
 /*시간*/
-.chat_ib div{ font-size:13px; float:right; margin: auto;}
+.chat-ib div{ font-size:13px; float:right; margin: auto;}
 /*최근 메세지 내용*/
-.chat_ib p{ font-size:14px; color:dimgray; margin:auto;}
+.chat-ib p{ font-size:14px; color:dimgray; margin:auto;}
 /*메세지 개수*/
-.chat_ib h5 span{
+.chat-ib h5 span{
     vertical-align:top;
     float: right;
     font-weight : 500;
@@ -77,13 +77,13 @@ img{ max-width:100%;}
     color: white;
     margin: auto
 }
-.chat_img {
+.chat-img {
     cursor: pointer;
     float: left;
     width: 17%;
 }
 /*이미지*/
-.chat_img img{
+.chat-img img{
     object-fit: cover;
     object-position: top;
     border-radius: 40%;
@@ -91,12 +91,12 @@ img{ max-width:100%;}
     width : 50px;
     padding-bottom: 0;
 }
-.chat_ib {
+.chat-ib {
     float: left;
     padding: 0 0 0 15px;
     width: 78%;
 }
-.chat_ib button {
+.chat-ib button {
     padding-bottom: 0;
     float: right;
     background-color: transparent;
@@ -105,23 +105,23 @@ img{ max-width:100%;}
 }
 
 /*각 사람당 칸*/
-.Chat{
+.chat{
     border-bottom: 1.2px solid white;
     margin: 0;
     padding: 18px 16px 10px;
 }
-.chat_people{ overflow:hidden; clear:both;}
+.chat-people{ overflow:hidden; clear:both;}
 
-.inbox_chat { height: 550px; overflow-y: scroll;}
-.inbox_chat ul{
+.inbox-chat { height: 550px; overflow-y: scroll;}
+.inbox-chat ul{
     list-style-type: none;
 }
 
-.incoming_msg_img {
+.incoming-msg-img {
     display: inline-block;
     width: 7%;
 }
-.incoming_msg_img img{
+.incoming-msg-img img{
     object-fit: cover;
     object-position: top;
     border-radius: 40%;
@@ -129,14 +129,14 @@ img{ max-width:100%;}
     height: 2.2rem;
     padding-bottom: 0;
 }
-.received_msg {
+.received-msg {
     display: inline-block;
     padding: 0 0 0 10px;
     vertical-align: top;
     width: 92%;
 }
 
-.received_with_msg p {
+.received-with-msg p {
     background: #ebebeb none repeat scroll 0 0;
     border-radius: 3px;
     color: #646464;
@@ -145,20 +145,20 @@ img{ max-width:100%;}
     padding: 5px 10px 5px 12px;
     width: 100%;
 }
-.time_date {
+.time-date {
     color: #747474;
     display: block;
     font-size: 12px;
     margin: 8px 0 0;
 }
-.received_with_msg { width: 57%;}
+.received-with-msg { width: 57%;}
 .messages {
     float: left;
     padding: 30px 15px 0 25px;
     width: 60%;
 }
 
-.sent_msg p {
+.sent-msg p {
     background: #A7CEE2 none repeat scroll 0 0;
     border-radius: 3px;
     font-size: 14px;
@@ -166,12 +166,12 @@ img{ max-width:100%;}
     padding: 5px 10px 5px 12px;
     width:100%;
 }
-.outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
-.sent_msg {
+.outgoing-msg{ overflow:hidden; margin:26px 0 26px;}
+.sent-msg {
     float: right;
     width: 46%;
 }
-.input_msg_write input {
+.input-msg-write input {
     background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
     border: medium none;
     color: #4c4c4c;
@@ -180,8 +180,8 @@ img{ max-width:100%;}
     width: 100%;
 }
 
-.type_msg { border-top: 1px solid #c4c4c4;position: relative;}
-.msg_send_btn {
+.type-msg { border-top: 1px solid #c4c4c4;position: relative;}
+.msg-send-btn {
     background: #A7CEE2 none repeat scroll 0 0;
     border: medium none;
     border-radius: 50%;
@@ -195,7 +195,7 @@ img{ max-width:100%;}
     width: 33px;
 }
 .chatting { padding: 0 0 50px 0;}
-.msg_history {
+.msg-history {
     height: 516px;
     overflow-y: auto;
 }

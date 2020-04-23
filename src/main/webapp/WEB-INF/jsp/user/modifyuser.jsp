@@ -134,18 +134,18 @@
                     <div class="form-group">
                         <div class="col-xs-6">
                             <h4>PASSWORD</h4>
-                            <input type="password" class="form-control" id="password" placeholder="password" title="enter your password.">
+                            <input type="password" class="form-control" id="password" placeholder="기존 비밀번호" title="enter your password.">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
                             <h4>NEW PASSWORD</h4>
-                            <input type="password" class="form-control" name="password" id="pwd1" placeholder="password" title="enter your password.">
+                            <input type="password" class="form-control" name="password" id="newPW" placeholder="password" title="enter your password.">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="pwd2"><h4>CONFIRM PASSWORD</h4></label>
-                        <input type="password" class="form-control" name="password2" id="pwd2" placeholder="비밀번호 확인" title="enter your password2.">
+                        <label for="confirmPW"><h4>CONFIRM PASSWORD</h4></label>
+                        <input type="password" class="form-control" name="password2" id="confirmPW" placeholder="비밀번호 확인" title="enter your password2.">
                         <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
                         <div class="alert alert-danger" id="alert-danger">비밀번호확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
                         <p>${valid_password}</p>
@@ -201,10 +201,10 @@
         $("#alert-success").hide();
         $("#alert-danger").hide();
         $("input").keyup(function(){
-            var pwd1=$("#pwd1").val();
-            var pwd2=$("#pwd2").val();
-            if(pwd1 != "" || pwd2 != ""){
-                if(pwd1 == pwd2){
+            var newPW=$("#newPW").val();
+            var confirmPW=$("#confirmPW").val();
+            if(newPW != "" || confirmPW != ""){
+                if(newPW == confirmPW){
                     $("#alert-success").show();
                     $("#alert-danger").hide();
                     $("#submit").removeAttr("disabled"); }
@@ -218,15 +218,14 @@
 
     $("#submit").click(function(){
         var password = $("#password").val();
-        var pwd1 = $("#pwd1").val();
+        var newPW = $("#newPW").val();
         var userName = "<c:out value="${userinfo.username}"/>";
 
-        console.log("newPW:"+password);
-        console.log("newPW:"+pwd1);
+        console.log("newPW:"+newPW);
         var info = {
             username : userName,
-            password : password,
-            newPW : pwd1
+            password : password,    //기존비밀번호
+            newPW : newPW
         };
         userService.changePW(info, function (result) {
             alert(result);

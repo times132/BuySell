@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService {
             user = userRepository.save(userMapper.toEntity(userDto));
 
             //Role 저장
-            role = roleRepository.findByName(RoleName.ROLE_GUEST)
+            role = roleRepository.findByName(RoleName.ROLE_USER)
                     .orElseThrow(() -> new AppException("User Role not set"));
         }
         else {

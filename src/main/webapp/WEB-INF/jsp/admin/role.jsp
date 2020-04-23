@@ -72,12 +72,12 @@
                         <div class="sidebar-submenu">
                             <ul>
                                 <li>
-                                    <a href="/admin/userinfo">모든 계정 정보 확인 및 관리
+                                    <a href="/admin/userlist">모든 계정 정보 확인 및 관리
                                         회원 수 <span class="badge badge-pill badge-success">5</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/admin/userrole">계정 권한 삭제 및 추가</a>
+                                    <a href="/admin/role">계정 권한 삭제 및 추가</a>
                                 </li>
                             </ul>
                         </div>
@@ -177,7 +177,7 @@
                         </div>
                 <div class="card-body">
 
-                            <form id="searchForm" action="/admin/userinfo" method="get">
+                            <form id="searchForm" action="/admin/userlist" method="get">
                                 <div class="row justify-content-md-center">
                                     <div class="input-group input-group-sm mb-3 col-lg-8">
                                         <div class="input-group-append">
@@ -255,7 +255,7 @@
                             </div>
 
 
-                            <form id="actionForm" action="/admin/userinfo" method="get">
+                            <form id="actionForm" action="/admin/role" method="get">
                                 <input type="hidden" name="page" value="${pageMaker.cri.page}">
                                 <input type="hidden" name="type" value="${pageMaker.cri.type}">
                                 <input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">

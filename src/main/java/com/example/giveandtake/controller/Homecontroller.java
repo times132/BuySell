@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @AllArgsConstructor
-public class Homecontroller {
+public class HomeController {
 
     private CategoryService categoryService;
 

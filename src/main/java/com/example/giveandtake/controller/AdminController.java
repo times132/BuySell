@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +36,7 @@ public class AdminController {
     }
 
     //회원정보보기 및 삭제
-    @GetMapping("/userinfo")
+    @GetMapping("/userlist")
     public String userListGET(SearchCriteria searchCri, Model model) {
         searchCri.setPageSize(10); // 한 화면에 유저 10개씩 표시
         Page<User> userPage = adminService.getList(searchCri);
@@ -51,11 +48,11 @@ public class AdminController {
                 .realEndPage(userPage.getTotalPages())
                 .listSize(5) // 페이징 5로 설정
                 .build());
-        return "/admin/userinfo";
+        return "/admin/userList";
     }
     //회원 롤 관리
-    @GetMapping("/userrole")
-    public String userRoleGET(SearchCriteria searchCri, Model model) {
+    @GetMapping("/role")
+    public String userRoleListGET(SearchCriteria searchCri, Model model) {
         searchCri.setPageSize(10); // 한 화면에 유저 10개씩 표시
         Page<UserRoles> userPage = adminService.getRole(searchCri);
         List<Role> roles= adminService.findAllRole();
@@ -70,26 +67,25 @@ public class AdminController {
         return "/admin/role";
     }
 
-    //회원 탈퇴
-    @GetMapping("/userinfo/delete")
+    //회원 삭제
+    @GetMapping("/userlist/delete")
     public String deleteGET(@RequestParam("id") Long id, @ModelAttribute("cri") SearchCriteria cri) {
         userService.delete(id);
-        return "redirect:/admin";
+        return "redirect:/admin/userlist";
     }
 
     //롤 삭제
     @GetMapping("/userrole/delete")
     public String deleteUserRole(@RequestParam("id") Long id, @ModelAttribute("cri") SearchCriteria cri) {
-        System.out.println("**delete**" + id);
         adminService.deleteUserRole(id);
-        return "redirect:/admin/userrole";
+        return "redirect:/admin/role";
     }
     //롤 추가
     @GetMapping("/userrole/add")
     public String addUserRole(@RequestParam("username") String username, @RequestParam("roleName") String roleName, @ModelAttribute("cri") SearchCriteria cri) {
         System.out.println("**delete**" + username);
         adminService.addUserRole(username, roleName);
-        return "redirect:/admin/userrole";
+        return "redirect:/admin/role";
     }
 
 

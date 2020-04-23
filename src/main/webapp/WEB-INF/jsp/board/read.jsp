@@ -170,7 +170,6 @@
                 var nickname = {
                     nickname : nickName
                 };
-
                 chatService.createRoom(nickname, function (result) {
                         alert("채팅방으로 이동합니다.");
                         location.href = "/chat/room/enter/" + result;

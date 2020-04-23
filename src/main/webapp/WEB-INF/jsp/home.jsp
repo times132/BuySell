@@ -210,7 +210,7 @@
         });
 
         var itemList = $(".itemList");
-        var itemtable = $(".item-body");
+        var itemTable = $(".item-body");
         $(".item").on("click", function () {
             itemList.show();
             var itemName = $(this).children("img").attr("alt");
@@ -228,7 +228,7 @@
                     str += "</td><td class='writer' style='width: 10%'>" + data[i].writer + "</td><td class='time' style='width: 8%' '>" + commonService.displayTime(data[i].createdDate);
                     str += "</td><td class='viewCnt' style='width: 5%'>" + data[i].viewCnt + "</td><td class='likeCnt' style='width: 5%'>" + data[i].likeCnt + "</td></tr>";
                 }
-                itemtable.html(str);
+                itemTable.html(str);
             });
         });
 
