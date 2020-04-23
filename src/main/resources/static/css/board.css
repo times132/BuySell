@@ -1,6 +1,7 @@
 /* 게시글 조회 */
-.board-body{
+.boardBody{
     width: 90%;
+    padding-top: 15px;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
@@ -27,6 +28,16 @@
     color: #8f96a5;
     font-size: 0.1rem;
     font-weight: bold;
+}
+.writeBtn{
+    border: #d5d0d0 1px solid;
+    padding: 4px;
+    color: black;
+    float: right;
+    border-radius: 2px 2px 2px 2px;
+}
+.listFooter{
+    clear: both;
 }
 .pagination {
     text-align: center;
@@ -65,36 +76,36 @@
 .carousel-item.active{
     overflow: hidden;
 }
-.product_info{
+.productInfo{
     margin-right: 1rem;
 }
-.product_info *{
+.productInfo *{
     padding-bottom: 10px;
 }
-.product_info .createddate{
+.productInfo .createdDate{
     float: right;
 }
-.product_info .price{
+.productInfo .price{
     text-align: right;
 }
-.writer-dropdown{
+.writerDropdown{
     -ms-flex: 1 1 auto;
     right: 0;
     bottom: 0;
     position: absolute;
 }
-.panel-group{
+.panelGroup{
     flex-basis: 0;
     flex-grow: 1;
     max-width: 15rem;
     position: relative;
 }
 @media (max-width: 768px) {
-    .writer-dropdown{
+    .writerDropdown{
         text-align: right;
         position: relative;
     }
-    .panel-group{
+    .panelGroup{
         flex-basis: 0;
         flex-grow: 1;
         position: relative;
@@ -121,7 +132,7 @@
     height: 3rem;
     padding-bottom: 0;
 }
-.reply-profile{
+.replyProfile{
     object-fit: cover;
     object-position: top;
     border-radius: 50%;
@@ -129,7 +140,7 @@
     height: 2rem;
     margin-right: .5rem;
 }
-.card-header{
+.cardHeader{
     display: flex;
 }
 .like{
@@ -148,13 +159,13 @@
 .likebtn img:hover{
     cursor: pointer;
 }
-.card-body{
+.cardBody{
     border-top: 1px solid lightgray;
 }
 .btnlist{
     text-align: right;
 }
-.muted-info{
+.mutedInfo{
     margin-top: 0.5rem;
 }
 .reply-add, .reply-modify{
