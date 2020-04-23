@@ -134,7 +134,7 @@ public class BoardController {
     }
 
 
-    @PreAuthorize("principal.user.nickName == #dto.writer")
+    @PreAuthorize("principal.user.nickname == #dto.writer")
     @PostMapping("/modify")
     public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----board modifyPOST-----");
@@ -144,7 +144,7 @@ public class BoardController {
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
-    @PreAuthorize("principal.user.nickName == #writer")
+    @PreAuthorize("principal.user.nickname == #writer")
     @PostMapping("/remove")
     public String removePOST(@ModelAttribute SearchCriteria searchCri, @RequestParam("bid") Long bid, String writer){
         logger.info("-----board removePOST-----");
@@ -154,7 +154,7 @@ public class BoardController {
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }
 
-    @PreAuthorize("principal.user.nickName == #writer")
+    @PreAuthorize("principal.user.nickname == #writer")
     @PostMapping("sell")
     public String sellPOST(@RequestParam("bid") Long bid, String writer){
         logger.info("-----board sellPOST-----");

@@ -69,8 +69,10 @@
                                 <span class="h6 createddate text-muted"><small><javatime:format pattern="yyyy.MM.dd hh:mm" value="${boardDto.createdDate}"/></small></span>
                             </div>
 
-                            <h1 class="title"><c:out value="${boardDto.title}"/></h1>
-                            <h4 class="price"><fmt:formatNumber value="${boardDto.price}"/>원</h4>
+
+                                <h2><c:out value="${boardDto.title}"/></h2>
+                                <h4 class="price"><fmt:formatNumber value="${boardDto.price}"/>원</h4>
+
 
                             <!-- 작성자 드랍다운 -->
                             <div class="writer-dropdown">
@@ -154,21 +156,14 @@
         </form>
     </div>
 
-    <!-- js -->
+    <!-- js & jquery -->
     <script>
         $(document).ready(function () {
-            function getParameterByName(name) {
-                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                    results = regex.exec(location.search);
-                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-            }
-            var checkUser = getParameterByName("id");
-
-            console.log();
+            // 사용자를 통해 세부페이지로 왔을 때 id값 저장
+            var checkUser = commonService.getParameterByName("id");
             var operForm = $("#operForm");
             var nickName = "<c:out value="${boardDto.user.nickname}"/>";
-            var path = "<c:out value="${boardDto.user.profileImage}"/>";
+
 
             // 닉네임 클릭 후 채팅 클릭 이벤트
             $("#chatting").on("click", function (e) {

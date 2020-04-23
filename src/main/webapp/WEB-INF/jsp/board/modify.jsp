@@ -40,7 +40,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-9">
-                            <input type="text" class="form-control" name="title" value="${boardDto.title}">
+                            <input type="text" class="form-control" name="title" value="${boardDto.title}" maxlength="30">
                         </div>
                         <div class="form-group input-group col-3">
                             <div class="input-group-prepend">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" name="content" rows="10">${boardDto.content}</textarea>
+                        <textarea class="form-control" name="content" rows="10" maxlength="250">${boardDto.content}</textarea>
                     </div>
                 </form>
             </div>
@@ -91,6 +91,7 @@
         </div>
     </div>
 
+    <!-- js & jquery -->
     <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script type="text/javascript" src="/resources/js/board.js"></script>
     <script>
@@ -101,22 +102,21 @@
 
             $("#category option[value='" + categoryId + "']").attr('selected', 'selected');
             $("#items option[value='" + category + "']").attr('selected', 'selected');
+
             var categoryDIV = $("#items");
             $("#category").on("change",function(){
-                alert("카테고리")
                 var id = $("#category option:selected").val();
-                console.log("id"+id);
 
                 boardService.getCategoryItems(id, function (data) {
-                    console.log(data);
                     var str = "<option value=''>---------------------------------------------------</option>";
                     for (var i = 0, len = data.length || 0; i < len; i++) {
                         str += "<option value='"+data[i].itemName+"'>"+ data[i].itemName + "</option>"
                     }
-                    console.log(str);
                     categoryDIV.html(str);
                 });
             });
+
+            // 수정, 목록 버튼 이벤트
             $("button").on("click", function(e){
                 e.preventDefault();
 
@@ -153,6 +153,7 @@
 
             var bidValue = "<c:out value="${boardDto.bid}"/>";
 
+            // 기존 첨부파일 불러오기
             $.getJSON("/board/getFileList", {bid: bidValue}, function (arr) {
                 var str = "";
 
@@ -169,6 +170,7 @@
                 $(".uploadResult ul").html(str);
             });
 
+            // 첨부파일 삭제
             $(".uploadResult").on("click", ".del-image", function (e) {
                 if (confirm("사진을 삭제하시겠습니까?")){
                     var targetLi = $(this).closest("li");

@@ -84,13 +84,10 @@
 
     </div>
 
-    <!-- js -->
-    <script src="/resources/js/jquery.number.min.js"></script>
+    <!-- js & jquery -->
     <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script>
         $(document).ready(function () {
-            $("input[name='price']").number(true);
-
             var writeForm = $("#writeForm");
             $(".btn-submit").on("click", function (e) {
                 e.preventDefault();

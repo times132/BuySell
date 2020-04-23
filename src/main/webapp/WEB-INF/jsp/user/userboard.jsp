@@ -25,7 +25,7 @@
             <div class="col-sm-10"><h1>${user.nickname}</h1></div>
         </div>
         <div class="row">
-            <div class="col-3"><!--left col-->
+            <div class="col-sm-3"><!--left col-->
 
                 <div class="profile-image">
 
@@ -47,7 +47,7 @@
 
 
             </div><!--/col-3-->
-            <div class="col-9">
+            <div class="col-sm-9">
                 <!--------------------------------------게시물---------------------------------------------------->
                 <table class="table table-sm table-hover">
                     <thead>
@@ -75,11 +75,11 @@
                             </td>
 
                             <c:if test="${board.sellCheck eq true}">
-                                <td class="ta-title-sold">
+                                <td class="titleSold">
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
-                                    <span class="sold-replycnt">
+                                    <span class="soldReplyCnt">
                                         [<c:out value="${board.replyCnt}"/>]
                                     </span>
                                     <span class="sold">
@@ -88,11 +88,11 @@
                                 </td>
                             </c:if>
                             <c:if test="${board.sellCheck eq false}">
-                                <td class="ta-title">
+                                <td class="title">
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
-                                    <span class="replycnt">
+                                    <span class="replyCnt">
                                         [<c:out value="${board.replyCnt}"/>]
                                     </span>
                                 </td>

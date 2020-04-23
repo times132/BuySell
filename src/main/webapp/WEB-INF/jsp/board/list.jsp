@@ -162,11 +162,12 @@
         </div>
     </div>
 
-    <!-- js -->
+    <!-- js & jquery -->
     <script>
         $(document).ready(function () {
             var actionForm = $("#actionForm");
 
+            // 세부 페이지 이동
             $(".move").on("click", function (e) {
                 e.preventDefault();
                 actionForm.append("<input type='hidden' name='bid' value='"+$(this).attr("href")+"'>");
@@ -174,6 +175,7 @@
                 actionForm.submit();
             });
 
+            // 페이징 이동
             $(".page-item a").on("click", function (e) {
                 e.preventDefault();
                 console.log("click");
