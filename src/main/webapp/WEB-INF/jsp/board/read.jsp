@@ -63,19 +63,17 @@
                         </div>
 
                         <!-- 제품 기본 정보 -->
-                        <div class="product_info col my-lg-2">
-                            <div class="muted-info">
-                                <span class="h6 btype text-muted"><small>분류 : <c:out value="${boardDto.category}"/></small></span>
-                                <span class="h6 createddate text-muted"><small><javatime:format pattern="yyyy.MM.dd hh:mm" value="${boardDto.createdDate}"/></small></span>
+                        <div class="productInfo col my-lg-2">
+                            <div class="mutedInfo">
+                                <span class="h6 category text-muted"><small>분류 : <c:out value="${boardDto.category}"/></small></span>
+                                <span class="h6 createdDate text-muted"><small><javatime:format pattern="yyyy.MM.dd hh:mm" value="${boardDto.createdDate}"/></small></span>
                             </div>
 
-
-                                <h2><c:out value="${boardDto.title}"/></h2>
-                                <h4 class="price"><fmt:formatNumber value="${boardDto.price}"/>원</h4>
-
+                            <h2><c:out value="${boardDto.title}"/></h2>
+                            <h4 class="price"><fmt:formatNumber value="${boardDto.price}"/>원</h4>
 
                             <!-- 작성자 드랍다운 -->
-                            <div class="writer-dropdown">
+                            <div class="writerDropdown">
                                 <div class='profile'>
                                     <img src='/display?fileName=${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
                                     <button type="button" class="writer btn btn-link btn-sm dropdown-toggle pro" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -86,7 +84,6 @@
                                         <a class="dropdown-item" href="#" id="chatting">1:1채팅</a>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -101,7 +98,7 @@
 
                 <!-- 댓글 -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="cardHeader">
                         <p class="mb-0"><strong class="replycnt"></strong></p>
                         <p class="mb-0">&nbsp|&nbsp</p>
                         <p class="mb-0"><strong class="like">
@@ -113,8 +110,8 @@
                             </sec:authorize>
                         </strong></p>
                     </div>
-                    <div class="card-body">
 
+                    <div class="cardBody">
                         <div class="reply-body">
                             <ul class="replyList">
                                 <!-- 댓글 리스트 -->
@@ -329,7 +326,7 @@
                 for (var i = 0, len = data.content.length || 0; i < len; i++){
                     console.log(data.content[i]);
                     str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
-                    str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id
+                    str += "<div class='reply-header'><img class='replyProfile' src='/display?fileName=" + data.content[i].user.id
                         + "/profile/s_" + data.content[i].user.profileImage
                         + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
                     str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickname + "</strong>";

@@ -13,14 +13,15 @@
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/common.js"></script>
+    <style>
 
+    </style>
 </head>
 <body>
     <%@include file="../include/header.jsp"%>
-    <%@include file="../include/search.jsp"%>
-    <div class="board-body">
+    <div class="boardBody">
         <div class="row">
-            <div class="panel-group">
+            <div class="panelGroup">
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">Panel Title</h3>
@@ -34,10 +35,6 @@
                 </div>
             </div>
             <div class="col-lg-10 col-md-9">
-                <sec:authorize access="isAuthenticated()">
-                    <a href="/board/write">글쓰기</a>
-                </sec:authorize>
-
                 <a href="/board">전체보기</a>
 
                 <table class="table table-sm table-hover">
@@ -114,7 +111,11 @@
                     </tbody>
                 </table>
 
-                <div class="list-footer">
+                <sec:authorize access="isAuthenticated()">
+                    <a class="writeBtn" href="/board/write"><img src="/resources/image/pencil.png"/> 글쓰기</a>
+                </sec:authorize>
+
+                <div class="listFooter">
                     <%-- 페이징 --%>
                     <ul class="pagination pagination-sm justify-content-center">
                         <c:if test="${pageMaker.prev}">
@@ -127,6 +128,8 @@
                             <li class="page-item"><a class="next" href="${pageMaker.endPage + 1}">다음</a></li>
                         </c:if>
                     </ul>
+
+
                 </div>
 
                 <%--검색 폼--%>
