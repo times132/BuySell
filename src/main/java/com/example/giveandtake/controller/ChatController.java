@@ -1,5 +1,6 @@
 package com.example.giveandtake.controller;
 
+import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.ChatMessageDTO;
 import com.example.giveandtake.DTO.ChatRoomDTO;
 import com.example.giveandtake.DTO.ReplyDTO;
@@ -7,6 +8,7 @@ import com.example.giveandtake.common.CustomUserDetails;
 import com.example.giveandtake.model.entity.ChatMessage;
 import com.example.giveandtake.model.entity.ChatRoom;
 import com.example.giveandtake.model.entity.User;
+import com.example.giveandtake.service.BoardService;
 import com.example.giveandtake.service.ChatService;
 import com.example.giveandtake.service.UserService;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.http.HttpResponse;
 import java.security.Principal;
 import java.util.List;
 
@@ -35,6 +38,8 @@ public class ChatController {
 
     private ChatService chatService;
     private UserService userService;
+    private BoardService boardService;
+
     // 채팅 리스트 화면
     @GetMapping("/room")
     public String rooms() {
@@ -117,6 +122,20 @@ public class ChatController {
             return chatService.findMessages(roomId);
         }
         return null;
+    }
+
+    //게시판 내용 메시지 보내기
+    @GetMapping("/message/orderItem")
+    @ResponseBody
+    public void orderItemGET(@RequestParam("bid") Long bid, @RequestParam("userId") Long id, Principal principal, HttpServletResponse response) throws IOException {
+        BoardDTO boardDTO = boardService.getBoardDetail(bid);
+        String roomId = chatService.createChatRoom(boardDTO.getWriter(), principal);
+        chatService.convertBoardToMessage(boardDTO, id, principal, roomId);
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.println("<script>alert('채팅창으로 이동합니다.');location.href='/chat/room/enter/"+roomId+"';</script>");
+        out.flush();
     }
 
 }

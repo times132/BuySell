@@ -1,5 +1,6 @@
 package com.example.giveandtake.service;
 
+import com.example.giveandtake.DTO.BoardDTO;
 import com.example.giveandtake.DTO.ChatMessageDTO;
 import com.example.giveandtake.DTO.ChatRoomDTO;
 import com.example.giveandtake.DTO.ChatUsersDTO;
@@ -13,6 +14,7 @@ import com.example.giveandtake.repository.ChatMessageRepository;
 import com.example.giveandtake.repository.ChatRoomRepository;
 import com.example.giveandtake.repository.ChatUsersRepository;
 import com.example.giveandtake.repository.UserRepository;
+import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import static com.example.giveandtake.model.entity.ChatMessage.MessageType.BOARD;
 
 @Service
 @AllArgsConstructor
@@ -76,9 +80,12 @@ public class ChatService{
                     ChatUsersDTO dto = new ChatUsersDTO();
                         dto.setChatRoom(chatRoom);
                         dto.setUser(part);
-                    chatUsersRepository.save(chatMapper.userToEntity(dto));
+                    ChatUsers chatUsers = chatUsersRepository.save(chatMapper.userToEntity(dto));
+                    chatRoom.getUsers().add(chatUsers);
                 }
+
             }
+
             System.out.println(status);
             return status;
     }
@@ -108,11 +115,13 @@ public class ChatService{
     public void createMessage(ChatMessageDTO chatMessageDTO, Principal principal) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(chatMessageDTO.getRoomId());
         List<ChatUsers> users = chatRoom.getUsers();
+        System.out.println("USER"+users);
 
         if (ChatMessage.MessageType.QUIT.equals(chatMessageDTO.getType())) {
             chatMessageDTO.setMessage(chatMessageDTO.getSender() + "님이 방에서 나갔습니다.");
             chatMessageDTO.setSender("[알림]");
-            if (users.size() == 1){ return;}
+            if (users.size() == 1){ return;
+            }
         }
 
         chatMessageDTO.setChatRoom(chatRoom);
@@ -185,5 +194,26 @@ public class ChatService{
             if (chatUser.getChatRoom().getRoomId().equals(roomId)){return true; }
         }
         return false;
+    }
+    @Transactional
+    public String convertBoardToMessage(BoardDTO boardDTO, Long id,  Principal principal, String roomId) {
+        ChatMessageDTO chatMessageDTO =new ChatMessageDTO();
+        chatMessageDTO.setSender(principal.getName());
+        chatMessageDTO.setSenderId(id.toString());
+        chatMessageDTO.setRoomId(roomId);
+        chatMessageDTO.setType(BOARD);
+
+        BoardDTO boardMsg = new BoardDTO();
+        boardMsg.setBid(boardDTO.getBid());
+        boardMsg.setContent(boardDTO.getContent().substring(0,10));
+        boardMsg.setTitle(boardDTO.getTitle());
+        boardMsg.setPrice(boardDTO.getPrice());
+        boardMsg.setCategory(boardDTO.getCategory());
+        boardMsg.setCreatedDate(boardDTO.getCreatedDate());
+        Gson gson = new Gson();
+        String json = gson.toJson(boardMsg);
+        chatMessageDTO.setMessage(json);
+        createMessage(chatMessageDTO ,principal);
+        return roomId;
     }
 }

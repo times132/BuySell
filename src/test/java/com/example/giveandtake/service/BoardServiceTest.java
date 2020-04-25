@@ -41,15 +41,15 @@ public class BoardServiceTest {
     UserService userService;
 
     @Test
-    @WithUserDetails(value = "y4380")
+    @WithUserDetails(value = "yoo4380")
     public void registerTest(){
         User user = ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
 
         for (int i=1; i<5; i++){
             Board board = Board.builder()
-                    .category("뷰티")
-                    .title("뷰티"+i)
-                    .content("뷰티"+i)
+                    .category("애완")
+                    .title("뽀삐팔아요 분양하세요"+i)
+                    .content("뽀삐"+i)
                     .price(2146+i*578)
                     .replyCnt(0)
                     .viewCnt(0)

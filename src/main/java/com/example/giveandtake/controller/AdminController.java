@@ -76,13 +76,13 @@ public class AdminController {
 
     //롤 삭제
     @GetMapping("/userrole/delete")
-    public String deleteUserRole(@RequestParam("id") Long id, @ModelAttribute("cri") SearchCriteria cri) {
+    public String deleteRoleGET(@RequestParam("id") Long id, @ModelAttribute("cri") SearchCriteria cri) {
         adminService.deleteUserRole(id);
         return "redirect:/admin/role";
     }
     //롤 추가
     @GetMapping("/userrole/add")
-    public String addUserRole(@RequestParam("username") String username, @RequestParam("roleName") String roleName, @ModelAttribute("cri") SearchCriteria cri) {
+    public String addUserRoleGET(@RequestParam("username") String username, @RequestParam("roleName") String roleName, @ModelAttribute("cri") SearchCriteria cri) {
         System.out.println("**delete**" + username);
         adminService.addUserRole(username, roleName);
         return "redirect:/admin/role";

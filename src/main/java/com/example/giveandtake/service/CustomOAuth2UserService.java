@@ -97,7 +97,7 @@ public class CustomOAuth2UserService  implements OAuth2AuthorizedClientService {
         logger.info("######GOOGLE : " + google);
         String username = google.getName();
         UserDTO userDTO = new UserDTO();
-        Authentication authentication;
+
         if (!userService.checkUserName(username)) {
             userDTO.setUsername(username);
             userDTO.setEmail(google.getEmail());

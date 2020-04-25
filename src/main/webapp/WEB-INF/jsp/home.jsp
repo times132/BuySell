@@ -83,11 +83,11 @@
                                     <p>전체보기</p>
                                 </li>
                                 <li class="item cartItem0">
-                                    <img src="/resources/image/home/eatout.png" alt="외식"/>
+                                    <img src="/resources/image/home/restaurant.png" alt="외식"/>
                                     <p>외식</p>
                                 </li>
                                 <li class="item cartItem0">
-                                    <img src="/resources/image/home/cafe.png" alt="카페"/>
+                                    <img src="/resources/image/home/coffee.png" alt="카페"/>
                                     <p>카페</p>
                                 </li>
                                 <li class="item cartItem0">

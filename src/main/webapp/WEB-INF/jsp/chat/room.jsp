@@ -94,7 +94,9 @@
                 if(data[i].users.length == 1){
                     str += "<img src='/resources/image/profile.png'>" + "</div>";
                 }
-                else{for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
+                else{
+                    for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
+
                     if (sender != data[i].users[a].user.nickname) {
                             str += "<img src='/display?fileName=" + data[i].users[a].user.id
                             +"/profile/s_" + data[i].users[a].user.profileImage
@@ -105,8 +107,8 @@
                             :"<h5 id='enterBtn'>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span></h5>");
                     }
                 }}
-
-                str += "<p>" + data[i].recentMsg+ "</p>";
+                str += (data[i].recentMsg.startsWith( '{"bid":' ) && data[i].recentMsg.endsWith( '}' ) ?
+                    '<p>관심있는 상품을 보냈습니다.</p>' :"<p>" + data[i].recentMsg+ "</p>" );
                 str += "<div class='chat-date'>"+ chatService.displayTime(data[i].msgDate)+"</div></div>"
                 str += "</div></li></ul></div>";
             }
@@ -166,21 +168,42 @@
             }
             chatService.findAllMessages(roomId, function (data) {
                 init();
+                console.log(data);
                 $('.messages').show();
                 var str = "";
-                var str2 = "";
                 if (data == null || data.length == 0) {
                     return;
 
                 }
 
                 for (var i = 0, len = data.length || 0; i < len; i++) {
-                   if(senderId == data[i].senderId) {
+
+                    if (data[i].type == "BOARD"){
+                        console.log(data[i].type)
+                        console.log(JSON.parse(data[i].message))
+                        const board = JSON.parse(data[i].message);
+
+                        str += "<div class='outgoing-msg'>"+
+                            "<div class='card' style='width: 18rem;'>"+
+
+                            "<div class='card-header'><h5>"+board.title+"</h5></div>"+
+                            "<div class='card-body'>"+
+                            "<strong  class='float-right'>" + board.price + "원" + "</strong></span>"+
+                            "<p class='card-text'>"+board.content.substring(0,10)+"...."+"</p>"+
+                            "<a href='/board/read?bid="+ board.bid +"' id='showDetail' class='btn btn-primary'>상세정보보기 >></a>"+
+                            "</div>"+
+                            "<div class='card-footer'>"+
+                            "<span class='float-right'>"+ board.createdDate.date.year +"."+  board.createdDate.date.month +"."+ board.createdDate.date.day +"</span>" +
+                            "</div></div></div>";
+
+                    }
+
+                    else if(senderId == data[i].senderId) {
                        str += "<div class='outgoing-msg'>\n" +
                        "<div class='sent-msg'>\n" +
                        "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
-                       "<p>" + data[i].message + "</p>\n" +
-                       "<span class='chat-date'>" + chatService.displayTime(data[i].createdDate) + "   " + "</span></h5>" +
+                        "<p>" + data[i].message + "</p>\n" +
+                       "<span class='chat-date'>" + chatService.displayTime(data[i].createdDate)+ "</span></h5>" +
                        "</div></div>"
                    }
                    else{

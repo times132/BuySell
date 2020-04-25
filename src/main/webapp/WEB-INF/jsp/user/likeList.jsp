@@ -94,9 +94,9 @@
                                 <a class="move" href='<c:out value="${like.board.bid}"/>'>
                                     <c:out value="${like.board.title}"/>
                                 </a>
-                                <span class="replycnt">
+                                <span class="replyCnt">
                                         [<c:out value="${like.board.replyCnt}"/>]
-                                    </span>
+                                 </span>
                             </td>
                         </c:if>
 
@@ -114,6 +114,13 @@
 
                         <td class="viewCnt">
                             <c:out value="${like.board.viewCnt}"/>
+                        </td>
+                        <td class="order">
+                            <button class='btn float-right'>
+                                <a class="item" href='<c:out value="${like.board.bid}"/>'>
+                                    <img class='btn-img' src='/resources/image/love.png'>
+                                </a>
+                            </button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -164,6 +171,16 @@
             e.preventDefault();
             console.log("click");
             actionForm.find("input[name='page']").val($(this).attr("href"));
+            actionForm.submit();
+        });
+        //주문하기 위한 메시지 전송
+
+        var id = '${userinfo.id}';
+        $(".item").on("click", function (e) {
+            e.preventDefault();
+            actionForm.append("<input type='hidden' name='bid' value='"+$(this).attr("href")+"'>");
+            actionForm.append("<input type='hidden' name='userId' value='"+id+"'>");
+            actionForm.attr("action", "/chat/message/orderItem");
             actionForm.submit();
         });
     });

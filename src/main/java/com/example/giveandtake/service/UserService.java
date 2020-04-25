@@ -77,9 +77,6 @@ public class UserService implements UserDetailsService {
                 role = roleRepository.findByName(RoleName.ROLE_USER)
                         .orElseThrow(() -> new AppException("User Role not set"));
             }
-//            if(!user.getEmail().equals("null")){
-//
-//            }
         }
         UserRolesDTO userRole = new UserRolesDTO();
         userRole.setUser(user);
