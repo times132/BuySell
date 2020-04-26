@@ -98,7 +98,7 @@
 
                 <!-- 댓글 -->
                 <div class="card">
-                    <div class="cardHeader">
+                    <div class="card-header">
                         <p class="mb-0"><strong class="replycnt"></strong></p>
                         <p class="mb-0">&nbsp|&nbsp</p>
                         <p class="mb-0"><strong class="like">
@@ -111,7 +111,7 @@
                         </strong></p>
                     </div>
 
-                    <div class="cardBody">
+                    <div class="card-body">
                         <div class="reply-body">
                             <ul class="replyList">
                                 <!-- 댓글 리스트 -->

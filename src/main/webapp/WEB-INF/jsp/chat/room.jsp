@@ -15,7 +15,6 @@
     <script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/resources/js/chat.js"></script>
-
 </head>
 <body>
 <sec:authentication property="principal.user" var="userinfo"/>
@@ -87,7 +86,7 @@
             }
             for (var i = 0, len = data.length || 0; i < len; i++) {
                 console.log(data[i])
-                str += "<div class='chat'><ul>"
+                str += "<div class='chat'><ul class='a'>"
                 str += "<li class='chat-li' data-rid='" + data[i].roomId + "'>";
                 str += "<div class='chat-people'>"
                 str += "<div id='enterBtn' class='chat-img'> "
@@ -186,7 +185,7 @@
                         str += "<div class='outgoing-msg'>"+
                             "<div class='card' style='width: 18rem;'>"+
 
-                            "<div class='card-header'><h5>"+board.title+"</h5></div>"+
+                            "<div class='card-header'><h5 class='mb-0'>"+board.title+"</h5></div>"+
                             "<div class='card-body'>"+
                             "<strong  class='float-right'>" + board.price + "원" + "</strong></span>"+
                             "<p class='card-text'>"+board.content.substring(0,10)+"...."+"</p>"+

@@ -140,7 +140,7 @@
     height: 2rem;
     margin-right: .5rem;
 }
-.cardHeader{
+.card-header{
     display: flex;
 }
 .like{
@@ -159,7 +159,7 @@
 .likebtn img:hover{
     cursor: pointer;
 }
-.cardBody{
+.card-body{
     border-top: 1px solid lightgray;
 }
 .btnlist{
