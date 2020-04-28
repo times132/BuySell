@@ -22,6 +22,7 @@ public class MailService {
 
     //이메일 보내기
     public String sendMail(String email, HttpServletRequest request, String mailType) {
+        System.out.println("메일 전송입니더어ㅓㅇ");
         String key = getKey(false, 6);
         String from = "buysell0209@gmail.com";
         String to = email; // 받는 사람 이메일

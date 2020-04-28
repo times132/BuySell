@@ -121,7 +121,7 @@ public class ChatController {
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        out.println("<script>alert('채팅창으로 이동합니다.');location.href='/chat/room/enter/"+roomId+"';</script>");
+        out.println("<script>alert('관심있는 게시물을 전송했습니다.');location.href='/chat/room/enter/"+roomId+"';</script>");
         out.flush();
     }
 

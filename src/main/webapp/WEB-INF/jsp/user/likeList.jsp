@@ -1,9 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time"%>
+<%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<!DOCTYPE html>
 <html>
 <head>
     <title>GiveAndTake</title>
@@ -15,6 +14,7 @@
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
 </head>
+
 <body>
     <%@include file="../include/navbar.jsp"%>
     <sec:authentication property="principal.user" var="userinfo"/>
@@ -58,6 +58,7 @@
                         <th style="width: 10%" scope="col">작성자</th>
                         <th style="width: 10%" scope="col">작성일</th>
                         <th style="width: 10%" scope="col">조회</th>
+                        <th style="width: 10%" scope="col">전송</th>
                     </tr>
                     </thead>
 
@@ -146,6 +147,7 @@
             </div><!--/col-9-->
         </div><!--/row-->
     </div>
+
     <!-- js -->
     <script type="text/javascript" src="/resources/js/mail.js"></script>
     <script type="text/javascript" src="/resources/js/user.js"></script>
@@ -184,7 +186,6 @@
                 actionForm.submit();
             });
         });
-
     </script>
 </body>
 </html>

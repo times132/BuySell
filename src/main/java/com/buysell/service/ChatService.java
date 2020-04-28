@@ -197,7 +197,7 @@ public class ChatService{
             boardMsg.setContent(boardDTO.getContent().substring(0,10));
         }
         else{
-            boardMsg.setContent(boardDTO.getContent().substring(0,10));
+            boardMsg.setContent(boardDTO.getContent());
         }
         boardMsg.setTitle(boardDTO.getTitle());
         boardMsg.setPrice(boardDTO.getPrice());

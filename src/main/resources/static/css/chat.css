@@ -112,7 +112,7 @@ img{ max-width:100%;}
 }
 .chat-people{ overflow:hidden; clear:both;}
 
-.inbox-chat { height: 550px; overflow-y: scroll;}
+.inbox-chat { height: 550px; border-right:1.5px solid #c4c4c4; overflow-y: scroll;}
 .inbox-chat ul{
     list-style-type: none;
 }
@@ -166,7 +166,7 @@ img{ max-width:100%;}
     padding: 5px 10px 5px 12px;
     width:100%;
 }
-.outgoing-msg{ overflow:hidden; margin:26px 0 26px;}
+.outgoing-msg{ overflow:hidden; margin:26px 26px 26px;}
 .sent-msg {
     float: right;
     width: 46%;
