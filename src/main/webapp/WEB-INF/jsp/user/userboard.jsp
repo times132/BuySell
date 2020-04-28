@@ -1,42 +1,36 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
+<%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <title>GiveAndTake</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/resources/css/myinfo.css">
     <link rel="stylesheet" href="/resources/css/board.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
-    <script type="text/javascript" src="/resources/js/mail.js"></script>
-    <script type="text/javascript" src="/resources/js/user.js"></script>
 </head>
 
 <body>
-    <%@include file="../include/header.jsp"%>
-    <hr>
+    <%@include file="../include/navbar.jsp"%>
     <div class="container">
         <div class="row">
             <div class="col-sm-10"><h1>${user.nickname}</h1></div>
         </div>
+
         <div class="row">
             <div class="col-sm-3"><!--left col-->
-
                 <div class="profile-image">
 
                 </div></hr><br>
-
 
                 <div class="panel panel-default">
                     <div class="panel-heading">Website <i class="fa fa-link fa-1x"></i></div>
                     <div class="panel-body"><a href="/">giveandtake.com</a></div>
                 </div>
-
 
                 <ul class="list-group">
                     <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
@@ -44,9 +38,8 @@
                     <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
                     <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
                 </ul>
-
-
             </div><!--/col-3-->
+
             <div class="col-sm-9">
                 <!--------------------------------------게시물---------------------------------------------------->
                 <table class="table table-sm table-hover">
@@ -75,11 +68,11 @@
                             </td>
 
                             <c:if test="${board.sellCheck eq true}">
-                                <td class="titleSold">
+                                <td class="title-sold">
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
-                                    <span class="soldReplyCnt">
+                                    <span class="sold-reply-cnt">
                                         [<c:out value="${board.replyCnt}"/>]
                                     </span>
                                     <span class="sold">
@@ -92,7 +85,7 @@
                                     <a class="move" href='<c:out value="${board.bid}"/>'>
                                         <c:out value="${board.title}"/>
                                     </a>
-                                    <span class="replyCnt">
+                                    <span class="reply-cnt">
                                         [<c:out value="${board.replyCnt}"/>]
                                     </span>
                                 </td>
@@ -110,7 +103,7 @@
                                 <javatime:format pattern="yy.MM.dd" value="${board.createdDate}"/>
                             </td>
 
-                            <td class="viewCnt">
+                            <td class="view-cnt">
                                 <c:out value="${board.viewCnt}"/>
                             </td>
                         </tr>
@@ -140,6 +133,8 @@
             </div><!--/col-9-->
         </div><!--/row-->
     </div>
+
+    <!-- js -->
     <script>
         $(document).ready(function() {
             var profileImage = "<c:out value="${user.profileImage}"/>";
@@ -165,7 +160,6 @@
                 actionForm.submit();
             });
         });
-
     </script>
 </body>
 </html>

@@ -3,28 +3,34 @@
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Title</title>
 
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-    <link href="/resources/css/board.css" rel="stylesheet">
+    <link rel="stylesheet" href="/resources/css/board.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/resources/js/chat.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
-    <script type="text/javascript" src="/resources/js/reply.js"></script>
-    <script type="text/javascript" src="/resources/js/board.js"></script>
-    <script type="text/javascript" src="/resources/js/common.js"></script>
+    <script>
+        $(document).ready(function () {
+            var token =  '${_csrf.token}';
+            var header = '${_csrf.headerName}';
 
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <%@include file="../include/header.jsp"%>
-    <%@include file="../include/search.jsp"%>
+    <%@include file="../include/navbar.jsp"%>
     <div class="container">
         <!-- 수정, 삭제, 목록 버튼-->
-        <div class="btnlist mb-1">
+        <div class="btn-list mb-1">
             <sec:authentication property="principal" var="userinfo"/>
             <sec:authorize access="isAuthenticated()">
                 <c:if test="${userinfo.user.nickname eq boardDto.user.nickname}">
@@ -63,8 +69,8 @@
                         </div>
 
                         <!-- 제품 기본 정보 -->
-                        <div class="productInfo col my-lg-2">
-                            <div class="mutedInfo">
+                        <div class="product-info col my-lg-2">
+                            <div class="muted-info">
                                 <span class="h6 category text-muted"><small>분류 : <c:out value="${boardDto.category}"/></small></span>
                                 <span class="h6 createdDate text-muted"><small><javatime:format pattern="yyyy.MM.dd hh:mm" value="${boardDto.createdDate}"/></small></span>
                             </div>
@@ -73,7 +79,7 @@
                             <h4 class="price"><fmt:formatNumber value="${boardDto.price}"/>원</h4>
 
                             <!-- 작성자 드랍다운 -->
-                            <div class="writerDropdown">
+                            <div class="writer-dropdown">
                                 <div class='profile'>
                                     <img src='/display?fileName=${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
                                     <button type="button" class="writer btn btn-link btn-sm dropdown-toggle pro" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -104,8 +110,8 @@
                         <p class="mb-0"><strong class="like">
                             <sec:authorize access="isAnonymous()">
                                 <div>좋아요&nbsp</div>
-                                <div class='likebtn'>
-                                    <img id='likeimg' src='/resources/image/dislike.png'>&nbsp${boardDto.likeCnt}
+                                <div class='like-btn'>
+                                    <img id='likeImg' src='/resources/image/dislike.png'>&nbsp${boardDto.likeCnt}
                                 </div>
                             </sec:authorize>
                         </strong></p>
@@ -113,7 +119,7 @@
 
                     <div class="card-body">
                         <div class="reply-body">
-                            <ul class="replyList">
+                            <ul class="reply-list">
                                 <!-- 댓글 리스트 -->
                             </ul>
                         </div>
@@ -134,11 +140,9 @@
             </div>
         </div>
 
-
-
-
-        <div class="imageWrapper">
-            <div class="originPicture">
+        <!-- 사진 눌렀을때 확대한 사진 -->
+        <div class="image-wrapper">
+            <div class="origin-picture">
 
             </div>
         </div>
@@ -154,6 +158,10 @@
     </div>
 
     <!-- js & jquery -->
+    <script src="/resources/js/chat.js"></script>
+    <script src="/resources/js/reply.js"></script>
+    <script src="/resources/js/board.js"></script>
+    <script src="/resources/js/common.js"></script>
     <script>
         $(document).ready(function () {
             // 사용자를 통해 세부페이지로 왔을 때 id값 저장
@@ -246,25 +254,25 @@
 
             // 원본 파일 화면에 표시
             function showImage(fileCallPath) {
-                $(".imageWrapper").css("display", "flex").show();
+                $(".image-wrapper").css("display", "flex").show();
 
-                $(".originPicture")
+                $(".origin-picture")
                     .html("<img src='/display?fileName=" + fileCallPath +"'>")
-                    .animate({width: "10%", height: "10%"}, 100);
+                    .animate({width: "100%", height: "100%"}, 100);
             }
 
             // 원본 파일 클릭시 닫기
-            $(".originPicture").on("click", function (e) {
-                $(".originPicture").animate({width: "0%", height: "0%"});
+            $(".origin-picture").on("click", function (e) {
+                $(".origin-picture").animate({width: "0%", height: "0%"});
                 setTimeout(function () {
-                    $(".imageWrapper").hide();
+                    $(".image-wrapper").hide();
                 }, 100);
             });
         });
     </script>
     <script>
         var bidValue = "<c:out value="${boardDto.bid}"/>";
-        var replyUL = $(".replyList");
+        var replyUL = $(".reply-list");
         var likeUL = $(".like");
         var curUser = null;
         var likeCnt = "<c:out value="${boardDto.likeCnt}"/>";
@@ -305,19 +313,18 @@
             });
         });
 
-
         // 댓글 목록 출력
         showList(1);
         function showList(page) {
             replyService.getList({bid: bidValue, page: page || 1}, function (data) {
                 var replyCntText = "댓글 " + data.totalElements;
                 $(".replycnt").text(replyCntText);
+
                 if (page == -1){
                     pageNum = 1;
                     showList(1);
                     return;
                 }
-
                 var str = "";
 
                 if (data == null || data.length == 0){
@@ -325,8 +332,8 @@
                 }
                 for (var i = 0, len = data.content.length || 0; i < len; i++){
                     console.log(data.content[i]);
-                    str += "<li class='replyli' data-rid='" + data.content[i].rid + "'>";
-                    str += "<div class='reply-header'><img class='replyProfile' src='/display?fileName=" + data.content[i].user.id
+                    str += "<li class='reply-li' data-rid='" + data.content[i].rid + "'>";
+                    str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id
                         + "/profile/s_" + data.content[i].user.profileImage
                         + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
                     str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickname + "</strong>";
@@ -340,7 +347,6 @@
                     str += "<p id='reply_" + data.content[i].rid + "'>" + data.content[i].reply + "</p>";
                     str += "</li>";
                 }
-
                 replyUL.html(str);
 
                 showReplyPage(data.totalElements, data.size); //21, 5
@@ -428,17 +434,17 @@
         // 댓글 수정 클릭
         $(document).on("click", "#modReplyBtn", function(){
             var rid = $(this).closest("li").data("rid");
-            $(this).parent(".reply-header-btn").html("<button id='modifycancel' class='btn btn-sm btn-link text-muted'>수정취소</button></div>");
+            $(this).parent(".reply-header-btn").html("<button id='modifyCancel' class='btn btn-sm btn-link text-muted'>수정취소</button></div>");
             var str = "";
 
             str += "<div class='reply-modify form-group'><textarea class='form-control rounded-0' name='mod_reply'>"+replyCopy+"</textarea>";
-            str += "<button id='modifyconfirm' class='btn btn-lg btn-light'>수정</button></div>"
+            str += "<button id='modifyConfirm' class='btn btn-lg btn-light'>수정</button></div>"
 
             $("#reply_"+rid).html(str);
         });
 
         // 수정한 댓글 전송
-        $(document).on("click", "#modifyconfirm", function () {
+        $(document).on("click", "#modifyConfirm", function () {
             var rid = $(this).closest("li").data("rid");
             var modReply = $("#reply_"+rid).find("textarea[name='mod_reply']");
 
@@ -455,7 +461,7 @@
         });
 
         // 수정 취소
-        $(document).on("click", "#modifycancel", function () {
+        $(document).on("click", "#modifyCancel", function () {
             showList(pageNum);
         });
 

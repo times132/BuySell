@@ -1,19 +1,31 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Title</title>
 
-    <link href="/resources/css/board.css" rel="stylesheet">
+    <link rel="stylesheet" href="/resources/css/board.css">
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
-
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        $(document).ready(function () {
+            var token =  '${_csrf.token}';
+            var header = '${_csrf.headerName}';
+
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <%@include file="../include/header.jsp"%>
+    <%@include file="../include/navbar.jsp"%>
 
     <div class="container">
         <div class="row">
@@ -64,15 +76,15 @@
                     <div class="file-head">
                         <span class="h5 font-weight-bold">사진</span>
                         <span class="h6 text-muted">(최대 10장 까지 가능하며 총 50MB까지 가능합니다.)</span>
-                        <label class="uploadDiv" for="input-img-icon">
-                            <img class="uploadimg" src="/resources/image/plus.png"/>
+                        <label class="upload-div" for="input-img-icon">
+                            <img class="upload-img" src="/resources/image/plus.png"/>
                         </label>
                         <input id="input-img-icon" class="input-image" type="file" name="uploadFile" onclick="this.value=null;" multiple>
 
                     </div>
 
                     <div class="file-body">
-                        <div class="uploadResult">
+                        <div class="upload-result">
                             <ul>
 
                             </ul>
@@ -137,7 +149,7 @@
                 }else if (operation === 'modify'){
                     var str = "";
 
-                    $(".uploadResult ul li").each(function (i, obj) {
+                    $(".upload-result ul li").each(function (i, obj) {
                         var jobj = $(obj);
 
                         str += "<input type='hidden' name='boardFileList[" + i + "].fid' value='" + jobj.data("fid") + "'>";
@@ -167,11 +179,11 @@
                         str += "</li>"
                     }
                 });
-                $(".uploadResult ul").html(str);
+                $(".upload-result ul").html(str);
             });
 
-            // 첨부파일 삭제
-            $(".uploadResult").on("click", ".del-image", function (e) {
+            // 첨부파일 화면에서만 삭제
+            $(".upload-result").on("click", ".del-image", function (e) {
                 if (confirm("사진을 삭제하시겠습니까?")){
                     var targetLi = $(this).closest("li");
                     targetLi.remove();

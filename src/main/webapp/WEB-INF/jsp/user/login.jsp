@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +18,7 @@
 
 </head>
 <body>
-<%@include file="../include/header.jsp"%>
+<%@include file="../include/navbar.jsp"%>
 <div class="container">
     <div class="d-flex justify-content-center h-100">
         <div class="card">

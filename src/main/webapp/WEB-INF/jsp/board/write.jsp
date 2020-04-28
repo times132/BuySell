@@ -1,19 +1,31 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Title</title>
-    <link href="/resources/css/board.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/resources/css/board.css">
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
-    <script src="/resources/js/board.js"></script>
+    <script>
+        $(document).ready(function () {
+            var token =  '${_csrf.token}';
+            var header = '${_csrf.headerName}';
+
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <%@include file="../include/header.jsp"%>
+    <%@include file="../include/navbar.jsp"%>
     <BR>
     <div class="container">
         <div class="row">
@@ -59,15 +71,15 @@
                     <div class="file-head">
                         <span class="h5 font-weight-bold">사진</span>
                         <span class="h6 text-muted">(최대 10장 까지 가능하며 총 50MB까지 가능합니다.)</span>
-                        <label class="uploadDiv" for="input-img-icon">
-                            <img class="uploadimg" src="/resources/image/plus.png"/>
+                        <label class="upload-div" for="input-img-icon">
+                            <img class="upload-img" src="/resources/image/plus.png"/>
                         </label>
                         <input id="input-img-icon" class="input-image" type="file" name="uploadFile" onclick="this.value=null;" multiple>
 
                     </div>
 
                     <div class="file-body">
-                        <div class="uploadResult">
+                        <div class="upload-result">
                             <ul>
 
                             </ul>
@@ -85,7 +97,8 @@
     </div>
 
     <!-- js & jquery -->
-    <script type="text/javascript" src="/resources/js/fileupload.js"></script>
+    <script src="/resources/js/fileupload.js"></script>
+    <script src="/resources/js/board.js"></script>
     <script>
         $(document).ready(function () {
             var writeForm = $("#writeForm");
@@ -110,7 +123,7 @@
                     return false;
                 }
 
-                $(".uploadResult ul li").each(function (i, obj) {
+                $(".upload-result ul li").each(function (i, obj) {
                     var jobj = $(obj);
                     console.log(jobj);
                     str += "<input type='hidden' name='boardFileList[" + i + "].fileName' value='" + jobj.data("filename") + "'>";
@@ -119,26 +132,6 @@
                     str += "<input type='hidden' name='boardFileList[" + i + "].image' value='" + jobj.data("type") + "'>";
                 });
                 writeForm.append(str).submit();
-            });
-
-
-            $(".uploadResult").on("click", ".del-image", function (e) {
-                filecount -= 1;
-                var targetFile = $(this).data("file");
-                var type = $(this).data("type");
-
-                var targetLi = $(this).closest("li");
-
-                $.ajax({
-                    type: "post",
-                    url: "/deleteFile",
-                    data: {fileName: targetFile, type:type},
-                    dataType: "text",
-                    success: function (result) {
-                        alert(result);
-                        targetLi.remove();
-                    }
-                });
             });
         });
 

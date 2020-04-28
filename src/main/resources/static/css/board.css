@@ -1,5 +1,5 @@
 /* 게시글 조회 */
-.boardBody{
+.board-body{
     width: 90%;
     padding-top: 15px;
     padding-right: 15px;
@@ -7,7 +7,7 @@
     margin-right: auto;
     margin-left: auto;
 }
-.title, .titleSold{
+.title, .title-sold{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -16,10 +16,10 @@
 .title a{
     color: #000000;
 }
-.titleSold a{
+.title-sold a{
     color: #b8bfce;
 }
-.soldReplyCnt{
+.sold-reply-cnt{
     color: #b8bfce;
 }
 .sold{
@@ -29,14 +29,14 @@
     font-size: 0.1rem;
     font-weight: bold;
 }
-.writeBtn{
+.write-btn{
     border: #d5d0d0 1px solid;
     padding: 4px;
     color: black;
     float: right;
     border-radius: 2px 2px 2px 2px;
 }
-.listFooter{
+.list-footer{
     clear: both;
 }
 .pagination {
@@ -76,36 +76,36 @@
 .carousel-item.active{
     overflow: hidden;
 }
-.productInfo{
+.product-info{
     margin-right: 1rem;
 }
-.productInfo *{
+.product-info *{
     padding-bottom: 10px;
 }
-.productInfo .createdDate{
+.product-info .createdDate{
     float: right;
 }
-.productInfo .price{
+.product-info .price{
     text-align: right;
 }
-.writerDropdown{
+.writer-dropdown{
     -ms-flex: 1 1 auto;
     right: 0;
     bottom: 0;
     position: absolute;
 }
-.panelGroup{
+.panel-group{
     flex-basis: 0;
     flex-grow: 1;
     max-width: 15rem;
     position: relative;
 }
 @media (max-width: 768px) {
-    .writerDropdown{
+    .writer-dropdown{
         text-align: right;
         position: relative;
     }
-    .panelGroup{
+    .panel-group{
         flex-basis: 0;
         flex-grow: 1;
         position: relative;
@@ -132,7 +132,7 @@
     height: 3rem;
     padding-bottom: 0;
 }
-.replyProfile{
+.reply-profile{
     object-fit: cover;
     object-position: top;
     border-radius: 50%;
@@ -146,26 +146,26 @@
 .like{
     display: flex;
 }
-#likeimg, #addLike, #deleteLike {
+#likeImg, #addLike, #deleteLike {
     width: 20px;
     height: 20px;
 }
-.likebtn{
+.like-btn{
     display: flex;
     align-items: center;
     border: 0.01rem solid #c2c9d8;
     padding: 0 .5rem;
 }
-.likebtn img:hover{
+.like-btn img:hover{
     cursor: pointer;
 }
 .card-body{
     border-top: 1px solid lightgray;
 }
-.btnlist{
+.btn-list{
     text-align: right;
 }
-.mutedInfo{
+.muted-info{
     margin-top: 0.5rem;
 }
 .reply-add, .reply-modify{
@@ -175,15 +175,15 @@
     padding: 1rem 0;
     background-color: whitesmoke;
 }
-.replyList{
+.reply-list{
     list-style: none;
 }
-.replyList li{
+.reply-list li{
     border-width: thick;
     border-bottom: 1px outset;
     margin-top: .5rem;
 }
-#addReplyBtn, #modifyconfirm{
+#addReplyBtn, #modifyConfirm{
     margin-left: 0.5rem;
     width: 7rem;
 }
@@ -198,7 +198,7 @@
     text-align: center;
 }
 
-.imageWrapper{
+.image-wrapper{
     position: absolute;
     display: none;
     justify-content: center;
@@ -210,13 +210,13 @@
     z-index: 100;
     background: rgba(255,255,255,0.5);
 }
-.originPicture{
+.origin-picture{
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.originPicture img{
+.origin-picture img{
     width: 600px;
 }
 
@@ -258,33 +258,33 @@
      width: 0;
      height: 0;
  }
-.uploadimg{
+.upload-img{
     width: 1.6rem;
     height: 1.6rem;
     cursor: pointer;
 }
-.uploadDiv{
+.upload-div{
     float: right;
 }
-.uploadResult{
+.upload-result{
     width: 100%;
     background-color: gray;
 }
-.uploadResult ul{
+.upload-result ul{
     display: flex;
     flex-flow: row;
     align-items: center;
     padding: 0 1rem;
 
 }
-.uploadResult ul li{
+.upload-result ul li{
     list-style: none;
     height: 7rem;
     width: 5rem;
     margin: .5rem .2rem;
     position: relative;
 }
-.uploadResult ul li img{
+.upload-result ul li img{
     overflow: hidden;
     height: 100%;
     width: 100%;

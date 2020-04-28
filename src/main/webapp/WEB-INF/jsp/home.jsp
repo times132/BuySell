@@ -3,17 +3,20 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
 <!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <title>메인</title>
-    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
-
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
     <link href="/resources/css/home.css" rel="stylesheet">
+
+    <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="/resources/js/common.js"></script>
 </head>
 <body>
-    <%@include file="../jsp/include/header.jsp"%>
+    <%@include file="../jsp/include/navbar.jsp"%>
     <div class="container-fluid pr-0 pl-0">
         <!-- 통합 검색창 -->
         <div class="search-bar">

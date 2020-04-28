@@ -14,23 +14,6 @@
      padding-left: 10px;
      padding-bottom: 0px;
 }
-.navbar-input {
-    padding: 10px 180px;
-    border-radius: 5px 0 0 5px;
-    border: 3px solid #2874f0;
-    outline: 0 none;
-    font-size: 15px;
-}
-
-.navbar-button {
-    background-color: #ffe11b;
-    border: 3px solid #ffe11b;
-    border-radius: 0 5px 5px 0;
-    color: #565656;
-    padding: 10px 15px;
-    height: 47px;
-    cursor: pointer;
-}
 
 .upper-links {
     display: inline-block;
@@ -87,30 +70,5 @@
 
 .profile-li{
     padding-top: 5px;
-}
-
-.smallnav{
-    display: block;
-}
-
-.smallsearch{
-    margin-left: 15px;
-    margin-top: 15px;
-}
-
-.menu{
-    cursor: pointer;
-}
-
-@media screen and (min-width: 768px) {
-    .largenav {
-        display: block;
-    }
-    .smallnav{
-        display: none;
-    }
-    .smallsearch{
-        margin: 0px;
-    }
 }
 

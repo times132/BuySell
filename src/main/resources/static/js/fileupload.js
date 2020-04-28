@@ -96,7 +96,7 @@ function showUploadResult(uploadResultArr) {
     if (!uploadResultArr || uploadResultArr.length == 0) {
         return;
     }
-    var uploadUL = $(".uploadResult ul");
+    var uploadUL = $(".upload-result ul");
     var str = "";
 
     $(uploadResultArr).each(function (i, obj) {
@@ -118,3 +118,22 @@ function showUploadResult(uploadResultArr) {
     });
     uploadUL.append(str);
 }
+
+$(".upload-result").on("click", ".del-image", function (e) {
+    filecount -= 1;
+    var targetFile = $(this).data("file");
+    var type = $(this).data("type");
+
+    var targetLi = $(this).closest("li");
+
+    $.ajax({
+        type: "post",
+        url: "/deleteFile",
+        data: {fileName: targetFile, type:type},
+        dataType: "text",
+        success: function (result) {
+            alert(result);
+            targetLi.remove();
+        }
+    });
+});
