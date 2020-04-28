@@ -49,7 +49,7 @@
                 <div class="row msgHeader">
                     <div class='col-md-12'>
                         <button id='deleteBtn' class='btn float-right'><img class='btn-img' src='/resources/image/delete.png'></button>
-                        <button class='btn float-right' onClick="self.location='/chat/room';"><img class='btn-img' src='/resources/image/enter.png'></button>
+                        <button class='btn float-right' onClick="self.location='/chat/room';"><img class='btn-img' src='/resources/image/enter.png'></button>n
                     </div>
                 </div>
 

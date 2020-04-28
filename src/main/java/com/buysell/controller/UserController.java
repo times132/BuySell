@@ -1,18 +1,15 @@
 package com.buysell.controller;
 
-import com.buysell.domain.DTO.UserDTO;
 import com.buysell.common.Pagination;
 import com.buysell.common.SearchCriteria;
+import com.buysell.domain.DTO.UserDTO;
 import com.buysell.domain.entity.Board;
 import com.buysell.domain.entity.Like;
 import com.buysell.domain.entity.User;
-import com.buysell.service.AdminService;
 import com.buysell.service.BoardService;
 import com.buysell.service.MailService;
 import com.buysell.service.UserService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
