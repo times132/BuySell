@@ -61,6 +61,7 @@
                     <th style="width: 10%" scope="col">작성자</th>
                     <th style="width: 10%" scope="col">작성일</th>
                     <th style="width: 10%" scope="col">조회</th>
+                    <th style="width: 10%" scope="col">전송</th>
                 </tr>
                 </thead>
 
@@ -173,8 +174,8 @@
             actionForm.find("input[name='page']").val($(this).attr("href"));
             actionForm.submit();
         });
-        //주문하기 위한 메시지 전송
 
+        //주문하기 위한 메시지 전송
         var id = '${userinfo.id}';
         $(".item").on("click", function (e) {
             e.preventDefault();

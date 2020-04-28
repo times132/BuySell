@@ -48,8 +48,8 @@
             <div class="messages">
                 <div class="row msgHeader">
                     <div class='col-md-12'>
-                    <button id='deleteBtn' class='btn float-right'><img class='btn-img' src='/resources/image/delete.png'></button>
-                    <button class='btn float-right' onClick="self.location='/chat/room';"><img class='btn-img' src='/resources/image/enter.png'></button>
+                        <button id='deleteBtn' class='btn float-right'><img class='btn-img' src='/resources/image/delete.png'></button>
+                        <button class='btn float-right' onClick="self.location='/chat/room';"><img class='btn-img' src='/resources/image/enter.png'></button>
                     </div>
                 </div>
 
@@ -86,10 +86,10 @@
             }
             for (var i = 0, len = data.length || 0; i < len; i++) {
                 console.log(data[i])
-                str += "<div class='chat'><ul class='a'>"
-                str += "<li class='chat-li' data-rid='" + data[i].roomId + "'>";
-                str += "<div class='chat-people'>"
-                str += "<div id='enterBtn' class='chat-img'> "
+                str += "<div class='chat' ><ul class= 'a'>"
+                str += "<li class='chat-li'  data-rid='" + data[i].roomId + "'>";
+                str += "<div class='chat-people' id='enterBtn' >"
+                str += "<div class='chat-img'> "
                 if(data[i].users.length == 1){
                     str += "<img src='/resources/image/profile.png'>" + "</div>";
                 }
@@ -104,12 +104,12 @@
                         str += "<div class='chat-ib'>"
                         str += (data[i].users[a].msgCount === 0 ? "<h5 id='enterBtn'>" + data[i].users[a].user.nickname+"</h5>"
                             :"<h5 id='enterBtn'>" + data[i].users[a].user.nickname+ "<span>"+"&nbsp"+ data[i].users[a].msgCount +"&nbsp"+"</span></h5>");
-                    }
-                }}
-                str += (data[i].recentMsg.startsWith( '{"bid":' ) && data[i].recentMsg.endsWith( '}' ) ?
-                    '<p>관심있는 상품을 보냈습니다.</p>' :"<p>" + data[i].recentMsg+ "</p>" );
-                str += "<div class='chat-date'>"+ chatService.displayTime(data[i].msgDate)+"</div></div>"
-                str += "</div></li></ul></div>";
+                        }
+                    }}
+                    str += (data[i].recentMsg.startsWith( '{"bid":' ) && data[i].recentMsg.endsWith( '}' ) ?
+                        '<p>관심있는 상품을 보냈습니다.</p>' :"<p>" + data[i].recentMsg+ "</p>" );
+                    str += "<div class='chat-date'>"+ chatService.displayTime(data[i].msgDate)+"</div></div>"
+                    str += "</div></li></ul></div>";
             }
             chatUL.html(str);
         });
@@ -177,22 +177,20 @@
 
                 for (var i = 0, len = data.length || 0; i < len; i++) {
 
-                    if (data[i].type == "BOARD"){
-                        console.log(data[i].type)
-                        console.log(JSON.parse(data[i].message))
+                    if (data[i].type == "BOARD"){  //게시판내용인 경우
                         const board = JSON.parse(data[i].message);
-
-                        str += "<div class='outgoing-msg'>"+
-                            "<div class='card' style='width: 18rem;'>"+
-
-                            "<div class='card-header'><h5 class='mb-0'>"+board.title+"</h5></div>"+
+                        str+=(senderId === data[i].senderId ?
+                            "<div class='outgoing-msg'><div class = 'sent-msg'>" :
+                            "<div class='incoming-msg'><div class='received-with-msg'>");
+                        str +=
+                            "<div class='mb-3 card'>"+
+                            "<div class='card-header'><h5 class='mb-0'>"+board.title+"</h5>"+
+                            "<span class='float-right'>"+ board.createdDate.date.year +"."+  board.createdDate.date.month +"."+ board.createdDate.date.day +"</span></div>" +
                             "<div class='card-body'>"+
-                            "<strong  class='float-right'>" + board.price + "원" + "</strong></span>"+
-                            "<p class='card-text'>"+board.content.substring(0,10)+"...."+"</p>"+
-                            "<a href='/board/read?bid="+ board.bid +"' id='showDetail' class='btn btn-primary'>상세정보보기 >></a>"+
+                            "<strong  class='float-right'>" + ""+ board.price + "원" + "</strong></span>"+
+                            "<h6 class='card-text'>"+board.content + "..." +"</h6>"+
+                            "<a  href='/board/read?bid="+ board.bid +"' id='showDetail' class='btn btn-primary float-right'>상세정보보기 >></a>"+
                             "</div>"+
-                            "<div class='card-footer'>"+
-                            "<span class='float-right'>"+ board.createdDate.date.year +"."+  board.createdDate.date.month +"."+ board.createdDate.date.day +"</span>" +
                             "</div></div></div>";
 
                     }
