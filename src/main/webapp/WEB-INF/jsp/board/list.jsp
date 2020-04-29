@@ -141,8 +141,8 @@
                                     <option value="W"<c:out value="${pageMaker.cri.type eq 'W' ? 'selected' : ''}"/>>작성자</option>
                                 </select>
                             </div>
-                            <input hidden="hidden" /> <%--엔터키 방지--%>
-                            <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" value="<c:out value="${pageMaker.cri.keyword}"/>" aria-label="Recipient's username" aria-describedby="button-addon2">
+
+                            <input name="keyword" type="text" class="form-control" placeholder="검색어를 입력해주세요" value="<c:out value="${pageMaker.cri.keyword}"/>">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
                             </div>
@@ -185,21 +185,31 @@
                 actionForm.submit();
             });
 
-            var searchForm = $("#searchForm");
+
             $("#searchForm button").on("click", function (e) {
-                if (!searchForm.find("option:selected").val()){
-                    alert("검색종류를 선택하세요.");
-                    return false;
-                }
-                if (!searchForm.find("input[name='keyword']").val()){
-                    alert("키워드를 입력하세요.");
-                    return false;
-                }
-                searchForm.find("input[name='page']").val("1");
-                e.preventDefault();
-                searchForm.submit();
+                return searchCheck();
             });
+
+            $("input[name='keyword']").keydown(function (key) {
+                if(key.keyCode == 13){
+                    return searchCheck();
+                }
+            })
         });
+
+        function searchCheck() {
+            var searchForm = $("#searchForm");
+            if (!searchForm.find("option:selected").val()){
+                alert("검색종류를 선택하세요.");
+                return false;
+            }
+            if (!searchForm.find("input[name='keyword']").val()){
+                alert("키워드를 입력하세요.");
+                return false;
+            }
+            searchForm.find("input[name='page']").val("1");
+            searchForm.submit();
+        }
     </script>
 </body>
 </html>

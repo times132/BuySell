@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/resources/css/board.css">
+    <link rel="stylesheet" href="/resources/css/magnific.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
@@ -25,6 +26,31 @@
             });
         });
     </script>
+
+    <style>
+        .mfp-with-zoom .mfp-container,
+        .mfp-with-zoom.mfp-bg {
+            opacity: 0;
+            -webkit-backface-visibility: hidden;
+            /* ideally, transition speed should match zoom duration */
+            -webkit-transition: all 0.3s ease-out;
+            -moz-transition: all 0.3s ease-out;
+            -o-transition: all 0.3s ease-out;
+            transition: all 0.3s ease-out;
+        }
+
+        .mfp-with-zoom.mfp-ready .mfp-container {
+            opacity: 1;
+        }
+        .mfp-with-zoom.mfp-ready.mfp-bg {
+            opacity: 0.8;
+        }
+
+        .mfp-with-zoom.mfp-removing .mfp-container,
+        .mfp-with-zoom.mfp-removing.mfp-bg {
+            opacity: 0;
+        }
+    </style>
 </head>
 <body>
     <%@include file="../include/navbar.jsp"%>
@@ -162,6 +188,7 @@
     <script src="/resources/js/reply.js"></script>
     <script src="/resources/js/board.js"></script>
     <script src="/resources/js/common.js"></script>
+    <script src="/resources/js/magnific.min.js"></script>
     <script>
         $(document).ready(function () {
             // 사용자를 통해 세부페이지로 왔을 때 id값 저장
@@ -226,15 +253,15 @@
                             var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
                             if (i === 0){ // 첫번째 요소에 active 부여
                                 first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
-                                str += "<div class='carousel-item active' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
+                                str += "<a href='/display?fileName=" + fileCallPath + "' class='carousel-item active' data-path='" + "'>";
                             }
                             else{
                                 first += "<li data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
-                                str += "<div class='carousel-item' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
+                                str += "<a href= '/display?fileName=" + fileCallPath + "' class='carousel-item'>";
                             }
 
                             str += "<img class='d-block img-fluid' src='/display?fileName=" + fileCallPath + "'>";
-                            str += "</div>";
+                            str += "</a>";
                         }
                     });
                 }
@@ -243,33 +270,23 @@
                 $(".carousel-inner").html(str);
             });
 
-            // 썸네일 사진 클릭시 이벤트
-            $(".carousel-inner").on("click", "div", function (e) {
-                var liobj = $(this);
-
-                var path = encodeURIComponent(liobj.data("path") + "/" + liobj.data("uuid") + "_" + liobj.data("filename"));
-
-                showImage(path.replace(new RegExp(/\\/g),"/"));
-            });
-
-            // 원본 파일 화면에 표시
-            function showImage(fileCallPath) {
-                $(".image-wrapper").css("display", "flex").show();
-
-                $(".origin-picture")
-                    .html("<img src='/display?fileName=" + fileCallPath +"'>")
-                    .animate({width: "100%", height: "100%"}, 100);
-            }
-
-            // 원본 파일 클릭시 닫기
-            $(".origin-picture").on("click", function (e) {
-                $(".origin-picture").animate({width: "0%", height: "0%"});
-                setTimeout(function () {
-                    $(".image-wrapper").hide();
-                }, 100);
+            // 썸네일 사진 클릭시
+            $('.carousel-inner').magnificPopup({
+                delegate: 'a',
+                type: 'image',
+                closeOnContentClick: false,
+                closeBtnInside: false,
+                mainClass: 'mfp-with-zoom mfp-img-mobile',
+                image: {
+                    verticalFit: true,
+                },
+                gallery: {
+                    enabled: true
+                },
             });
         });
     </script>
+
     <script>
         var bidValue = "<c:out value="${boardDto.bid}"/>";
         var replyUL = $(".reply-list");
@@ -287,7 +304,7 @@
         function showLike(likeCnt){
             boardService.checkLike(bidValue, function (data) {
                 console.log(data)
-                var str = "<div>좋아요&nbsp</div><div class='likebtn'>";
+                var str = "<div>좋아요&nbsp</div><div class='like-btn'>";
                 //date가 있는 경우 (like인 경우)
                 if (data){
                     str += "<img id = 'deleteLike' src='/resources/image/like.png'>";

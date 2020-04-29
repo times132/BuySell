@@ -8,7 +8,7 @@
     <title>관리자 페이지</title>
 
     <link href="/resources/css/admin.css" rel="stylesheet">
-    <link href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css" id="bootstrap-css">
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css" id="bootstrap-css">
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
@@ -23,7 +23,7 @@
     <nav id="sidebar" class="sidebar-wrapper">
         <div class="sidebar-content">
             <div class="sidebar-brand">
-                <a href="/">GIVEANDTAKE</a>
+                <a href="/">BUYSELL</a>
                 <div id="close-sidebar">
                     <i class="fas fa-times"></i>
                 </div>

@@ -185,16 +185,14 @@
                     </tbody>
                 </table>
             </div>
-
-
         </div>
 
         <form id="actionForm" action="/board" method="get">
         </form>
     </div>
-    <script type="text/javascript" src="/resources/js/board.js"></script>
-    <script type="text/javascript" src="/resources/js/common.js"></script>
-    <script src="/resources/js/jquery.number.min.js"></script>
+    <script src="/resources/js/board.js"></script>
+    <script src="/resources/js/common.js"></script>
+    <script src="/resources/js/number.min.js"></script>
     <script>
         var actionForm = $("#actionForm");
         $(".price").number(true);
