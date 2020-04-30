@@ -24,7 +24,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Controller
-@RequestMapping("chat")
+@RequestMapping("/chat")
 @MessageMapping("/chat")
 public class ChatController {
 

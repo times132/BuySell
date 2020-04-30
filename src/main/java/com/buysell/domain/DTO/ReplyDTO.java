@@ -16,7 +16,8 @@ public class ReplyDTO {
     private Long rid;
     private Long bid;
     private String reply;
-    @JsonIgnoreProperties({"id", "replyList", "boardList", "password", "email", "phone", "profileImage", "roles"})
+    private String replyer;
+    @JsonIgnoreProperties({"id", "replyList", "boardList", "password", "email", "phone", "profileImage", "roles", "likeList", "chats"})
     private User user;
     private Board board;
     private LocalDateTime createdDate;

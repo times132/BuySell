@@ -17,7 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("replies")
+@RequestMapping("/replies")
 @AllArgsConstructor
 public class ReplyController {
 
@@ -61,11 +61,12 @@ public class ReplyController {
     }
 
     // 댓글 삭제
-    @PreAuthorize("principal.user.nickname == #dto.replyer")
+//    @PreAuthorize("principal.user.nickname == #replyer")
     @DeleteMapping(value = "{rid}")
-    public ResponseEntity<String> replyDELETE(@RequestBody ReplyDTO dto, @PathVariable("rid") Long rid){
+    public ResponseEntity<String> replyDELETE(@RequestBody String replyer, @PathVariable("rid") Long rid){
         logger.info("-----reply removeDELETE-----");
-        logger.info("dto : " + dto);
+//        logger.info("dto : " + dto);
+        logger.info("replyer: " + replyer);
         replyService.deleteReply(rid);
 
         return new ResponseEntity<>("댓글 삭제가 완료되었습니다.", HttpStatus.OK);
