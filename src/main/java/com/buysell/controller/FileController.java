@@ -4,9 +4,11 @@ import com.buysell.domain.DTO.BoardFileDTO;
 import com.buysell.security.CustomUserDetails;
 import com.buysell.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,6 +39,7 @@ public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
     private UserService userService;
+
 
     private String getFolder(Long userid) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
