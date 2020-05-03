@@ -139,6 +139,9 @@ public class ChatService{
             }
             else {
                 to= user.getUser().getNickname();
+                ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
+                chatUsersDTO.setMsgCount(0);  ////내가  받은 메시지 +0
+                chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));
             }
         }
         chatRoomRepository.save(chatRoomDTO.toEntity());

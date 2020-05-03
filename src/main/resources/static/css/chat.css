@@ -197,5 +197,5 @@ img{ max-width:100%;}
 .chatting { padding: 0 0 50px 0;}
 .msg-history {
     height: 516px;
-    overflow-y: auto;
+    overflow-y: scroll;
 }

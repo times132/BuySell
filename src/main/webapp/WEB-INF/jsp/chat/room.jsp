@@ -71,8 +71,8 @@
 
                 <div class="type-msg">
                     <div class="input-msg-write">
-                        <input type="text" class="write_msg" placeholder="Type a message" id="message" />
-                        <button class="msg-send-btn" type="button" id="sending"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                        <input type="text" class="write_msg" placeholder="메세지를 입력해주세요" id="message">
+                        <button class="msg-send-btn" type="button" onclick="sending()"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
                     </div>
                 </div>
             </div>
@@ -171,8 +171,8 @@
         var message = '';
         //최초시작시 세팅
         var messageDIV = $(".msg-history");
-        init2();
-        function init2() {
+        initMessage();
+        function initMessage() {
             // 채팅룸 출력
             if(roomId==""){
                 return;
@@ -181,80 +181,93 @@
                 init();
                 console.log(data);
                 $('.messages').show();
-                var str = "";
                 if (data == null || data.length == 0) {
                     return;
 
                 }
-
                 for (var i = 0, len = data.length || 0; i < len; i++) {
-
-                    if (data[i].type == "BOARD"){  //게시판내용인 경우
-                        const board = JSON.parse(data[i].message);
-                        str+=(senderId === data[i].senderId ?
-                            "<div class='outgoing-msg'><div class = 'sent-msg'>" :
-                            "<div class='incoming-msg'><div class='received-with-msg'>");
-                        str +=
-                            "<div class='mb-3 card'>"+
-                            "<div class='card-header'><h5 class='mb-0'>"+board.title+"</h5>"+
-                            "<span class='float-right'>"+ board.createdDate.date.year +"."+  board.createdDate.date.month +"."+ board.createdDate.date.day +"</span></div>" +
-                            "<div class='card-body'>"+
-                            "<strong  class='float-right'>" + ""+ board.price + "원" + "</strong></span>"+
-                            "<h6 class='card-text'>"+board.content + "..." +"</h6>"+
-                            "<a  href='/board/read?bid="+ board.bid +"' id='showDetail' class='btn btn-primary float-right'>상세정보보기 >></a>"+
-                            "</div>"+
-                            "</div></div></div>";
-
-                    }
-
-                    else if(senderId == data[i].senderId) {
-                       str += "<div class='outgoing-msg'>\n" +
-                       "<div class='sent-msg'>\n" +
-                       "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
-                        "<p>" + data[i].message + "</p>\n" +
-                       "<span class='chat-date'>" + chatService.displayTime(data[i].createdDate)+ "</span></h5>" +
-                       "</div></div>"
-                   }
-                   else{
-                       str +=
-                        "<div class='incoming-msg'>\n" +
-                        "<div class='incoming-msg-img'>";
-
-                       if("[알림]" == data[i].sender){
-                           str += "<img src='/resources/image/info2.png'>"
-                       }
-
-                       else{
-                           //사용자가 1명인 경우
-                           if (data[i].chatRoom.users.length == 1){
-                               str += "<img src='/resources/image/profile.png'>"
-                           }
-                           else {
-                               for (var a = 0, length = data[i].chatRoom.users.length || 0; a < length; a++) {
-                                   if (data[i].sender == data[i].chatRoom.users[a].user.nickname) {
-                                       str += "<img src='/display?fileName=" + data[i].chatRoom.users[a].user.id +
-                                           "/profile/s_" + data[i].chatRoom.users[a].user.profileImage +
-                                           "' onerror=\"this.src = '/resources/image/profile.png'\"/>";
-                                       break;
-                                   }
-                               }
-                           }
-                       }
-                        str +=
-                        "</div>"+
-                        "<strong id='sender' class='primary-font'>" + data[i].sender + "</strong>" +
-                        "<div class='received-with-msg'>"+
-                        "<p>"+data[i].message+"</p>\n"+
-                        "<span class='chat-date'>"+ chatService.displayTime(data[i].createdDate)+"   "+"</span></h5>"+
-                        "</div></div>"
-                   }
+                    appendMsg(data[i]);
                 }
-                messageDIV.html(str);
             });
 
         }
 
-        $(document).on("click", "#sending", function () {
+        function appendMsg(data){
+            var str = "";
+                if (data.type == "BOARD"){  //게시판내용인 경우
+                    const board = JSON.parse(data.message);
+                    str+=(senderId === data.senderId ?
+                        "<div class='outgoing-msg'><div class = 'sent-msg'>" :
+                        "<div class='incoming-msg'><div class='received-with-msg'>");
+                    str +=
+                        "<div class='mb-3 card'>"+
+                        "<div class='card-header'><h5 class='mb-0'>"+board.title+"</h5>"+
+                        "<span class='float-right'>"+ board.createdDate.date.year +"."+  board.createdDate.date.month +"."+ board.createdDate.date.day +"</span></div>" +
+                        "<div class='card-body'>"+
+                        "<strong  class='float-right'>" + ""+ board.price + "원" + "</strong></span>"+
+                        "<h6 class='card-text'>"+board.content + "..." +"</h6>"+
+                        "<a  href='/board/read?bid="+ board.bid +"' id='showDetail' class='btn btn-primary float-right'>상세정보보기 >></a>"+
+                        "</div>"+
+                        "</div></div></div>";
+
+                }
+
+                else if(senderId == data.senderId) {
+                    str += "<div class='outgoing-msg'>\n" +
+                        "<div class='sent-msg'>\n" +
+                        "<strong id='sender' class='primary-font'>" + data.sender + "</strong>" +
+                        "<p>" + data.message + "</p>\n" +
+                        "<span class='chat-date'>" + chatService.displayTime(data.createdDate)+ "</span></h5>" +
+                        "</div></div>"
+                }
+                else{
+                    str +=
+                        "<div class='incoming-msg'>\n" +
+                        "<div class='incoming-msg-img'>";
+
+                    if("[알림]" == data.sender){
+                        str += "<img src='/resources/image/info2.png'>"
+                    }
+
+                    else{
+                        //사용자가 1명인 경우
+                        if (data.chatRoom.users.length == 1){
+                            str += "<img src='/resources/image/profile.png'>"
+                        }
+                        else {
+                            for (var a = 0, length = data.chatRoom.users.length || 0; a < length; a++) {
+                                if (data.sender == data.chatRoom.users[a].user.nickname) {
+                                    str += "<img src='/display?fileName=" + data.chatRoom.users[a].user.id +
+                                        "/profile/s_" + data.chatRoom.users[a].user.profileImage +
+                                        "' onerror=\"this.src = '/resources/image/profile.png'\"/>";
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    str +=
+                        "</div>"+
+                        "<strong id='sender' class='primary-font'>" + data.sender + "</strong>" +
+                        "<div class='received-with-msg'>"+
+                        "<p>"+data.message+"</p>\n"+
+                        "<span class='chat-date'>"+ chatService.displayTime(data.createdDate)+"   "+"</span></h5>"+
+                        "</div></div>"
+                    
+                }
+                messageDIV.append(str);
+        }
+
+
+
+        $(document).ready(function() {
+            $("#message").keydown(function(key) {
+                if (key.keyCode == 13) {
+                    sending();
+                }
+            })
+        });
+
+        function sending(){
             this.message = document.getElementById("message").value;
             ws.send("/app/chat/message", {}, JSON.stringify({
                 type: 'TALK',
@@ -262,13 +275,10 @@
                 sender: sender,
                 senderId : senderId,
                 message: this.message,
-
             }));
             this.message = '';
             document.getElementById("message").value = '';
-            init();
-            init2();
-        });
+        }
 
 
         //삭제
@@ -289,18 +299,20 @@
         });
 
 
+
         //연결
         function connect() {
             // pub/sub event
             ws.connect({}, function (frame) {
                 ws.subscribe("/queue/chat/room/" + roomId, function (message) {
-                    init();
-                    init2();
+                        init();
+                        const recv = JSON.parse(message.body);
+                        appendMsg(recv);
+                        $(".msg-history").scrollTop($(".msg-history")[0].scrollHeight);
                 });
-            ws.subscribe("/user/queue/chat/room", function (message) {
-                init();
-                init2();
-             });
+                ws.subscribe("/user/queue/chat/room", function (message) {
+                        init();
+                });
             }
             , function (error) {
                 if (reconnect++ <= 5) {
