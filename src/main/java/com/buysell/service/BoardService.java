@@ -85,7 +85,7 @@ public class BoardService {
 
     // 게시물 업데이트
     @Transactional
-    public void update(BoardDTO dto, CustomUserDetails userDetails){
+    public void update(BoardDTO dto){
         Board board = boardRepository.findById(dto.getBid()).get();
         BoardDTO boardDTO = boardMapper.toDTO(board);
         boardDTO.setCategory(dto.getCategory());
@@ -93,7 +93,7 @@ public class BoardService {
         boardDTO.setContent(dto.getContent());
         boardDTO.setPrice(dto.getPrice());
 
-        board = boardRepository.save(boardMapper.toEntity(boardDTO));
+        boardRepository.save(boardMapper.toEntity(boardDTO));
 
         // 기존 게시물에 있던 사진 uuid 저장
         Set<String> uuidList = boardFileRepository.findAllByBoardBid(dto.getBid())
@@ -101,10 +101,14 @@ public class BoardService {
                 .map(BoardFile::getUuid)
                 .collect(Collectors.toSet());
 
+        //
         for (BoardFileDTO fileDTO : dto.getBoardFileList()){
-            uuidList.remove(fileDTO.getUuid());
-            fileDTO.setBoard(board);
-            boardFileRepository.save(boardMapper.fileToEntity(fileDTO));
+            if (uuidList.contains(fileDTO.getUuid())){
+                uuidList.remove(fileDTO.getUuid()); // 기존에 있던 파일은 제거
+            }else{
+                fileDTO.setBoard(board);
+                boardFileRepository.save(boardMapper.fileToEntity(fileDTO));
+            }
         }
 
         for (String uuid : uuidList){

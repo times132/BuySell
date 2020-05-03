@@ -143,7 +143,7 @@
                 profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
             }
             else{
-                profile.html("<img class='img-thumbnail' src='/display?fileName=${user.id}/profile/${user.profileImage}'/>")
+                profile.html("<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/${user.id}/profile/${user.profileImage}'/>")
             }
             var actionForm = $("#actionForm");
             $(".move").on("click", function (e) {

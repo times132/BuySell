@@ -107,7 +107,7 @@
                             <!-- 작성자 드랍다운 -->
                             <div class="writer-dropdown">
                                 <div class='profile'>
-                                    <img src='/display?fileName=${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
+                                    <img src='https://d1divnqsnqozzu.cloudfront.net/${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
                                     <button type="button" class="writer btn btn-link btn-sm dropdown-toggle pro" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="writer h6"><c:out value="${boardDto.writer}"></c:out></span>
                                     </button>
@@ -253,14 +253,14 @@
                             var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
                             if (i === 0){ // 첫번째 요소에 active 부여
                                 first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
-                                str += "<a href='/display?fileName=" + fileCallPath + "' class='carousel-item active' data-path='" + "'>";
+                                str += "<a href='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "' class='carousel-item active' data-path='" + "'>";
                             }
                             else{
                                 first += "<li data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
-                                str += "<a href= '/display?fileName=" + fileCallPath + "' class='carousel-item'>";
+                                str += "<a href= 'https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "' class='carousel-item'>";
                             }
 
-                            str += "<img class='d-block img-fluid' src='/display?fileName=" + fileCallPath + "'>";
+                            str += "<img class='d-block img-fluid' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
                             str += "</a>";
                         }
                     });
@@ -350,7 +350,7 @@
                 for (var i = 0, len = data.content.length || 0; i < len; i++){
                     console.log(data.content[i]);
                     str += "<li class='reply-li' data-rid='" + data.content[i].rid + "'>";
-                    str += "<div class='reply-header'><img class='reply-profile' src='/display?fileName=" + data.content[i].user.id
+                    str += "<div class='reply-header'><img class='reply-profile' src='https://d1divnqsnqozzu.cloudfront.net/" + data.content[i].user.id
                         + "/profile/s_" + data.content[i].user.profileImage
                         + "' onerror=\"this.src='/resources/image/profile.png'\"/>"
                     str += "<strong id='replyer' class='primary-font'>" + data.content[i].user.nickname + "</strong>";

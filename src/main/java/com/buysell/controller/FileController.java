@@ -2,6 +2,7 @@ package com.buysell.controller;
 
 import com.buysell.domain.DTO.BoardFileDTO;
 import com.buysell.security.CustomUserDetails;
+import com.buysell.service.FileService;
 import com.buysell.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -39,26 +40,7 @@ public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
     private UserService userService;
-
-
-    private String getFolder(Long userid) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        String str = userid + "-" + sdf.format(date);
-        return str.replace("-", File.separator);
-    }
-
-    private boolean checkImageType(File file) {
-        try {
-            String contentType = Files.probeContentType(file.toPath());
-
-            return contentType.startsWith("image");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
+    private FileService fileService;
 
     @GetMapping("/display")
     @ResponseBody
@@ -90,66 +72,10 @@ public class FileController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/uploadFile", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<BoardFileDTO>> uploadFilePOST(MultipartFile[] uploadFile, @AuthenticationPrincipal CustomUserDetails user){
+    public ResponseEntity<List<BoardFileDTO>> uploadFilePOST(MultipartFile[] uploadFile, @AuthenticationPrincipal CustomUserDetails user) throws IOException {
         logger.info("-----File uploadFilePOST-----");
-        Long userid = user.getUser().getId();
-        List<BoardFileDTO> list = new ArrayList<>();
-        String uploadFolder = "D:\\upload";
 
-        String uploadFolderPath = getFolder(userid); // 3/2020/03/13
-        File uploadPath = new File(uploadFolder, uploadFolderPath);
-
-
-        if (uploadPath.exists() == false) {
-            uploadPath.mkdirs();
-        }
-
-        for (MultipartFile multipartFile : uploadFile) {
-
-            logger.info("======================================");
-            logger.info("Upload File Name: " + multipartFile.getOriginalFilename());
-            logger.info("Upload File Size: " + multipartFile.getSize());
-
-            BoardFileDTO fileDTO = new BoardFileDTO();
-
-            String uploadFileName = multipartFile.getOriginalFilename();
-
-            // IE file path
-            uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
-            logger.info("only file name: " + uploadFileName);
-            fileDTO.setFileName(uploadFileName);
-
-            UUID uuid = UUID.randomUUID();
-
-            uploadFileName = uuid.toString() + "_" + uploadFileName;
-
-            try {
-                File saveFile = new File(uploadPath, uploadFileName);
-                multipartFile.transferTo(saveFile);
-
-                fileDTO.setUploadPath(uploadFolderPath);
-                fileDTO.setUuid(uuid.toString());
-
-                if (checkImageType(saveFile)) {
-
-                    fileDTO.setImage(true);
-
-                    FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
-                    Thumbnails.of(saveFile)
-                            .size(480, 600)
-                            .outputFormat("jpg")
-                            .toOutputStream(thumbnail);
-
-                    thumbnail.close();
-                }
-
-                list.add(fileDTO);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(fileService.upload(uploadFile, user.getUser().getId()), HttpStatus.OK);
     }
 
     @PostMapping(value = "/uploadProfile", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -158,48 +84,8 @@ public class FileController {
         logger.info("-----User uploadProfile-----");
 
         Long userid = user.getUser().getId();
-        Map<String, Object> map = new HashMap<>();
-        String uploadFolder = "D:\\upload\\"; // 공통 업로드 경로
-        String uploadFolderPath = userid + "\\profile"; // 개인 추가 업로드 경로
 
-        File uploadPath = new File(uploadFolder, uploadFolderPath);
-
-        if (!uploadPath.exists()){
-            uploadPath.mkdirs();
-        }
-
-        logger.info("======================================");
-        logger.info("Upload File Name: " + uploadProfile.getOriginalFilename());
-
-        String uploadFileName = uploadProfile.getOriginalFilename();
-
-        // IE file path
-        uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
-
-        try{
-            File saveFile = new File(uploadPath, uploadFileName);
-
-            if (checkImageType(saveFile)){
-                uploadProfile.transferTo(saveFile);
-
-                map.put("uploadPath", uploadFolderPath);
-                map.put("fileName", uploadFileName);
-                map.put("image", true);
-
-                FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
-                Thumbnails.of(saveFile)
-                        .size(64, 64)
-                        .outputFormat("jpg")
-                        .toOutputStream(thumbnail);
-
-                thumbnail.close();
-//                userService.uploadProfile(uploadFileName, userid);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<>(map, HttpStatus.OK);
+        return new ResponseEntity<>(fileService.uploadProfile(uploadProfile, userid), HttpStatus.OK);
     }
 
 
@@ -225,6 +111,6 @@ public class FileController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<String>("deleted", HttpStatus.OK);
+        return new ResponseEntity<>("deleted", HttpStatus.OK);
     }
 }

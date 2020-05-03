@@ -38,7 +38,7 @@
             <div class="inbox-people">
                 <div class="heading">
                     <div class="recent-heading">
-                        <span><img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}' onerror="this.src = '/resources/image/profile.png'"/>
+                        <span><img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/${userinfo.id}/profile/${userinfo.profileImage}' onerror="this.src = '/resources/image/profile.png'"/>
                         <br><h4>ME : ${userinfo.nickname}</h4></span>
                     </div>
                     <div class="search-bar">
@@ -109,7 +109,7 @@
                     for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
 
                     if (sender != data[i].users[a].user.nickname) {
-                            str += "<img src='/display?fileName=" + data[i].users[a].user.id
+                            str += "<img src='https://d1divnqsnqozzu.cloudfront.net/" + data[i].users[a].user.id
                             +"/profile/s_" + data[i].users[a].user.profileImage
                             +"' onerror=\"this.src='/resources/image/profile.png'\"/>"
                             + "</div>"
@@ -232,7 +232,7 @@
                            else {
                                for (var a = 0, length = data[i].chatRoom.users.length || 0; a < length; a++) {
                                    if (data[i].sender == data[i].chatRoom.users[a].user.nickname) {
-                                       str += "<img src='/display?fileName=" + data[i].chatRoom.users[a].user.id +
+                                       str += "<img src='https://d1divnqsnqozzu.cloudfront.net/" + data[i].chatRoom.users[a].user.id +
                                            "/profile/s_" + data[i].chatRoom.users[a].user.profileImage +
                                            "' onerror=\"this.src = '/resources/image/profile.png'\"/>";
                                        break;

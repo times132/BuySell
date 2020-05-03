@@ -137,7 +137,6 @@
 
         var categoryDIV = $("#items");
         $("#category").on("change",function(){
-            alert("소분류를 선택해주세요")
             var id = $("#category option:selected").val();
             console.log("id"+id);
 

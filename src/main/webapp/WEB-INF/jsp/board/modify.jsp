@@ -174,7 +174,7 @@
                         var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
 
                         str += "<li data-fid='" + file.fid + "' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
-                        str += "<img class='img-thumbnail' src='/display?fileName=" + fileCallPath + "'>";
+                        str += "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
                         str += "<input class='del-image' type='button' data-file=\'" + fileCallPath + "\' data-type='image'/>";
                         str += "</li>"
                     }

@@ -133,7 +133,7 @@ public class BoardController {
     public String modifyPOST(@ModelAttribute SearchCriteria searchCri, BoardDTO dto, @AuthenticationPrincipal CustomUserDetails userDetails){
         logger.info("-----board modifyPOST-----");
 
-        boardService.update(dto, userDetails);
+        boardService.update(dto);
 
         return "redirect:/board" + searchCri.makeSearchUrl(searchCri.getPage());
     }

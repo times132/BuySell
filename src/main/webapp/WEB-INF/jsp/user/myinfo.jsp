@@ -236,7 +236,7 @@
                 profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
             }
             else{
-                profile.html("<img class='img-thumbnail' src='/display?fileName=${userinfo.id}/profile/${userinfo.profileImage}'/>")
+                profile.html("<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/${userinfo.id}/profile/${userinfo.profileImage}'/>")
             }
         });
         //이메일 중복확인

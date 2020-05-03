@@ -85,7 +85,7 @@ function showUploadProfile(uploadResult) {
 
     if (uploadResult.image){
         var fileCallPath = encodeURIComponent(uploadResult.uploadPath + "/" + uploadResult.fileName);
-        var str = "<img class='img-thumbnail' src='/display?fileName=" + fileCallPath + "'>";
+        var str = "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
 
         $("#profileImage").val(uploadResult.fileName);
         $(".profile-image").html(str);
@@ -109,7 +109,7 @@ function showUploadResult(uploadResultArr) {
 
             str += "<li class='thum-image' data-fid='" + obj.fid + "' data-path='" + obj.uploadPath + "'" + " data-uuid='" + obj.uuid;
             str += "' data-fileName='" + obj.fileName + "' data-type='" + obj.image + "'>";
-            str += "<img class='img-thumbnail' src='/display?fileName=" + fileCallPath + "'>";
+            str += "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
             str += "<input class='del-image' type='button' data-file=\'" + fileCallPath + "\' data-type='image'/>";
             str += "</li>";
         }else{
