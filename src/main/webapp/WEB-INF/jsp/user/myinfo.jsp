@@ -263,10 +263,9 @@
 
         $("#codex").hide();
         //이메일 전송
+
         $('#auth').click(function(){
             var email = $('#e-mail').val();
-            console.log(email);
-
             $("#codex").show();
             mailService.sendEmail(email, function (result) {
                 if (result != "true"){
@@ -276,13 +275,15 @@
             });
         });
         //인증번호 확인
+        var userName = "<c:out value="${userinfo.username}"/>";
         $('#confirm').click(function(){
 
             var email = $('#e-mail').val();
             var code = $('#code').val();
             var checking = {
                 codeKey : code,
-                email : email
+                email : email,
+                username : userName
             };
 
             mailService.checkCode(checking, function (result) {

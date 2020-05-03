@@ -4,6 +4,8 @@ import com.buysell.service.MailService;
 import com.buysell.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +30,13 @@ public class MailController {
     //이메일로 전송된 코드확인
     @RequestMapping(value = "/mail/checkCode", method = RequestMethod.GET)
     @ResponseBody
-    public boolean checkCode(@RequestParam String codeKey, @RequestParam String email, HttpServletRequest request) {
+    public boolean checkCode(@RequestParam String codeKey, @RequestParam String email, @RequestParam String username, HttpServletRequest request) {
 
-        boolean note= mailService.checkCode(request, codeKey, email);
-        if(userService.checkEmail(email) && note) { //회원이 있는 경우 + 6자리의 코드가 일치하는 경우
+        boolean note= mailService.checkCode(request, codeKey); //note : 이메일 인증코드 일치 여부
+        if(username.equals(null) && note){ //회원 아이디가 없는 경우
+            return note;
+        }
+        else if(userService.checkUserName(username) && note) { //회원이 있는 경우 + 6자리의 코드가 일치하는 경우
             userService.changeROLE(email);
         }
         return note;
