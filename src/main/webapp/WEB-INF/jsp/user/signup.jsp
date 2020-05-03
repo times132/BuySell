@@ -229,7 +229,8 @@
             var code = $('#code').val();
             var checking = {
                 codeKey : code,
-                email : email
+                email : email,
+                username : null
             };
             mailService.checkCode(checking, function (result) {
                 if (result){

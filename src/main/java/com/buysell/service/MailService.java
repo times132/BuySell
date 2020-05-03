@@ -99,7 +99,8 @@ public class MailService {
         return sb.toString();
     }
 
-    public boolean checkCode(HttpServletRequest request, String codeKey, String email){
+    //인증코드 확인
+    public boolean checkCode(HttpServletRequest request, String codeKey){
      HttpSession session = request.getSession();
      String key = (String) session.getAttribute("key");
 
