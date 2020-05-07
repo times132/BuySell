@@ -93,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
+    @Override // UserDetails을 사용해서 사용자 인증
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.eraseCredentials(false).userDetailsService(userService).passwordEncoder(passwordEncoder());
     }

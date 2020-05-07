@@ -19,9 +19,7 @@ public interface BoardMapper {
     Board toEntity(BoardDTO dto);
 
     // 게시물 불러올 때
-//    @Mapping(target = "boardFileList", ignore = true)
     BoardDTO toDTO(Board entity);
-
 
     BoardFile fileToEntity(BoardFileDTO dto);
 
