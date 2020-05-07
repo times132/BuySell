@@ -2,7 +2,7 @@ package com.buysell.repository;
 
 import com.buysell.domain.DTO.CategoryItemDTO;
 import com.buysell.domain.entity.Category;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

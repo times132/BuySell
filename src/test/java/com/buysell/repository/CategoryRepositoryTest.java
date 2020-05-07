@@ -1,7 +1,7 @@
 package com.buysell.repository;
 
 import com.buysell.domain.DTO.CategoryDTO;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
