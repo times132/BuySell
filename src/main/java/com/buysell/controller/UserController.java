@@ -160,7 +160,6 @@ public class UserController {
     @GetMapping("/user")
     public String myInfoGET(Model model) {
         List<String> socialList = new ArrayList<String>(Arrays.asList("kakao", "google"));
-        System.out.println(socialList);
         model.addAttribute("socialList", socialList);
         return "/user/myinfo";
     }
