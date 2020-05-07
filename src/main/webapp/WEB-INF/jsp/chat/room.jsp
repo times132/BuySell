@@ -188,6 +188,7 @@
                 for (var i = 0, len = data.length || 0; i < len; i++) {
                     appendMsg(data[i]);
                 }
+                $(".msg-history").scrollTop($(".msg-history")[0].scrollHeight);
             });
 
         }
