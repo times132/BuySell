@@ -175,7 +175,7 @@
 
                         str += "<li data-fid='" + file.fid + "' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
                         str += "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
-                        str += "<input class='del-image' type='button' data-file=\'" + fileCallPath + "\' data-type='image'/>";
+                        str += "<input class='del-tmp-image' type='button' data-file=\'" + fileCallPath + "\' data-type='image'/>";
                         str += "</li>"
                     }
                 });
@@ -183,7 +183,7 @@
             });
 
             // 첨부파일 화면에서만 삭제
-            $(".upload-result").on("click", ".del-image", function (e) {
+            $(".upload-result").on("click", ".del-tmp-image", function (e) {
                 if (confirm("사진을 삭제하시겠습니까?")){
                     var targetLi = $(this).closest("li");
                     targetLi.remove();

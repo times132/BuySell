@@ -119,8 +119,8 @@ public class UserController {
     @GetMapping("/user/findID")
     public String findID(Model model, @RequestParam String email, @RequestParam String name)
     {
-        List<User> userList = userService.findId(email, name);
-        model.addAttribute("userList", userList);
+        User user = userService.findId(email, name);
+        model.addAttribute("user", user);
         return "/user/findPW";
     }
 

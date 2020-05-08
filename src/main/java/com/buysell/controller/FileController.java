@@ -111,6 +111,6 @@ public class FileController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>("deleted", HttpStatus.OK);
+        return new ResponseEntity<>("삭제되었습니다.", HttpStatus.OK);
     }
 }

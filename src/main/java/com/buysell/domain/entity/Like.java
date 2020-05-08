@@ -29,7 +29,6 @@ public class Like {
     @JsonIdentityReference(alwaysAsId=true)
     private Board board;
 
-
     @Builder
     public Like(Long id, User user, Board board){
         this.id = id;

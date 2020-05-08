@@ -69,13 +69,13 @@ public class ChatService{
             String randomId = UUID.randomUUID().toString();
             chatRoomDTO.setRoomId(randomId);
             chatRoomDTO.setMsgDate(LocalDateTime.now());
-            ChatRoom chatRoom = chatRoomRepository.save(chatRoomDTO.toEntity());
+            ChatRoom chatRoom = chatRoomRepository.save(chatMapper.chatRoomToEntity(chatRoomDTO));
             //Chat User
             for(User part : participant){
                 ChatUsersDTO dto = new ChatUsersDTO();
                     dto.setChatRoom(chatRoom);
                     dto.setUser(part);
-                ChatUsers chatUsers = chatUsersRepository.save(chatMapper.userToEntity(dto));
+                ChatUsers chatUsers = chatUsersRepository.save(chatMapper.chatUserToEntity(dto));
                 chatRoom.getUsers().add(chatUsers);
             }
 
@@ -122,7 +122,7 @@ public class ChatService{
 
         List<ChatMessage> messages = chatRoom.getMessages();
         messages.add(chatMessage);
-        ChatRoomDTO chatRoomDTO = chatMapper.RoomToDto(chatRoom);
+        ChatRoomDTO chatRoomDTO = chatMapper.chatRoomToDto(chatRoom);
         chatRoomDTO.setMessages(messages);
         chatRoomDTO.setMsgDate(chatMessage.getCreatedDate()); //최근 메세지 시간을 채팅방 시간으로 입력
         chatRoomDTO.setRecentMsg(chatMessage.getMessage()); //최근 메세지 내용으로 설정
@@ -133,15 +133,15 @@ public class ChatService{
         //내가 보낸 메시지 개수 설정
         for (ChatUsers user : users){
             if (user.getUser().getNickname().equals(nickname)){
-                ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
+                ChatUsersDTO chatUsersDTO = chatMapper.chatUserToDTO(user);
                 chatUsersDTO.setMsgCount(user.getMsgCount()+1);  ////내가 보낸 메시지 수 +1
-                chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));
+                chatUsersRepository.save(chatMapper.chatUserToEntity(chatUsersDTO));
             }
             else {
                 to= user.getUser().getNickname();
-                ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
+                ChatUsersDTO chatUsersDTO = chatMapper.chatUserToDTO(user);
                 chatUsersDTO.setMsgCount(0);  ////내가  받은 메시지 +0
-                chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));
+                chatUsersRepository.save(chatMapper.chatUserToEntity(chatUsersDTO));
             }
         }
         chatRoomRepository.save(chatRoomDTO.toEntity());
@@ -175,9 +175,9 @@ public class ChatService{
         //메세지 수 0
         for (ChatUsers user : users){
             if (!user.getUser().getNickname().equals(me.getNickname())){
-                ChatUsersDTO chatUsersDTO = chatMapper.toDTO(user);
+                ChatUsersDTO chatUsersDTO = chatMapper.chatUserToDTO(user);
                 chatUsersDTO.setMsgCount(0);  //상대방이 보낸 메세지 개수 0 으로 설정
-                chatUsersRepository.save(chatMapper.userToEntity(chatUsersDTO));
+                chatUsersRepository.save(chatMapper.chatUserToEntity(chatUsersDTO));
             }
         }
         return messages;

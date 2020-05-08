@@ -59,6 +59,7 @@
                     </div> <!-- form-group// -->
                     <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
                     <div class="alert alert-danger" id="alert-danger">비밀번호 확인이 필요합니다. 비밀번호가 일치하지 않습니다.</div>
+                    <div class="alert alert-danger" id="alert-form">형식틀림</div>
                     <p>${valid_password}</p>
 
                     <div class="form-group input-group">
@@ -116,6 +117,8 @@
     <script type="text/javascript" src="/resources/js/user.js"></script>
     <script type="text/javascript" src="/resources/js/mail.js"></script>
     <script>
+        idck1 = 0; idck = 0; pwck= 0; mailck =0;
+
         //이메일 중복확인
         $("#auth").hide();
         $("#email-check").on("click", function () {
@@ -137,12 +140,10 @@
             });
         });
 
-        // 닉네임 유효성 검사(0 = 중복 / 1 != 중복)
+
         $("#submit")
             .attr("disabled", true);
-
-        // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
-        idck1 = 0;idck = 0;  pwck= 0; mailck =0;
+        // 닉네임 유효성 검사(0 = 중복 / 1 != 중복)
         $("#nickname-check").hide();
         $("#username-check").hide();
         $("#nickname").keyup(function() {
@@ -186,20 +187,36 @@
 
         $("#alert-success").hide();
         $("#alert-danger").hide();
+        $("#alert-form").hide();
+        var regex = new RegExp("(?=.*[0-9]).{4,20}");
+
         $("input").keyup(function(){
             var password=$("#password").val();
             var confirmPW=$("#confirmPW").val();
             if(password != "" || confirmPW != ""){
-                if(password == confirmPW){
-                    $("#alert-success").show();
-                    $("#alert-danger").hide();
-                    pwck = 1;
-                }
-                else{
-                    $("#alert-success").hide(); $("#alert-danger").show();
+                // 유효성 검사
+                if(!regex.test(password)){
+                    $("#alert-success").hide(); $("#alert-form").show();
                     $("#submit").attr("disabled", "disabled");
                     pwck = 0;
                 }
+                else{
+                    $("#alert-success").show();
+                    $("#alert-form").hide();
+                    pwck = 1;
+                }
+
+                // 같은 지 확인
+                if(password != confirmPW){
+                    $("#alert-success").hide(); $("#alert-danger").show();
+                    $("#submit").attr("disabled", "disabled");
+                    pwck = 0;
+                }else{
+                    $("#alert-danger").hide();
+                    $("#alert-success").show();
+                    pwck = 1;
+                }
+
                 if(idck==1 && idck1==1 && pwck == 1 && mailck ==1){
                     $("#submit")
                         .removeAttr("disabled");
@@ -224,7 +241,6 @@
 
         //인증번호 확인
         $('#confirm').click(function(){
-
             var email = $('#email').val();
             var code = $('#code').val();
             var checking = {

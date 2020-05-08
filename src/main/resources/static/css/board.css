@@ -29,6 +29,9 @@
     font-size: 0.1rem;
     font-weight: bold;
 }
+.like-cnt, .view-cnt{
+    text-align: center;
+}
 .write-btn{
     border: #d5d0d0 1px solid;
     padding: 4px;
@@ -289,7 +292,7 @@
     height: 100%;
     width: 100%;
 }
-.del-image{
+.del-image, .del-tmp-image{
     background: url( "/resources/image/close.png" ) no-repeat;
     border: none;
     width: 16px;

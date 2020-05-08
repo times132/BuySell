@@ -51,11 +51,8 @@ public class FileService {
 
                 // 메타 데이터 저장
                 ObjectMetadata meta = new ObjectMetadata();
-//                meta.setContentType(Mimetypes.getInstance().getMimetype(uploadFileName)); // 파일명으로 contentType 설정
-//                byte[] bytes = IOUtils.toByteArray(multipartFile.getInputStream());
-//                meta.setContentLength(bytes.length); // 더 많은 데이터를 기다리는 것을 방지하기위해 사이즈 지정
                 meta.setContentType(multipartFile.getContentType());
-                meta.setContentLength(multipartFile.getSize());
+                meta.setContentLength(multipartFile.getSize()); // 더 많은 데이터를 기다리는 것을 방지하기위해 사이즈 지정
 
                 s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/" + uploadFileName, multipartFile.getInputStream(), meta)
                         .withCannedAcl(CannedAccessControlList.PublicRead)); // 원본 저장

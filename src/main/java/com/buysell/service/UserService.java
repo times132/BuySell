@@ -154,15 +154,6 @@ public class UserService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
     }
 
-    //사진변경
-    public void uploadProfile(String fileName, Long uid){
-        Optional<User> userWapper = userRepository.findById(uid);
-        User user = userWapper.get();
-        UserDTO userDTO = userMapper.convertEntityToDto(user);
-        userDTO.setProfileImage(fileName);
-        userRepository.save(userMapper.toEntity(userDTO));
-    }
-
 
     //로그인 후 비밀번호 확인
     public boolean checkPassword(String pw) {
@@ -187,15 +178,14 @@ public class UserService implements UserDetailsService {
 
     //이메일검사
     @Transactional
-    public boolean checkEmail(String email)
-    {
-
+    public boolean checkEmail(String email) {
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
         if(user.isPresent()){
             return true;
         }
         return false;
     }
+
     //닉네임 중복검사
     @Transactional
     public boolean checkNickName(String nickName)
@@ -206,6 +196,7 @@ public class UserService implements UserDetailsService {
         }
         return false;
     }
+
     //비밀번호 변경
     @Transactional
     public void changePW(String userName, String newPW){
@@ -214,8 +205,8 @@ public class UserService implements UserDetailsService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userDTO.setPassword(passwordEncoder.encode(newPW));
         userRepository.save(userMapper.toEntity(userDTO)).getId();
-
     }
+
     //계정 USER 로 변환
     @Transactional
     public void changeROLE(String email) {
@@ -244,10 +235,9 @@ public class UserService implements UserDetailsService {
     }
 
     //아이디 찾기, 왜 리스트지?
-    public List<User> findId(String email, String name) {
+    public User findId(String email, String name) {
         return userRepository.findByEmailAndName(email, name);
     }
-
 
     public Page<Like> getLikeList(Long id, SearchCriteria searchCri){
         Pageable pageable = PageRequest.of(searchCri.getPage()-1, searchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));

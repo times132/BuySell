@@ -8,10 +8,21 @@
     <meta charset="utf-8">
 
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/resources/css/myinfo.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        $(document).ready(function () {
+            var token =  '${_csrf.token}';
+            var header = '${_csrf.headerName}';
+
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <%@include file="../include/navbar.jsp"%>
@@ -78,7 +89,6 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${userList}" var="user">
                                         <tr>
                                             <th scope="row">
                                                 <h6><c:out value="${user.username}"/>
@@ -94,7 +104,6 @@
                                                 </c:if>
                                             </th>
                                         </tr>
-                                        </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -171,7 +180,6 @@
                                     location.href = "/user/login"
                                     return;
                                 }
-
                             });
                         });
                 }

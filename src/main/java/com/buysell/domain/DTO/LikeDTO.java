@@ -11,11 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LikeDTO {
 
-
     private Long id;
-
     private User user;
-
     private Board board;
-
 }

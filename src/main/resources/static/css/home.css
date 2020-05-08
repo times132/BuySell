@@ -118,7 +118,7 @@ a:hover{
     margin-top: 74px;
 }
 
-.title, .titleSold{
+.title, .title-sold{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -127,10 +127,10 @@ a:hover{
 .title a{
     color: #000000;
 }
-.titleSold a{
+.title-sold a{
     color: #b8bfce;
 }
-.soldReplyCnt{
+.sold-reply-cnt{
     color: #b8bfce;
 }
 .sold{

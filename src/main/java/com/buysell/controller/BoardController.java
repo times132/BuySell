@@ -165,8 +165,6 @@ public class BoardController {
     }
 
 
-
-
     //좋아요 여부 검사
     @GetMapping(value = "/like/{bid}")
     @ResponseBody
@@ -199,11 +197,11 @@ public class BoardController {
     }
 
     @Cacheable(value = "home")
-    @GetMapping(value = "/item/{itemname}")
+    @GetMapping(value = "/item/{itemName}")
     @ResponseBody
-    public ResponseEntity<List<Board>> ItemListGET(@PathVariable("itemname") String itemName){
+    public ResponseEntity<List<Board>> ItemListGET(@PathVariable("itemName") String itemName){
         SearchCriteria searchCriteria = new SearchCriteria();
-        if (!itemName.equals("whole")) searchCriteria.setType("I");
+        if (!itemName.equals("whole")) searchCriteria.setType("I"); // 소분류로 검색할 때
         searchCriteria.setPageSize(10);
         searchCriteria.setKeyword(itemName);
         List<Board> itemList = boardService.getList(searchCriteria).getContent();

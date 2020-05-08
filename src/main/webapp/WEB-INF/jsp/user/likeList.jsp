@@ -8,7 +8,6 @@
     <title>GiveAndTake</title>
 
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/resources/css/myinfo.css">
     <link rel="stylesheet" href="/resources/css/board.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
@@ -75,11 +74,11 @@
                             </td>
 
                             <c:if test="${like.board.sellCheck eq true}">
-                                <td class="title-sell">
+                                <td class="title-sold">
                                     <a class="move" href='<c:out value="${like.board.bid}"/>'>
                                         <c:out value="${like.board.title}"/>
                                     </a>
-                                    <span class="replycnt">
+                                    <span class="sold-reply-cnt">
                                             [<c:out value="${like.board.replyCnt}"/>]
                                         </span>
                                     <span class="sold">

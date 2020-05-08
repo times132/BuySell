@@ -249,7 +249,6 @@
                 else{
                     $(arr).each(function (i, file) {
                         if (file.image){
-
                             var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
                             if (i === 0){ // 첫번째 요소에 active 부여
                                 first += "<li class='active' data-target='#carouselIndicators' data-slide-to='" + i + "'></li>";
@@ -303,13 +302,12 @@
         //관심유저 관련
         function showLike(likeCnt){
             boardService.checkLike(bidValue, function (data) {
-                console.log(data)
                 var str = "<div>좋아요&nbsp</div><div class='like-btn'>";
-                //date가 있는 경우 (like인 경우)
+                //data가 있는 경우 (like인 경우)
                 if (data){
                     str += "<img id = 'deleteLike' src='/resources/image/like.png'>";
                 }
-                //date가 없는 경우(like 안한 상태)
+                //data가 없는 경우(like 안한 상태)
                 else {
                     str += "<img id='addLike' src='/resources/image/dislike.png'>";
                 }
@@ -348,7 +346,6 @@
                     return;
                 }
                 for (var i = 0, len = data.content.length || 0; i < len; i++){
-                    console.log(data.content[i]);
                     str += "<li class='reply-li' data-rid='" + data.content[i].rid + "'>";
                     str += "<div class='reply-header'><img class='reply-profile' src='https://d1divnqsnqozzu.cloudfront.net/" + data.content[i].user.id
                         + "/profile/s_" + data.content[i].user.profileImage

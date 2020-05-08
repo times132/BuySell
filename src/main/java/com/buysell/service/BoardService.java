@@ -51,7 +51,6 @@ public class BoardService {
     }
 
     // 게시물 목록, 페이징, 검색
-
     public Page<Board> getList(SearchCriteria SearchCri){
         Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
 
@@ -142,9 +141,7 @@ public class BoardService {
         boardRepository.save(boardMapper.toEntity(boardDTO));
     }
 
-
     public boolean checkLike(Long bid, CustomUserDetails userDetails) {
-        System.out.println("CHECK");
         Optional<Like> like = Optional.ofNullable(likeRepository.findByUserIdAndBoardBid(userDetails.getUser().getId(),bid));
 
         if(like.isPresent()){
@@ -152,9 +149,9 @@ public class BoardService {
         }
         return false;
     }
+
     @Transactional
     public int addLike(Long bid, CustomUserDetails userDetails) {
-        System.out.println("좋아요");
         Optional<Board> boardWrapper = boardRepository.findById(bid);
         Board board = boardWrapper.get();
 
