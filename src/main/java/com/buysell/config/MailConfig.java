@@ -21,7 +21,6 @@ import java.util.Properties;
         mailSender.setDefaultEncoding("utf-8");
         Properties prop = new Properties();
 
-
         prop.put("mail.transport.protocol", "smtp");
         prop.put("mail.smtp.debug", "true");
         prop.put("mail.smtp.auth", true);

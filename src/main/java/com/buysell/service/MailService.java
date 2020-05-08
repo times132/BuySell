@@ -29,6 +29,7 @@ public class MailService {
         String title ="";
         String content = "";
         HttpSession session = request.getSession();
+        logger.info("코드 : " + key);
         if(mailType == "join") {
             title = "[BUYSELL] 회원 인증 이메일 입니다."; // 제목
             content = System.getProperty("line.separator") + //한줄씩 줄간격을 두기위해 작성

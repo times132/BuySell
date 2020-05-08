@@ -48,7 +48,7 @@ public class UserController {
     public String signUpPOST(@Valid UserDTO userDto, Errors errors, Model model) {
         if (errors.hasErrors()) {
             // 회원가입 실패시, 입력 데이터를 유지
-            model.addAttribute("userDto", userDto);
+            model.addAttribute("userDto", userDto); // 이거안됨
             //회원가입 실패 시, 회원가입 페이지에서 입력했던 정보들을 그대로 유지하기 위해 입력받았던 데이터를 그대로 할당
 
             // 유효성 통과 못한 필드와 메시지를 핸들링
@@ -63,8 +63,8 @@ public class UserController {
         return "redirect:/user/login";
     }
 
-    // readUserByUsername
-    @RequestMapping(value = "/user/userInfo",method = RequestMethod.GET)
+    // readUserByUsername 어디서 쓰는거
+    @RequestMapping(value = "/user/userInfo", method = RequestMethod.GET)
     public UserDTO userInfoGET(@RequestParam(value = "nickname") String nickname){
         return userService.readUserByUsername(nickname);
     }
@@ -187,8 +187,9 @@ public class UserController {
                 userService.update(user);
                 out.println("<script>alert('수정이 완료되었습니다.'); location.href='/user';</script>");
             }
-            else
-            {out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");}
+            else {
+                out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");
+            }
         }
         out.flush();
     }
@@ -197,30 +198,25 @@ public class UserController {
     @PostMapping("/user/changePW")
     @ResponseBody
     public ResponseEntity<String> passwordPOST(@RequestParam String newPW, @RequestParam String password,  @RequestParam String username){
-        if(userService.checkPassword(password))
-        {
+        if(userService.checkPassword(password)) {
             userService.changePW(username, newPW);
             return new ResponseEntity<>("비밀번호 변경이 완료되었습니다.", HttpStatus.OK);
-        }
-        else{
-
+        }else {
             return new ResponseEntity<>("기존의 비밀번호가 틀립니다.", HttpStatus.OK);
         }
-
     }
+
     //비밀번호 확인 후 탈퇴
     @RequestMapping(value = "/user/{userId}/delete",method = RequestMethod.GET)
     public void deleteUserGET(@RequestParam(value = "password") String password, @PathVariable ("userId") Long id, HttpSession httpSession, HttpServletResponse response) throws IOException{
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        if(userService.checkPassword(password))
-        {
+        if(userService.checkPassword(password)) {
             userService.delete(id);
             httpSession.invalidate();
             out.println("<script>alert('탈퇴가 완료되었습니다.'); location.href='/user/logout';</script>");
-        }
-        else{
+        }else {
             out.println("<script>alert('비밀번호가 틀립니다. 다시입력해주세요');history.go(-1);</script>");
         }
         out.flush();

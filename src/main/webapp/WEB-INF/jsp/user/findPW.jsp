@@ -147,7 +147,7 @@
             }
             $("#username-check").hide();
             userService.checkUsername(userName, function (data) {
-                if (data == false) {
+                if (data == false) { // 존재하지 않는 아이디일 때
                     $("#username-check").show();
                     $("#finding").attr("disabled", true);
                     idck = 0;
@@ -156,7 +156,7 @@
                     $("#username-check").hide();
                     idck=1;
                 }
-                if(idck==1) {
+                if(idck==1) { // 존재하는 아이디일 때
                     $("#finding")
                         .removeAttr("disabled")
                         .click(function() {

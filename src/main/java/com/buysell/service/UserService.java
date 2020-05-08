@@ -42,9 +42,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-    @Autowired
     private UserMapper userMapper;
-    @Autowired
     private UserRolesRepository userRolesRepository;
     private ChatService chatService;
     private LikeRepository likeRepository;
@@ -54,22 +52,22 @@ public class UserService implements UserDetailsService {
     public void joinUser(UserDTO userDto) {
         User user;
         Role role;
-        if (userDto.getProvider() == null){
+        if (userDto.getProvider() == null){ // 자체 회원가입
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
             userDto.setActivation(true);
             userDto.setProvider("giveandtake");
-            user = userRepository.save(userMapper.toEntity(userDto));
 
-            //Role 저장
+            user = userRepository.save(userMapper.toEntity(userDto));
             role = roleRepository.findByName(RoleName.ROLE_USER)
                     .orElseThrow(() -> new AppException("User Role not set"));
         }
-        else {
+        else { // 소셜 가입
             user = userRepository.save(userMapper.toEntity(userDto));
             role = roleRepository.findByName(RoleName.ROLE_SOCIAL)
                     .orElseThrow(() -> new AppException("User Role not set"));
-            if (user.getEmail() != null){
+
+            if (user.getEmail() != null){ // 구글 같은 경우는 이메일 제공
                 role = roleRepository.findByName(RoleName.ROLE_USER)
                         .orElseThrow(() -> new AppException("User Role not set"));
             }
@@ -77,8 +75,8 @@ public class UserService implements UserDetailsService {
         UserRolesDTO userRole = new UserRolesDTO();
         userRole.setUser(user);
         userRole.setRole(role);
-        UserRoles userRoles = userRolesRepository.save(userMapper.userRolestoEntity(userRole));
-        user.getRoles().add(userRoles);
+        UserRoles userRoles = userRolesRepository.save(userMapper.userRolestoEntity(userRole)); // 유저 권한 테이블에 저장
+        user.getRoles().add(userRoles); // ? 무슨 코드
     }
 
     //로그인시 권한부여와 이메일과 패스워드를 User에 저장
@@ -149,7 +147,6 @@ public class UserService implements UserDetailsService {
 
     //시큐리티컨텍스트 업데이트
     public void updateSecurityContext(Authentication authentication, String username) {
-
         UserDetails userDetails = loadUserByUsername(username); // 수정된 유저 정보 가져옴
         System.out.println("걸림?? ##########AUTH#############"+userDetails.getAuthorities());
         UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(userDetails, authentication, userDetails.getAuthorities());
@@ -177,8 +174,6 @@ public class UserService implements UserDetailsService {
         }
         return false;
     }
-
-
 
     //아이디 중복확인
     @Transactional
@@ -231,9 +226,7 @@ public class UserService implements UserDetailsService {
         UserDTO userDTO = userMapper.convertEntityToDto(user);
         userDTO.setEmail(email);
         userRepository.save(userMapper.toEntity(userDTO));
-        System.out.println("DELETE" + userDTO.getId());
         userRolesRepository.deleteAllByUserId(userDTO.getId());
-        System.out.println("DELETE FINISH" + userDTO.getId());
 
         UserRolesDTO userRole = new UserRolesDTO();
         userRole.setUser(user);
@@ -250,17 +243,16 @@ public class UserService implements UserDetailsService {
         return  user.getEmail();
     }
 
-    //아이디 찾기
+    //아이디 찾기, 왜 리스트지?
     public List<User> findId(String email, String name) {
-    return  userRepository.findByEmailAndName(email, name);
+        return userRepository.findByEmailAndName(email, name);
     }
-
 
 
     public Page<Like> getLikeList(Long id, SearchCriteria searchCri){
         Pageable pageable = PageRequest.of(searchCri.getPage()-1, searchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
 
         Page<Like> likes = likeRepository.findAllByUserId(id,pageable);
-       return likes;
+        return likes;
     }
 }
