@@ -84,8 +84,8 @@ var userService = (function () {
             type: "POST",
             url: "/user/findPW",
             data: username,
+            async: false,
             dataType: 'text',//데이타 타입
-            async: true,
             success: function (result) {
                 if (callback){
                     callback(result);

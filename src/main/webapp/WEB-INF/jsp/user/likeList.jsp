@@ -75,11 +75,11 @@
                             </td>
 
                             <c:if test="${like.board.sellCheck eq true}">
-                                <td class="title-sell">
+                                <td class="title-sold">
                                     <a class="move" href='<c:out value="${like.board.bid}"/>'>
                                         <c:out value="${like.board.title}"/>
                                     </a>
-                                    <span class="replycnt">
+                                    <span class="sold-reply-cnt">
                                             [<c:out value="${like.board.replyCnt}"/>]
                                         </span>
                                     <span class="sold">

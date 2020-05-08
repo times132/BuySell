@@ -12,6 +12,18 @@
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        $(document).ready(function () {
+            var token =  '${_csrf.token}';
+            var header = '${_csrf.headerName}';
+
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <%@include file="../include/navbar.jsp"%>
@@ -171,7 +183,6 @@
                                     location.href = "/user/login"
                                     return;
                                 }
-
                             });
                         });
                 }

@@ -177,7 +177,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center pt-0 mr-0 ml-0">
+        <div class="row justify-content-center pt-0 mr-0 ml-0 mb-5">
             <div class="itemList">
                 <table class="table table-sm table-hover mb-0">
                     <tbody class="item-body">
@@ -221,9 +221,9 @@
 
                     str += "<tr><th style='width: 6%'>" + data[i].bid + "</th>";
                     if (data[i].sellCheck){
-                        str += "<td class='titleSold' style='width: 44%'><a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>" + "<span class='soldReplyCnt'>" + "\[" +data[i].replyCnt + "\]" + "</span><span class='sold'>완료</span></td>";
+                        str += "<td class='title-sold' style='width: 44%'><a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>" + "<span class='sold-reply-cnt'>" + "\[" +data[i].replyCnt + "\]" + "</span><span class='sold'>완료</span></td>";
                     }else{
-                        str += "<td class='title' style='width: 44%'><a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>" + "<span class='replyCnt'>" + "\[" +data[i].replyCnt + "\]" + "</span></td>";
+                        str += "<td class='title' style='width: 44%'><a class='move' href='" + data[i].bid + "'>" + data[i].title + "</a>" + "<span class='reply-cnt'>" + "\[" +data[i].replyCnt + "\]" + "</span></td>";
                     }
                     str += "<td class='price' style='width: 10%'>" + "&#8361;" +data[i].price.toLocaleString();
                     str += "</td><td class='writer' style='width: 10%'>" + data[i].writer + "</td><td class='time' style='width: 8%' '>" + commonService.displayTime(data[i].createdDate);
