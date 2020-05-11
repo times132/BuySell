@@ -116,8 +116,8 @@ public class UserController {
     }
 
     //아이디 찾기
-    @GetMapping("/user/findID")
-    public String findID(Model model, @RequestParam String email, @RequestParam String name)
+    @PostMapping("/user/findID")
+    public String findID(Model model, String email, String name)
     {
         User user = userService.findId(email, name);
         model.addAttribute("user", user);

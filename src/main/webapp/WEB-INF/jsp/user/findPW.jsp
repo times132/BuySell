@@ -61,20 +61,21 @@
                                             <h3 class="text-center">아이디를 잊어버리셨습니까?</h3>
                                             <br>
                                             <p>이메일과 이름을 입력해주세요</p>
-                                            <form id="actionForm" action="/user/findID" method="get">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="email" name="email" placeholder="이메일" required/>
-                                                </div>
-                                            </div>
+                                            <form id="actionForm" action="/user/findID" method="post">
+                                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                                 <div class="form-group">
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" id="name" name="name" placeholder="이름" required/>
+                                                        <input type="text" class="form-control" id="email" name="email" placeholder="이메일" required/>
                                                     </div>
                                                 </div>
-                                            <div class="form-group">
-                                                <input id="findId" class="btn btn-lg btn-primary btn-block btnForget" value="아이디찾기" type="submit">
-                                            </div>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="name" name="name" placeholder="이름" required/>
+                                                        </div>
+                                                    </div>
+                                                <div class="form-group">
+                                                    <input id="findId" class="btn btn-lg btn-primary btn-block btnForget" value="아이디찾기" type="submit">
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
