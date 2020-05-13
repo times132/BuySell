@@ -115,24 +115,23 @@ public class UserController {
         return "redirect:/";
     }
 
+    //회원정보 분실 시 회원번호 찾기 페이지
+    @GetMapping("/user/findUser")
+    public String findUser()
+    {
+        return "/user/findUser";
+    }
     //아이디 찾기
-    @PostMapping("/user/findID")
+    @PostMapping("/user/findUser/findID")
     public String findID(Model model, String email, String name)
     {
         User user = userService.findId(email, name);
         model.addAttribute("user", user);
-        return "/user/findPW";
+        return "/user/findUser";
     }
 
-    //비밀번호 찾기
-    @GetMapping("/user/findPW")
-    public String findPW()
-    {
-        return "/user/findPW";
-    }
-
-    //메일로 비밀번호 보내기
-    @RequestMapping( value = "/user/findPW" , method=RequestMethod.POST)
+    //비밀번호 찾기 - 메일로 비밀번호 보내기
+    @RequestMapping( value = "/user/findUser/findPW" , method=RequestMethod.POST)
     @ResponseBody
     public String passwordMailPOST(HttpServletRequest request, @RequestParam String username){
         String email = userService.getEmailByUsername(username);

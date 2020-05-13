@@ -58,7 +58,7 @@
                     계정이 없으십니까?<a href="/user/signup">회원가입</a>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <a href="/user/findPW">비밀번호를 잊어버리셨습니까?</a>
+                    <a href="/user/findUser">비밀번호를 잊어버리셨습니까?</a>
                 </div>
             </div>
         </div>

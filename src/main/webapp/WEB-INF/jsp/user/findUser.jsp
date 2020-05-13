@@ -61,7 +61,7 @@
                                             <h3 class="text-center">아이디를 잊어버리셨습니까?</h3>
                                             <br>
                                             <p>이메일과 이름을 입력해주세요</p>
-                                            <form id="actionForm" action="/user/findID" method="post">
+                                            <form id="actionForm" action="/user/findUser/findID" method="post">
                                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                                 <div class="form-group">
                                                     <div class="input-group">
@@ -131,8 +131,7 @@
                                             </div>
                                             <div class="alert alert-danger" id="username-check">존재하지 않는 아이디 입니다.</div>
 
-
-                                            <input id="finding" class="btn btn-lg btn-primary btn-block btnForget" value="이메일 발송">
+                                            <input id="finding" class="btn btn-lg btn-primary btn-block btnForget" value="이메일 발송"  style="cursor: pointer">
                                         </div>
                                     </div>
                                 </div>
