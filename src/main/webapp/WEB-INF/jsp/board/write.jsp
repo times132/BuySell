@@ -8,9 +8,12 @@
 
     <link rel="stylesheet" href="/resources/css/board.css">
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/editer/summernote-lite.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+    <script src="/resources/editer/summernote-lite.js"></script>
+    <script src="/resources/editer/summernote-ko-KR.js"></script>
     <script>
         $(document).ready(function () {
             var token =  '${_csrf.token}';
@@ -56,9 +59,9 @@
                             <input type="text" class="form-control" name="price" placeholder="가격" onkeyup="return this.value=this.value.replace(/[^0-9]/g,'');">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <textarea class="form-control" name="content" rows="10" placeholder="본문 (최대 250자)" maxlength="250"></textarea>
-                    </div>
+
+                    <textarea id="content" name="content" style="display: none"></textarea>
+
                 </form>
             </div>
 
@@ -99,6 +102,19 @@
     <!-- js & jquery -->
     <script src="/resources/js/fileupload.js"></script>
     <script src="/resources/js/board.js"></script>
+    <script>
+        $(document).ready(function() {
+            //여기 아래 부분
+            $('#content').summernote({
+                height: 300,                 // 에디터 높이
+                minHeight: null,             // 최소 높이
+                maxHeight: null,             // 최대 높이
+                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR",					// 한글 설정
+                placeholder: '최대 250자까지 쓸 수 있습니다'	//placeholder 설정
+            });
+        });
+    </script>
     <script>
         $(document).ready(function () {
             var writeForm = $("#writeForm");

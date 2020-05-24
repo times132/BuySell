@@ -42,44 +42,44 @@ public class ChatService{
     //채팅방만들기
     @Transactional
     public String createChatRoom(String nickname, Principal principal){
-            User me = userRepository.findByNickname(principal.getName());
-            User receiver = userRepository.findByNickname(nickname);
+        User me = userRepository.findByNickname(principal.getName());
+        User receiver = userRepository.findByNickname(nickname);
 
-            //채팅방 중복검사
-            List<ChatUsers> chatList = chatUsersRepository.findAllByUserNickname(principal.getName()); //본인이 속해 있는 모든 채팅방 정보 SELECT
+        //채팅방 중복검사
+        List<ChatUsers> chatList = chatUsersRepository.findAllByUserNickname(principal.getName()); //본인이 속해 있는 모든 채팅방 정보 SELECT
 
-            for (ChatUsers chatUsers : chatList){
-                ChatRoom chatRoom = chatUsers.getChatRoom();
+        for (ChatUsers chatUsers : chatList){
+            ChatRoom chatRoom = chatUsers.getChatRoom();
 
-                List<ChatUsers> users = chatRoom.getUsers();
-                //해당 채팅방 userList 검색
-                for (ChatUsers user : users){
-                    if (user.getUser().getNickname().equals(nickname)){
-                        return user.getChatRoom().getRoomId();
-                    }
+            List<ChatUsers> users = chatRoom.getUsers();
+            //해당 채팅방 userList 검색
+            for (ChatUsers user : users){
+                if (user.getUser().getNickname().equals(nickname)){
+                    return user.getChatRoom().getRoomId();
                 }
             }
+        }
 
-            //USER 목록 생성
-            List<User> participant = new ArrayList<User>();
-            participant.add(me);
-            participant.add(receiver);
+        //USER 목록 생성
+        List<User> participant = new ArrayList<User>();
+        participant.add(me);
+        participant.add(receiver);
 
-            ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
-            String randomId = UUID.randomUUID().toString();
-            chatRoomDTO.setRoomId(randomId);
-            chatRoomDTO.setMsgDate(LocalDateTime.now());
-            ChatRoom chatRoom = chatRoomRepository.save(chatMapper.chatRoomToEntity(chatRoomDTO));
-            //Chat User
-            for(User part : participant){
-                ChatUsersDTO dto = new ChatUsersDTO();
-                    dto.setChatRoom(chatRoom);
-                    dto.setUser(part);
-                ChatUsers chatUsers = chatUsersRepository.save(chatMapper.chatUserToEntity(dto));
-                chatRoom.getUsers().add(chatUsers);
-            }
+        ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
+        String randomId = UUID.randomUUID().toString();
+        chatRoomDTO.setRoomId(randomId);
+        chatRoomDTO.setMsgDate(LocalDateTime.now());
+        ChatRoom chatRoom = chatRoomRepository.save(chatMapper.chatRoomToEntity(chatRoomDTO));
+        //Chat User
+        for(User part : participant){
+            ChatUsersDTO dto = new ChatUsersDTO();
+                dto.setChatRoom(chatRoom);
+                dto.setUser(part);
+            ChatUsers chatUsers = chatUsersRepository.save(chatMapper.chatUserToEntity(dto));
+//            chatRoom.getUsers().add(chatUsers);
+        }
 
-            return randomId;
+        return randomId;
     }
 
     // 모든 채팅방 조회
@@ -120,14 +120,13 @@ public class ChatService{
         chatMessageDTO.setChatRoom(chatRoom);
         ChatMessage chatMessage = chatMessageRepository.save(chatMessageDTO.toEntity()); //메시지 DB저장
 
-        List<ChatMessage> messages = chatRoom.getMessages();
-        messages.add(chatMessage);
+        List<ChatMessage> messages = chatRoom.getMessages(); // 채팅방에 있는 메세지 조회
+        messages.add(chatMessage); // 새로쓴 메세지 추가
         ChatRoomDTO chatRoomDTO = chatMapper.chatRoomToDto(chatRoom);
-        chatRoomDTO.setMessages(messages);
+        chatRoomDTO.setMessages(messages); // 채팅방 모든 메시지 저장
         chatRoomDTO.setMsgDate(chatMessage.getCreatedDate()); //최근 메세지 시간을 채팅방 시간으로 입력
         chatRoomDTO.setRecentMsg(chatMessage.getMessage()); //최근 메세지 내용으로 설정
         String nickname = principal.getName();
-
 
         String to = null;
         //내가 보낸 메시지 개수 설정

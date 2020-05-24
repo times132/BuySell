@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http.cors()
+                .and().headers().frameOptions().sameOrigin()
                 .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
                 // 페이지 권한 설정

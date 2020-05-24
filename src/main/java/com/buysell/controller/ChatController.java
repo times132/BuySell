@@ -104,8 +104,7 @@ public class ChatController {
     @GetMapping("/messages/{roomId}")
     @ResponseBody
     public List<ChatMessage> messageInfoGET(@PathVariable String roomId) {
-        if(chatService.checkAccess(roomId))
-        {
+        if(chatService.checkAccess(roomId)) {
             return chatService.findMessages(roomId);
         }
         return null;

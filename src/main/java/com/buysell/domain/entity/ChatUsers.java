@@ -19,7 +19,7 @@ public class ChatUsers{
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"replyList", "boardList", "password", "email", "phone", "roles", "provider", "username", "name", "createdDate", "updatedDate", "activation","chats"})
+    @JsonIgnoreProperties({"replyList", "boardList", "password", "email", "phone", "roles", "provider", "username", "name", "createdDate", "updatedDate", "activation", "chats", "likeList"})
     private User user;
 
     @ManyToOne

@@ -122,9 +122,7 @@
 
                     <!-- 제품 상세 내용 -->
                     <div class="card-body">
-                        <p class="card-text">
-                            <c:out value="${boardDto.content}"/>
-                        </p>
+                        ${boardDto.content}
                     </div>
                 </div>
 

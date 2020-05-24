@@ -8,9 +8,12 @@
 
     <link rel="stylesheet" href="/resources/css/board.css">
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/editer/summernote-lite.css">
 
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.bundle.js"></script>
+    <script src="/resources/editer/summernote-lite.js"></script>
+    <script src="/resources/editer/summernote-ko-KR.js"></script>
     <script>
         $(document).ready(function () {
             var token =  '${_csrf.token}';
@@ -62,7 +65,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" name="content" rows="10" maxlength="250">${boardDto.content}</textarea>
+                        <textarea id="content" name="content" style="display: none">${boardDto.content}</textarea>
                     </div>
                 </form>
             </div>
@@ -96,8 +99,8 @@
 
         <div class="row">
             <div class="col">
-                <button class="btn btn-outline-dark btn-submit" data-oper="modify" type="submit">수정</button>
-                <button class="btn btn-dark float-right" data-oper="list" type="submit">목록</button>
+                <button class="btn btn-outline-dark btn-submit" id="modify-btn" type="submit">수정</button>
+                <button class="btn btn-dark float-right" id="list-btn" type="submit">목록</button>
             </div>
 
         </div>
@@ -106,6 +109,18 @@
     <!-- js & jquery -->
     <script type="text/javascript" src="/resources/js/fileupload.js"></script>
     <script type="text/javascript" src="/resources/js/board.js"></script>
+    <script>
+        $(document).ready(function() {
+            //여기 아래 부분
+            $('#content').summernote({
+                height: 300,                 // 에디터 높이
+                minHeight: null,             // 최소 높이
+                maxHeight: null,             // 최대 높이
+                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+                lang: "ko-KR",					// 한글 설정
+            });
+        });
+    </script>
     <script>
         $(document).ready(function(){
             var formObj = $("form");
@@ -129,37 +144,36 @@
             });
 
             // 수정, 목록 버튼 이벤트
-            $("button").on("click", function(e){
+            $("#modify-btn").on("click", function(e){
                 e.preventDefault();
+                var str = "";
 
-                var operation = $(this).data("oper");
+                $(".upload-result ul li").each(function (i, obj) {
+                    var jobj = $(obj);
 
-                if(operation === "list"){
-                    formObj.attr("action", "/board").attr("method", "get");
+                    str += "<input type='hidden' name='boardFileList[" + i + "].fid' value='" + jobj.data("fid") + "'>";
+                    str += "<input type='hidden' name='boardFileList[" + i + "].fileName' value='" + jobj.data("filename") + "'>";
+                    str += "<input type='hidden' name='boardFileList[" + i + "].uuid' value='" + jobj.data("uuid") + "'>";
+                    str += "<input type='hidden' name='boardFileList[" + i + "].uploadPath' value='" + jobj.data("path") + "'>";
+                    str += "<input type='hidden' name='boardFileList[" + i + "].image' value='" + jobj.data("type") + "'>";
+                });
+                formObj.append(str).submit();
+            });
 
-                    var pageTag = $("input[name='page']").clone();
-                    var typeTag = $("input[name='type']").clone();
-                    var keywordTag = $("input[name='keyword']").clone();
+            $("#list-btn").on("click", function(e){
+                e.preventDefault();
+                formObj.attr("action", "/board").attr("method", "get");
 
-                    formObj.empty();
+                var pageTag = $("input[name='page']").clone();
+                var typeTag = $("input[name='type']").clone();
+                var keywordTag = $("input[name='keyword']").clone();
 
-                    formObj.append(pageTag);
-                    formObj.append(typeTag);
-                    formObj.append(keywordTag);
-                }else if (operation === 'modify'){
-                    var str = "";
+                formObj.empty();
 
-                    $(".upload-result ul li").each(function (i, obj) {
-                        var jobj = $(obj);
+                formObj.append(pageTag);
+                formObj.append(typeTag);
+                formObj.append(keywordTag);
 
-                        str += "<input type='hidden' name='boardFileList[" + i + "].fid' value='" + jobj.data("fid") + "'>";
-                        str += "<input type='hidden' name='boardFileList[" + i + "].fileName' value='" + jobj.data("filename") + "'>";
-                        str += "<input type='hidden' name='boardFileList[" + i + "].uuid' value='" + jobj.data("uuid") + "'>";
-                        str += "<input type='hidden' name='boardFileList[" + i + "].uploadPath' value='" + jobj.data("path") + "'>";
-                        str += "<input type='hidden' name='boardFileList[" + i + "].image' value='" + jobj.data("type") + "'>";
-                    });
-                    formObj.append(str).submit();
-                }
                 formObj.submit();
             });
 
@@ -197,7 +211,7 @@
                 mouseleave: function () {
                     $(this).closest("li").css("border", "none");
                 }
-            }, ".del-image");
+            }, ".del-tmp-image");
         });
     </script>
 </body>
