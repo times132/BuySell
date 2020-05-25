@@ -436,10 +436,10 @@
         // 댓글창 수정 버튼 클릭하면 정보를 읽어옴
         replyUL.on("click", "button", function () {
             var rid = $(this).closest("li").data("rid");
+            replyerCopy = $(this).parent().prev().children("strong").text();
 
             replyService.get(rid, function (reply) {
                 replyCopy = reply.reply;
-                replyerCopy = reply.user.nickname;
             });
         });
 

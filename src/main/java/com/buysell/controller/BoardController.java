@@ -196,7 +196,7 @@ public class BoardController {
         return new ResponseEntity<>(categoryItems, HttpStatus.OK);
     }
 
-    @Cacheable(value = "home")
+
     @GetMapping(value = "/item/{itemName}")
     @ResponseBody
     public ResponseEntity<List<Board>> ItemListGET(@PathVariable("itemName") String itemName){
@@ -204,7 +204,7 @@ public class BoardController {
         if (!itemName.equals("whole")) searchCriteria.setType("I"); // 소분류로 검색할 때
         searchCriteria.setPageSize(10);
         searchCriteria.setKeyword(itemName);
-        List<Board> itemList = boardService.getList(searchCriteria).getContent();
+        List<Board> itemList = boardService.getHomeList(searchCriteria).getContent();
 
         return new ResponseEntity<>(itemList, HttpStatus.OK);
     }

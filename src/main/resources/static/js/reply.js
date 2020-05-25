@@ -63,7 +63,6 @@ var replyService = (function () {
 
         $.getJSON("/replies/pages/" + bid + "/" + page, function (data) {
             if (callback){
-
                 callback(data);
             }
         }).fail(function (xhr, status, err) {

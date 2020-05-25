@@ -52,9 +52,10 @@ public class Board extends DateAudit {
     @JsonIgnore
     private List<Like> likeList;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"password", "boardList", "phone"})
+//    @JsonIgnoreProperties({"password", "boardList", "phone"})
+    @JsonIgnore
     private User user;
 
     @Builder

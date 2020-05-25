@@ -15,6 +15,9 @@ import com.buysell.domain.entity.Like;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +43,7 @@ public class BoardService {
 
     // 게시물 등록
     @Transactional
+    @CacheEvict(value = "home", key = "#dto.category")
     public void write(BoardDTO dto, CustomUserDetails userDetails){
         dto.setUser(userDetails.getUser());
         Board board = boardRepository.save(boardMapper.toEntity(dto));
@@ -53,7 +57,7 @@ public class BoardService {
     // 게시물 목록, 페이징, 검색
     public Page<Board> getList(SearchCriteria SearchCri){
         Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
-
+        logger.info("캐시 테스트");
         Page<Board> page;
 
         if (SearchCri.getType().equals("")){
@@ -62,12 +66,22 @@ public class BoardService {
             page = boardRepository.findAllByTitleContainingOrContentContaining(SearchCri.getKeyword(), SearchCri.getKeyword(), pageable);
         }else if (SearchCri.getType().equals("W")){ // 작성자로 검색
             page = boardRepository.findAllByWriter(SearchCri.getKeyword(), pageable);
-        } else if (SearchCri.getType().equals("C")) { // 대분류로 검색
-            page = null;
-        } else if (SearchCri.getType().equals("I")) { // 소분류로 검색
-            page = boardRepository.findAllByCategory(SearchCri.getKeyword(), pageable);
         } else { // id로 검색
             page = boardRepository.findAllByUserId(Long.parseLong(SearchCri.getKeyword()), pageable);
+        }
+
+        return page;
+    }
+
+    @Cacheable(value = "home", key = "#SearchCri.keyword")
+    public Page<Board> getHomeList(SearchCriteria SearchCri){
+        Pageable pageable = PageRequest.of(SearchCri.getPage()-1, SearchCri.getPageSize(), Sort.by(Sort.Direction.DESC, "createdDate"));
+
+        Page<Board> page;
+        if (SearchCri.getType().equals("I")){
+            page = boardRepository.findAllByCategory(SearchCri.getKeyword(), pageable);
+        }else {
+            page = boardRepository.findAll(pageable);
         }
 
         return page;
@@ -84,6 +98,7 @@ public class BoardService {
 
     // 게시물 업데이트
     @Transactional
+    @CacheEvict(value = "home", key = "#dto.category")
     public void update(BoardDTO dto){
         Board board = boardRepository.findById(dto.getBid()).get();
         BoardDTO boardDTO = boardMapper.toDTO(board);
@@ -116,10 +131,12 @@ public class BoardService {
     }
 
     // 게시물 삭제
+    @CacheEvict(value = "home", allEntries = true)
     public void delete(Long bid){
         boardRepository.deleteById(bid);
     }
 
+    @CacheEvict(value = "home", allEntries = true)
     public void sell(Long bid){
         Board board = boardRepository.findById(bid).get();
         BoardDTO boardDTO = boardMapper.toDTO(board);
