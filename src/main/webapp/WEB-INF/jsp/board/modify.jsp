@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -188,7 +189,7 @@
                         var fileCallPath = encodeURIComponent(file.uploadPath + "/s_" + file.uuid + "_" + file.fileName);
 
                         str += "<li data-fid='" + file.fid + "' data-path='" + file.uploadPath + "' data-uuid='" + file.uuid + "' data-fileName='" + file.fileName + "' data-type='" + file.image + "'>";
-                        str += "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
+                        str += "<img class='img-thumbnail' src='<spring:eval expression="@commonProperties['spring.prefixPath']"/>" + fileCallPath + "'>";
                         str += "<input class='del-tmp-image' type='button' data-file=\'" + fileCallPath + "\' data-type='image'/>";
                         str += "</li>"
                     }

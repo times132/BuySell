@@ -1,7 +1,9 @@
 package com.buysell.service;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,16 +15,15 @@ import javax.servlet.http.HttpSession;
 import java.util.Random;
 
 @Service
+@RequiredArgsConstructor
 public class MailService {
 
     private static final Logger logger = LoggerFactory.getLogger(MailService.class);
-
-    @Resource(name="mailSender")
-    private JavaMailSender sender;
+    private final JavaMailSender sender;
 
     //이메일 보내기
     public String sendMail(String email, HttpServletRequest request, String mailType) {
-        System.out.println("메일 전송입니더어ㅓㅇ");
+        System.out.println("메일 전송입니다.");
         String key = getKey(false, 6);
         String from = "buysell0209@gmail.com";
         String to = email; // 받는 사람 이메일
@@ -30,7 +31,7 @@ public class MailService {
         String content = "";
         HttpSession session = request.getSession();
         logger.info("코드 : " + key);
-        if(mailType == "join") {
+        if(mailType.equals("join")) {
             title = "[BUYSELL] 회원 인증 이메일 입니다."; // 제목
             content = System.getProperty("line.separator") + //한줄씩 줄간격을 두기위해 작성
                     System.getProperty("line.separator") +

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
@@ -21,6 +22,7 @@
                     xhr.setRequestHeader(header, token);
                 }
             });
+	        var prefixPath = '<spring:eval expression="@commonProperties['spring.prefixPath']"/>'
         });
     </script>
 </head>
@@ -163,11 +165,11 @@
     </div><!--/row-->
 
     <!-- js -->
-    <script type="text/javascript" src="/resources/js/fileupload.js"></script>
+    <script type="text/javascript" src="/resources/js/fileupload.js" defer></script>
     <script type="text/javascript" src="/resources/js/user.js"></script>
     <script>
         var authority = $("#role");
-        console.log("###role"+ authority)
+
         $(document).ready(function() {
             var profileImage = "<c:out value="${userinfo.profileImage}"/>";
 
@@ -175,7 +177,7 @@
             if (profileImage === ""){
                 profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
             }else{
-                profile.html("<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/${userinfo.id}/profile/${userinfo.profileImage}'/>")
+                profile.html("<img class='img-thumbnail' src='<spring:eval expression="@commonProperties['spring.prefixPath']"/>${userinfo.id}/profile/${userinfo.profileImage}'/>")
             }
 
         });

@@ -1,4 +1,5 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -236,8 +237,9 @@
                 profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
             }
             else{
-                profile.html("<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/${userinfo.id}/profile/${userinfo.profileImage}'/>")
-            }
+                <%--profile.html("<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/${userinfo.id}/profile/${userinfo.profileImage}'/>")--%>
+	            profile.html("<img class='img-thumbnail' src='<spring:eval expression="@commonProperties['spring.prefixPath']"/>${userinfo.id}/profile/${userinfo.profileImage}'/>")
+			}
         });
         //이메일 중복확인
         $("#checkBtn").on("click", function () {

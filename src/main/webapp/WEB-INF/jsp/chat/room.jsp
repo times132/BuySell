@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <html>
 <head>
     <title>Chatting room</title>
@@ -38,7 +39,7 @@
             <div class="inbox-people">
                 <div class="heading">
                     <div class="recent-heading">
-                        <span><img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/${userinfo.id}/profile/${userinfo.profileImage}' onerror="this.src = '/resources/image/profile.png'"/>
+                        <span><img class='img-thumbnail' src='<spring:eval expression="@commonProperties['spring.prefixPath']"/>${userinfo.id}/profile/${userinfo.profileImage}' onerror="this.src = '/resources/image/profile.png'"/>
                         <br><h4>ME : ${userinfo.nickname}</h4></span>
                     </div>
                     <div class="search-bar">
@@ -108,7 +109,7 @@
                 }else{
                     for (var a = 0, length = data[i].users.length || 0; a < length; a++) {
                         if (sender != data[i].users[a].user.nickname) {
-                            str += "<img src='https://d1divnqsnqozzu.cloudfront.net/" + data[i].users[a].user.id +"/profile/s_" + data[i].users[a].user.profileImage
+                            str += "<img src='<spring:eval expression="@commonProperties['spring.prefixPath']"/>" + data[i].users[a].user.id +"/profile/s_" + data[i].users[a].user.profileImage
                             str += "' onerror=\"this.src='/resources/image/profile.png'\"/></div>"
                             str += "<div class='chat-ib'>"
                             str += (data[i].users[a].msgCount === 0 ? "<h5 id='enterBtn'>" + data[i].users[a].user.nickname+"</h5>"
@@ -232,7 +233,7 @@
                 else {
                     for (var a = 0, length = data.chatRoom.users.length || 0; a < length; a++) {
                         if (data.sender == data.chatRoom.users[a].user.nickname) {
-                            str += "<img src='https://d1divnqsnqozzu.cloudfront.net/" + data.chatRoom.users[a].user.id +
+                            str += "<img src='<spring:eval expression="@commonProperties['spring.prefixPath']"/>" + data.chatRoom.users[a].user.id +
                                 "/profile/s_" + data.chatRoom.users[a].user.profileImage +
                                 "' onerror=\"this.src = '/resources/image/profile.png'\"/>";
                             break;

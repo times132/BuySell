@@ -3,6 +3,7 @@
 <%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <title>GiveAndTake</title>
@@ -139,11 +140,12 @@
         $(document).ready(function() {
             var profileImage = "<c:out value="${user.profileImage}"/>";
             var profile = $(".profile-image");
+
             if (profileImage === ""){
                 profile.html("<img class='img-thumbnail' src='/resources/image/profile.png'/>")
             }
             else{
-                profile.html("<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/${user.id}/profile/${user.profileImage}'/>")
+                profile.html("<img class='img-thumbnail' src='<spring:eval expression="@commonProperties['spring.prefixPath']"/>${user.id}/profile/${user.profileImage}'/>")
             }
             var actionForm = $("#actionForm");
             $(".move").on("click", function (e) {

@@ -1,6 +1,8 @@
 var regex = new RegExp("(.*?)\.(JPG|jpg|jpeg|PNG|png|bmp)$");
 var maxSize = 10485760; // 10MB
 let filecount = 0;
+// var prefixPath = '/display?fileName=';
+var prefixPath = 'd2204blpyfdmef.cloudfront.net/';
 
 function checkExtension(fileName, fileSize) {
     if (!regex.test(fileName)){
@@ -85,7 +87,8 @@ function showUploadProfile(uploadResult) {
 
     if (uploadResult.image){
         var fileCallPath = encodeURIComponent(uploadResult.uploadPath + "/" + uploadResult.fileName);
-        var str = "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
+        // var str = "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
+        var str = "<img class='img-thumbnail' src='" + prefixPath + fileCallPath + "'>";
 
         $("#profileImage").val(uploadResult.fileName);
         $(".profile-image").html(str);
@@ -102,14 +105,15 @@ function showUploadResult(uploadResultArr) {
     $(uploadResultArr).each(function (i, obj) {
         if (obj.image){
             var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
-
+            console.log(fileCallPath)
             if (obj.fid === null){ // 새로추가된 파일은 fid가 없으므로 -1로 초기화
                 obj.fid = -1;
             }
 
             str += "<li class='thum-image' data-fid='" + obj.fid + "' data-path='" + obj.uploadPath + "'" + " data-uuid='" + obj.uuid;
             str += "' data-fileName='" + obj.fileName + "' data-type='" + obj.image + "'>";
-            str += "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
+            // str += "<img class='img-thumbnail' src='https://d1divnqsnqozzu.cloudfront.net/" + fileCallPath + "'>";
+            str += "<img class='img-thumbnail' src='" + prefixPath + fileCallPath + "'>";
             str += "<input class='del-image' type='button' data-file=\'" + fileCallPath + "\' data-type='image'/>";
             str += "</li>";
         }else{

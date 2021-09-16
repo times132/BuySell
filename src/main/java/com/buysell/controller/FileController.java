@@ -35,19 +35,22 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
-    private UserService userService;
-    private FileService fileService;
+    @Value("${spring.uploadFolderPath}")
+    private String uploadPath;
+    private final UserService userService;
+    private final FileService fileService;
 
     @GetMapping("/display")
     @ResponseBody
     public ResponseEntity<byte[]> fileGET(String fileName) {
         logger.info("-----File fileGET-----");
 
-        File file = new File("D:\\upload\\" + fileName);
+//        File file = new File("D:\\upload\\" + fileName);
+        File file = new File(uploadPath + fileName);
 
         ResponseEntity<byte[]> result = null;
 
@@ -98,7 +101,7 @@ public class FileController {
         File file;
 
         try {
-            file = new File("D:\\upload\\"  + URLDecoder.decode(fileName, "UTF-8"));
+            file = new File(uploadPath  + URLDecoder.decode(fileName, "UTF-8"));
             file.delete();
 
             if (type.equals("image")){

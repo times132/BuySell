@@ -8,6 +8,7 @@ import com.buysell.domain.DTO.BoardFileDTO;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,11 +25,18 @@ public class FileService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Value("${spring.uploadFolderPath}")
+    private String uploadFolder;
 
     public List<BoardFileDTO> upload(MultipartFile[] uploadFile, Long uid) throws IOException {
         List<BoardFileDTO> list = new ArrayList<>();
 
         String uploadPath = getFolder(uid); // 파일 경로
+        File uploadFolderPath = new File(uploadFolder, uploadPath);
+
+        if (!uploadFolderPath.exists()){
+            uploadFolderPath.mkdirs();
+        }
 
         for (MultipartFile multipartFile : uploadFile){
             BoardFileDTO fileDTO = new BoardFileDTO();
@@ -42,29 +50,43 @@ public class FileService {
 
             uploadFileName = uuid.toString() + "_" + uploadFileName; // uuid + 이름 원본
 
-            File saveFile = new File(uploadPath, uploadFileName);
+            File saveFile = new File(uploadFolderPath, uploadFileName);
 
             if (checkImageType(saveFile)) {
                 fileDTO.setUploadPath(uploadPath);
                 fileDTO.setUuid(uuid.toString());
                 fileDTO.setImage(true);
 
-                // 메타 데이터 저장
-                ObjectMetadata meta = new ObjectMetadata();
-                meta.setContentType(multipartFile.getContentType());
-                meta.setContentLength(multipartFile.getSize()); // 더 많은 데이터를 기다리는 것을 방지하기위해 사이즈 지정
+                if (bucket.equals("local")) { // 개발 환경
+                    multipartFile.transferTo(saveFile);
+                    fileDTO.setImage(true);
 
-                s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/" + uploadFileName, multipartFile.getInputStream(), meta)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)); // 원본 저장
+                    FileOutputStream thumbnail = new FileOutputStream(new File(uploadFolderPath, "s_" + uploadFileName));
+                    Thumbnails.of(saveFile)
+                            .size(480, 600)
+                            .outputFormat("jpg")
+                            .toOutputStream(thumbnail);
 
-                // 썸네일 생성
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                Thumbnails.of(multipartFile.getInputStream()).size(480, 600).toOutputStream(os);
-                InputStream is = new ByteArrayInputStream(os.toByteArray());
-                meta.setContentLength(os.size());
+                    thumbnail.close();
+                } else { // 배포 환경
+                    // 메타 데이터 저장
+                    ObjectMetadata meta = new ObjectMetadata();
+                    meta.setContentType(multipartFile.getContentType());
+                    meta.setContentLength(multipartFile.getSize()); // 더 많은 데이터를 기다리는 것을 방지하기위해 사이즈 지정
 
-                s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/s_" + uploadFileName, is, meta)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)); // 썸네일 저장
+                    s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/" + uploadFileName, multipartFile.getInputStream(), meta)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)); // 원본 저장
+
+                    // 썸네일 생성
+                    ByteArrayOutputStream os = new ByteArrayOutputStream();
+                    Thumbnails.of(multipartFile.getInputStream()).size(480, 600).toOutputStream(os);
+                    InputStream is = new ByteArrayInputStream(os.toByteArray());
+                    meta.setContentLength(os.size());
+
+                    s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/s_" + uploadFileName, is, meta)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)); // 썸네일 저장
+                }
+
             }
             list.add(fileDTO);
         }
@@ -76,6 +98,11 @@ public class FileService {
         Map<String, Object> map = new HashMap<>();
 
         String uploadPath = uid + "/profile"; // 개인 추가 업로드 경로
+        File uploadFolderPath = new File(uploadFolder, uploadPath);
+
+        if (!uploadFolderPath.exists()){
+            uploadFolderPath.mkdirs();
+        }
 
         String uploadFileName = uploadFile.getOriginalFilename();
 
@@ -83,28 +110,40 @@ public class FileService {
         uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
 
         try{
-            File saveFile = new File(uploadPath, uploadFileName);
+            File saveFile = new File(uploadFolderPath, uploadFileName);
 
             if (checkImageType(saveFile)){
+
                 map.put("uploadPath", uploadPath);
                 map.put("fileName", uploadFileName);
                 map.put("image", true);
 
-                ObjectMetadata meta = new ObjectMetadata();
-                meta.setContentType(uploadFile.getContentType());
-                meta.setContentLength(uploadFile.getSize());
+                if (bucket.equals("local")) { // 로컬 환경
+                    uploadFile.transferTo(saveFile);
+                    FileOutputStream thumbnail = new FileOutputStream(new File(uploadFolderPath, "s_" + uploadFileName));
+                    Thumbnails.of(saveFile)
+                            .size(64, 64)
+                            .outputFormat("jpg")
+                            .toOutputStream(thumbnail);
 
-                s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/" + uploadFileName, uploadFile.getInputStream(), meta)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)); // 원본 저장
+                    thumbnail.close();
+                } else { // 배포 환경
+                    ObjectMetadata meta = new ObjectMetadata();
+                    meta.setContentType(uploadFile.getContentType());
+                    meta.setContentLength(uploadFile.getSize());
 
-                // 썸네일 생성
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                Thumbnails.of(uploadFile.getInputStream()).size(64, 64).toOutputStream(os);
-                InputStream is = new ByteArrayInputStream(os.toByteArray());
-                meta.setContentLength(os.size());
+                    s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/" + uploadFileName, uploadFile.getInputStream(), meta)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)); // 원본 저장
 
-                s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/s_" + uploadFileName, is, meta)
-                        .withCannedAcl(CannedAccessControlList.PublicRead)); // 썸네일 저장
+                    // 썸네일 생성
+                    ByteArrayOutputStream os = new ByteArrayOutputStream();
+                    Thumbnails.of(uploadFile.getInputStream()).size(64, 64).toOutputStream(os);
+                    InputStream is = new ByteArrayInputStream(os.toByteArray());
+                    meta.setContentLength(os.size());
+
+                    s3Client.putObject(new PutObjectRequest(bucket, uploadPath + "/s_" + uploadFileName, is, meta)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)); // 썸네일 저장
+                }
             }
         }catch (Exception e){
             e.printStackTrace();

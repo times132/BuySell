@@ -3,6 +3,7 @@ package com.buysell.controller;
 import com.buysell.service.MailService;
 import com.buysell.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,16 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MailController {
-    private MailService mailService;
-    @Autowired
-    private UserService userService;
+    private final MailService mailService;
+    private final UserService userService;
 
     @GetMapping("/user/auth")
     @ResponseBody
     public String sendMailGET(@RequestParam String email, HttpServletRequest request) {
-        System.out.println("이메일 전송" + email);
+        System.out.println("이메일 전송 " + email);
         String mailType =  "join";
         String alert = mailService.sendMail(email, request, mailType);
 
