@@ -1,5 +1,3 @@
-console.log("mail module****************************");
-
 var mailService = (function () {
     function sendEmail(email, callback, error) {
         $.ajax({

@@ -141,7 +141,6 @@
 
                 $(".upload-result ul li").each(function (i, obj) {
                     var jobj = $(obj);
-                    console.log(jobj);
                     str += "<input type='hidden' name='boardFileList[" + i + "].fileName' value='" + jobj.data("filename") + "'>";
                     str += "<input type='hidden' name='boardFileList[" + i + "].uuid' value='" + jobj.data("uuid") + "'>";
                     str += "<input type='hidden' name='boardFileList[" + i + "].uploadPath' value='" + jobj.data("path") + "'>";
@@ -154,15 +153,12 @@
         var categoryDIV = $("#items");
         $("#category").on("change",function(){
             var id = $("#category option:selected").val();
-            console.log("id"+id);
 
             boardService.getCategoryItems(id, function (data) {
-                console.log(data);
                 var str = "<option value=''>---------------------------------------------------</option>";
                 for (var i = 0, len = data.length || 0; i < len; i++) {
                     str += "<option value='"+data[i].itemName+"'>"+ data[i].itemName + "</option>"
                 }
-                console.log(str);
                 categoryDIV.html(str);
             });
 

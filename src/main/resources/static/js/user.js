@@ -1,9 +1,6 @@
-console.log("user module****************************");
-
 var userService = (function () {
 
     function checkUsername(username, callback, error) {
-        console.log("CHECK ID");
         $.ajax({
             url : '/user/checkUsername?username='+ username,
             type : 'get',
@@ -22,7 +19,6 @@ var userService = (function () {
     }
 
     function checkNickname(nickname, callback, error) {
-        console.log("CHECK NICKNAME");
         $.ajax({
             url : '/user/checkNickname?nickname='+ nickname,
             type : 'get',
@@ -40,7 +36,6 @@ var userService = (function () {
         });
     }
     function checkEmail(email, callback, error) {
-        console.log("CHECK EMAIL");
         $.ajax({
             url : '/user/checkEmail?email='+ email,
             type : 'get',
@@ -59,7 +54,6 @@ var userService = (function () {
     }
 
     function changePW(password, callback, error) {
-        console.log("CHANGE PASSWORD");
         $.ajax({
             url: '/user/changePW',
             data: password,
@@ -79,7 +73,6 @@ var userService = (function () {
     }
 
     function findPW(username, callback, error) {
-        console.log("FIND PASSWORD");
         $.ajax({
             type: "POST",
             url: "/user/findUser/findPW",

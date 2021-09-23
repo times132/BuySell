@@ -4,7 +4,7 @@ import com.buysell.repository.BoardRepository;
 import com.buysell.security.CustomUserDetails;
 import com.buysell.domain.entity.Board;
 import com.buysell.domain.entity.User;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

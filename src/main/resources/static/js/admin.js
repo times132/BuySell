@@ -1,9 +1,6 @@
-console.log("ADMIN module****************************");
-
 var adminService = (function () {
 
     function roleList(callback, error) {
-        console.log("GET ROLE LIST");
         $.getJSON("/admin/roleList", function (data) {
             if (callback){
                 callback(data);
@@ -21,9 +18,4 @@ var adminService = (function () {
     return {
         roleList : roleList
     };
-
-
-
-
-
 })();

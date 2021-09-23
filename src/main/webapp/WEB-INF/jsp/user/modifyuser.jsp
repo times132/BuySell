@@ -228,7 +228,6 @@
             var newPW = $("#newPW").val();
             var userName = "<c:out value="${userinfo.username}"/>";
 
-            console.log("newPW:"+newPW);
             var info = {
                 username : userName,
                 password : password,    //기존비밀번호

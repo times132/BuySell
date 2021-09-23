@@ -295,7 +295,6 @@
             var actionForm = $("#actionForm");
             $(".page-item a").on("click", function (e){
                 e.preventDefault();
-                console.log("click");
                 actionForm.find("input[name='page']").val($(this).attr("href"));
                 actionForm.submit();
             });

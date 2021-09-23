@@ -108,7 +108,7 @@
                             <!-- 작성자 드랍다운 -->
                             <div class="writer-dropdown">
                                 <div class='profile'>
-                                    <img src='/display?fileName=${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
+                                    <img src='<spring:eval expression="@commonProperties['spring.prefixPath']"/>${boardDto.user.id}/profile/s_${boardDto.user.profileImage}' onerror="this.src='/resources/image/profile.png'"/>
                                     <button type="button" class="writer btn btn-link btn-sm dropdown-toggle pro" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="writer h6"><c:out value="${boardDto.writer}"></c:out></span>
                                     </button>

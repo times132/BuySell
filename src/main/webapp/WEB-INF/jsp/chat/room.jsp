@@ -98,7 +98,6 @@
                 return;
             }
             for (var i = 0, len = data.length || 0; i < len; i++) {
-                console.log(data[i])
                 str += "<div class='chat' ><ul class= 'a'>"
                 str += "<li class='chat-li'  data-rid='" + data[i].roomId + "'>";
                 str += "<div class='chat-people' id='enterBtn' >"
@@ -179,7 +178,6 @@
         }
         chatService.findAllMessages(roomId, function (data) {
             init();
-            console.log(data);
             $('.messages').show();
             if (data == null || data.length == 0) { // 대화 내용이 없을 때
                 return;
@@ -298,7 +296,6 @@
             ws.subscribe("/queue/chat/room/" + roomId, function (message) {
                     init();
                     const recv = JSON.parse(message.body);
-                    console.log("메시지", recv)
                     appendMsg(recv);
                     $(".msg-history").scrollTop($(".msg-history")[0].scrollHeight);
             });
@@ -309,7 +306,6 @@
         , function (error) {
             if (reconnect++ <= 5) {
                 setTimeout(function () {
-                    console.log("connection reconnect");
                     sock = new SockJS("/ws-stomp");
                     ws = Stomp.over(sock);
                     connect();

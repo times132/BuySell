@@ -7,12 +7,15 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.buysell.domain.DTO.BoardFileDTO;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -27,6 +30,7 @@ public class FileService {
     private String bucket;
     @Value("${spring.uploadFolderPath}")
     private String uploadFolder;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public List<BoardFileDTO> upload(MultipartFile[] uploadFile, Long uid) throws IOException {
         List<BoardFileDTO> list = new ArrayList<>();
@@ -159,15 +163,14 @@ public class FileService {
         return str.replace("-", "/");
     }
 
-    private boolean checkImageType(File file) {
-        try {
-            String contentType = Files.probeContentType(file.toPath());
+    private boolean checkImageType(File file) throws IOException {
+        MimetypesFileTypeMap mimeTypeMap = new MimetypesFileTypeMap();
+        String contentType = mimeTypeMap.getContentType(file);
 
-            return contentType.startsWith("image");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (contentType.contains("image")) {
+            return true;
+        } else {
+            throw new IOException();
         }
-
-        return false;
     }
 }

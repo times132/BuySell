@@ -228,7 +228,7 @@
         $(".authentication").hide();
         $('#auth').click(function(){
             var email = $('#email').val();
-            console.log(email);
+
             alert(email+"로 인증번호 6자리가 전송됩니다..인증번호를 확인해주세요");
             $(".authentication").show();
             mailService.sendEmail(email, function (result) {

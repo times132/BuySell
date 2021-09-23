@@ -2,7 +2,7 @@ var regex = new RegExp("(.*?)\.(JPG|jpg|jpeg|PNG|png|bmp)$");
 var maxSize = 10485760; // 10MB
 let filecount = 0;
 // var prefixPath = '/display?fileName=';
-var prefixPath = 'd2204blpyfdmef.cloudfront.net/';
+var prefixPath = 'https://d2204blpyfdmef.cloudfront.net/';
 
 function checkExtension(fileName, fileSize) {
     if (!regex.test(fileName)){
@@ -105,7 +105,7 @@ function showUploadResult(uploadResultArr) {
     $(uploadResultArr).each(function (i, obj) {
         if (obj.image){
             var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);
-            console.log(fileCallPath)
+
             if (obj.fid === null){ // 새로추가된 파일은 fid가 없으므로 -1로 초기화
                 obj.fid = -1;
             }
